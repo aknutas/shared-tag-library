@@ -1,0 +1,110 @@
+Project Overview:                                                     14-Sep-09
+
+ Objective: Design and consturct a program for organizing information for a
+   large set of books by using an object tagging system.
+
+ Program Layout:
+
+                         +-----+
+          ,------------->| GUI |
+          |              +-----+
+          |
+          |                     client
+    ==================================
+          |
+          v
+     +--------+          +----+
+     | server |<-------->| DB |
+     +--------+          +----+
+          ^
+          |                     server
+    ==================================
+          |
+          |              +--------+
+          `------------->| parent |
+                         +--------+
+    
+                                remote
+    (fig 1: basic components of the program)
+   
+   1. The program is a both the client and the server, by using a command line
+      switch the program can be ran in a headless server mode.
+
+   2. The server portion of the code may connect to a parent server in order to
+      have a larger dataset to query from.
+
+ Basic Program Concepts:
+
+   1. Book: (Object)
+     the basic information unit of the system; each book has title/author/etc
+     associated with it; a book is associated with a set of tags for which a
+     weighting/relevancy is calculated based on tags users select;
+
+      +-------+--------+
+      | Tag   | Weight |
+      +-------+--------+
+      | Tag A |  W[A]  |
+      | Tag B |  W[B]  |
+      |     . . .      |
+      | Tag Z |  W[Z]  |
+      +-------+--------+
+      (fig 2: a book has a set of tags with weights)
+
+    book operations:
+     (a) add tag    : increases the weight of a tag on a book
+     (b) remove tag : decreases the wieght of a tag on a book
+     (c) merge      : merges two books together (in case of duplicates) and
+                      recalculates the weight of each tag
+
+   2. Bookshelf: (Set)
+     a bookshelf is a set of books for which operations can be performed; unlike
+     in a physical library one book can be on multiple bookshelves; a bookshelf
+     contains sub bookselfs, which is an subset of books; book tag weight are 
+     persistent across multiple bookshelves;
+
+      +--------+
+      |  Book  |
+      +--------+
+      | Book 1 |
+      | Book 2 |
+      |  ....  |
+      | Book n |
+      +--------+
+      (fig 3: a bookshelf is a set of books)
+
+     bookshelf operations:
+      (a) add book     : inserts a book into the bookshelf
+      (b) remove book  : removes a book from the bookshelf
+      (d) union        : a bookshelf combining all the books of two bookshelves
+      (c) subset       : a bookshelf with books matching the criteria
+
+   3. Library: (Client)
+     a library is an instance of the program; a library contains one or more
+     bookshelves for which sharing can be controlled; a library also contains a
+     master bookshelf, a union of all the bookshelves in the library;
+     
+      +---------+      +---------+      +-------- +
+      | Public  |      | Private |      | Parent  |
+      +---------+      +---------+      +---------+
+      | Book 1  |      | Book A  |      | Book a  |
+      | Book 2  |      | Book B  |      | Book b  |
+      |  ....   |      |  . . .  |      |  . . .  |
+      | Book n  |      | Book Z  |      | Book z  |
+      +---------+      +---------+      +---------+
+      (fig 4: multiple bookshelves in a library can be used to control privacy)
+
+     library operations:
+      (a) create bookshelf : creates a new, empty bookshelf to the library
+      (b) remove bookshelf : removes a bookshelf from the library
+
+  4. Browsing: (Traversals)
+    a client can browse any bookshelf avialable by navigating through avaiable 
+    tagsl; using bookshelf operations (c) and (d), basic browsing functionality 
+    can be built;
+
+    browsing operations:
+     (a) select tag : get subset of bookshelf containing tag
+     (b) remove tag : remove a tag from the browsing navigation
+     
+ Basic Network Structure:
+
