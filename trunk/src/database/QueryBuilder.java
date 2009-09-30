@@ -10,6 +10,9 @@ import network.Control;
  * Interface QueryBuilder
  * This static class creates a helper object for managing database query input into
  * several different formats. Access methods created as needed.
+ * 
+ * @author Antti Knutas
+ * 
  */
 public interface QueryBuilder {
 

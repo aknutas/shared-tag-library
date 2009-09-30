@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 /**
  * Class AccessImpl
+ * 
+ * @author Antti Knutas
+ * 
  */
 class AccessImpl implements Access {
 
