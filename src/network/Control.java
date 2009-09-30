@@ -8,6 +8,9 @@ import database.Access;
 /**
  * Interface Control
  * This class allows for control and polling of the networking threads.
+ * 
+ * @author Antti Knutas
+ * 
  */
 public interface Control {
 

@@ -7,6 +7,9 @@ import data.Bookshelf;
 
 /**
  * Class QueryBuilderImpl
+ * 
+ * @author Antti Knutas
+ * 
  */
 class QueryBuilderImpl implements QueryBuilder {
 

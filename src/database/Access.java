@@ -8,6 +8,9 @@ import java.util.ArrayList;
  * The singleton object that both manages and queues access for the database.
  * 
  * It is synchronized for relatively safe multithreading.
+ * 
+ * @author Antti Knutas
+ * 
  */
 public interface Access {
 

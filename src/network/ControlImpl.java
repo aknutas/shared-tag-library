@@ -5,6 +5,9 @@ import java.util.*;
 
 /**
  * Class ControlImpl
+ * 
+ * @author Antti Knutas
+ * 
  */
 class ControlImpl implements Control {
 

@@ -5,6 +5,9 @@ import java.util.*;
 
 /**
  * Class Thread
+ * 
+ * @author Antti Knutas
+ * 
  */
 public class Thread {
 
