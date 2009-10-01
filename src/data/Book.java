@@ -1,108 +1,83 @@
-package data;
-
-/* file: Book.java
- * date: 17-Sep-09
- *
- * hist:
- *  17-Sep-09: file created
- */
-
 /**
- * The Book public interface represents a single book. Each book has an author, title,
+ * The Book interface represents a single book. Each book has an author, title,
  * and description. A book can have 0 or more tags associated with it, each tag
  * is weighted by adding and removing tags.
  *
  * @author Andrew Alm
  */
-public interface Book {
+interface Book {
 
 	/**
-	 * Increases the given Tag's weight.
+	 * The weight of the given tag is increased.
 	 *
-	 * @param tag the Tag to recompute the weight of
+	 * @param tag name of the tag
 	 *
-	 * @return the newley computed weight
+	 * @return the weight of the tag.
 	 *
-	 * @throws NullPointerException if tag is null
+	 * @throws IllegalArgumentException if the tag given is null
 	 */
-	int addTag(Tag tag) throws NullPointerException;
+	public int tag(String tag) throws IllegalArgumentException;
 
 	/**
-	 * Decreases the given Tag's weight.
+	 * The weight of the given tag is decreased.
 	 *
-	 * @param tag the Tag to recompute the weight of
+	 * @param tag name of the tag
 	 *
-	 * @return the newely computed weight
+	 * @return the weight of the tag
 	 *
-	 * @throws NullPointerException if tag is null
+	 * @throws IllegalArgumentException if the tag given is null
 	 */
-	int removeTag(Tag tag) throws NullPointerException;
+	public int untag(String tag) throws IllegalArgumentException;
 
 	/**
-	 * Gets the weight of the given Tag on the book, a Tag which has not
-	 * used will have a weight of zero.
+	 * Gets the weight of a given tag. If the tag has never been used 
+	 * with this VirtualBook then the weight will be zero. (Note: A 
+	 * return value of zero does not necessicarily indicate that a tag
+	 * has never been used with the book.)
 	 *
-	 * @param tag the Tag to get the weight of
+	 * @param tag the name of the tag
 	 *
-	 * @return the weight of the given Tag.
+	 * @return the weight of the tag
 	 *
-	 * @throws NullPointerException if tag is null
+	 * @throws IllegalArgumentException if the tag given is null
 	 */
-	int getWeight(Tag tag) throws NullPointerException;
+	public int weight(String tag) throws IllegalArgumentException;
 
 	/**
-	 * Set the author of the book, returning the old value.
+	 * Gets the author of the book.
 	 *
-	 * @param author the author's name
+	 * @return string containing the author's name
+	 */
+	public String getAuthor();
+
+	/**
+	 * Sets the author of the book to the given value.
+	 *
+	 * @param author string containing the author's name
 	 *
 	 * @return the previous value of author
 	 *
-	 * @throws NullPointerException if author is null
+	 * @throws NullPointerExceptoin if the author is null
 	 */
-	String setAuthor(String author) throws NullPointerException;
+	public String setAuthor(String author) throws IllegalArgumentException;
 
 	/**
-	 * Set the title of the Book, returning the old value.
+	 * Gets the title of the book.
 	 *
-	 * @param title the book's title
+	 * @return string containing the title of the book
+	 */
+	public String getTitle();
+
+	/**
+	 * Sets the title of the book to the given value.
+	 *
+	 * @param title string containing the title of the book
 	 *
 	 * @return the previous value of title
 	 *
-	 * @throws NullPointerException if title is null
+	 * @throws NullPointerExceptoin if the title is null
 	 */
-	String setTitle(String title) throws NullPointerException;
-
-	/**
-	 * Set the description of the Book, returning the old value.
-	 *
-	 * @param description a short description of the book
-	 *
-	 * @return the previous value of description
-	 *
-	 * @throws NullPointerException if description is null
-	 */
-	String setDescription(String description) throws NullPointerException;
-
-	/**
-	 * Get the author of the Book.
-	 *
-	 * @return a String containing the author of the book.
-	 */
-	String getAuthor();
-
-	/**
-	 * Get the title of the Book.
-	 *
-	 * @return a String containing the title of the book.
-	 */
-	String getTitle();
-
-	/**
-	 * Get the description of the Book.
-	 *
-	 * @return a String containing a short desciption of the book
-	 */
-	String getDescription();
+	public String setTitle(String title) throws IllegalArgumentException;
 
 }
 
