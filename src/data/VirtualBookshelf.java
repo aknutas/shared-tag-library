@@ -2,10 +2,23 @@ package data;
 
 import java.util.*;
 
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.Element;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+
+@PersistenceCapable
 public class VirtualBookshelf implements Bookshelf {
 
+	@Persistent
 	private String name;
+	
+	@Persistent
+	@Element(types=data.VirtualBook.class)
 	private Set<Book> bookshelf;
+	
+	@Persistent
+	@Element(types=data.VirtualBookshelf.class)
 	private Set<Bookshelf> shelves;
 
 	public VirtualBookshelf(String name) throws IllegalArgumentException {
