@@ -1,3 +1,5 @@
+package data;
+
 /**
  * The Book interface represents a single book. Each book has an author, title,
  * and description. A book can have 0 or more tags associated with it, each tag
