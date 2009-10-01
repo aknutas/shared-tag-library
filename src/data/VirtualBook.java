@@ -2,28 +2,17 @@ package data;
 
 import java.util.*;
 
-import javax.jdo.annotations.Element;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-
 /**
  * The VirtualBook class implements the Book interface and represents a Book
  * which exists only in memory.
  *
  * @author AndrewAlm
  */
-
-@PersistenceCapable
 public class VirtualBook implements Book {
 
-	@Persistent
 	private String author;
-	
-	@Persistent
 	private String title;
-	
-	@Persistent
-	@Element(types=data.Tag.class)
+
 	private Map<String, Integer> tags;
 
 	/**
