@@ -1,6 +1,11 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 
 /**
@@ -11,85 +16,100 @@ import java.util.ArrayList;
  */
 class AccessImpl implements Access {
 
-  //
-  // Fields
-  //
+	//
+	// Fields
+	//
 
-  private database.AccessImpl instance;
-  
-  //
-  // Constructors
-  //
-  public AccessImpl () { };
-  
-  //
-  // Methods
-  //
+	private database.AccessImpl instance;
+	private PersistenceManager pm;
+	private PersistenceManagerFactory pmf;
 
+	//
+	// Constructors
+	//
+	private AccessImpl () {
+		//It says what it does, bud!
+		initialize();
+	};
 
-  //
-  // Accessor methods
-  //
+	public void finalize ()
+	{
 
-  /**
-   * Set the value of instance
-   * @param newVar the new value of instance
-   */
-  private void setInstance ( database.AccessImpl newVar ) {
-    instance = newVar;
-  }
+	}
 
-  /**
-   * Get the value of instance
-   * @return the value of instance
-   */
-  private database.AccessImpl getInstance ( ) {
-    return instance;
-  }
-
-  //
-  // Other methods
-  //
-
-  /**
-   * Takes a string as a query, and returns an array of objects.
-   * @return       ArrayList
-   * @param        querystring
-   */
-  public ArrayList query( String querystring )
-  {
-	return null;
-  }
+	//
+	// Methods
+	//
 
 
-  /**
-   * Persists the objects in the list, according to the query parameters.
-   * @return       int
-   * @param        objects
-   * @param        query
-   */
-  public int commit( ArrayList objects, String query )
-  {
-	return 0;
-  }
+	//
+	// Accessor methods
+	//
+
+	//
+	// Other methods
+	//
+
+	/**
+	 * Takes a string as a query, and returns an array of objects.
+	 * @return       ArrayList
+	 * @param        querystring
+	 */
+	public ArrayList query( String querystring )
+	{
+		return null;
+	}
 
 
-  /**
-   * @return       int
-   */
-  private int initialize(  )
-  {
-	return 0;
-  }
+	/**
+	 * Persists the objects in the list, according to the query parameters.
+	 * @return       int
+	 * @param        objects
+	 * @param        query
+	 */
+	public int commit( ArrayList objects, String query )
+	{
+		return 0;
+	}
 
 
-  /**
-   * @return       Database.AccessImpl
-   */
-  public database.AccessImpl access(  )
-  {
-	  return null;
-  }
+	/**
+	 * Returns 1 in case of a successful initialization.
+	 * @return       int
+	 */
+	private int initialize(  )
+	{
+		//Inputting settings
+		Properties properties = new Properties();
+		properties.setProperty("javax.jdo.PersistenceManagerFactoryClass",
+		"org.datanucleus.jdo.JDOPersistenceManagerFactory");
+		properties.setProperty("javax.jdo.option.ConnectionDriverName","org.apache.derby.jdbc.EmbeddedDriver");
+		properties.setProperty("javax.jdo.option.ConnectionURL","jdbc:derby:LIB;create=true;user=me;password=mine");
+		properties.setProperty("javax.jdo.option.ConnectionUserName","me");
+		properties.setProperty("javax.jdo.option.ConnectionPassword","mine");
+		
+		//Trying to create the persistance manager
+		try {
+			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory(properties);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
+	}
+
+
+	/**
+	 * @return       Database.AccessImpl
+	 */
+	public database.AccessImpl access(  )
+	{
+		if (instance==null)
+		{
+			instance = new AccessImpl();
+		}
+		return instance;
+	}
 
 
 }
