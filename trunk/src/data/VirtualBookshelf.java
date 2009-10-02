@@ -2,6 +2,9 @@ package data;
 
 import java.util.*;
 
+import javax.jdo.annotations.PersistenceCapable;
+
+@PersistenceCapable
 public class VirtualBookshelf implements Bookshelf {
 
 	private String name;
