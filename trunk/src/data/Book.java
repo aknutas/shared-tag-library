@@ -7,7 +7,7 @@ package data;
  *
  * @author Andrew Alm
  */
-interface Book {
+public interface Book {
 
 	/**
 	 * The weight of the given tag is increased.
