@@ -4,7 +4,7 @@
     "http://java.sun.com/dtd/orm_2_0.dtd">
 <orm>
     <package name="data">
-        <class name="Book" identity-type="datastore">
+        <class name="VirtualBook" identity-type="datastore">
             <inheritance strategy="new-table"/>
             <field name="title">
                 <column length="100" jdbc-type="VARCHAR"/>
