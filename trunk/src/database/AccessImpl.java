@@ -79,18 +79,9 @@ class AccessImpl implements Access {
 	 */
 	private int initialize(  )
 	{
-		//Inputting settings
-		Properties properties = new Properties();
-		properties.setProperty("javax.jdo.PersistenceManagerFactoryClass",
-		"org.datanucleus.jdo.JDOPersistenceManagerFactory");
-		properties.setProperty("javax.jdo.option.ConnectionDriverName","org.apache.derby.jdbc.EmbeddedDriver");
-		properties.setProperty("javax.jdo.option.ConnectionURL","jdbc:derby:LIB;create=true;user=me;password=mine");
-		properties.setProperty("javax.jdo.option.ConnectionUserName","me");
-		properties.setProperty("javax.jdo.option.ConnectionPassword","mine");
-		
 		//Trying to create the persistance manager
 		try {
-			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory(properties);
+			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("META-INF/datanucleus.properties");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
