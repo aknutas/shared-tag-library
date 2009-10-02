@@ -25,7 +25,7 @@ public class Result extends JPanel {
 	private Book book;
 	private Bookshelf bookshelf;
 	private Library library;
-	private Tag tag;
+	private String tag;
 	
 	/**
 	 * This is the default constructor
@@ -53,7 +53,7 @@ public class Result extends JPanel {
 		initialize();
 	}
 	
-	public Result(Tag t) {
+	public Result(String t) {
 		super();
 		tag = t;
 		initialize();
