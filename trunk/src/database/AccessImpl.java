@@ -73,7 +73,7 @@ class AccessImpl implements Access {
 	{
 		//Trying to create the persistance manager
 		try {
-			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("META-INF/datanucleus.properties");
+			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
