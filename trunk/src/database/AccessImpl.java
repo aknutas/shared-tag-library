@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.jdo.JDOHelper;
@@ -41,21 +42,12 @@ class AccessImpl implements Access {
 	// Methods
 	//
 
-
-	//
-	// Accessor methods
-	//
-
-	//
-	// Other methods
-	//
-
 	/**
 	 * Takes a string as a query, and returns an array of objects.
 	 * @return       ArrayList
 	 * @param        querystring
 	 */
-	public ArrayList query( String querystring )
+	public synchronized List query( String querystring )
 	{
 		return null;
 	}
@@ -67,7 +59,7 @@ class AccessImpl implements Access {
 	 * @param        objects
 	 * @param        query
 	 */
-	public int commit( ArrayList objects, String query )
+	public synchronized int commit( List objects, String query )
 	{
 		return 0;
 	}
@@ -93,7 +85,7 @@ class AccessImpl implements Access {
 	/**
 	 * @return       Database.AccessImpl
 	 */
-	public database.AccessImpl access(  )
+	public synchronized database.AccessImpl access(  )
 	{
 		if (instance==null)
 		{

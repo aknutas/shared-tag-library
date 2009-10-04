@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -17,19 +18,11 @@ public interface Access {
   //
   // Fields
   //
+	
 
   
   //
   // Methods
-  //
-
-
-  //
-  // Accessor methods
-  //
-
-  //
-  // Other methods
   //
 
   /**
@@ -44,7 +37,7 @@ public interface Access {
    * @return       ArrayList
    * @param        querystring
    */
-  public ArrayList query( String querystring );
+  public List query( String querystring );
 
 
   /**
@@ -53,7 +46,7 @@ public interface Access {
    * @param        objects
    * @param        query
    */
-  public int commit( ArrayList objects, String query );
+  public int commit( List objects, String query );
 
 
 }
