@@ -18,18 +18,10 @@ public interface Control {
   // Fields
   //
 
+	
   
   //
   // Methods
-  //
-
-
-  //
-  // Accessor methods
-  //
-
-  //
-  // Other methods
   //
 
   /**
@@ -53,7 +45,7 @@ public interface Control {
    * Use this method to get an instance of the singleton.
    * @return       Database.Access
    */
-  public database.Access access(  );
+  public network.Control access(  );
 
 
 }
