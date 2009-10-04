@@ -1,5 +1,7 @@
 package data;
 
+import java.util.*;
+
 /**
  * The Book interface represents a single book. Each book has an author, title,
  * and description. A book can have 0 or more tags associated with it, each tag
@@ -45,6 +47,14 @@ public interface Book {
 	 */
 	public int weight(String tag) throws IllegalArgumentException;
 
+	/**
+	 * Returns an iterator of all tags on a book and their associated
+	 * weights.
+	 * 
+	 * @return an Iterator of map entries.
+	 */
+	public Iterator<Map.Entry<String, Integer>> enumerateTags();
+	
 	/**
 	 * Gets the author of the book.
 	 *

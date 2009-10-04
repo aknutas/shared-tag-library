@@ -1,7 +1,6 @@
 package data;
 
 import java.util.*;
-
 import javax.jdo.annotations.PersistenceCapable;
 
 /**
@@ -10,8 +9,7 @@ import javax.jdo.annotations.PersistenceCapable;
  *
  * @author AndrewAlm
  */
-
-@PersistenceCapable
+//@PersistenceCapable
 public class VirtualBook implements Book {
 
 	private String author;
@@ -78,8 +76,7 @@ public class VirtualBook implements Book {
 		if(null == weight)
 			weight = new Integer(0);
 
-		/* note: this allows for negative weights... i dont have a problem with
-	     this */
+		/* this allows for negative weights, i dont have a problem with this */
 		weight = new Integer(weight.intValue() - 1);
 		this.tags.put(tag, weight);
 
@@ -89,7 +86,7 @@ public class VirtualBook implements Book {
 	/**
 	 * Gets the weight of a given tag. If the tag has never been used 
 	 * with this VirtualBook then the weight will be zero. (Note: A 
-	 * return value of zero does not necessicarily indicate that a tag
+	 * return value of zero does not necessarily indicate that a tag
 	 * has never been used with the book.)
 	 *
 	 * @param tag the name of the tag
@@ -109,6 +106,16 @@ public class VirtualBook implements Book {
 		return weight;
 	}
 
+	/**
+	 * Returns an iterator containing all the of a book and their
+	 * given weights.
+	 * 
+	 * @return an Iterator of tags and weights.
+	 */
+	public Iterator<Map.Entry<String, Integer>> enumerateTags() {
+		return this.tags.entrySet().iterator();
+	}
+	
 	/**
 	 * Gets the author of the book.
 	 *
