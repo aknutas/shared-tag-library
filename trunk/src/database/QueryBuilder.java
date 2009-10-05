@@ -38,7 +38,7 @@ public interface QueryBuilder {
    * @return       int Success status.
    * @param        shelf
    */
-  public int shelfCreate( String shelfname, Bookshelf shelf );
+  public int shelfCreate( Bookshelf shelf );
 
 
   /**

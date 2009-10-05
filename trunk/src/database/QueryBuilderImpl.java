@@ -41,9 +41,9 @@ public final class QueryBuilderImpl implements QueryBuilder {
   /**
    * Creates a new shelf. Takes the persisted shelf object as a parameter.
    * @return       int Success status.
-   * @param        shelf
+   * @param        shelf The persisted shelf object.
    */
-  public int shelfCreate( String shelfname, Bookshelf shelf )
+  public int shelfCreate( Bookshelf shelf )
   {
 	return 0;
   }
