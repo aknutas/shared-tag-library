@@ -43,9 +43,9 @@ class AccessImpl implements Access {
 	//
 
 	/**
-	 * Takes a string as a query, and returns an array of objects.
-	 * @return       ArrayList
-	 * @param        querystring
+	 * Takes a string as a query, and returns the result as an array of objects.
+	 * @return       List Result list of objects.
+	 * @param        querystring Query, formatted by QueryBuilder.
 	 */
 	public synchronized List query( String querystring )
 	{
@@ -55,9 +55,9 @@ class AccessImpl implements Access {
 
 	/**
 	 * Persists the objects in the list, according to the query parameters.
-	 * @return       int
-	 * @param        objects
-	 * @param        query
+	 * @return       int Success status.
+	 * @param        objects List of objects to be persisted.
+	 * @param        query The save query, if necessary.
 	 */
 	public synchronized int commit( List objects, String query )
 	{
@@ -83,7 +83,8 @@ class AccessImpl implements Access {
 
 
 	/**
-	 * @return       Database.AccessImpl
+	 * Returns the singleton object reference.
+	 * @return       Database.Access
 	 */
 	public synchronized database.AccessImpl access(  )
 	{
