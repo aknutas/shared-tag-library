@@ -10,6 +10,9 @@ import java.util.List;
  * 
  * It is synchronized for relatively safe multithreading.
  * 
+ * Instance of this is protected with AccessImpl,
+ * use AccessImpl.getInstance() to access.
+ * 
  * @author Antti Knutas
  * 
  */
@@ -24,12 +27,11 @@ public interface Access {
   //
   // Methods
   //
-
+  
   /**
-   * Returns the singleton object reference.
-   * @return       Database.Access
+   * Orders the persistance manager to close connections and finish.
    */
-  public database.Access access(  );
+  public void finalize(  );
 
 
   /**
@@ -39,13 +41,18 @@ public interface Access {
    */
   public List query( String querystring );
 
+	/**
+	 * Persists a single object.
+	 * @return       int Success status.
+	 * @param        object The persisted object.
+	 */
+  public int commitOne( Object object );
 
-  /**
-   * Persists the objects in the List. Can be also be used to persist previously
-   * stored objects.
-   * @return       int Success status.
-   * @param        objects List of objects to be persisted.
-   */
+	/**
+	 * Persists the objects in the list.
+	 * @return       int Success status.
+	 * @param        objects List of objects to be persisted.
+	 */
   public int commit( List objects );
 
 

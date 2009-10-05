@@ -1,7 +1,6 @@
 package database;
 
 import java.util.ArrayList;
-
 import data.Bookshelf;
 
 
@@ -33,7 +32,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
    * @return       ArrayList An array list of shelves.
    * @param        booktitle Book title.
    */
-  public ArrayList shelfSearch( String booktitle )
+  public ArrayList<Bookshelf> shelfSearch( String booktitle )
   {
 	return null;
   }
@@ -45,6 +44,9 @@ public final class QueryBuilderImpl implements QueryBuilder {
    */
   public int shelfCreate( Bookshelf shelf )
   {
+	Access db = AccessImpl.getInstance();
+	db.commitOne(shelf);
+	
 	return 0;
   }
 

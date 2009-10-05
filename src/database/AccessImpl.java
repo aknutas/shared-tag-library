@@ -15,21 +15,22 @@ class AccessImpl implements Access {
 	// Fields
 	//
 
-	private database.AccessImpl instance;
+	private static database.Access instance;
 	private PersistenceManager pm;
+	@SuppressWarnings("unused")
 	private PersistenceManagerFactory pmf;
 
 	//
 	// Constructors
 	//
-	private AccessImpl () {
-		//It says what it does, bud!
+	protected AccessImpl () {
 		initialize();
 	};
 
 	public void finalize ()
 	{
-
+		pm.close();
+		instance=null;
 	}
 
 	//
@@ -57,7 +58,7 @@ class AccessImpl implements Access {
         }
         catch (Exception e)
         {
-        System.out.println(e);	
+        	e.printStackTrace();
         }
         finally
         {
@@ -66,13 +67,45 @@ class AccessImpl implements Access {
                 tx.rollback();
             }
             pm.close();
-            return results;
         }
+        return results;
 	}
 
-
 	/**
-	 * Persists the objects in the list, according to the query parameters.
+	 * Persists a single object.
+	 * @return       int Success status.
+	 * @param        object The persisted object.
+	 */
+	public synchronized int commitOne( Object object )
+	{
+		int returnvalue = 1;
+        Transaction tx=pm.currentTransaction();
+        try
+        {
+        	//Beginning transaction
+            tx.begin();
+            pm.makePersistent(object);
+            tx.commit();
+        }
+        catch (Exception e)
+        {
+        e.printStackTrace();
+        returnvalue = 0;	
+        }
+        finally
+        {
+            if (tx.isActive())
+            {
+                tx.rollback();
+            }
+            pm.close();
+        }
+        return returnvalue;
+	}
+	
+	
+	/**
+	 * Persists the objects in the list.
 	 * @return       int Success status.
 	 * @param        objects List of objects to be persisted.
 	 */
@@ -90,6 +123,7 @@ class AccessImpl implements Access {
         }
         catch (Exception e)
         {
+        e.printStackTrace();
         returnvalue = 0;	
         }
         finally
@@ -127,7 +161,7 @@ class AccessImpl implements Access {
 	 * Returns the singleton object reference.
 	 * @return       Database.Access
 	 */
-	public synchronized database.AccessImpl access(  )
+	public synchronized static database.Access getInstance(   )
 	{
 		if (instance==null)
 		{
