@@ -1,7 +1,7 @@
 package data;
 
 import java.util.*;
-//import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PersistenceCapable;
 
 /**
  * The VirtualBookshelf class implements the Bookshelf interface and is used
@@ -10,7 +10,7 @@ import java.util.*;
  * 
  * @author Andrew Alm
  */
-//@PersistenceCapable
+@PersistenceCapable
 public class VirtualBookshelf implements Bookshelf {
 
 	private String name;
