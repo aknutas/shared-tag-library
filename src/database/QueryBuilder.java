@@ -25,28 +25,17 @@ public interface QueryBuilder {
   // Methods
   //
 
-
-  //
-  // Accessor methods
-  //
-
-  //
-  // Other methods
-  //
-
   /**
    * Returns all bookshelfs with a book object with this specific title.
-   * @return       ArrayList
-   * @param        booktitle Book title. String type.
+   * @return       ArrayList An array list of shelves.
+   * @param        booktitle Book title.
    */
   public ArrayList shelfSearch( String booktitle );
 
 
   /**
-   * Creates a new shelf. Takes both shelf name and the shelf object itself as
-   * parameters.
-   * @return       int
-   * @param        shelfname
+   * Creates a new shelf. Takes the persisted shelf object as a parameter.
+   * @return       int Success status.
    * @param        shelf
    */
   public int shelfCreate( String shelfname, Bookshelf shelf );
