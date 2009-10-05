@@ -1,13 +1,7 @@
 package database;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
+import javax.jdo.*;
+import java.util.*;
 
 /**
  * Class AccessImpl
@@ -47,9 +41,33 @@ class AccessImpl implements Access {
 	 * @return       List Result list of objects.
 	 * @param        querystring Query, formatted by QueryBuilder.
 	 */
+	@SuppressWarnings("unchecked")
 	public synchronized List query( String querystring )
 	{
-		return null;
+		Transaction tx=pm.currentTransaction();
+		Query q=pm.newQuery("javax.jdo.query.JDOQL", querystring);
+		List results = null;
+		
+        try
+        {
+        	//Beginning transaction
+            tx.begin();
+            results = (List)q.execute();
+            tx.commit();
+        }
+        catch (Exception e)
+        {
+        System.out.println(e);	
+        }
+        finally
+        {
+            if (tx.isActive())
+            {
+                tx.rollback();
+            }
+            pm.close();
+            return results;
+        }
 	}
 
 
@@ -57,11 +75,32 @@ class AccessImpl implements Access {
 	 * Persists the objects in the list, according to the query parameters.
 	 * @return       int Success status.
 	 * @param        objects List of objects to be persisted.
-	 * @param        query The save query, if necessary.
 	 */
-	public synchronized int commit( List objects, String query )
+	@SuppressWarnings("unchecked")
+	public synchronized int commit( List objects )
 	{
-		return 0;
+		int returnvalue = 1;
+        Transaction tx=pm.currentTransaction();
+        try
+        {
+        	//Beginning transaction
+            tx.begin();
+            pm.makePersistentAll(objects);
+            tx.commit();
+        }
+        catch (Exception e)
+        {
+        returnvalue = 0;	
+        }
+        finally
+        {
+            if (tx.isActive())
+            {
+                tx.rollback();
+            }
+            pm.close();
+        }
+        return returnvalue;
 	}
 
 
@@ -74,6 +113,8 @@ class AccessImpl implements Access {
 		//Trying to create the persistance manager
 		try {
 			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+			PersistenceManager pm = pmf.getPersistenceManager();
+			pm.setDetachAllOnCommit(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

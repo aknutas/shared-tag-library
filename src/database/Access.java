@@ -41,12 +41,12 @@ public interface Access {
 
 
   /**
-   * Persists the objects in the list, according to the query parameters.
+   * Persists the objects in the List. Can be also be used to persist previously
+   * stored objects.
    * @return       int Success status.
    * @param        objects List of objects to be persisted.
-   * @param        query The save query, if necessary.
    */
-  public int commit( List objects, String query );
+  public int commit( List objects );
 
 
 }
