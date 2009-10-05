@@ -9,7 +9,7 @@ import javax.jdo.annotations.PersistenceCapable;
  *
  * @author AndrewAlm
  */
-//@PersistenceCapable
+@PersistenceCapable
 public class VirtualBook implements Book {
 
 	private String author;
