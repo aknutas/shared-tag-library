@@ -1,6 +1,7 @@
 package database;
 
-import java.util.ArrayList;
+import java.util.*;
+
 import data.Bookshelf;
 
 
@@ -28,13 +29,34 @@ public final class QueryBuilderImpl implements QueryBuilder {
   //
 
   /**
-   * Returns all bookshelfs with a book object with this specific title.
+   * Returns all bookshelves with a book object with this specific title.
    * @return       ArrayList An array list of shelves.
    * @param        booktitle Book title.
    */
-  public ArrayList<Bookshelf> shelfSearch( String booktitle )
+  @SuppressWarnings("unchecked") 
+public List<Bookshelf> shelfSearch( String booktitle )
   {
-	return null;
+	  Access db = AccessImpl.getInstance();
+	  String querystring = "SELECT FROM data.Bookshelf WHERE title = " + booktitle;
+	
+	  List<Bookshelf> returnlist = (List<Bookshelf>)db.query(querystring);
+	  
+	  return returnlist;
+  }
+  
+  /**
+   * Returns all bookshelves.
+   * @return       ArrayList An array list of shelves.
+   */
+  @SuppressWarnings("unchecked")
+public List<Bookshelf> shelfList(   )
+  {
+	  Access db = AccessImpl.getInstance();
+	  String querystring = "SELECT UNIQUE FROM data.Bookshelf";
+	
+	  List<Bookshelf> returnlist = (List<Bookshelf>)db.query(querystring);
+	  
+	  return returnlist;
   }
 
   /**
@@ -45,20 +67,23 @@ public final class QueryBuilderImpl implements QueryBuilder {
   public int shelfCreate( Bookshelf shelf )
   {
 	Access db = AccessImpl.getInstance();
-	db.commitOne(shelf);
+	int returnvalue = db.commitOne(shelf);
 	
-	return 0;
+	return returnvalue;
   }
 
   /**
    * Searches for, and removes an instance of this bookshelf from the database.
-   * Returns boolean value of the success.
+   * Returns the success status.
    * @return       boolean
    * @param        shelf
    */
-  public boolean shelfRemove( Bookshelf shelf )
+  public int shelfRemove( Bookshelf shelf )
   {
-	return false;
+	Access db = AccessImpl.getInstance();
+	int returnvalue = db.removeOne(shelf);
+	
+	return returnvalue;
   }
   
 }

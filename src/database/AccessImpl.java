@@ -48,27 +48,27 @@ public class AccessImpl implements Access {
 		Transaction tx=pm.currentTransaction();
 		Query q=pm.newQuery("javax.jdo.query.JDOQL", querystring);
 		List results = null;
-		
-        try
-        {
-        	//Beginning transaction
-            tx.begin();
-            results = (List)q.execute();
-            tx.commit();
-        }
-        catch (Exception e)
-        {
-        	e.printStackTrace();
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-        return results;
+
+		try
+		{
+			//Beginning transaction
+			tx.begin();
+			results = (List)q.execute();
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+		return results;
 	}
 
 	/**
@@ -79,31 +79,31 @@ public class AccessImpl implements Access {
 	public synchronized int commitOne( Object object )
 	{
 		int returnvalue = 1;
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-        	//Beginning transaction
-            tx.begin();
-            pm.makePersistent(object);
-            tx.commit();
-        }
-        catch (Exception e)
-        {
-        e.printStackTrace();
-        returnvalue = 0;	
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-        return returnvalue;
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			//Beginning transaction
+			tx.begin();
+			pm.makePersistent(object);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			returnvalue = 0;	
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+		return returnvalue;
 	}
-	
-	
+
+
 	/**
 	 * Persists the objects in the list.
 	 * @return       int Success status.
@@ -113,28 +113,28 @@ public class AccessImpl implements Access {
 	public synchronized int commit( List objects )
 	{
 		int returnvalue = 1;
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-        	//Beginning transaction
-            tx.begin();
-            pm.makePersistentAll(objects);
-            tx.commit();
-        }
-        catch (Exception e)
-        {
-        e.printStackTrace();
-        returnvalue = 0;	
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-        return returnvalue;
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			//Beginning transaction
+			tx.begin();
+			pm.makePersistentAll(objects);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			returnvalue = 0;	
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+		return returnvalue;
 	}
 
 
@@ -168,6 +168,38 @@ public class AccessImpl implements Access {
 			instance = new AccessImpl();
 		}
 		return instance;
+	}
+
+	/**
+	 * Removes a single object from the persistence graph.
+	 * @return       int Success status.
+	 * @param        object The persisted object.
+	 */
+	public int removeOne( Object object )
+	{
+		int returnvalue = 1;
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			//Beginning transaction
+			tx.begin();
+			pm.deletePersistent(object);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			returnvalue = 0;	
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+		return returnvalue;
 	}
 
 

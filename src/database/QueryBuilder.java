@@ -26,12 +26,17 @@ public interface QueryBuilder {
   //
 
   /**
-   * Returns all bookshelfs with a book object with this specific title.
+   * Returns all bookshelves with a book object with this specific title.
    * @return       ArrayList An array list of shelves.
    * @param        booktitle Book title.
    */
-  public ArrayList shelfSearch( String booktitle );
-
+  public List<Bookshelf> shelfSearch( String booktitle );
+  
+  /**
+   * Returns all bookshelves.
+   * @return       ArrayList An array list of shelves.
+   */
+  public List<Bookshelf> shelfList(   );
 
   /**
    * Creates a new shelf. Takes the persisted shelf object as a parameter.
@@ -43,11 +48,11 @@ public interface QueryBuilder {
 
   /**
    * Searches for, and removes an instance of this bookshelf from the database.
-   * Returns boolean value of the success.
-   * @return       boolean
+   * Returns integer value of the success status.
+   * @return       int
    * @param        shelf
    */
-  public boolean shelfRemove( Bookshelf shelf );
+  public int shelfRemove( Bookshelf shelf );
 
 
 }
