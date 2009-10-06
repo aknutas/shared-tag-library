@@ -31,6 +31,17 @@ public interface Bookshelf {
 	public boolean remove(Book book) throws IllegalArgumentException;
 	
 	/**
+	 * Determines whether the bookshelf contains the given book.
+	 * 
+	 * @param book the book to check for
+	 * 
+	 * @return true if the the bookshelf has the book, otherwise false
+	 * 
+	 * @throws IllegalArgumentException if the book given is null.
+	 */
+	public boolean contains(Book book) throws IllegalArgumentException;
+	
+	/**
 	 * Determines whether the Bookshelf is empty. An empty bookshelf contains no
 	 * books and has a size of 0.
 	 * 

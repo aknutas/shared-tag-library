@@ -1,7 +1,7 @@
 package data;
 
 import java.util.*;
-import javax.jdo.annotations.PersistenceCapable;
+//import javax.jdo.annotations.PersistenceCapable;
 
 /**
  * The VirtualBookshelf class implements the Bookshelf interface and is used
@@ -10,7 +10,7 @@ import javax.jdo.annotations.PersistenceCapable;
  * 
  * @author Andrew Alm
  */
-@PersistenceCapable
+//@PersistenceCapable
 public class VirtualBookshelf implements Bookshelf {
 
 	private String name;
@@ -59,6 +59,13 @@ public class VirtualBookshelf implements Bookshelf {
 		return false;
 	}
 
+	public boolean contains(Book book) throws IllegalArgumentException {
+		if(null == book)
+			throw new IllegalArgumentException("book cannot be null");
+		
+		return this.bookshelf.contains(book);
+	}
+	
 	/**
 	 * Determines if the virtual bookshelf is empty.
 	 * 
@@ -97,8 +104,7 @@ public class VirtualBookshelf implements Bookshelf {
 	 * @return an Iterator of books
 	 */
 	public Iterator<Book> enumerate() {
-		// need an iterator that traverses other iterators
-		return null;
+		return new VirtualBookshelfIterator(this.shelves.iterator(), this.bookshelf.iterator());
 	}
 
 	/**
@@ -112,12 +118,15 @@ public class VirtualBookshelf implements Bookshelf {
 		if(null == shelf)
 			throw new IllegalArgumentException("shelf cannot be null");
 
-		if(shelf instanceof VirtualBookshelf) {
-			// merge
-		}
+		VirtualBookshelf newShelf = new VirtualBookshelf();
+		this.shallowCopyInto(newShelf);
+
+		if(shelf instanceof VirtualBookshelf) 
+			((VirtualBookshelf)shelf).shallowCopyInto(newShelf);
+		else
+			newShelf.addBookshelf(shelf);
 		
-		
-		return null;
+		return newShelf;
 	}
 
 	/**
@@ -198,12 +207,31 @@ public class VirtualBookshelf implements Bookshelf {
 	}
 	
 	/**
-	 * Creates a shallow-copy clone of this bookshelf.
+	 * Returns an iterator of all the bookshelves contained in this virtual
+	 * bookshelf.
+	 *
+	 * @return an iterator of books
+	 */
+	protected Iterator<Bookshelf> enumerateBookshelves() {
+		return this.shelves.iterator();
+	}
+	
+	/**
+	 * Performs a shallow copy of itself into the given VirtualBookshelf.
 	 * 
 	 * @return a new Bookshelf identical to this.
 	 */
-	protected VirtualBookshelf shallowCopy() {
-		return null;
+	protected VirtualBookshelf shallowCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
+		if(null == toShelf)
+			throw new IllegalArgumentException("toShelf cannot be null");
+
+		for(Bookshelf shelf : this.shelves)
+			toShelf.addBookshelf(shelf);
+		
+		for(Book book : this.bookshelf)
+			toShelf.insert(book);
+		
+		return toShelf;
 	}
 	
 	
@@ -214,9 +242,56 @@ public class VirtualBookshelf implements Bookshelf {
 	public String setName(String name) throws IllegalArgumentException {
 		String temp = this.name;
 		this.name = name;
-		return name;
+		return temp;
 	}
 
-
+	/* test cases */
+	public static void main(String []args) {
+		VirtualBookshelf a = new VirtualBookshelf();
+		VirtualBookshelf b = new VirtualBookshelf();
+		
+		a.insert(new VirtualBook("a", "b"));
+		a.insert(new VirtualBook("c", "d"));
+		a.insert(new VirtualBook("e", "f"));
+		a.insert(new VirtualBook("g", "h"));
+		a.insert(new VirtualBook("i", "j"));
+		a.insert(new VirtualBook("k", "l"));
+		
+		b.insert(new VirtualBook("m", "n"));
+		b.insert(new VirtualBook("o", "p"));
+		b.insert(new VirtualBook("q", "r"));
+		b.insert(new VirtualBook("s", "t"));
+		b.insert(new VirtualBook("u", "v"));
+		b.insert(new VirtualBook("w", "x"));
+		
+		Iterator<Book> it = a.enumerate();
+		int i = 0;
+		
+		for(Book book = it.next(); it.hasNext(); book = it.next()) {
+			System.out.println(book.getAuthor() + " - " + book.getTitle());
+			i += 1;
+		}
+		
+		assert(i == a.size());
+		
+		it = b.enumerate();
+		i = 0;
+		
+		for(Book book = it.next(); it.hasNext(); book = it.next()) {
+			System.out.println(book.getAuthor() + " - " + book.getTitle());
+			i += 1;
+		}
+		
+		assert(i == b.size());
+		
+		Bookshelf c = a.union(b);
+		it = c.enumerate();
+		System.out.println(it.hasNext());
+		i = 0;
+		
+		for(Book book = it.next(); it.hasNext(); book = it.next()) {
+			System.out.println(book.getAuthor() + " - " + book.getTitle());
+			i += 1;
+		}
+	}
 }
-
