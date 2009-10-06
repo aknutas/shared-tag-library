@@ -9,7 +9,7 @@ import java.util.*;
  * @author Antti Knutas
  * 
  */
-class AccessImpl implements Access {
+public class AccessImpl implements Access {
 
 	//
 	// Fields
