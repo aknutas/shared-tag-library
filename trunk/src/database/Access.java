@@ -39,7 +39,8 @@ public interface Access {
    * @return       List Result list of objects.
    * @param        querystring Query, formatted by QueryBuilder.
    */
-  public List query( String querystring );
+  @SuppressWarnings("unchecked")
+public List query( String querystring );
 
 	/**
 	 * Persists a single object.
@@ -47,6 +48,13 @@ public interface Access {
 	 * @param        object The persisted object.
 	 */
   public int commitOne( Object object );
+  
+	/**
+	 * Removes a single object from the persistence graph.
+	 * @return       int Success status.
+	 * @param        object The persisted object.
+	 */
+public int removeOne( Object object );
 
 	/**
 	 * Persists the objects in the list.
