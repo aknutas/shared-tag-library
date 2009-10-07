@@ -1,7 +1,9 @@
 package data;
 
 import java.util.*;
-//import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PersistenceCapable;
+
+import javax.jdo.annotations.PersistenceCapable;
 
 /**
  * The VirtualBook class implements the Book interface and represents a Book
@@ -9,7 +11,7 @@ import java.util.*;
  *
  * @author AndrewAlm
  */
-//@PersistenceCapable
+@PersistenceCapable(detachable="true")
 public class VirtualBook implements Book {
 
 	private String author;

@@ -44,7 +44,6 @@ public class AccessImpl implements Access {
 	@SuppressWarnings("unchecked")
 	public synchronized List query( String querystring )
 	{
-		System.out.println(querystring);
 		Transaction tx=pm.currentTransaction();
 		Query q=pm.newQuery(querystring);
 		List results = null;
@@ -146,7 +145,7 @@ public class AccessImpl implements Access {
 			pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
 			pm = pmf.getPersistenceManager();
 			pm.getFetchPlan().setMaxFetchDepth(-1);
-//			pm.setDetachAllOnCommit(true);
+			pm.setDetachAllOnCommit(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
