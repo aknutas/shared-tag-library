@@ -55,6 +55,20 @@ public class DatabaseTest {
 		
 		qb.shelfCreate(shelf);
 		qb.shelfSearch("Diiba");
+		
+		for(int i=0; i<100; i++)
+		{
+			book = new VirtualBook(Integer.toString(i), Integer.toString(i));
+			for(int j=0; j<5; j++)
+			{
+				book.tag(Integer.toString(j));
+			}
+			shelf.insert(book);
+		}
+		
+		qb.shelfCreate(shelf);
+		qb.shelfList();
+		qb.shelfSearch("Daaba");
 	}
 
 }

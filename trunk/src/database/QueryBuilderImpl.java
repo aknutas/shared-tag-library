@@ -52,7 +52,7 @@ public List<Bookshelf> shelfSearch( String booktitle )
 public List<Bookshelf> shelfList(   )
   {
 	  Access db = AccessImpl.getInstance();
-	  String querystring = "SELECT UNIQUE FROM data.VirtualBookshelf";
+	  String querystring = "SELECT FROM data.VirtualBookshelf";
 	
 	  List<Bookshelf> returnlist = (List<Bookshelf>)db.query(querystring);
 	  
