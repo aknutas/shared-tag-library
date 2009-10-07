@@ -44,8 +44,9 @@ public class AccessImpl implements Access {
 	@SuppressWarnings("unchecked")
 	public synchronized List query( String querystring )
 	{
+		System.out.println(querystring);
 		Transaction tx=pm.currentTransaction();
-		Query q=pm.newQuery("javax.jdo.query.JDOQL", querystring);
+		Query q=pm.newQuery(querystring);
 		List results = null;
 
 		try
