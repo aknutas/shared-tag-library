@@ -37,9 +37,9 @@ public final class QueryBuilderImpl implements QueryBuilder {
 public List<Bookshelf> shelfSearch( String booktitle )
   {
 	  Access db = AccessImpl.getInstance();
-	  String querystring = "SELECT FROM data.Bookshelf WHERE title = " + booktitle;
+	  String querystring = "SELECT FROM data.VirtualBookshelf WHERE (bookshelf.contains(book) && book.title == '" + booktitle + "') VARIABLES data.VirtualBook book";
 	
-	  List<Bookshelf> returnlist = (List<Bookshelf>)db.query(querystring);
+	  List<Bookshelf> returnlist = db.query(querystring);
 	  
 	  return returnlist;
   }
@@ -52,7 +52,7 @@ public List<Bookshelf> shelfSearch( String booktitle )
 public List<Bookshelf> shelfList(   )
   {
 	  Access db = AccessImpl.getInstance();
-	  String querystring = "SELECT UNIQUE FROM data.Bookshelf";
+	  String querystring = "SELECT UNIQUE FROM data.VirtualBookshelf";
 	
 	  List<Bookshelf> returnlist = (List<Bookshelf>)db.query(querystring);
 	  
