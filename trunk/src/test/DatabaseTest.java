@@ -12,7 +12,7 @@ import javax.jdo.Transaction;
 public class DatabaseTest {
 
 	/**
-	 * @param args
+	 * Note: The unit tests work only on a completely empty database. Clutter will show up as errors.
 	 */
 	public static void main(String[] args) {
 		QueryBuilder qb = new QueryBuilderImpl();
@@ -23,38 +23,13 @@ public class DatabaseTest {
 		shelf.setName("Plop");
 		book = new VirtualBook("Diiba", "Daaba");
 		shelf.insert(book);
-
-		/*
-		PersistenceManager pm;
-		PersistenceManagerFactory pmf;
-		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
-		pm = pmf.getPersistenceManager();
-		pm.getFetchPlan().setMaxFetchDepth(-1);
-		
-		Transaction tx=pm.currentTransaction();
-		try
-		{
-			//Beginning transaction
-			tx.begin();
-			pm.makePersistent(shelf);
-			tx.commit();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();	
-		}
-		finally
-		{
-			if (tx.isActive())
-			{
-				tx.rollback();
-			}
-			pm.close();
-		}
-		*/
 		
 		qb.shelfCreate(shelf);
-		qb.shelfSearch("Diiba");
+		List returnlist = qb.shelfSearch("Diiba");
+		Bookshelf testshelf = (Bookshelf)returnlist.get(0);
+		
+		assert testshelf.getName().equals(shelf.getName());
+		assert returnlist.size()==1;
 		
 		for(int i=0; i<100; i++)
 		{
@@ -67,8 +42,15 @@ public class DatabaseTest {
 		}
 		
 		qb.shelfCreate(shelf);
-		qb.shelfList();
-		qb.shelfSearch("Daaba");
+		returnlist = qb.shelfList();
+		testshelf = (Bookshelf)returnlist.get(0);
+		
+		assert testshelf.getName().equals(shelf.getName());
+		assert testshelf.size()==101;
+		assert (returnlist.size()==1);
+		
+		returnlist = qb.shelfSearch("Daaba");
+		assert (returnlist.size()==0);
 	}
 
 }
