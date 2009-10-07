@@ -21,6 +21,10 @@
             <field name="author">
                 <column length="100" jdbc-type="VARCHAR"/>
             </field>
+            <field name="tags" persistence-modifier="persistent">
+				<map key-type="java.lang.String" value-type="java.lang.Integer"/>
+				<join/>
+            </field>
         </class>
     </package>
 </orm>
