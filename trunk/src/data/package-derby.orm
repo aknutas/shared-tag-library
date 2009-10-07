@@ -4,7 +4,7 @@
     "http://java.sun.com/dtd/orm_2_0.dtd">
 <orm>
     <package name="data">
-        <class name="VirtualBookshelf" identity-type="datastore">
+        <class name="VirtualBookshelf" identity-type="datastore" detachable="true">
             <inheritance strategy="new-table"/>
             <field name="bookshelf" persistence-modifier="persistent">
 				<collection element-type="data.VirtualBook"/>
@@ -13,7 +13,7 @@
 				<collection element-type="data.VirtualBookshelf"/>
 			</field>
         </class>
-        <class name="VirtualBook" identity-type="datastore">
+        <class name="VirtualBook" identity-type="datastore" detachable="true">
             <inheritance strategy="new-table"/>
             <field name="title">
                 <column length="100" jdbc-type="VARCHAR"/>
@@ -22,7 +22,7 @@
                 <column length="100" jdbc-type="VARCHAR"/>
             </field>
             <field name="tags" persistence-modifier="persistent">
-				<map key-type="java.lang.String" value-type="java.lang.Integer"/>
+				<map key-type="java.lang.String" value-type="java.lang.Integer" />
 				<join/>
             </field>
         </class>

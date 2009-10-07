@@ -17,7 +17,6 @@ public class AccessImpl implements Access {
 
 	private static database.Access instance;
 	private PersistenceManager pm;
-	@SuppressWarnings("unused")
 	private PersistenceManagerFactory pmf;
 
 	//
@@ -66,7 +65,6 @@ public class AccessImpl implements Access {
 			{
 				tx.rollback();
 			}
-			pm.close();
 		}
 		return results;
 	}
@@ -98,7 +96,6 @@ public class AccessImpl implements Access {
 			{
 				tx.rollback();
 			}
-			pm.close();
 		}
 		return returnvalue;
 	}
@@ -132,7 +129,6 @@ public class AccessImpl implements Access {
 			{
 				tx.rollback();
 			}
-			pm.close();
 		}
 		return returnvalue;
 	}
@@ -142,13 +138,14 @@ public class AccessImpl implements Access {
 	 * Returns 1 in case of a successful initialization.
 	 * @return       int
 	 */
-	private int initialize(  )
+	private synchronized int initialize(  )
 	{
 		//Trying to create the persistance manager
 		try {
-			PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
-			PersistenceManager pm = pmf.getPersistenceManager();
-			pm.setDetachAllOnCommit(true);
+			pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+			pm = pmf.getPersistenceManager();
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+//			pm.setDetachAllOnCommit(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -175,7 +172,7 @@ public class AccessImpl implements Access {
 	 * @return       int Success status.
 	 * @param        object The persisted object.
 	 */
-	public int removeOne( Object object )
+	public synchronized int removeOne( Object object )
 	{
 		int returnvalue = 1;
 		Transaction tx=pm.currentTransaction();
@@ -197,7 +194,6 @@ public class AccessImpl implements Access {
 			{
 				tx.rollback();
 			}
-			pm.close();
 		}
 		return returnvalue;
 	}
