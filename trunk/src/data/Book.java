@@ -5,7 +5,9 @@ import java.util.*;
 /**
  * The Book interface represents a single book. Each book has an author, title,
  * and description. A book can have 0 or more tags associated with it, each tag
- * is weighted by adding and removing tags.
+ * is weighted by adding and removing tags.  A book can also have properties
+ * attached to it to represent name-value pairs of data, such as an author
+ * property containing the author's name.
  *
  * @author Andrew Alm
  */
@@ -56,40 +58,36 @@ public interface Book {
 	public Iterator<Map.Entry<String, Integer>> enumerateTags();
 	
 	/**
-	 * Gets the author of the book.
-	 *
-	 * @return string containing the author's name
+	 * Gets the value of the given property. If the given property does not
+	 * exist then null is returned.
+	 * 
+	 * @param property the name of the property to get.
+	 * 
+	 * @return the value of the property
+	 * 
+	 * @throws IllegalArgumentException if the property given is null
 	 */
-	public String getAuthor();
-
+	public String getProperty(String name) throws IllegalArgumentException;
+	
+	
 	/**
-	 * Sets the author of the book to the given value.
-	 *
-	 * @param author string containing the author's name
-	 *
-	 * @return the previous value of author
-	 *
-	 * @throws NullPointerExceptoin if the author is null
+	 * Sets the named property to the given value, returning the old value for
+	 * the property. If the Book did not have the property, null returned.
+	 * 
+	 * @param name the name of the property
+	 * @param value the value to set the property to
+	 * 
+	 * @return IllegalArgumentException if the name of value given is null
 	 */
-	public String setAuthor(String author) throws IllegalArgumentException;
-
+	public String setProperty(String name, String value);
+	
 	/**
-	 * Gets the title of the book.
-	 *
-	 * @return string containing the title of the book
+	 * Returns an iterator containing the key-value pairs of all the properties
+	 * the book has.
+	 * 
+	 * @return an iterator of properties
 	 */
-	public String getTitle();
-
-	/**
-	 * Sets the title of the book to the given value.
-	 *
-	 * @param title string containing the title of the book
-	 *
-	 * @return the previous value of title
-	 *
-	 * @throws NullPointerExceptoin if the title is null
-	 */
-	public String setTitle(String title) throws IllegalArgumentException;
+	public Iterator<Map.Entry<String, String>> enumerateProperties();
 
 }
 
