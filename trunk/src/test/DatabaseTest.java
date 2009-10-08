@@ -19,8 +19,8 @@ public class DatabaseTest {
 		Book book;
 		Bookshelf shelf;
 
-		shelf = new VirtualBookshelf();
-		shelf.setName("Plop");
+		shelf = new VirtualBookshelf("");
+		shelf.setProperty("name", "Plop");
 		book = new VirtualBook("Diiba", "Daaba");
 		shelf.insert(book);
 		
@@ -28,7 +28,7 @@ public class DatabaseTest {
 		List returnlist = qb.shelfSearch("Diiba");
 		Bookshelf testshelf = (Bookshelf)returnlist.get(0);
 		
-		assert testshelf.getName().equals(shelf.getName());
+		assert testshelf.getProperty("name").equals(shelf.getProperty("name"));
 		assert returnlist.size()==1;
 		
 		for(int i=0; i<100; i++)
@@ -45,7 +45,7 @@ public class DatabaseTest {
 		returnlist = qb.shelfList();
 		testshelf = (Bookshelf)returnlist.get(0);
 		
-		assert testshelf.getName().equals(shelf.getName());
+		assert testshelf.getProperty("name").equals(shelf.getProperty("name"));
 		assert testshelf.size()==101;
 		assert (returnlist.size()==1);
 		
