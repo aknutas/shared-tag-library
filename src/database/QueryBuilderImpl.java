@@ -30,6 +30,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
 
   /**
    * Returns all bookshelves with a book object with this specific title.
+   * DOES NOT WORK YET
    * @return       List A list of shelves.
    * @param        booktitle Book title.
    */
@@ -46,6 +47,7 @@ public List<Bookshelf> shelfSearchByBookName( String booktitle )
   
   /**
    * Returns all bookshelves with this specific property.
+   * DOES NOT WORK YET
    * @return       List A list of shelves.
    * @param        booktitle Book title.
    */
