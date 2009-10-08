@@ -1,8 +1,7 @@
 package data;
 
 import java.util.*;
-import javax.jdo.annotations.PersistenceCapable;
-
+import java.util.Map.*;
 import javax.jdo.annotations.PersistenceCapable;
 
 /**
@@ -14,10 +13,8 @@ import javax.jdo.annotations.PersistenceCapable;
 @PersistenceCapable(detachable="true")
 public class VirtualBook implements Book {
 
-	private String author;
-	private String title;
-
 	private Map<String, Integer> tags;
+	private Map<String, String> properties;
 
 	/**
 	 * Creates a new VirtualBook with the given author and title.
@@ -32,10 +29,12 @@ public class VirtualBook implements Book {
 		if(null == author || null == title)
 			throw new IllegalArgumentException("author and title cannot be null");
 
-		/* initialize variables */
-		this.title = title;
-		this.author = author;
+		/* initialize variables */		
 		this.tags = new HashMap<String, Integer>();
+		this.properties = new HashMap<String, String>();
+		
+		this.setProperty("title", title);
+		this.setProperty("author", author);
 	}
 
 	/**
@@ -119,59 +118,51 @@ public class VirtualBook implements Book {
 	}
 	
 	/**
-	 * Gets the author of the book.
-	 *
-	 * @return string containing the author's name
+	 * Gets the value of the given property. If the given property does not
+	 * exist then null is returned.
+	 * 
+	 * @param name the name of the property to get.
+	 * 
+	 * @return the value of the property
+	 * 
+	 * @throws IllegalArgumentException if the property given is null
 	 */
-	public String getAuthor() {
-		return this.author;
+	public String getProperty(String name) throws IllegalArgumentException {
+		if(null == name)
+			throw new IllegalArgumentException("name cannot be null");
+		
+		return this.properties.get(name);
+	}
+	
+	/**
+	 * Sets the named property to the given value, returning the old value for
+	 * the property. If the Book did not have the property, null returned.
+	 * 
+	 * @param name the name of the property
+	 * @param value the value to set the property to
+	 * 
+	 * @return the old property value
+	 * 
+	 * @throws IllegalArgumentException if the name of value given is null
+	 */
+	public String setProperty(String name, String value) {
+		if(null == name || null == value)
+			throw new IllegalArgumentException("name or value cannot be null");
+		
+		return this.properties.put(name, value);
 	}
 
 	/**
-	 * Sets the author of the book to the given value.
-	 *
-	 * @param author string containing the author's name
-	 *
-	 * @return the previous value of author
-	 *
-	 * @throws IllegalArgumentException if the author is null
+	 * Returns an iterator containing the key-value pairs of all the properties
+	 * the book has.
+	 * 
+	 * @return an iterator of properties
 	 */
-	public String setAuthor(String author) throws IllegalArgumentException {
-		if(null == author)
-			throw new IllegalArgumentException("author cannot be null");
-
-		String prev = this.author;
-		this.author = author;
-		return prev;
+	public Iterator<Entry<String, String>> enumerateProperties() {
+		return this.properties.entrySet().iterator();
 	}
 
-	/**
-	 * Gets the title of the book.
-	 *
-	 * @return string containing the title of the book
-	 */
-	public String getTitle() {
-		return this.title;
-	}
-
-	/**
-	 * Sets the title of the book to the given value.
-	 *
-	 * @param title string containing the title of the book
-	 *
-	 * @return the previous value of title
-	 *
-	 * @throws IllegalArgumentException if the title is null
-	 */
-	public String setTitle(String title) throws IllegalArgumentException {
-		if(null == title)
-			throw new IllegalArgumentException("title cannot be null");
-
-		String prev = this.title;
-		this.title = title;
-		return prev;
-	}
-
+	
 	/* unit tests */
 	public static void main(String []args) {
 		Book b = new VirtualBook("Elements", "Euclid");
@@ -191,15 +182,10 @@ public class VirtualBook implements Book {
 			b.untag("foobar");
 
 		assert 25 == b.weight("foobar");
+		
+		assert b.getProperty("title").equals("Elements");
+		assert b.getProperty("author").equals("Euclid");
 
-		assert b.getTitle().equals("Elements");
-		assert b.getAuthor().equals("Euclid");
-
-		b.setTitle("For Whom the Bell Tolls");
-		b.setAuthor("Earnest Hemingway");
-
-		assert b.getTitle().equals("For Whom the Bell Tolls");
-		assert b.getAuthor().equals("Earnest Hemingway");
 	}
 
 }
