@@ -34,10 +34,26 @@ public final class QueryBuilderImpl implements QueryBuilder {
    * @param        booktitle Book title.
    */
   @SuppressWarnings("unchecked") 
-public List<Bookshelf> shelfSearch( String booktitle )
+public List<Bookshelf> shelfSearchByBookName( String booktitle )
   {
 	  Access db = AccessImpl.getInstance();
-	  String querystring = "SELECT FROM data.VirtualBookshelf WHERE (bookshelf.contains(book) && book.title == '" + booktitle + "') VARIABLES data.VirtualBook book";
+	  String querystring = "SELECT FROM data.VirtualBookshelf WHERE (bookshelf.contains(book) book.properties.containsKey(key) && key == 'title' && bookshelf.book.properties.containsValue(value) && value == '" + booktitle + "') VARIABLES data.VirtualBook book; String key; String value;";
+	
+	  List<Bookshelf> returnlist = db.query(querystring);
+	  
+	  return returnlist;
+  }
+  
+  /**
+   * Returns all bookshelves with this specific property.
+   * @return       List A list of shelves.
+   * @param        booktitle Book title.
+   */
+  @SuppressWarnings("unchecked")
+public List<Bookshelf> shelfSearchByProperty( String property, String value )
+  {
+	  Access db = AccessImpl.getInstance();
+	  String querystring = "SELECT FROM data.VirtualBookshelf WHERE (book.properties.containsEntry(key, value) && key = '" + property + "' && value = '" + value + "')";
 	
 	  List<Bookshelf> returnlist = db.query(querystring);
 	  
@@ -60,11 +76,11 @@ public List<Bookshelf> shelfList(   )
   }
 
   /**
-   * Creates a new shelf. Takes the persisted shelf object as a parameter.
+   * Stores new shelf, or updates the database with the changes. Takes the persisted shelf object as a parameter.
    * @return       int Success status.
-   * @param        shelf The persisted shelf object.
+   * @param        shelf The shelf to be stored or updated.
    */
-  public int shelfCreate( Bookshelf shelf )
+  public int shelfStore( Bookshelf shelf )
   {
 	Access db = AccessImpl.getInstance();
 	int returnvalue = db.commitOne(shelf);

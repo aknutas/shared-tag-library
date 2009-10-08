@@ -2,6 +2,7 @@ package test;
 
 import database.*;
 import data.*;
+
 import java.util.*;
 
 import javax.jdo.JDOHelper;
@@ -18,18 +19,22 @@ public class DatabaseTest {
 		QueryBuilder qb = new QueryBuilderImpl();
 		Book book;
 		Bookshelf shelf;
+		List<Bookshelf> returnlist;
+		Bookshelf testshelf;
 
 		shelf = new VirtualBookshelf("");
 		shelf.setProperty("name", "Plop");
 		book = new VirtualBook("Diiba", "Daaba");
 		shelf.insert(book);
-		
-		qb.shelfCreate(shelf);
-		List returnlist = qb.shelfSearch("Diiba");
-		Bookshelf testshelf = (Bookshelf)returnlist.get(0);
+
+		/*
+		qb.shelfStore(shelf);
+		returnlist = qb.shelfSearchByBookName("Diiba");
+		testshelf = (Bookshelf)returnlist.get(0);
 		
 		assert testshelf.getProperty("name").equals(shelf.getProperty("name"));
 		assert returnlist.size()==1;
+		*/
 		
 		for(int i=0; i<100; i++)
 		{
@@ -41,7 +46,7 @@ public class DatabaseTest {
 			shelf.insert(book);
 		}
 		
-		qb.shelfCreate(shelf);
+		qb.shelfStore(shelf);
 		returnlist = qb.shelfList();
 		testshelf = (Bookshelf)returnlist.get(0);
 		
@@ -49,8 +54,17 @@ public class DatabaseTest {
 		assert testshelf.size()==101;
 		assert (returnlist.size()==1);
 		
-		returnlist = qb.shelfSearch("Daaba");
+		Iterator<Book> e = shelf.enumerate();
+		
+		while(e.hasNext())
+		{
+			System.out.println(e.next().getProperty("title"));
+		}
+		
+		/*
+		returnlist = qb.shelfSearchByBookName("Daaba");
 		assert (returnlist.size()==0);
+		*/
 	}
 
 }
