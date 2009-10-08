@@ -19,18 +19,28 @@ public class VirtualBookshelf implements Bookshelf {
 	private Map<String, String> properties;
 
 	/**
+	 * Creates a new Bookshelf object which contains no books and has no
+	 * properties.
+	 * 
+	 * @throws IllegalArgumentException if the name given is null
+	 */
+	public VirtualBookshelf() throws IllegalArgumentException {
+		/* initialize containers */
+		this.bookshelf = new HashSet<Book>();
+		this.shelves = new HashSet<Bookshelf>();
+		this.properties = new HashMap<String, String>();
+	}
+	
+	/**
 	 * Creates a new Bookshelf object which contains no books.
 	 * 
 	 * @throws IllegalArgumentException if the name given is null
 	 */
 	public VirtualBookshelf(String name) throws IllegalArgumentException {
+		this();
+		
 		if(null == name)
 			throw new IllegalArgumentException("name given is null");
-		
-		/* initialize containers */
-		this.bookshelf = new HashSet<Book>();
-		this.shelves = new HashSet<Bookshelf>();
-		this.properties = new HashMap<String, String>();
 		
 		this.setProperty("name", name);
 	}

@@ -2,7 +2,7 @@ package data;
 
 import java.util.*;
 import java.util.Map.*;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.*;
 
 /**
  * The VirtualBook class implements the Book interface and represents a Book
