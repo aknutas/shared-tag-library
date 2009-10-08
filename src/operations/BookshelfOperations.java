@@ -19,7 +19,7 @@ public abstract class BookshelfOperations{
 		
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 		
-		VirtualBookshelf newBS = new VirtualBookshelf();
+		VirtualBookshelf newBS = new VirtualBookshelf("");
 		
 		for( Bookshelf s: shelfs ){
 			if (null == s) throw new IllegalArgumentException("Collection contains a null shelf");
@@ -33,7 +33,7 @@ public abstract class BookshelfOperations{
 		
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 		
-		VirtualBookshelf newBS = new VirtualBookshelf();
+		VirtualBookshelf newBS = new VirtualBookshelf("");
 		VirtualBookshelf temp;
 		
 		Iterator<Bookshelf> shelfsIt = shelfs.iterator();
@@ -88,10 +88,10 @@ public abstract class BookshelfOperations{
 			System.out.println(e.getMessage());
 		}
 		
-		VirtualBookshelf a = new VirtualBookshelf();
-		VirtualBookshelf b = new VirtualBookshelf();
-		VirtualBookshelf c = new VirtualBookshelf();
-		VirtualBookshelf d = new VirtualBookshelf();
+		VirtualBookshelf a = new VirtualBookshelf("");
+		VirtualBookshelf b = new VirtualBookshelf("");
+		VirtualBookshelf c = new VirtualBookshelf("");
+		VirtualBookshelf d = new VirtualBookshelf("");
 		
 		a.insert(new VirtualBook("a", "b"));
 		a.insert(new VirtualBook("c", "d"));
