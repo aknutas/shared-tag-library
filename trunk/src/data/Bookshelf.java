@@ -1,6 +1,6 @@
 package data;
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * The Bookshelf interface stores a set of books. The Bookshelf is main
@@ -111,14 +111,34 @@ public interface Bookshelf {
 	public Bookshelf subset(Book book) throws IllegalArgumentException;
 
 	/**
-	 * to be removed
-	 * @return none
+	 * Gets the value of the given property. If the given property does not
+	 * exist then null is returned.
+	 * 
+	 * @param property the name of the property to get.
+	 * 
+	 * @return the value of the property
+	 * 
+	 * @throws IllegalArgumentException if the property given is null
 	 */
-	public String getName();
+	public String getProperty(String name) throws IllegalArgumentException;
+	
 	
 	/**
-	 * to be removed
-	 * @return none
+	 * Sets the named property to the given value, returning the old value for
+	 * the property. If the Book did not have the property, null returned.
+	 * 
+	 * @param name the name of the property
+	 * @param value the value to set the property to
+	 * 
+	 * @return IllegalArgumentException if the name of value given is null
 	 */
-	public String setName(String name) throws IllegalArgumentException;
+	public String setProperty(String name, String value);
+	
+	/**
+	 * Returns an iterator containing the key-value pairs of all the properties
+	 * the book has.
+	 * 
+	 * @return an iterator of properties
+	 */
+	public Iterator<Map.Entry<String, String>> enumerateProperties();
 }
