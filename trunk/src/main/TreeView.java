@@ -6,6 +6,10 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 import data.*;
 
@@ -40,6 +44,12 @@ public class TreeView extends JPanel {
 		this.setSize(321, 637);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(getTree(), null);
+		try {
+			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel()); 
+		    }
+		    catch ( UnsupportedLookAndFeelException ex ){
+		      System.out.println("Cannot set new Theme for Java Look and Feel.");
+		    }
 	}
 
 	/**
