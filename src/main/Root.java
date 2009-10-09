@@ -1,13 +1,23 @@
 package main;
 
-import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import javax.swing.JToolBar;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
+
+import data.VirtualBook;
+import data.VirtualBookshelf;
 
 public class Root extends JFrame {
 
@@ -17,6 +27,9 @@ public class Root extends JFrame {
 	private JSplitPane jSplitPane = null;
 	private TreeView treeView = null;
 	private SearchResults searchResults = null;
+	private ArrayList<VirtualBookshelf> bookshelves = new ArrayList<VirtualBookshelf>();  //  @jve:decl-index=0:
+	int currentBookshelfIndex = -1;
+
 	/**
 	 * This method initializes jToolBar	
 	 * 	
@@ -26,7 +39,48 @@ public class Root extends JFrame {
 		if (jToolBar == null) {
 			jToolBar = new JToolBar();
 		}
+
+		// TODO: Create & Add Icons
+		JButton addBookshelf = new JButton("Add Bookshelf");
+		addBookshelf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+
+				// Add functionality for changing name
+				bookshelves.add(new VirtualBookshelf("Default Name"));
+				currentBookshelfIndex = bookshelves.size() - 1;
+				
+				searchResults.addResult(new Result(bookshelves.get(currentBookshelfIndex)));
+				
+				draw();
+			}
+		});
+		jToolBar.add(addBookshelf);
+
+		JButton addBook = new JButton("Add Book");
+		addBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+
+				// Add safety checks
+				// Add functionality for changing name
+				if (currentBookshelfIndex == -1) {
+					bookshelves.add(new VirtualBookshelf("Default Name"));
+					currentBookshelfIndex = bookshelves.size() - 1;
+				}
+				bookshelves.get(currentBookshelfIndex).insert(new VirtualBook("The Traitor", "Andre Gorz"));
+				searchResults.addResult(new Result(bookshelves.get(currentBookshelfIndex)));
+				
+				draw();
+				// Refresh current bookshelf view
+			}
+		});
+		jToolBar.add(addBook);
+
 		return jToolBar;
+	}
+	
+	protected void draw(){
+		validate();
+		repaint();
 	}
 
 	/**
@@ -50,7 +104,7 @@ public class Root extends JFrame {
 	 */
 	private TreeView getTreeView() {
 		if (treeView == null) {
-			treeView = new TreeView();
+			//treeView = new TreeView();
 		}
 		return treeView;
 	}
@@ -77,6 +131,12 @@ public class Root extends JFrame {
 				Root thisClass = new Root();
 				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				thisClass.setVisible(true);
+				try {
+					UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel()); 
+				}
+				catch ( UnsupportedLookAndFeelException ex ){
+					System.out.println("Cannot set new Theme for Java Look and Feel.");
+				}
 			}
 		});
 	}

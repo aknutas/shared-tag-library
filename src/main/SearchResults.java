@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 public class SearchResults extends JPanel {
 
@@ -20,13 +24,15 @@ public class SearchResults extends JPanel {
 		initialize();
 		
 		// Just a demo, will be adding full event/interaction logic...
-		addDemoResult();
+	//	addDemoResult();
 	}
 	
 
 	protected Result addResult(Result result) {
 		
 		this.add(result);
+		this.repaint();
+		super.repaint();
 		return result;
 	}
 	
@@ -63,6 +69,12 @@ public class SearchResults extends JPanel {
 		this.setSize(529, 381);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		results = new ArrayList<Result>();
+		try {
+			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel()); 
+		    }
+		    catch ( UnsupportedLookAndFeelException ex ){
+		      System.out.println("Cannot set new Theme for Java Look and Feel.");
+		    }
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="266,31"
