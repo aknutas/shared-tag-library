@@ -21,8 +21,9 @@ public interface QueryBuilder {
      * @return List A list of shelves.
      * @param booktitle Book title.
      *          
-     * @depreciated
+     * @Deprecated
      */
+    @Deprecated
     public List<Bookshelf> shelfSearchByBookName(String booktitle);
 
     /**
@@ -32,8 +33,9 @@ public interface QueryBuilder {
      * @param property Property name.
      * @param value Property value.
      *            
-     * @depreciated
+     * @Deprecated
      */
+    @Deprecated
     public List<Bookshelf> shelfSearchByProperty(String property, String value);
 
     /**

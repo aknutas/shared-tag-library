@@ -20,9 +20,9 @@ public final class QueryBuilderImpl implements QueryBuilder {
      * 
      * @return List A list of shelves.
      * @param String Book title.
-     *            
-     * @depreciated
+     * @Deprecated
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public List<Bookshelf> shelfSearchByBookName(String booktitle) {
 	Access db = AccessImpl.getInstance();
@@ -40,9 +40,9 @@ public final class QueryBuilderImpl implements QueryBuilder {
      * 
      * @return List A list of shelves.
      * @param booktitle Book title.
-     *            
-     * @depreciated
+     * @Deprecated
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public List<Bookshelf> shelfSearchByProperty( String property, String value )
     { 
