@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -41,7 +42,9 @@ public class Root extends JFrame {
 		}
 
 		// TODO: Create & Add Icons
-		JButton addBookshelf = new JButton("Add Bookshelf");
+		ImageIcon icon = new ImageIcon(getClass().getResource("addBookshelf.png"), "Add Bookshelf");
+		JButton addBookshelf = new JButton(icon);
+		addBookshelf.setBorder(null);
 		addBookshelf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 
@@ -55,8 +58,10 @@ public class Root extends JFrame {
 			}
 		});
 		jToolBar.add(addBookshelf);
-
-		JButton addBook = new JButton("Add Book");
+		
+		ImageIcon icon2 = new ImageIcon(getClass().getResource("addBook.png"), "Add Book (to Current Bookshelf)");
+		JButton addBook = new JButton(icon2);
+		addBook.setBorder(null);
 		addBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 
