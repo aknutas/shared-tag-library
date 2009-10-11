@@ -54,6 +54,8 @@ public class DatabaseTest {
 
 	// Updating the database with updated object
 	qb.shelfStore(shelf);
+	// Doing it again, just to make things harder
+	qb.shelfStore(shelf);
 
 	// Fetching new results
 	returnlist = qb.shelfList();
