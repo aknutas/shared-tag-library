@@ -27,15 +27,12 @@ public interface QueryBuilder {
     public List<Bookshelf> shelfSearchByBookName(String booktitle);
 
     /**
-     * Returns all bookshelves with this specific property.
+     * Returns all bookshelves with this specific property set to this value.
      * 
      * @return List A list of shelves.
      * @param property Property name.
-     * @param value Property value.
-     *            
-     * @Deprecated
+     * @param value Value.
      */
-    @Deprecated
     public List<Bookshelf> shelfSearchByProperty(String property, String value);
 
     /**
