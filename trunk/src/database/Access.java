@@ -18,7 +18,7 @@ import java.util.List;
 public interface Access {
 
     /**
-     * Orders the persistance manager to close connections and finish.
+     * Orders the persistence manager to close connections and finish.
      */
     public void finalize();
 

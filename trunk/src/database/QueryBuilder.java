@@ -20,10 +20,7 @@ public interface QueryBuilder {
      * 
      * @return List A list of shelves.
      * @param booktitle Book title.
-     *          
-     * @Deprecated
      */
-    @Deprecated
     public List<Bookshelf> shelfSearchByBookName(String booktitle);
 
     /**
