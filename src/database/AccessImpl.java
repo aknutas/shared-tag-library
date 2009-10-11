@@ -34,12 +34,12 @@ public class AccessImpl implements Access {
     public synchronized List query(String querystring) {
 	Transaction tx = pm.currentTransaction();
 	Query q = pm.newQuery(querystring);
-	List results = null;
+	List queryresults = null;
 
 	try {
 	    // Beginning transaction
 	    tx.begin();
-	    results = (List) q.execute();
+	    queryresults = (List) q.execute();
 	    tx.commit();
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -48,6 +48,9 @@ public class AccessImpl implements Access {
 		tx.rollback();
 	    }
 	}
+	ArrayList results = new ArrayList(queryresults);
+	q.closeAll();
+	
 	return results;
     }
 
