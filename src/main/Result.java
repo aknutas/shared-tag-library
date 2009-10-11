@@ -99,8 +99,8 @@ public class Result extends JPanel {
 		if (RightNavigation == null) {
 			RightNavigation = new JPanel();
 			RightNavigation.setLayout(new BoxLayout(getRightNavigation(), BoxLayout.Y_AXIS));
-			RightNavigation.add(getSave(), null);
-			RightNavigation.add(getSend(), null);
+	//		RightNavigation.add(getSave(), null);
+	//		RightNavigation.add(getSend(), null);
 		}
 		return RightNavigation;
 	}
