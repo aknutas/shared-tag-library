@@ -108,7 +108,7 @@ public class AccessImpl implements Access {
      * @return int Something remarkable
      */
     private synchronized int initialize() {
-	// Trying to create the persistance manager
+	// Trying to create the persistence manager
 	try {
 	    pmf = JDOHelper
 	    .getPersistenceManagerFactory("datanucleus.properties");

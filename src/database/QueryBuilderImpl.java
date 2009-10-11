@@ -20,16 +20,11 @@ public final class QueryBuilderImpl implements QueryBuilder {
      * 
      * @return List A list of shelves.
      * @param String Book title.
-     * @Deprecated
      */
-    @Deprecated
     @SuppressWarnings("unchecked")
     public List<Bookshelf> shelfSearchByBookName(String booktitle) {
 	Access db = AccessImpl.getInstance();
-	String querystring = "   SELECT FROM data.VirtualBookshelf WHERE (bookshelf.contains(book) book.properties.containsKey(key) && key == 'title' && bookshelf.book.properties.containsValue(value) && value == '"
-	    + booktitle
-	    + "') VARIABLES data.VirtualBook book; String key; String value;";
-
+	String querystring = "SELECT FROM data.VirtualBookshelf WHERE (this.bookshelf.contains(book) && book.properties.containsEntry('title', '" + booktitle + "')) VARIABLES data.VirtualBook book";
 	List<Bookshelf> returnlist = db.query(querystring);
 
 	return returnlist;
