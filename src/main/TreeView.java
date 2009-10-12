@@ -15,53 +15,53 @@ import data.*;
 
 public class TreeView extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JTree tree = null;
-	
-	private List<Library> library;
+    private static final long serialVersionUID = 1L;
+    private JTree tree = null;
 
-	/**
-	 * This is the default constructor
-	 */
-	public TreeView() {
-		super();
-		library = new ArrayList<Library>();
-		initialize();
-	}
+    private List<Library> library;
 
-	public TreeView(Library l) {
-		super();
-		library = new ArrayList<Library>();
-		library.add(l);
-		initialize();
-	}
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
-	private void initialize() {
-		this.setSize(321, 637);
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(getTree(), null);
-		try {
-			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel()); 
-		    }
-		    catch ( UnsupportedLookAndFeelException ex ){
-		      System.out.println("Cannot set new Theme for Java Look and Feel.");
-		    }
-	}
+    /**
+     * This is the default constructor
+     */
+    public TreeView() {
+	super();
+	library = new ArrayList<Library>();
+	initialize();
+    }
 
-	/**
-	 * This method initializes tree	
-	 * 	
-	 * @return javax.swing.JTree	
-	 */
-	private JTree getTree() {
-		if (tree == null) {
-			tree = new JTree();
-		}
-		return tree;
-	}
+    public TreeView(Library l) {
+	super();
+	library = new ArrayList<Library>();
+	library.add(l);
+	initialize();
+    }
 
-}  //  @jve:decl-index=0:visual-constraint="388,31"
+    /**
+     * This method initializes this
+     * 
+     * @return void
+     */
+    private void initialize() {
+	this.setSize(321, 637);
+	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+	this.add(getTree(), null);
+	try {
+	    UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+	} catch (UnsupportedLookAndFeelException ex) {
+	    System.out.println("Cannot set new Theme for Java Look and Feel.");
+	}
+    }
+
+    /**
+     * This method initializes tree
+     * 
+     * @return javax.swing.JTree
+     */
+    private JTree getTree() {
+	if (tree == null) {
+	    tree = new JTree();
+	}
+	return tree;
+    }
+
+} // @jve:decl-index=0:visual-constraint="388,31"

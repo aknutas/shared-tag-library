@@ -28,13 +28,13 @@ public class Root extends JFrame {
 	private JSplitPane jSplitPane = null;
 	private TreeView treeView = null;
 	private SearchResults searchResults = null;
-	private ArrayList<VirtualBookshelf> bookshelves = new ArrayList<VirtualBookshelf>();  //  @jve:decl-index=0:
+	private ArrayList<VirtualBookshelf> bookshelves = new ArrayList<VirtualBookshelf>(); // @jve:decl-index=0:
 	int currentBookshelfIndex = -1;
 
 	/**
-	 * This method initializes jToolBar	
-	 * 	
-	 * @return javax.swing.JToolBar	
+	 * This method initializes jToolBar
+	 * 
+	 * @return javax.swing.JToolBar
 	 */
 	private JToolBar getJToolBar() {
 		if (jToolBar == null) {
@@ -42,7 +42,8 @@ public class Root extends JFrame {
 		}
 
 		// TODO: Create & Add Icons
-		ImageIcon icon = new ImageIcon(getClass().getResource("addBookshelf.png"), "Add Bookshelf");
+		ImageIcon icon = new ImageIcon(getClass().getResource(
+				"addBookshelf.png"), "Add Bookshelf");
 		JButton addBookshelf = new JButton(icon);
 		addBookshelf.setBorder(null);
 		addBookshelf.setToolTipText("Add Bookshelf");
@@ -52,15 +53,17 @@ public class Root extends JFrame {
 				// Add functionality for changing name
 				bookshelves.add(new VirtualBookshelf("Default Name"));
 				currentBookshelfIndex = bookshelves.size() - 1;
-				
-				searchResults.addResult(new Result(bookshelves.get(currentBookshelfIndex)));
-				
+
+				searchResults.addResult(new Result(bookshelves
+						.get(currentBookshelfIndex)));
+
 				draw();
 			}
 		});
 		jToolBar.add(addBookshelf);
-		
-		ImageIcon icon2 = new ImageIcon(getClass().getResource("addBook.png"), "Add Book (to Current Bookshelf)");
+
+		ImageIcon icon2 = new ImageIcon(getClass().getResource("addBook.png"),
+				"Add Book (to Current Bookshelf)");
 		JButton addBook = new JButton(icon2);
 		addBook.setBorder(null);
 		addBook.setToolTipText("Add Book");
@@ -73,9 +76,11 @@ public class Root extends JFrame {
 					bookshelves.add(new VirtualBookshelf("Default Name"));
 					currentBookshelfIndex = bookshelves.size() - 1;
 				}
-				bookshelves.get(currentBookshelfIndex).insert(new VirtualBook("The Traitor", "Andre Gorz"));
-				searchResults.addResult(new Result(bookshelves.get(currentBookshelfIndex)));
-				
+				bookshelves.get(currentBookshelfIndex).insert(
+						new VirtualBook("The Traitor", "Andre Gorz"));
+				searchResults.addResult(new Result(bookshelves
+						.get(currentBookshelfIndex)));
+
 				draw();
 				// Refresh current bookshelf view
 			}
@@ -84,16 +89,16 @@ public class Root extends JFrame {
 
 		return jToolBar;
 	}
-	
-	protected void draw(){
+
+	protected void draw() {
 		validate();
 		repaint();
 	}
 
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
@@ -105,21 +110,21 @@ public class Root extends JFrame {
 	}
 
 	/**
-	 * This method initializes treeView	
-	 * 	
-	 * @return main.TreeView	
+	 * This method initializes treeView
+	 * 
+	 * @return main.TreeView
 	 */
 	private TreeView getTreeView() {
 		if (treeView == null) {
-			//treeView = new TreeView();
+			// treeView = new TreeView();
 		}
 		return treeView;
 	}
 
 	/**
-	 * This method initializes searchResults	
-	 * 	
-	 * @return main.SearchResults	
+	 * This method initializes searchResults
+	 * 
+	 * @return main.SearchResults
 	 */
 	private SearchResults getSearchResults() {
 		if (searchResults == null) {
@@ -139,10 +144,11 @@ public class Root extends JFrame {
 				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				thisClass.setVisible(true);
 				try {
-					UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel()); 
-				}
-				catch ( UnsupportedLookAndFeelException ex ){
-					System.out.println("Cannot set new Theme for Java Look and Feel.");
+					UIManager
+							.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+				} catch (UnsupportedLookAndFeelException ex) {
+					System.out
+							.println("Cannot set new Theme for Java Look and Feel.");
 				}
 			}
 		});
@@ -182,4 +188,4 @@ public class Root extends JFrame {
 		return jContentPane;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
