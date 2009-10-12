@@ -45,6 +45,7 @@ public class Root extends JFrame {
 		ImageIcon icon = new ImageIcon(getClass().getResource("addBookshelf.png"), "Add Bookshelf");
 		JButton addBookshelf = new JButton(icon);
 		addBookshelf.setBorder(null);
+		addBookshelf.setToolTipText("Add Bookshelf");
 		addBookshelf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 
@@ -62,6 +63,7 @@ public class Root extends JFrame {
 		ImageIcon icon2 = new ImageIcon(getClass().getResource("addBook.png"), "Add Book (to Current Bookshelf)");
 		JButton addBook = new JButton(icon2);
 		addBook.setBorder(null);
+		addBook.setToolTipText("Add Book");
 		addBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 
