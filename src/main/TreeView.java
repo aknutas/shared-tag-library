@@ -37,6 +37,18 @@ public class TreeView extends JPanel {
     }
 
     /**
+     * This method initializes tree
+     * 
+     * @return javax.swing.JTree
+     */
+    private JTree getTree() {
+	if (tree == null) {
+	    tree = new JTree();
+	}
+	return tree;
+    }
+
+    /**
      * This method initializes this
      * 
      * @return void
@@ -50,18 +62,6 @@ public class TreeView extends JPanel {
 	} catch (UnsupportedLookAndFeelException ex) {
 	    System.out.println("Cannot set new Theme for Java Look and Feel.");
 	}
-    }
-
-    /**
-     * This method initializes tree
-     * 
-     * @return javax.swing.JTree
-     */
-    private JTree getTree() {
-	if (tree == null) {
-	    tree = new JTree();
-	}
-	return tree;
     }
 
 } // @jve:decl-index=0:visual-constraint="388,31"

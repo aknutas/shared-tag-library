@@ -27,6 +27,13 @@ public class SearchResults extends JPanel {
 	// addDemoResult();
     }
 
+    private void addDemoResult() {
+	results.add(new Result());
+	results.add(new Result());
+	results.add(new Result());
+	addResults();
+    }
+
     protected Result addResult(Result result) {
 
 	this.add(result);
@@ -35,28 +42,9 @@ public class SearchResults extends JPanel {
 	return result;
     }
 
-    protected Result removeResult(Result result) {
-
-	this.remove(result);
-	return result;
-    }
-
-    private void addDemoResult() {
-	results.add(new Result());
-	results.add(new Result());
-	results.add(new Result());
-	addResults();
-    }
-
     private void addResults() {
 	for (Result r : results) {
 	    this.add(r);
-	}
-    }
-
-    private void removeResults() {
-	for (Result r : results) {
-	    this.remove(r);
 	}
     }
 
@@ -73,6 +61,18 @@ public class SearchResults extends JPanel {
 	    UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
 	} catch (UnsupportedLookAndFeelException ex) {
 	    System.out.println("Cannot set new Theme for Java Look and Feel.");
+	}
+    }
+
+    protected Result removeResult(Result result) {
+
+	this.remove(result);
+	return result;
+    }
+
+    private void removeResults() {
+	for (Result r : results) {
+	    this.remove(r);
 	}
     }
 

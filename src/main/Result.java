@@ -42,18 +42,6 @@ public class Result extends JPanel {
 
     }
 
-    public Result(VirtualBook b) {
-	super();
-	book = b;
-	initialize();
-    }
-
-    public Result(VirtualBookshelf b) {
-	super();
-	bookshelf = b;
-	initialize();
-    }
-
     public Result(Library l) {
 	super();
 	library = l;
@@ -66,97 +54,16 @@ public class Result extends JPanel {
 	initialize();
     }
 
-    /**
-     * This method initializes this
-     * 
-     * @return void
-     */
-    private void initialize() {
-	this.setLayout(new BorderLayout());
-	this.setSize(827, 260);
-	this.add(getRightNavigation(), BorderLayout.EAST);
-	this.add(getTitle(), BorderLayout.NORTH);
-	this.add(getContent(), BorderLayout.CENTER);
-	this.add(getProgressBar(), BorderLayout.SOUTH);
-	try {
-	    UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
-	} catch (UnsupportedLookAndFeelException ex) {
-	    System.out.println("Cannot set new Theme for Java Look and Feel.");
-	}
-
+    public Result(VirtualBook b) {
+	super();
+	book = b;
+	initialize();
     }
 
-    /**
-     * This method initializes RightNavigation
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getRightNavigation() {
-	if (RightNavigation == null) {
-	    RightNavigation = new JPanel();
-	    RightNavigation.setLayout(new BoxLayout(getRightNavigation(),
-		    BoxLayout.Y_AXIS));
-	    // RightNavigation.add(getSave(), null);
-	    // RightNavigation.add(getSend(), null);
-	}
-	return RightNavigation;
-    }
-
-    /**
-     * This method initializes Title
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getTitle() {
-	if (Title == null) {
-
-	    title = new JLabel();
-	    if (book != null)
-		title.setText(book.getProperty("title") + " | By: "
-			+ book.getProperty("author"));
-	    else if (bookshelf != null)
-		title.setText(bookshelf.getProperty("name"));
-	    else
-		title.setText("Title?");
-
-	    Title = new JPanel();
-	    Title.setLayout(new BoxLayout(getTitle(), BoxLayout.X_AXIS));
-	    Title.add(title, null);
-	    Title.setAlignmentX(CENTER_ALIGNMENT);
-	    Title.setAlignmentY(CENTER_ALIGNMENT);
-	}
-	return Title;
-    }
-
-    /**
-     * This method initializes save
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getSave() {
-	if (save == null) {
-	    save = new JButton();
-	    save.setName("jButton");
-	    save.setText("Save");
-	    save.setAlignmentY(CENTER_ALIGNMENT);
-	}
-	return save;
-    }
-
-    /**
-     * This method initializes send
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getSend() {
-	if (send == null) {
-	    send = new JButton();
-	    send.setText("Send");
-	    send.setName("jButton1");
-	    send.setText("Send");
-	    send.setAlignmentY(CENTER_ALIGNMENT);
-	}
-	return send;
+    public Result(VirtualBookshelf b) {
+	super();
+	bookshelf = b;
+	initialize();
     }
 
     /**
@@ -196,6 +103,99 @@ public class Result extends JPanel {
 	    progressBar = new JProgressBar();
 	}
 	return progressBar;
+    }
+
+    /**
+     * This method initializes RightNavigation
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getRightNavigation() {
+	if (RightNavigation == null) {
+	    RightNavigation = new JPanel();
+	    RightNavigation.setLayout(new BoxLayout(getRightNavigation(),
+		    BoxLayout.Y_AXIS));
+	    // RightNavigation.add(getSave(), null);
+	    // RightNavigation.add(getSend(), null);
+	}
+	return RightNavigation;
+    }
+
+    /**
+     * This method initializes save
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getSave() {
+	if (save == null) {
+	    save = new JButton();
+	    save.setName("jButton");
+	    save.setText("Save");
+	    save.setAlignmentY(CENTER_ALIGNMENT);
+	}
+	return save;
+    }
+
+    /**
+     * This method initializes send
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getSend() {
+	if (send == null) {
+	    send = new JButton();
+	    send.setText("Send");
+	    send.setName("jButton1");
+	    send.setText("Send");
+	    send.setAlignmentY(CENTER_ALIGNMENT);
+	}
+	return send;
+    }
+
+    /**
+     * This method initializes Title
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getTitle() {
+	if (Title == null) {
+
+	    title = new JLabel();
+	    if (book != null)
+		title.setText(book.getProperty("title") + " | By: "
+			+ book.getProperty("author"));
+	    else if (bookshelf != null)
+		title.setText(bookshelf.getProperty("name"));
+	    else
+		title.setText("Title?");
+
+	    Title = new JPanel();
+	    Title.setLayout(new BoxLayout(getTitle(), BoxLayout.X_AXIS));
+	    Title.add(title, null);
+	    Title.setAlignmentX(CENTER_ALIGNMENT);
+	    Title.setAlignmentY(CENTER_ALIGNMENT);
+	}
+	return Title;
+    }
+
+    /**
+     * This method initializes this
+     * 
+     * @return void
+     */
+    private void initialize() {
+	this.setLayout(new BorderLayout());
+	this.setSize(827, 260);
+	this.add(getRightNavigation(), BorderLayout.EAST);
+	this.add(getTitle(), BorderLayout.NORTH);
+	this.add(getContent(), BorderLayout.CENTER);
+	this.add(getProgressBar(), BorderLayout.SOUTH);
+	try {
+	    UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+	} catch (UnsupportedLookAndFeelException ex) {
+	    System.out.println("Cannot set new Theme for Java Look and Feel.");
+	}
+
     }
 
 } // @jve:decl-index=0:visual-constraint="207,107"

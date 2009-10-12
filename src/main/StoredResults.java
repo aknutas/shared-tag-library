@@ -25,12 +25,6 @@ public class StoredResults extends JPanel {
 	return result;
     }
 
-    protected Result removeResult(Result result) {
-
-	this.remove(result);
-	return result;
-    }
-
     /**
      * This method initializes this
      * 
@@ -44,6 +38,12 @@ public class StoredResults extends JPanel {
 	} catch (UnsupportedLookAndFeelException ex) {
 	    System.out.println("Cannot set new Theme for Java Look and Feel.");
 	}
+    }
+
+    protected Result removeResult(Result result) {
+
+	this.remove(result);
+	return result;
     }
 
 } // @jve:decl-index=0:visual-constraint="419,27"
