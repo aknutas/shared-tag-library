@@ -23,13 +23,76 @@ import data.VirtualBookshelf;
 public class Root extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Root thisClass = new Root();
+				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				thisClass.setVisible(true);
+				try {
+					UIManager
+							.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+				} catch (UnsupportedLookAndFeelException ex) {
+					System.out
+							.println("Cannot set new Theme for Java Look and Feel.");
+				}
+			}
+		});
+	}
 	private JPanel jContentPane = null;
 	private JToolBar jToolBar = null;
 	private JSplitPane jSplitPane = null;
 	private TreeView treeView = null;
 	private SearchResults searchResults = null;
 	private ArrayList<VirtualBookshelf> bookshelves = new ArrayList<VirtualBookshelf>(); // @jve:decl-index=0:
+
 	int currentBookshelfIndex = -1;
+
+	/**
+	 * This is the default constructor
+	 */
+	public Root() {
+		super();
+		initialize();
+	}
+
+	protected void draw() {
+		validate();
+		repaint();
+	}
+
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(new BorderLayout());
+			jContentPane.add(getJToolBar(), BorderLayout.NORTH);
+			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
+		}
+		return jContentPane;
+	}
+
+	/**
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
+	 */
+	private JSplitPane getJSplitPane() {
+		if (jSplitPane == null) {
+			jSplitPane = new JSplitPane();
+			jSplitPane.setLeftComponent(getTreeView());
+			jSplitPane.setRightComponent(getSearchResults());
+		}
+		return jSplitPane;
+	}
 
 	/**
 	 * This method initializes jToolBar
@@ -90,23 +153,16 @@ public class Root extends JFrame {
 		return jToolBar;
 	}
 
-	protected void draw() {
-		validate();
-		repaint();
-	}
-
 	/**
-	 * This method initializes jSplitPane
+	 * This method initializes searchResults
 	 * 
-	 * @return javax.swing.JSplitPane
+	 * @return main.SearchResults
 	 */
-	private JSplitPane getJSplitPane() {
-		if (jSplitPane == null) {
-			jSplitPane = new JSplitPane();
-			jSplitPane.setLeftComponent(getTreeView());
-			jSplitPane.setRightComponent(getSearchResults());
+	private SearchResults getSearchResults() {
+		if (searchResults == null) {
+			searchResults = new SearchResults();
 		}
-		return jSplitPane;
+		return searchResults;
 	}
 
 	/**
@@ -122,47 +178,6 @@ public class Root extends JFrame {
 	}
 
 	/**
-	 * This method initializes searchResults
-	 * 
-	 * @return main.SearchResults
-	 */
-	private SearchResults getSearchResults() {
-		if (searchResults == null) {
-			searchResults = new SearchResults();
-		}
-		return searchResults;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Root thisClass = new Root();
-				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				thisClass.setVisible(true);
-				try {
-					UIManager
-							.setLookAndFeel(new SubstanceBusinessLookAndFeel());
-				} catch (UnsupportedLookAndFeelException ex) {
-					System.out
-							.println("Cannot set new Theme for Java Look and Feel.");
-				}
-			}
-		});
-	}
-
-	/**
-	 * This is the default constructor
-	 */
-	public Root() {
-		super();
-		initialize();
-	}
-
-	/**
 	 * This method initializes this
 	 * 
 	 * @return void
@@ -171,21 +186,6 @@ public class Root extends JFrame {
 		this.setSize(1038, 509);
 		this.setContentPane(getJContentPane());
 		this.setTitle("JFrame");
-	}
-
-	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getJToolBar(), BorderLayout.NORTH);
-			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
-		}
-		return jContentPane;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
