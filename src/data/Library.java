@@ -26,6 +26,16 @@ public interface Library {
 	 */
 	void removeBookshelf(Bookshelf shelf) throws NullPointerException;
 
+	public void saveBookshelf(Bookshelf shelf) throws IllegalArgumentException, NullPointerException;
+	
+	/**
+	 * Returns an iterable object containing all of the bookshelves in the
+	 * library.
+	 * 
+	 * @return an Iterable object of bookshelves.
+	 */
+	Iterable<Bookshelf> enumerateBookshelves();
+	
 	/**
 	 * Gets the master shelf, a union of every bookshelf.
 	 *

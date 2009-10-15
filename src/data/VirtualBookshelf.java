@@ -3,6 +3,7 @@ package data;
 import java.util.*;
 import java.util.Map.*;
 import javax.jdo.annotations.*;
+import database.*;
 
 /**
  * The VirtualBookshelf class implements the Bookshelf interface and is used
@@ -29,6 +30,8 @@ public class VirtualBookshelf implements Bookshelf {
 		this.bookshelf = new HashSet<Book>();
 		this.shelves = new HashSet<Bookshelf>();
 		this.properties = new HashMap<String, String>();
+		
+		//(new QueryBuilderImpl()).shelfStore(this);
 	}
 	
 	/**
