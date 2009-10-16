@@ -23,7 +23,7 @@ public abstract class BookshelfOperations{
 		
 		for( Bookshelf s: shelfs ){
 			if (null == s) throw new IllegalArgumentException("Collection contains a null shelf");
-			newBS.union(s);	
+			newBS = (VirtualBookshelf) newBS.union(s);	
 		}
 		
 		return newBS;
