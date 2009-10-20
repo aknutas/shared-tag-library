@@ -13,6 +13,7 @@ import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 
+@SuppressWarnings("unused")
 public class QueryBuilderImplTest {
 
     // Introducing variables
