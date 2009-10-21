@@ -48,6 +48,16 @@ public interface QueryBuilder {
      *            
      */
     public int shelfStore(Bookshelf shelf);
+    
+    /**
+     * Stores new shelf, or updates the database with the changes. Takes a collection
+     * of persisted shelf objects as a parameters.
+     * 
+     * @return int Success status.
+     * @param shelf The shelf to be stored or updated.
+     *            
+     */
+    public int shelfStore(Collection<Bookshelf> shelves);
 
     /**
      * Searches for, and removes an instance of this bookshelf from the
