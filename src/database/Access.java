@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -53,6 +54,7 @@ public interface Access {
      * @return int Success status.
      * @param objects List of objects to be persisted.
      */
-    public int commit(List objects);
+    @SuppressWarnings("unchecked")
+    public int commitCollection(Collection objects);
 
 }

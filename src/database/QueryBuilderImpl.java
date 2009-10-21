@@ -87,5 +87,21 @@ public final class QueryBuilderImpl implements QueryBuilder {
 
 	return returnvalue;
     }
+    
+    /**
+     * Stores new shelf, or updates the database with the changes. Takes a collection
+     * of persisted shelf objects as a parameters.
+     * 
+     * @return int Success status.
+     * @param shelf The shelf to be stored or updated.
+     *            
+     */
+    public int shelfStore(Collection<Bookshelf> shelves)
+    {
+	Access db = AccessImpl.getInstance();
+	int returnvalue = db.commitCollection(shelves);
+
+	return returnvalue;
+    }
 
 }

@@ -86,7 +86,7 @@ public class AccessImpl implements Access {
      * @param objects List of objects to be persisted.
      */
     @SuppressWarnings("unchecked")
-    public synchronized int commit(List objects) {
+    public synchronized int commitCollection(Collection objects) {
 	int returnvalue = 1;
 	Transaction tx = pm.currentTransaction();
 	try {
