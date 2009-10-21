@@ -5,7 +5,7 @@ import data.*;
 import java.util.*;
 
 public abstract class BookshelfOperations{
-	
+
 	/**
 	 * This operation takes a Collection of Bookshelfs and unions
 	 * all of them into one Bookshelf.
@@ -14,77 +14,62 @@ public abstract class BookshelfOperations{
 	 * @return a new Bookshelf containing all of the books of the input.
 	 * @throws IllegalArgumentException if collection is/contains a null shelf.
 	 */
-	
+
 	public static Bookshelf union(Collection<Bookshelf> shelfs) throws IllegalArgumentException{
-		
+
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
-		
+
 		VirtualBookshelf newBS = new VirtualBookshelf();
-		
+
 		for( Bookshelf s: shelfs ){
 			if (null == s) throw new IllegalArgumentException("Collection contains a null shelf");
 			newBS = (VirtualBookshelf) newBS.union(s);	
 		}
-		
+
 		return newBS;
 	}
 
-	public static Bookshelf subset(Collection<Bookshelf> shelfs, Bookshelf basis) throws IllegalArgumentException{
-		
+	/**
+	 * This operation takes a Collection of Bookshelfs and a basis Book
+	 * and returns a new Bookshelf containing books similar to the basis.
+	 * 
+	 * @param shelfs The Collection of Bookshelfs
+	 * @param basis The basis book
+	 * @return a new bookshelf containing a subset of Books from the Collection that are similar to the basis.
+	 * @throws IllegalArgumentException
+	 */
+	
+	public static Bookshelf subset(Collection<Bookshelf> shelfs, Book basis) throws IllegalArgumentException{
+
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 
-		VirtualBookshelf newBS = new VirtualBookshelf();
-		
-		Iterator<Bookshelf> shelfsIt = shelfs.iterator();
-		Iterator<Book> basisBooks; 
+		Bookshelf allShelfs = union(shelfs);
+		Iterator<Book> allBooks = allShelfs.enumerate();
 
-		if (isVirtual(basis)){
-
-			while(shelfsIt.hasNext()){
-
-				Bookshelf currentBS = shelfsIt.next();
-				Iterator<Book> currentBSIt = currentBS.enumerate();
-
-				while(currentBSIt.hasNext()){
-
-					basisBooks = basis.enumerate();
-
-					Book currentBasisBook;
-					Book currentBook = currentBSIt.next();
-
-					Iterator<Map.Entry<String,Integer>> currentBasisWeights;
-
-					while(basisBooks.hasNext()){
-
-						currentBasisBook = basisBooks.next();
-						currentBasisWeights = currentBasisBook.enumerateTags();
-
-						while(currentBasisWeights.hasNext()){
-							Map.Entry<String,Integer> tag = currentBasisWeights.next();
-
-							if (currentBook.weight(tag.getKey()) < 0){	} //do nothing.
-							else if (currentBook.weight(tag.getKey()) > tag.getValue()/2)
-								newBS.insert(currentBook);
-
-						}
-
-					}	
-
-				}
-
-			}
-				
-		}
-
-		return null;
+		return allShelfs.subset(basis);
 	}
 
+	/**
+	 * if needed
+	 * @param shelf
+	 * @return
+	 */
 	private static boolean isVirtual(Bookshelf shelf){
 
 		return shelf instanceof VirtualBookshelf;
 	}
 
-/*	public static void main(String []args){
+	/**
+	 * if needed
+	 * @param book
+	 * @return
+	 */
+	private static boolean isVirtual(Book book){
+
+		return book instanceof VirtualBook;
+	}
+
+	/*	public static void main(String []args){
 
 		VirtualBookshelf a = new VirtualBookshelf();
 		VirtualBookshelf b = new VirtualBookshelf();
@@ -160,27 +145,27 @@ public abstract class BookshelfOperations{
 				System.out.println("Size 2: failed");
 			else
 				System.out.println("Size 2: passed");
-			
+
 			Stack<Bookshelf> stackOfBooks2 = new Stack<Bookshelf>();
 			stackOfBooks2.add(a);
 			stackOfBooks2.add(b);
 			stackOfBooks2.add(c);
 
 			Bookshelf abc = BookshelfOperations.union(stackOfBooks2);
-			
+
 			itA = a.enumerate();
 			itB = b.enumerate();
 			Iterator<Book> itC = c.enumerate();
-			
+
 
 			boolean three = true;
 
 			while (three && ( itA.hasNext() | itB.hasNext() | itC.hasNext() )){
-				
+
 				Book tempA;
 				Book tempB;
 				Book tempC;
-				
+
 				if (itA.hasNext())
 				{
 					tempA = itA.next();
@@ -215,4 +200,4 @@ public abstract class BookshelfOperations{
 			else
 				System.out.println("Size 3: passed");
 		}*/
-	}
+}
