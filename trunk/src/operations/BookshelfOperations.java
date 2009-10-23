@@ -68,6 +68,34 @@ public abstract class BookshelfOperations{
 
 		return book instanceof VirtualBook;
 	}
+	
+	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Bookshelf shelf){
+		
+		Iterator<Book> shelfIt = shelf.enumerate();
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		while (shelfIt.hasNext()){		//each book on the shelf
+			
+			Book current = shelfIt.next();
+			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
+			
+			while (tags.hasNext()){		//each tag on a book
+				Map.Entry<String, Integer> temp = tags.next();
+				map.put(temp.getKey(), temp.getValue());
+				
+			}
+			
+		}
+		return map.entrySet().iterator();
+		
+	}
+	
+	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Collection<Bookshelf> shelfs){
+		
+		Bookshelf newShelf = union(shelfs);
+		return enumerateTags(newShelf);
+		
+	}
 
 	/*	public static void main(String []args){
 
