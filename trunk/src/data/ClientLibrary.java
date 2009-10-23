@@ -30,36 +30,35 @@ public class ClientLibrary implements Library {
 	 * 
 	 * @param shelf the bookshelf to add to the library
 	 */
-	public void addBookshelf(Bookshelf shelf) throws NullPointerException {
+	public boolean addBookshelf(Bookshelf shelf) throws NullPointerException {
 		if(null == shelf)
 			throw new NullPointerException("shelf cannot be null");
-		
+	
+		if(shelf instanceof VirtualBookshelf)
+			database.shelfStore(shelf);
+
 		if(!this.bookshelves.contains(shelf))
-			this.bookshelves.add(shelf);
+			return this.bookshelves.add(shelf);
+	
+		return false;
 	}
 
 	/**
 	 * Removes a bookshelf from the library.
 	 */
-	public void removeBookshelf(Bookshelf shelf) throws NullPointerException {
+	public boolean removeBookshelf(Bookshelf shelf) throws NullPointerException {
 		if(null == shelf)
 			throw new NullPointerException("shelf cannot be null");
 		
 		this.bookshelves.remove(shelf);
+		return true;
 	}
 	
-	public Iterable<Bookshelf> enumerateBookshelves() {
-		return this.bookshelves;
-	}
-	
-	public void saveBookshelf(Bookshelf shelf) throws IllegalArgumentException, NullPointerException {
-		if(null == shelf)
-			throw new NullPointerException("the shelf given is null");
-		
-		if(!(shelf instanceof VirtualBookshelf))
-			throw new IllegalArgumentException("the shelf must be a virtual bookshelf");
-		
-		this.database.shelfStore(shelf);
+	/**
+	 * Returns an iterator containing all the bookshelves in this library.
+	 */
+	public Iterator<Bookshelf> iterator() {
+		return this.bookshelves.iterator();
 	}
 	
 	/**
@@ -71,36 +70,6 @@ public class ClientLibrary implements Library {
 	public Bookshelf getMasterShelf() {
 		return BookshelfOperations.union(this.bookshelves);
 	}
-
-	/* unit tests */
-	public static void main(String []args) {
-		Library lib = new ClientLibrary();
-		Bookshelf shelf1 = new VirtualBookshelf();
-		Bookshelf shelf2 = new VirtualBookshelf();
-		
-		for(Bookshelf shelf : lib.enumerateBookshelves()) {
-			System.out.print("[");
-			
-			Iterator<Book> it = shelf.enumerate();
-			
-			if(!it.hasNext()) {
-				System.out.println(" ]");
-				continue;
-			}
-			
-			for(Book book = it.next(); it.hasNext(); book = it.next())
-				System.out.print(" (" + book.getProperty("title") + "," + book.getProperty("author") + ")");
-			
-			System.out.println(" ]");
-		}
-		
-		for(int i = 0; i < 50; ++i) {	
-			shelf1.insert(new VirtualBook(Integer.toString(i), Integer.toString(50 - i)));
-			shelf2.insert(new VirtualBook(Integer.toString(50 - i), Integer.toString(i)));
-		}
-		lib.addBookshelf(shelf1);
-		
-		lib.saveBookshelf(shelf1);
-	}
 	
 }
+

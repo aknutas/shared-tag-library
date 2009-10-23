@@ -54,13 +54,16 @@ public class ScriptGenerator {
 		
 		//at this point should contain a fully set up library with
 		// shelves containing 5 books each
-		Iterable<Bookshelf> booksf = p.lib.enumerateBookshelves();
+		/*Iterable<Bookshelf> booksf = p.lib.enumerateBookshelves();
 		Iterator<Bookshelf> iter = booksf.iterator();
 		Bookshelf bs;
 		while(iter.hasNext()){
 			bs = iter.next();
 			System.out.println("name: "+bs.getProperty("Name"));
-		}
+		}*/
+		
+		for(Bookshelf bs : p.lib)
+			System.out.println("name: "+bs.getProperty("Name"));
 		
 		System.out.println("done");		
 	}
