@@ -20,6 +20,7 @@ public class ScriptGenerator {
 	public Vector<String> dictionary;
 	private final File dictionaryFile;
 	private final File targetFile;
+	public Parser p;
 	Random numgen; 
 	/**
 	 * creates a script generator with a dictionary input
@@ -43,10 +44,10 @@ public class ScriptGenerator {
 			System.err.println("error in s processline Dic "+ e);
 		}
 		sg.generateLibrary(10,5);
-		Parser p = new Parser("src\\scripts\\books.txt");
+		sg.p = new Parser("src\\scripts\\books.txt");
 
 		try{
-			p.processLineByLine();
+			sg.p.processLineByLine();
 		}
 		catch (Exception e){
 			System.err.println("error in s processline books "+ e);
@@ -62,7 +63,7 @@ public class ScriptGenerator {
 			System.out.println("name: "+bs.getProperty("Name"));
 		}*/
 		
-		for(Bookshelf bs : p.lib)
+		for(Bookshelf bs : sg.p.lib)
 			System.out.println("name: "+bs.getProperty("Name"));
 		
 		System.out.println("done");		
