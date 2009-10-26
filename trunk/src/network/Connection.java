@@ -1,5 +1,7 @@
 package network;
 
+import network.messages.NetworkMessage;
+
 /**
  * The Connection class is a dummy class to demonstrate the required
  * functionality of the data structures.
