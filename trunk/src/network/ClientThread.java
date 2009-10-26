@@ -1,6 +1,5 @@
 package network;
 
-
 /**
  * Class ClientThread
  * 
@@ -9,27 +8,11 @@ package network;
  */
 public class ClientThread extends Thread {
 
-  //
-  // Fields
-  //
+    public ClientThread() {
+    };
 
-  
-  //
-  // Constructors
-  //
-  public ClientThread () { };
-  
-  //
-  // Methods
-  //
+    public void ClientThread() {
 
-
-  //
-  // Accessor methods
-  //
-
-  //
-  // Other methods
-  //
+    }
 
 }
