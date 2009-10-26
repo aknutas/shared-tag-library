@@ -2,6 +2,7 @@ package data;
 import java.util.Iterator;
 
 import network.*;
+import network.messages.NetworkMessage;
 
 import java.util.*;
 
