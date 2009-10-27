@@ -122,10 +122,9 @@ public class Root extends JFrame {
 		currentBookshelfIndex = bookshelves.size() - 1;
 
 		bookshelves.get(currentBookshelfIndex).insert(
-			new VirtualBook("The Traitor", "Andre Gorz"));
+			new VirtualBook("Silence", "John Cage"));
 
-		searchResults.addResult(new Result(bookshelves.get(
-			currentBookshelfIndex).enumerate().next()));
+		searchResults.setResults(bookshelves.get(currentBookshelfIndex));
 
 		draw();
 	    }
@@ -149,9 +148,8 @@ public class Root extends JFrame {
 
 		bookshelves.get(currentBookshelfIndex).insert(
 			new VirtualBook("The Traitor", "Andre Gorz"));
-
-		searchResults.addResult(new Result(bookshelves.get(
-			currentBookshelfIndex).enumerate().next()));
+		
+		searchResults.setResults(bookshelves.get(currentBookshelfIndex));
 
 		draw();
 		// Refresh current bookshelf view
@@ -192,7 +190,8 @@ public class Root extends JFrame {
      * @return void
      */
     private void initialize() {
-	control = new Controller();
+	// Un-comment this to experience possible crash
+	// control = new Controller();
 	this.setSize(1038, 509);
 	this.setContentPane(getJContentPane());
 	this.setTitle("Book Butler");
