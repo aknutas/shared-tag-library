@@ -127,8 +127,85 @@ public class Controller {
 		return num;
 	}
 	
-/*
-	If you need any methods add a quick stub and discription and ill get to it
+
+	/**
+	 * Add a book to the library
+	 * 
+	 * @return the added book (null if error)
+	 */
+	public Book addBook(Bookshelf bookshelf, String name){
+	    return null;
+	}
+	
+	
+	/**
+	 * Add a book to the library
+	 * 
+	 * @return the added book (null if error)
+	 */
+	public Book addBook(Bookshelf bookshelf, Book book){
+	    return null;
+	}
+	
+	/**
+	 * Remove a book from the library
+	 * 
+	 * @return the removed book (null if error)
+	 */
+	public Book removeBook(Bookshelf bookshelf, String name){
+	    return null;
+	}
+	
+	
+	/**
+	 * Remove a book from the library
+	 * 
+	 * @return the removed book (null if error)
+	 */
+	public Book removeBook(Bookshelf bookshelf, Book book){
+	    return null;
+	}
+	
+	
+	/**
+	 * Add a bookshelf to the library
+	 * 
+	 * @return the added bookshelf (null if error)
+	 */
+	public Book addBookshelf(Bookshelf bookshelf, String name){
+	    return null;
+	}
+	
+	
+	/**
+	 * Add a bookshelf to the library
+	 * 
+	 * @return the added bookshelf (null if error)
+	 */
+	public Book addBookshelf(Bookshelf bookshelf, Book book){
+	    return null;
+	}
+	
+	/**
+	 * Remove a bookshelf from the library
+	 * 
+	 * @return the removed bookshelf (null if error)
+	 */
+	public Book removeBookshelf(Bookshelf bookshelf, String name){
+	    return null;
+	}
+	
+	
+	/**
+	 * Remove a bookshelf from the library
+	 * 
+	 * @return the removed bookshelf (null if error)
+	 */
+	public Book removeBookshelf(Bookshelf bookshelf, Book book){
+	    return null;
+	}
+	/*
+	If you need any methods add a quick stub and description and ill get to it
 	this is just an early version more to follow	
 	
 	
