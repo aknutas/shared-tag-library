@@ -39,12 +39,12 @@ public class Result extends JPanel {
     private VirtualBook book = null;
     private VirtualBookshelf bookshelf = null;
     private Library library = null;
-    private String tag = ""; // @jve:decl-index=0:
     private JTextField jTextField = null;
 
     protected void draw() {
 	validate();
-	repaint();
+	this.repaint();
+	super.repaint();
     }
 
     /**
@@ -59,12 +59,6 @@ public class Result extends JPanel {
     public Result(Library l) {
 	super();
 	library = l;
-	initialize();
-    }
-
-    public Result(String t) {
-	super();
-	tag = t;
 	initialize();
     }
 
@@ -89,7 +83,7 @@ public class Result extends JPanel {
 	if (Content == null) {
 
 	    Content = new JPanel();
-	    Content.setLayout(new BorderLayout());
+	    Content.setLayout(new FlowLayout());
 	}
 
 	if (book != null) {
@@ -98,13 +92,16 @@ public class Result extends JPanel {
 	    while (properties.hasNext()) {
 
 		Entry<String, String> e = properties.next();
-		JLabel title = new JLabel(e.getKey());
-		JLabel value = new JLabel(e.getValue());
-		Content.add(title, null);
-		Content.add(value, null);
-		System.out.println("Property Added."); // debug
+		if ((e.getKey().compareTo("title") != 0)
+			&& (e.getKey().compareTo("author") != 0)) {
+		    JLabel title = new JLabel(e.getKey());
+		    JLabel value = new JLabel(e.getValue());
+		    Content.add(title, null);
+		    Content.add(value, null);
+		}
 
-		// Make labels editable
+		draw();
+		// TODO: Make labels editable
 	    }
 
 	} else if (bookshelf != null) {
@@ -114,8 +111,8 @@ public class Result extends JPanel {
 	}
 
 	JLabel add = new JLabel("Add Tag");
-	Content.add(add, BorderLayout.WEST);
-	Content.add(getJTextField(), BorderLayout.EAST);
+	Content.add(add, null);
+	Content.add(getJTextField(), null);
 	return Content;
     }
 
@@ -243,6 +240,8 @@ public class Result extends JPanel {
 		if (book != null) {
 		    book.setProperty("tag", jTextField.getText());
 		}
+		
+		draw();
 		// Refresh current bookshelf view
 	    }
 	});

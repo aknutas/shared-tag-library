@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -10,6 +11,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
+import data.Book;
+import data.Bookshelf;
 import data.VirtualBook;
 
 public class SearchResults extends JPanel {
@@ -45,8 +48,21 @@ public class SearchResults extends JPanel {
 	super.repaint();
 	return result;
     }
+    
+    protected void setResults(Bookshelf shelf) {
+	
+	removeResults();
+	
+	Iterator<Book> result = shelf.enumerate();
+	while (result.hasNext()) {
+	    results.add(new Result(result.next()));
+	}
+	
+	addResults();
+    }
 
     private void addResults() {
+	
 	for (Result r : results) {
 	    this.add(r);
 	}
@@ -78,6 +94,7 @@ public class SearchResults extends JPanel {
 	for (Result r : results) {
 	    this.remove(r);
 	}
+	results.clear();
     }
 
 } // @jve:decl-index=0:visual-constraint="266,31"
