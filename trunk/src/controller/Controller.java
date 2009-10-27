@@ -172,7 +172,7 @@ public class Controller {
 	 * 
 	 * @return the added bookshelf (null if error)
 	 */
-	public Book addBookshelf(Bookshelf bookshelf, String name){
+	public Bookshelf addBookshelf(Bookshelf bookshelf, String name){
 	    return null;
 	}
 	
@@ -182,7 +182,7 @@ public class Controller {
 	 * 
 	 * @return the added bookshelf (null if error)
 	 */
-	public Book addBookshelf(Bookshelf bookshelf, Book book){
+	public Bookshelf addBookshelf(Bookshelf bookshelf, Book book){
 	    return null;
 	}
 	
@@ -191,7 +191,7 @@ public class Controller {
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
-	public Book removeBookshelf(Bookshelf bookshelf, String name){
+	public Bookshelf removeBookshelf(Bookshelf bookshelf, String name){
 	    return null;
 	}
 	
@@ -201,13 +201,22 @@ public class Controller {
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
-	public Book removeBookshelf(Bookshelf bookshelf, Book book){
+	public Bookshelf removeBookshelf(Bookshelf bookshelf, Book book){
 	    return null;
 	}
+	
+	
+	/**
+	 * Initialize a bookshelf with dummy data entries
+	 * 
+	 * @return the removed bookshelf (null if error)
+	 */
+	public Bookshelf initializeDummyData(){
+	    return null;
+	}
+	
 	/*
 	If you need any methods add a quick stub and description and ill get to it
 	this is just an early version more to follow	
-	
-	
-*/
+	 */
 }
