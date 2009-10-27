@@ -6,7 +6,7 @@ package network;
  * @author Antti Knutas
  * 
  */
-public class ServerThread extends Thread {
+public class ServerThread extends CommThread {
 
   public ServerThread () {
       
