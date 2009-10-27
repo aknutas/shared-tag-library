@@ -18,7 +18,7 @@ public class CommunicationImpl implements Communication {
 
     private final static int SO_TIMEOUT = 50;
 
-    public Object Receive(Socket _socket) throws IOException {
+    public synchronized Object Receive(Socket _socket) throws IOException {
 
 	try {
 	    _socket.setSoTimeout(SO_TIMEOUT);
@@ -47,7 +47,7 @@ public class CommunicationImpl implements Communication {
 	}
     }
 
-    public void Send(Socket _socket, Object _data) throws IOException {
+    public synchronized void Send(Socket _socket, Object _data) throws IOException {
 
 	ObjectOutputStream sendstream;
 	sendstream = new ObjectOutputStream(_socket.getOutputStream());
