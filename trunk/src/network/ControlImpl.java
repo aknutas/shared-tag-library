@@ -1,6 +1,8 @@
 package network;
 
 import java.util.*;
+
+import network.messages.Reply;
 import database.QueryBuilder;
 import database.Access;
 
@@ -12,23 +14,17 @@ import database.Access;
  */
 class ControlImpl implements Control {
 
-  //
-  // Fields
-  //
-
-  private network.ControlImpl instance;
-  private ArrayList threadCollection;
+  private HashMap threadCollection;
+  private long id;
+  private int conncounter;
+  private HashMap msgqueues;
   
-  //
-  // Constructors
-  //
-  private ControlImpl () {
-	  
+  public ControlImpl () {
+	Random random = new Random();
+	id = random.nextLong();
+	msgqueues = new HashMap();
+	threadCollection = new HashMap();
   };
-  
-  //
-  // Methods
-  //
 
   /**
    * A command for the network interface to connect to a server address. Return value
@@ -36,9 +32,11 @@ class ControlImpl implements Control {
    * @return       int
    * @param        address Connection IP
    */
-  public int connect( String address )
+  public synchronized int connect( String address )
   {
-	return 0;
+	//Dummy data
+      Random random = new Random();
+      return random.nextInt();
   }
 
 
@@ -47,24 +45,47 @@ class ControlImpl implements Control {
    * @return       int
    * @param        connection The connection ID to be disconnected.
    */
-  public int disconnect( int connection )
+  public synchronized int disconnect( int connection )
   {
 	return 0;
   }
-
-
+  
   /**
-   * Use this method to get an instance of the singleton.
-   * @return       Database.Access
+   * A command to send a data object to the specified connection, expecting a
+   * reply to the reply object.
+   * 
+   * @return Reply The reply object.
+   * @param connection
+   *            The connection ID.
    */
-  public network.Control access(  )
+  public synchronized Reply sendMsgGetReply(int connection)
   {
-		if (instance==null)
-		{
-			instance = new ControlImpl();
-		}
-		return instance;
+      Reply reply = new Reply();
+      
+      return reply;
   }
 
+  /**
+   * A command to send a data object to the specified connection, with no
+   * direct reply expected.
+   * 
+   * @param connection
+   *            The connection ID.
+   */
+  public void sendMsgNoReply(int connection)
+  {
+      
+  }
+  
+  /**
+   * A query of incoming messages. (chats, disconnections, etc)
+   * 
+   * @param connection
+   *            The connection ID.
+   */
+  public synchronized Map whatsUp()
+  {
+      return msgqueues;
+  }
 
 }
