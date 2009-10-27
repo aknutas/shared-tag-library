@@ -10,6 +10,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
+import data.VirtualBook;
+
 public class SearchResults extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -28,9 +30,11 @@ public class SearchResults extends JPanel {
     }
 
     private void addDemoResult() {
-	results.add(new Result());
-	results.add(new Result());
-	results.add(new Result());
+	results.add(new Result(new VirtualBook("Andre Gorz", "Traitor")));
+	results
+		.add(new Result(
+			new VirtualBook("Vegan Cooks", "Vegan Cookbook")));
+	results.add(new Result(new VirtualBook("John Cage", "Silence")));
 	addResults();
     }
 

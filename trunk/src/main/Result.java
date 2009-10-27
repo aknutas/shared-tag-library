@@ -13,9 +13,17 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
+import data.Book;
+import data.Bookshelf;
 import data.Library;
 import data.VirtualBook;
 import data.VirtualBookshelf;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import javax.swing.JTextField;
 
 public class Result extends JPanel {
 
@@ -31,7 +39,13 @@ public class Result extends JPanel {
     private VirtualBook book = null;
     private VirtualBookshelf bookshelf = null;
     private Library library = null;
-    private String tag = "";
+    private String tag = ""; // @jve:decl-index=0:
+    private JTextField jTextField = null;
+
+    protected void draw() {
+	validate();
+	repaint();
+    }
 
     /**
      * This is the default constructor
@@ -54,15 +68,15 @@ public class Result extends JPanel {
 	initialize();
     }
 
-    public Result(VirtualBook b) {
+    public Result(Book b) {
 	super();
-	book = b;
+	book = (VirtualBook) b;
 	initialize();
     }
 
-    public Result(VirtualBookshelf b) {
+    public Result(Bookshelf b) {
 	super();
-	bookshelf = b;
+	bookshelf = (VirtualBookshelf) b;
 	initialize();
     }
 
@@ -73,20 +87,35 @@ public class Result extends JPanel {
      */
     private JPanel getContent() {
 	if (Content == null) {
+
 	    Content = new JPanel();
-	    Content.setLayout(new GridBagLayout());
+	    Content.setLayout(new BorderLayout());
 	}
 
-	/*
-	 * if (book != null) { for (Entry<String, String> e :
-	 * book.enumerateProperties()) {
-	 * 
-	 * } } else if (bookshelf != null) { for (Entry<String, String> e :
-	 * bookshelf.enumerateProperties()) {
-	 * 
-	 * } } else {}
-	 */
+	if (book != null) {
+	    Iterator<Entry<String, String>> properties = book
+		    .enumerateProperties();
+	    while (properties.hasNext()) {
 
+		Entry<String, String> e = properties.next();
+		JLabel title = new JLabel(e.getKey());
+		JLabel value = new JLabel(e.getValue());
+		Content.add(title, null);
+		Content.add(value, null);
+		System.out.println("Property Added."); // debug
+
+		// Make labels editable
+	    }
+
+	} else if (bookshelf != null) {
+	    // not implemented
+	} else {
+	    // not implemented (library or tag)
+	}
+
+	JLabel add = new JLabel("Add Tag");
+	Content.add(add, BorderLayout.WEST);
+	Content.add(getJTextField(), BorderLayout.EAST);
 	return Content;
     }
 
@@ -160,14 +189,13 @@ public class Result extends JPanel {
     private JPanel getTitle() {
 	if (Title == null) {
 
-	    title = new JLabel();
-	    if (book != null)
-		title.setText(book.getProperty("title") + " | By: "
+	    title = new JLabel("Title?");
+	    if (book != null) {
+		title.setText("Book: " + book.getProperty("title") + " | By: "
 			+ book.getProperty("author"));
-	    else if (bookshelf != null)
-		title.setText(bookshelf.getProperty("name"));
-	    else
-		title.setText("Title?");
+	    } else if (bookshelf != null) {
+		title.setText("Bookshelf: " + bookshelf.getProperty("name"));
+	    }
 
 	    Title = new JPanel();
 	    Title.setLayout(new BoxLayout(getTitle(), BoxLayout.X_AXIS));
@@ -196,6 +224,30 @@ public class Result extends JPanel {
 	    System.out.println("Cannot set new Theme for Java Look and Feel.");
 	}
 
+	draw();
+    }
+
+    /**
+     * This method initializes jTextField
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getJTextField() {
+	if (jTextField == null) {
+	    jTextField = new JTextField(15);
+	}
+
+	jTextField.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent event) {
+
+		if (book != null) {
+		    book.setProperty("tag", jTextField.getText());
+		}
+		// Refresh current bookshelf view
+	    }
+	});
+
+	return jTextField;
     }
 
 } // @jve:decl-index=0:visual-constraint="207,107"
