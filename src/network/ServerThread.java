@@ -23,11 +23,11 @@ public class ServerThread extends CommThread {
   
   @Override
     public void run() {
+	super.setStatus(1);
 	Object obj;
 	run = true;
 
 	while (!s.isClosed() && run) {
-	    
 	    try {
 		obj = comm.Receive(s);
 		// TODO Helloworld hack
@@ -42,5 +42,7 @@ public class ServerThread extends CommThread {
 		}
 	    }
 	}
+	super.setStatus(0);
+	return;
     }
 }

@@ -23,26 +23,28 @@ public class ClientThread extends CommThread {
     };
     
     @Override
-      public void run() {
-  	Object obj;
-  	run = true;
+    public void run() {
+	super.setStatus(1);
+	Object obj;
+	run = true;
 
-  	while (!s.isClosed() && run) {
-  	    try {
-  		obj = comm.Receive(s);
-  		// TODO Helloworld hack
-  		addQueue((network.messages.Message) obj);
-  	    } catch (IOException e1) {
-  		System.out.println(e1);
-  		try {
-  		    Thread.sleep(100);
-  		} catch (InterruptedException e) {
-  		    // TODO Auto-generated catch block
-  		    e.printStackTrace();
-  		}
-  	    }
-  	}
-      }
-    
+	while (!s.isClosed() && run) {
+	    try {
+		obj = comm.Receive(s);
+		// TODO Helloworld hack
+		addQueue((network.messages.Message) obj);
+	    } catch (IOException e1) {
+		System.out.println(e1);
+		try {
+		    Thread.sleep(100);
+		} catch (InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+	}
+	super.setStatus(0);
+	return;
+    }
     
   }
