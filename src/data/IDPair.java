@@ -1,7 +1,12 @@
 package data;
 
 import java.util.Map.Entry;
-
+/**
+ * Implementation of Entry<String, Integer>
+ * 
+ * @author Steve
+ *
+ */
 public class IDPair implements Entry<String, Integer> {
 
 	String key;

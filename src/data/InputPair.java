@@ -1,7 +1,12 @@
 package data;
 
 import java.util.Map.Entry;
-
+/**
+ * Implementation of Entry<Integer, Integer>
+ * 
+ * @author Steve
+ *
+ */
 public class InputPair implements Entry<Integer, Integer> {
 
 	Integer key;

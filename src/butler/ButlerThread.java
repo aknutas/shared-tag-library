@@ -32,7 +32,7 @@ public class ButlerThread extends Thread {
 		while (properties.hasNext()){
 			Map.Entry<String, String> prop = properties.next();
 			idPairs.add(new IDPair(prop.getValue(),Integer.valueOf(i)));
-			inputPairs.add(new InputPair(i, ))
+			inputPairs.add(new InputPair(i, 1));
 			i++;
 		}
 		
