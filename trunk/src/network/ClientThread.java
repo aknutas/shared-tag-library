@@ -6,7 +6,7 @@ package network;
  * @author Antti Knutas
  * 
  */
-public class ClientThread extends Thread {
+public class ClientThread extends CommThread {
 
     public ClientThread() {
     };
