@@ -53,6 +53,7 @@ public class CommThread implements Runnable {
     public synchronized List<Message> getMsg() {
 	if (!messagequeue.isEmpty()) {
 	    ArrayList<Message> returnlist = new ArrayList<Message>(messagequeue);
+	    messagequeue.removeAll(returnlist);
 	    return returnlist;
 	} else
 	    return null;
