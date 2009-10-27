@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @author Antti Knutas
  * 
  */
+
 public class ChatMessage extends Message implements Serializable {
 
     private static final long serialVersionUID = -6448803844411292176L;
