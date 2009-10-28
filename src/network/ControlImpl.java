@@ -2,6 +2,7 @@ package network;
 
 import java.util.*;
 
+import network.messages.Message;
 import network.messages.Reply;
 import database.QueryBuilder;
 import database.Access;
@@ -45,7 +46,7 @@ class ControlImpl implements Control {
    * @return       int
    * @param        connection The connection ID to be disconnected.
    */
-  public synchronized int disconnect( int connection )
+  public synchronized int disconnect(int connection)
   {
 	return 0;
   }
@@ -58,7 +59,7 @@ class ControlImpl implements Control {
    * @param connection
    *            The connection ID.
    */
-  public synchronized Reply sendMsgGetReply(int connection)
+  public synchronized Reply sendMsgGetReply(int connection, Message message)
   {
       Reply reply = new Reply();
       
@@ -72,7 +73,7 @@ class ControlImpl implements Control {
    * @param connection
    *            The connection ID.
    */
-  public void sendMsgNoReply(int connection)
+  public void sendMsgNoReply(int connection, Message message)
   {
       
   }
