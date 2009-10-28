@@ -3,6 +3,7 @@ package network;
 import java.util.List;
 import java.util.Map;
 
+import network.messages.Message;
 import network.messages.Reply;
 
 /**
@@ -40,8 +41,10 @@ public interface Control {
      * @return Reply The reply object.
      * @param connection
      *            The connection ID.
+     * @param message
+     *            The message to be sent.
      */
-    public Reply sendMsgGetReply(int connection);
+    public Reply sendMsgGetReply(int connection, Message message);
 
     /**
      * A command to send a data object to the specified connection, with no
@@ -49,13 +52,16 @@ public interface Control {
      * 
      * @param connection
      *            The connection ID.
+     * @param message
+     *            The message to be sent.
      */
-    public void sendMsgNoReply(int connection);
-    
+    public void sendMsgNoReply(int connection, Message message);
+
     /**
      * A query of incoming messages. (chats, disconnections, etc)
      * 
-     * @return A map that contains a list of all incoming messages. Sorted by connection id.
+     * @return A map that contains a list of all incoming messages. Sorted by
+     *         connection id.
      * @param connection
      *            The connection ID.
      */
