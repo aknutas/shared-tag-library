@@ -65,6 +65,6 @@ public interface Control {
      * @param connection
      *            The connection ID.
      */
-    public Map whatsUp();
+    public  Map<Integer, List<Message>> whatsUp();
 
 }

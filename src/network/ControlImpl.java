@@ -15,78 +15,85 @@ import database.Access;
  */
 class ControlImpl implements Control {
 
-  private HashMap threadCollection;
-  private long id;
-  private int conncounter;
-  private HashMap msgqueues;
-  
-  public ControlImpl () {
+    private HashMap<Integer, CommThread> threadCollection;
+    private long id;
+    private int conncounter;
+
+    public ControlImpl() {
 	Random random = new Random();
 	id = random.nextLong();
-	msgqueues = new HashMap();
 	threadCollection = new HashMap();
-  };
+    };
 
-  /**
-   * A command for the network interface to connect to a server address. Return value
-   * is 0 for failure, or a number for connection identifier.
-   * @return       int
-   * @param        address Connection IP
-   */
-  public synchronized int connect( String address )
-  {
-	//Dummy data
-      Random random = new Random();
-      return random.nextInt();
-  }
+    /**
+     * A command for the network interface to connect to a server address.
+     * Return value is 0 for failure, or a number for connection identifier.
+     * 
+     * @return int
+     * @param address
+     *            Connection IP
+     */
+    public synchronized int connect(String address) {
+	// Dummy data
+	Random random = new Random();
+	return random.nextInt();
+    }
 
-
-  /**
-   * A command to disconnect a certain client or server connection.
-   * @return       int
-   * @param        connection The connection ID to be disconnected.
-   */
-  public synchronized int disconnect(int connection)
-  {
+    /**
+     * A command to disconnect a certain client or server connection.
+     * 
+     * @return int
+     * @param connection
+     *            The connection ID to be disconnected.
+     */
+    public synchronized int disconnect(int connection) {
 	return 0;
-  }
-  
-  /**
-   * A command to send a data object to the specified connection, expecting a
-   * reply to the reply object.
-   * 
-   * @return Reply The reply object.
-   * @param connection
-   *            The connection ID.
-   */
-  public synchronized Reply sendMsgGetReply(int connection, Message message)
-  {
-      Reply reply = new Reply();
-      
-      return reply;
-  }
+    }
 
-  /**
-   * A command to send a data object to the specified connection, with no
-   * direct reply expected.
-   * 
-   * @param connection
-   *            The connection ID.
-   */
-  public void sendMsgNoReply(int connection, Message message)
-  {
-      
-  }
-  
-  /**
-   * A query of incoming messages. (chats, disconnections, etc)
-   * 
-   * @param connection
-   *            The connection ID.
-   */
-  public synchronized Map whatsUp()
-  {
-      return msgqueues;
-  }
+    /**
+     * A command to send a data object to the specified connection, expecting a
+     * reply to the reply object.
+     * 
+     * @return Reply The reply object.
+     * @param connection
+     *            The connection ID.
+     */
+    public synchronized Reply sendMsgGetReply(int connection, Message message) {
+	Reply reply = new Reply();
 
+	return reply;
+    }
+
+    /**
+     * A command to send a data object to the specified connection, with no
+     * direct reply expected.
+     * 
+     * @param connection
+     *            The connection ID.
+     */
+    public void sendMsgNoReply(int connection, Message message) {
+
+    }
+
+    /**
+     * A query of incoming messages. (chats, disconnections, etc)
+     * 
+     * @param connection
+     *            The connection ID.
+     */
+    public synchronized Map<Integer, List<Message>> whatsUp() {
+	Map<Integer, List<Message>> returnmap = new HashMap<Integer, List<Message>>();
+	List<Message> tempqueue;
+
+	Set<Integer> keyset = threadCollection.keySet();
+	Iterator<Integer> i = keyset.iterator();
+
+	while (i.hasNext()) {
+	    tempqueue = threadCollection.get(i.next()).getMsg();
+	    if (tempqueue != null)
+		returnmap.put((Integer) i.next(), tempqueue);
+	}
+
+	return returnmap;
+    }
 }
