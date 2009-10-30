@@ -18,6 +18,7 @@ public class VirtualBookshelf implements Bookshelf {
 	private Set<Book> bookshelf;
 	private Set<Bookshelf> shelves;
 	private Map<String, String> properties;
+	private Comparable<Book> comparable;
 
 	/**
 	 * Creates a new Bookshelf object which contains no books and has no
@@ -25,7 +26,7 @@ public class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @throws IllegalArgumentException if the name given is null
 	 */
-	public VirtualBookshelf() throws IllegalArgumentException {
+	public VirtualBookshelf() {
 		/* initialize containers */
 		this.bookshelf = new HashSet<Book>();
 		this.shelves = new HashSet<Bookshelf>();
@@ -141,7 +142,7 @@ public class VirtualBookshelf implements Bookshelf {
 		if(null == shelf)
 			throw new IllegalArgumentException("shelf cannot be null");
 
-		VirtualBookshelf newShelf = new VirtualBookshelf("");
+		VirtualBookshelf newShelf = new VirtualBookshelf();
 		this.shallowCopyInto(newShelf);
 
 		if(shelf instanceof VirtualBookshelf) 
@@ -194,7 +195,9 @@ public class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @throws IllegalArgumentException if the book given is null.
 	 */
-	public Bookshelf subset(Book book) throws IllegalArgumentException {
+	public Bookshelf subset(Comparable<Book> comparable) throws IllegalArgumentException {
+		Bookshelf shelf = new VirtualBookshelf();
+		//shelf.
 		return null;
 	}
 	

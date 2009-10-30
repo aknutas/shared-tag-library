@@ -13,6 +13,7 @@ public class VirtualBookshelfIterator implements Iterator<Book> {
 	private Iterator<Bookshelf> shelves;
 	private Iterator<Book> books;
 	private Iterator<Book> current;
+	private Comparable<Bookshelf> comprable;
 
 	/**
 	 * Creates a new VirtualBookshelfIterator from the given VirtualBookshelf.
@@ -22,12 +23,24 @@ public class VirtualBookshelfIterator implements Iterator<Book> {
 	 * @throws IllegalArgumentException if the shelf given is null.
 	 */
 	public VirtualBookshelfIterator(Iterator<Bookshelf> shelves, Iterator<Book> books) throws IllegalArgumentException {
+		this(shelves, books, null);
+	}
+	
+	/**
+	 * Creates a new VirtualBookshelfIterator from the given VirtualBookshelf.
+	 *
+	 * @param shelf the VirtualBookshelf to iterate over.
+	 *
+	 * @throws IllegalArgumentException if the shelf given is null.
+	 */
+	public VirtualBookshelfIterator(Iterator<Bookshelf> shelves, Iterator<Book> books, Comparable<Bookshelf> comparable) throws IllegalArgumentException {
 		if(null == shelves || null == books)
 			throw new IllegalArgumentException("the shelves or books iterator is null");
 
 		this.shelves = shelves;
 		this.books = books;
 		this.current = books;
+		this.comprable = comparable;
 	}
 
 	/**
