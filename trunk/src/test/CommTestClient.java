@@ -1,51 +1,99 @@
 package test;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
+import network.CommThread;
 import network.Communication;
 import network.messages.*;
+
+/**
+ * Class CommTestServer This is a test listener that initializes the ClientThread and works on its functionality.
+ * 
+ * @author Antti Knutas
+ * 
+ */
 
 public class CommTestClient {
 
     // Variable definitions
     public static final int PORT = 12200;
     Socket s;
+    ServerSocket ss;
     Communication comm;
-    Object obj;
     long time;
+    CommThread ct;
+    long myid;
 
     public static void main(String[] args) {
-	CommTestClient application = new CommTestClient();
+	CommTestServer application = new CommTestServer();
 	application.launch();
     }
 
-    CommTestClient() {
+    public CommTestClient() {
 	time = System.currentTimeMillis();
 	System.out.println("Initializing client");
 	comm = new network.CommunicationImpl();
-	try {
-	    s = new Socket("127.0.0.1", PORT);
-	} catch (UnknownHostException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+	Random random = new Random();
+	myid = random.nextLong();
     }
 
     void launch() {
+	Iterator<Message> i;
+	List<Message> tempqueue;
 
 	System.out.println("\nMain thread initialized in "
 		+ (System.currentTimeMillis() - time) + " milliseconds.\n");
 
-	while (!s.isClosed()) {
-	    try {
-		obj = comm.Receive(s);
-	    } catch (IOException e1) {
-		System.out.println(e1);
+	try {
+	    ss = new ServerSocket(PORT);
+	} catch (IOException e) {
+	    System.out.println("Could not listen on port: " + PORT);
+	    System.exit(-1);
+	}
+
+	System.out.println("Listening for connections.");
+
+	try {
+	    s = ss.accept();
+	    ct = new network.ClientThread(myid, s);
+	    ct.start();
+	    System.out.println("Accepted");
+	} catch (IOException e) {
+	    System.out.println("Accept failed: " + PORT);
+	    System.exit(-1);
+	}
+
+	// A lot of stuff happens
+	while (ct.getStatus() == CommThread.CONNECTED) {
+	    tempqueue = ct.getMsg();
+
+	    System.out.println("TS: Loopin'");
+
+	    if (tempqueue != null) {
+		i = tempqueue.iterator();
+		System.out.println("Iteratin', size: " + tempqueue.size());
+
+		while (i.hasNext()) {
+		    Object tryout = i.next();
+		    if (tryout.getClass().getName().equals(
+			    network.messages.ChatMessage.class.getName())) {
+			ChatMessage hello = (ChatMessage) tryout;
+			System.out.println(hello.GetMessage());
+		    } else {
+			System.out
+				.println("Unknown Foreign Object recieved. UFO ALERT:"
+					+ i.next().getClass().getName());
+		    }
+		}
+	    } else {
+		System.out
+			.println("Queue still null, read too soon. Retrying.");
 		try {
 		    Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -53,28 +101,15 @@ public class CommTestClient {
 		    e.printStackTrace();
 		}
 	    }
-
-	    if (obj != null) {
-		if (obj.getClass().getName().equals(
-			network.messages.ChatMessage.class.getName())) {
-		    System.out.println(obj.getClass().getName());
-		} else {
-		    System.out
-			    .println("Unknown Foreign Object recieved. UFO ALERT:"
-				    + obj.getClass().getName());
-		}
-	    } else {
-		System.out
-			.println("Socket still null, read too soon. Retrying.");
-	    }
 	    try {
-		Thread.sleep(1000);
+		Thread.sleep(50);
 	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	}
 
-	System.out.println("Server closed connection.");
+	System.out.println("Client closed connection.");
 	try {
 	    Thread.sleep(5000);
 	} catch (InterruptedException e) {

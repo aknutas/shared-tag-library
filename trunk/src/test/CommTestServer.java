@@ -14,7 +14,8 @@ import network.Communication;
 import network.messages.*;
 
 /**
- * Class CommTestServer This is a test listener that initializes the ServerThread and works on its functionality.
+ * Class CommTestServer This is a test listener that initializes the
+ * ServerThread and works on its functionality.
  * 
  * @author Antti Knutas
  * 
@@ -70,7 +71,7 @@ public class CommTestServer {
 	    System.exit(-1);
 	}
 
-	//A lot of stuff happens
+	// A lot of stuff happens
 	while (ct.getStatus() == CommThread.CONNECTED) {
 	    tempqueue = ct.getMsg();
 
