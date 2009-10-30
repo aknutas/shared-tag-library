@@ -9,8 +9,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import network.CommThread;
 import network.Communication;
 import network.messages.*;
+
+/**
+ * Class CommTestServer This is a test listener that initializes the ServerThread and works on its functionality.
+ * 
+ * @author Antti Knutas
+ * 
+ */
 
 public class CommTestServer {
 
@@ -19,9 +27,8 @@ public class CommTestServer {
     Socket s;
     ServerSocket ss;
     Communication comm;
-    Object obj;
     long time;
-    network.CommThread ct;
+    CommThread ct;
     long myid;
 
     public static void main(String[] args) {
@@ -38,6 +45,7 @@ public class CommTestServer {
     }
 
     void launch() {
+	Iterator<Message> i;
 	List<Message> tempqueue;
 
 	System.out.println("\nMain thread initialized in "
@@ -49,34 +57,39 @@ public class CommTestServer {
 	    System.out.println("Could not listen on port: " + PORT);
 	    System.exit(-1);
 	}
-	
+
 	System.out.println("Listening for connections.");
 
 	try {
 	    s = ss.accept();
-	ct = new network.ServerThread(myid, s);
+	    ct = new network.ServerThread(myid, s);
+	    ct.start();
+	    System.out.println("Accepted");
 	} catch (IOException e) {
 	    System.out.println("Accept failed: " + PORT);
 	    System.exit(-1);
 	}
 
-	
-	while (ct.getStatus() == 1) {
+	//A lot of stuff happens
+	while (ct.getStatus() == CommThread.CONNECTED) {
 	    tempqueue = ct.getMsg();
 
+	    System.out.println("TS: Loopin'");
+
 	    if (tempqueue != null) {
-		Iterator<Message> i = tempqueue.iterator();
+		i = tempqueue.iterator();
+		System.out.println("Iteratin', size: " + tempqueue.size());
 
 		while (i.hasNext()) {
-		    if (obj.getClass().getName().equals(
+		    Object tryout = i.next();
+		    if (tryout.getClass().getName().equals(
 			    network.messages.ChatMessage.class.getName())) {
-			System.out.println(obj.getClass().getName());
-			ChatMessage hello = (ChatMessage) obj;
+			ChatMessage hello = (ChatMessage) tryout;
 			System.out.println(hello.GetMessage());
 		    } else {
 			System.out
 				.println("Unknown Foreign Object recieved. UFO ALERT:"
-					+ obj.getClass().getName());
+					+ i.next().getClass().getName());
 		    }
 		}
 	    } else {
@@ -89,9 +102,15 @@ public class CommTestServer {
 		    e.printStackTrace();
 		}
 	    }
+	    try {
+		Thread.sleep(50);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
 
-	System.out.println("Server closed connection.");
+	System.out.println("Client closed connection.");
 	try {
 	    Thread.sleep(5000);
 	} catch (InterruptedException e) {

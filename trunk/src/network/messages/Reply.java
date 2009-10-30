@@ -9,6 +9,7 @@ package network.messages;
  */
 
 public class Reply {
+    //Errorcodes defined in network.CommThread and network.ControlImpl
     int errorcode;
     int contenttype;
     boolean isready;

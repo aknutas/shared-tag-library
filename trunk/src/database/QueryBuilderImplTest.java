@@ -14,6 +14,12 @@ import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 
+/**
+ * Class QueryBuilderImplTest Contains the QueryBuilderImpl unit tests
+ * 
+ * @Author Antti Knutas
+ */
+
 @SuppressWarnings("unused")
 public class QueryBuilderImplTest {
 

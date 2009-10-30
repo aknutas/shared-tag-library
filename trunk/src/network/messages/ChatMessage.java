@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 public class ChatMessage extends Message implements Serializable {
 
-    private static final long serialVersionUID = -6448803844411292176L;
+    private static final long serialVersionUID = -5117029102342280006L;
     private String message;
 
     /**
