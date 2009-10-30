@@ -9,14 +9,7 @@ import java.util.List;
 import network.Communication;
 import network.messages.*;
 
-/**
- * Class Chatterer This class is a test object sender for outgoing communication.
- * 
- * @author Antti Knutas
- * 
- */
-
-public class Chatterer {
+public class CommTestClient {
 
     // Variable definitions
     public static final int PORT = 12200;
@@ -24,14 +17,13 @@ public class Chatterer {
     Communication comm;
     Object obj;
     long time;
-    int i=1;
 
     public static void main(String[] args) {
-	Chatterer application = new Chatterer();
+	CommTestClient application = new CommTestClient();
 	application.launch();
     }
 
-    public Chatterer() {
+    CommTestClient() {
 	time = System.currentTimeMillis();
 	System.out.println("Initializing client");
 	comm = new network.CommunicationImpl();
@@ -51,20 +43,42 @@ public class Chatterer {
 
 	while (!s.isClosed()) {
 	    try {
-		comm.Send(s, new ChatMessage("HILIRIMPSIS " + i));
-		System.out.println("Sent" + i);
-		i++;
-	    } catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		break;
+		obj = comm.Receive(s);
+	    } catch (IOException e1) {
+		System.out.println(e1);
+		try {
+		    Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+
+	    if (obj != null) {
+		if (obj.getClass().getName().equals(
+			network.messages.ChatMessage.class.getName())) {
+		    System.out.println(obj.getClass().getName());
+		} else {
+		    System.out
+			    .println("Unknown Foreign Object recieved. UFO ALERT:"
+				    + obj.getClass().getName());
+		}
+	    } else {
+		System.out
+			.println("Socket still null, read too soon. Retrying.");
 	    }
 	    try {
-		Thread.sleep(50);
+		Thread.sleep(1000);
 	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
+	}
+
+	System.out.println("Server closed connection.");
+	try {
+	    Thread.sleep(5000);
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
 	}
     }
 

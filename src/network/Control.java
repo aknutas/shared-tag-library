@@ -43,6 +43,7 @@ public interface Control {
      *            The connection ID.
      * @param message
      *            The message to be sent.
+     * @see Reply
      */
     public Reply sendMsgGetReply(int connection, Message message);
 

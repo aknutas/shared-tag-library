@@ -9,10 +9,17 @@ import database.QueryBuilder;
 import database.QueryBuilderImpl;
 
 /**
- * Class Thread
+ * Class CommThread This class provides common functionality for each of the communication thread classes.
+ * 
+ * @Author Antti Knutas
  */
-public class CommThread implements Runnable {
+public class CommThread extends Thread {
+    
+    //Thread statuses
+    public static final int DISCONNECTED = 0;
+    public static final int CONNECTED = 1;
 
+    //Introducing variables
     protected int status;
     protected Socket s;
     protected Communication comm;
@@ -72,7 +79,7 @@ public class CommThread implements Runnable {
 	// Prevents empty default constructor
     }
     
-    public void stop()
+    public void end()
     {
 	run=false;
     }

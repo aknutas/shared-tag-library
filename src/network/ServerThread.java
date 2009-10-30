@@ -5,44 +5,51 @@ import java.net.Socket;
 import java.util.ArrayList;
 import network.messages.*;
 
-
 /**
- * Class ServerThread
+ * Class ServerThread A class for listening to connections.
+ * 
  * @author Antti Knutas
  * 
  */
 public class ServerThread extends CommThread {
 
-  public ServerThread (long myid, Socket s) {
-      messagequeue = new ArrayList<Message>();
-      sendqueue = new ArrayList<Message>();
-      this.myid = myid;
-      this.s = s;
-      comm = new CommunicationImpl();
-  };
-  
-  @Override
+    public ServerThread(long myid, Socket s) {
+	messagequeue = new ArrayList<Message>();
+	sendqueue = new ArrayList<Message>();
+	this.myid = myid;
+	this.s = s;
+	comm = new CommunicationImpl();
+	// Debug
+	System.out.println("Initialized CommServerThread");
+	super.setStatus(CONNECTED);
+    };
+
+    @Override
     public void run() {
-	super.setStatus(1);
-	Object obj;
+	Object obj = null;
 	run = true;
+	// Debug
+	System.out.println("Thread: Runnin'");
 
 	while (!s.isClosed() && run) {
 	    try {
 		obj = comm.Receive(s);
-		// TODO Helloworld hack
-		addQueue((network.messages.Message) obj);
 	    } catch (IOException e1) {
 		System.out.println(e1);
-		try {
-		    Thread.sleep(100);
-		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
+	    }
+	    if (obj != null)
+	    {
+		System.out.println("Thread: Got: " + obj.getClass().getName());
+		super.addQueue((network.messages.Message) obj);
+	    }
+	    try {
+		Thread.sleep(25);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	    }
 	}
-	super.setStatus(0);
+	super.setStatus(DISCONNECTED);
 	return;
     }
 }

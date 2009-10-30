@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import network.messages.Message;
 
 /**
- * Class ClientThread
+ * Class ClientThread A Thread for connecting to other program instances.
  * 
  * @author Antti Knutas
  * 
@@ -20,30 +20,37 @@ public class ClientThread extends CommThread {
         this.myid = myid;
         this.s = s;
         comm = new CommunicationImpl();
+	// Debug
+	System.out.println("Initialized CommClientThread");
+	super.setStatus(CONNECTED);
     };
     
     @Override
     public void run() {
-	super.setStatus(1);
-	Object obj;
+	Object obj = null;
 	run = true;
+	// Debug
+	System.out.println("Thread: Runnin'");
 
 	while (!s.isClosed() && run) {
 	    try {
 		obj = comm.Receive(s);
-		// TODO Helloworld hack
-		addQueue((network.messages.Message) obj);
 	    } catch (IOException e1) {
 		System.out.println(e1);
-		try {
-		    Thread.sleep(100);
-		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
+	    }
+	    if (obj != null)
+	    {
+		System.out.println("Thread: Got: " + obj.getClass().getName());
+		super.addQueue((network.messages.Message) obj);
+	    }
+	    try {
+		Thread.sleep(25);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	    }
 	}
-	super.setStatus(0);
+	super.setStatus(DISCONNECTED);
 	return;
     }
     
