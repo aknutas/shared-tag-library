@@ -21,6 +21,10 @@ import controller.Controller;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 
+/**
+ * @author patrick
+ *
+ */
 public class Root extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -64,6 +68,9 @@ public class Root extends JFrame {
 	initialize();
     }
 
+    /**
+     * 
+     */
     protected void draw() {
 	validate();
 	repaint();
@@ -191,7 +198,7 @@ public class Root extends JFrame {
      */
     private void initialize() {
 	// Un-comment this to experience possible crash
-	// control = new Controller();
+	control = new Controller();
 	this.setSize(1038, 509);
 	this.setContentPane(getJContentPane());
 	this.setTitle("Book Butler");
