@@ -309,6 +309,12 @@ public final class VirtualBookshelf implements Bookshelf {
 		return toShelf;
 	}
 
+	@Override
+	public Bookshelf subset(Book book) throws IllegalArgumentException {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+
 	
 
 	

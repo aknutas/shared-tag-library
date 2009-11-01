@@ -142,4 +142,6 @@ public interface Bookshelf extends Iterable<Book> {
 	 * @return an iterator of properties
 	 */
 	public Iterator<Map.Entry<String, String>> enumerateProperties();
+
+	Bookshelf subset(Book book) throws IllegalArgumentException;
 }
