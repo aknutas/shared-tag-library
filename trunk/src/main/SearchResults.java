@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -14,11 +16,13 @@ import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 import data.Book;
 import data.Bookshelf;
 import data.VirtualBook;
+import java.awt.FlowLayout;
 
 public class SearchResults extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
+    private Bookshelf bookshelf;
     List<Result> results;
 
     /**
@@ -51,16 +55,22 @@ public class SearchResults extends JPanel {
     
     protected void setResults(Bookshelf shelf) {
 	
+	bookshelf = shelf;
 	removeResults();
 	
-	Iterator<Book> result = shelf.enumerate();
+	Iterator<Book> result = bookshelf.enumerate();
 	while (result.hasNext()) {
 	    results.add(new Result(result.next()));
 	}
 	
 	addResults();
     }
-
+    
+    public void resetResults()
+    {
+	setResults(bookshelf);
+    }
+    
     private void addResults() {
 	
 	for (Result r : results) {
@@ -75,7 +85,8 @@ public class SearchResults extends JPanel {
      */
     private void initialize() {
 	this.setSize(529, 381);
-	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+	this.setLayout(new FlowLayout());
+	
 	results = new ArrayList<Result>();
 	try {
 	    UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());

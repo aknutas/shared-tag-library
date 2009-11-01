@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Rectangle;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,7 +26,13 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import javax.swing.JTextField;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
+/**
+ * @author patrick
+ *
+ */
 public class Result extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +48,13 @@ public class Result extends JPanel {
     private VirtualBookshelf bookshelf = null;
     private Library library = null;
     private JTextField jTextField = null;
+    
+    GridBagConstraints gridBagConstraints1;
+    GridBagConstraints gridBagConstraints;
 
+    /**
+     * 
+     */
     protected void draw() {
 	validate();
 	this.repaint();
@@ -56,18 +70,27 @@ public class Result extends JPanel {
 
     }
 
+    /**
+     * @param l
+     */
     public Result(Library l) {
 	super();
 	library = l;
 	initialize();
     }
 
+    /**
+     * @param b
+     */
     public Result(Book b) {
 	super();
 	book = (VirtualBook) b;
 	initialize();
     }
 
+    /**
+     * @param b
+     */
     public Result(Bookshelf b) {
 	super();
 	bookshelf = (VirtualBookshelf) b;
@@ -82,10 +105,21 @@ public class Result extends JPanel {
     private JPanel getContent() {
 	if (Content == null) {
 
+	    gridBagConstraints1 = new GridBagConstraints();
+	    gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
+	    gridBagConstraints1.gridx = 1;
+	    gridBagConstraints1.gridy = 0;
+	    gridBagConstraints1.weightx = 1.0;
+	    gridBagConstraints1.insets = new Insets(5, 0, 5, 300);
+	    gridBagConstraints = new GridBagConstraints();
+	    gridBagConstraints.insets = new Insets(5, 300, 5, 5);
+	    gridBagConstraints.gridy = 0;
+	    gridBagConstraints.gridx = 0;
 	    Content = new JPanel();
-	    Content.setLayout(new FlowLayout());
+	    Content.setLayout(new GridBagLayout());
 	}
 
+	int yOffset = 10;
 	if (book != null) {
 	    Iterator<Entry<String, String>> properties = book
 		    .enumerateProperties();
@@ -95,13 +129,22 @@ public class Result extends JPanel {
 		if ((e.getKey().compareTo("title") != 0)
 			&& (e.getKey().compareTo("author") != 0)) {
 		    JLabel title = new JLabel(e.getKey());
+		    title.setFont(new Font("Sans", Font.BOLD, 16));
+		    GridBagConstraints titleC = (GridBagConstraints)gridBagConstraints.clone();
+		    titleC.gridy = yOffset;
+		    
 		    JLabel value = new JLabel(e.getValue());
-		    Content.add(title, null);
-		    Content.add(value, null);
+		    value.setFont(new Font("Sans", Font.BOLD, 14));
+		    GridBagConstraints valueC = (GridBagConstraints)gridBagConstraints1.clone();
+		    valueC.gridy = yOffset;
+		    valueC.anchor = GridBagConstraints.FIRST_LINE_START;
+		    
+		    Content.add(title, titleC);
+		    Content.add(value, valueC);
+		    ++yOffset;
 		}
 
 		draw();
-		// TODO: Make labels editable
 	    }
 
 	} else if (bookshelf != null) {
@@ -111,8 +154,8 @@ public class Result extends JPanel {
 	}
 
 	JLabel add = new JLabel("Add Tag");
-	Content.add(add, null);
-	Content.add(getJTextField(), null);
+	Content.add(add, gridBagConstraints);
+	Content.add(getJTextField(), gridBagConstraints1);
 	return Content;
     }
 
@@ -210,7 +253,8 @@ public class Result extends JPanel {
      */
     private void initialize() {
 	this.setLayout(new BorderLayout());
-	this.setSize(827, 260);
+	this.setSize(827, 200);
+	this.setBounds(new Rectangle(0, 0, 500, 200));
 	this.add(getRightNavigation(), BorderLayout.EAST);
 	this.add(getTitle(), BorderLayout.NORTH);
 	this.add(getContent(), BorderLayout.CENTER);

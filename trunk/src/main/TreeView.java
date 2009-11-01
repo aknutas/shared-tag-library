@@ -29,6 +29,9 @@ public class TreeView extends JPanel {
 	initialize();
     }
 
+    /**
+     * @param l
+     */
     public TreeView(Library l) {
 	super();
 	library = new ArrayList<Library>();
