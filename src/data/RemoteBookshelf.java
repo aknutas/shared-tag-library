@@ -99,4 +99,17 @@ public class RemoteBookshelf implements Bookshelf {
 		return null;
 	}
 
+	@Override
+	public Bookshelf subset(Comparable<Book> comparable)
+		throws IllegalArgumentException {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+
+	@Override
+	public Iterator<Book> iterator() {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+
 }
