@@ -8,7 +8,7 @@ import java.util.*;
  * 
  * @author Andrew Alm
  */
-public interface Bookshelf {
+public interface Bookshelf extends Iterable<Book> {
 	
 	/**
 	 * Adds a book to the Bookshelf, if the Bookshelf already contains the book
@@ -100,7 +100,8 @@ public interface Bookshelf {
 	public Bookshelf difference(Bookshelf shelf) throws IllegalArgumentException;
 	
 	/**
-	 * Returns a bookshelf containing a subset of books which match the given book.
+	 * Returns a bookshelf containing a subset of Book objects which
+	 * match the given Book Comparable.
 	 * 
 	 * @param book the book to model the new bookshelf after.
 	 * 
@@ -108,7 +109,7 @@ public interface Bookshelf {
 	 * 
 	 * @throws IllegalArgumentException if the book given is null.
 	 */
-	public Bookshelf subset(Book book) throws IllegalArgumentException;
+	public Bookshelf subset(Comparable<Book> comparable) throws IllegalArgumentException;
 
 	/**
 	 * Gets the value of the given property. If the given property does not
