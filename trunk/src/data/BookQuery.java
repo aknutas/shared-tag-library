@@ -13,12 +13,13 @@ import java.util.regex.*;
  * 
  * @author Andrew Alm
  */
-public class BookQuery implements Comparable<Book> {
+public final class BookQuery implements Comparable<Book> {
 
-	private Collection<Comparable<String>> containsTag;
-	private Collection<Comparable<Entry<String, String>>> containsProperty;
+	private Collection<Comparable<String>> tagComparables;
+	private Collection<Comparable<Entry<String, String>>> propertyComparables;
+	private Collection<Comparable<Book>> bookComparables;
 
-	/* Building these Patterns frequently could be costly... */
+	/* building these patterns frequently could be costly... */
 	private Map<String, Pattern> regexpCache;
 	
 	/**
@@ -26,9 +27,68 @@ public class BookQuery implements Comparable<Book> {
 	 * no constraints will match no books.
 	 */
 	public BookQuery() {
-		this.containsTag = new LinkedList<Comparable<String>>();
-		this.containsProperty = new LinkedList<Comparable<Entry<String, String>>>();
+		this.tagComparables = new LinkedList<Comparable<String>>();
+		this.propertyComparables = new LinkedList<Comparable<Entry<String, String>>>();
+		this.bookComparables = new LinkedList<Comparable<Book>>();
+		
 		this.regexpCache = new HashMap<String, Pattern>();
+	}
+	
+	/**
+	 * Creates a new BookQuery which uses the given comparable as a
+	 * base. This is equivalent to a copy constructor for Comparables
+	 * that are instances of BookQuery.
+	 *  
+	 * @param query the comparable to base this BookQuery from.
+	 */
+	public BookQuery(Comparable<Book> comparable) {
+		this();
+		
+		if(comparable instanceof BookQuery)
+			((BookQuery)comparable).deepCopyInto(this);
+		else
+			this.and(comparable);
+	}
+	
+	/**
+	 * Deep copies all Comparable objects in this BookQuery object
+	 * into the given BookQuery using private methods.
+	 * 
+	 * @param query the BookQuery to copy into.
+	 * 
+	 * @throws NullPointerException if the query given is null.
+	 */
+	private void deepCopyInto(BookQuery query) throws NullPointerException {
+		if(null == query)
+			throw new NullPointerException("query cannot be null");
+		
+		/* copy book comparables (from 'and') */
+		for(Comparable<Book> bookComparable : this.bookComparables)
+			query.and(bookComparable);
+		
+		/* copy tag comparables */
+		for(Comparable<String> tagComparable : this.tagComparables)
+			query.addTagComparable(tagComparable);
+		
+		/* copy property comparables */
+		for(Comparable<Entry<String, String>> propertyComparable : this.propertyComparables)
+			query.addPropertyComparable(propertyComparable);
+	}
+	
+	/**
+	 * Adds an 'and' constraint to the BookQuery object. An 'and'
+	 * constraint is a Comparable that must match in order for a Book
+	 * to match this BookQuery. 
+	 * 
+	 * @param comparable the comparable to 'and' with.
+	 * 
+	 * @throws NullPointerException if the comparable given is null.
+	 */
+	public void and(Comparable<Book> comparable) throws NullPointerException {
+		if(null == comparable)
+			throw new NullPointerException("comparable cannot be null");
+		
+		this.bookComparables.add(comparable);
 	}
 
 	/**
@@ -87,12 +147,12 @@ public class BookQuery implements Comparable<Book> {
 	 * 
 	 * @throws NullPointerException if the regexp given is null
 	 */
-	public void matchTag(final String regexp, final boolean invert) throws NullPointerException{
+	public void matchTag(final String regexp, final boolean invert) throws NullPointerException {
 		if(null == regexp)
 			throw new NullPointerException("regexp cannot be null");
 		
 		final Pattern pattern = this.createRegexp(regexp);
-		this.containsTag.add(new Comparable<String>() {
+		this.addTagComparable(new Comparable<String>() {
 			public int compareTo(String tag) {
 				if(null == tag)
 					return 1;
@@ -100,6 +160,18 @@ public class BookQuery implements Comparable<Book> {
 				return (pattern.matcher(tag).matches()) ? (invert ? -1 : 0) : 1;
 			}
 		});
+	}
+	
+	/**
+	 * Inserts the given Comparable into the Tag comparable list.
+	 *  
+	 * @param comparable the Comparable to add to the 
+	 */
+	private void addTagComparable(Comparable<String> comparable) throws NullPointerException {
+		if(null == comparable)
+			throw new NullPointerException("comparable cannot be null");
+		
+		this.tagComparables.add(comparable);
 	}
 
 	/**
@@ -184,7 +256,7 @@ public class BookQuery implements Comparable<Book> {
 		final Pattern namePattern = (null != nameRegexp) ? this.createRegexp(nameRegexp) : null;
 		final Pattern valuePattern = (null != valueRegexp) ? this.createRegexp(valueRegexp) : null;
 		
-		this.containsProperty.add(new Comparable<Entry<String, String>>() {
+		this.addPropertyComparable(new Comparable<Entry<String, String>>() {
 			public int compareTo(Entry<String, String> property) {
 				if((null == property.getKey()) || (null == property.getValue()))
 					return 1;
@@ -195,6 +267,20 @@ public class BookQuery implements Comparable<Book> {
 				return (nameMatch && valueMatch) ? (invert ? -1 : 0) : 1;
 			}
 		});
+	}
+	
+	/**
+	 * Inserts a property comparable into the BookQuery object.
+	 * 
+	 * @param comparable the comparable to add.
+	 * 
+	 * @throws NullPointerException if the comparable give is null.
+	 */
+	private void addPropertyComparable(Comparable<Entry<String, String>> comparable) throws NullPointerException {
+		if(null == comparable)
+			throw new NullPointerException("comparable cannot be null");
+		
+		this.propertyComparables.add(comparable);
 	}
 	
 	/**
@@ -228,20 +314,26 @@ public class BookQuery implements Comparable<Book> {
 	 * @param book the Book to check
 	 * 
 	 * @returns 0 if the book matches the criteria of this book
-	 *          query, otherwise -1
+	 *          query, otherwise -1 or 1
 	 */
 	@Override
 	public int compareTo(Book book) {
 		Iterator<Entry<String, Integer>> tagIter = book.enumerateTags();
 		Iterator<Entry<String, String>> propertyIter = book.enumerateProperties();
+		
 		boolean match = false;
+
+		for(Comparable<Book> comparable : this.bookComparables) {
+			if(!comparable.equals(book))
+				return -1;
+		}
 		
 		while(tagIter.hasNext() || propertyIter.hasNext()) {
 			Entry<String, Integer> tag = (tagIter.hasNext() ? tagIter.next() : null);
 			Entry<String, String> property = (propertyIter.hasNext() ? propertyIter.next() : null);
 			
-			int compareTag = (null != tag) ? this.compare(this.containsTag, tag.getKey()) : 1;
-			int compareProperty = (null != property) ? this.compare(this.containsProperty, property) : 1;
+			int compareTag = (null != tag) ? this.compare(this.tagComparables, tag.getKey()) : 1;
+			int compareProperty = (null != property) ? this.compare(this.propertyComparables, property) : 1;
 			
 			if((-1 == compareTag) || (-1 == compareProperty))
 				return -1;

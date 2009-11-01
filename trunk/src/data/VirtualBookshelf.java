@@ -3,7 +3,6 @@ package data;
 import java.util.*;
 import java.util.Map.*;
 import javax.jdo.annotations.*;
-import database.*;
 
 /**
  * The VirtualBookshelf class implements the Bookshelf interface and is used
@@ -13,7 +12,7 @@ import database.*;
  * @author Andrew Alm
  */
 @PersistenceCapable(detachable="true")
-public class VirtualBookshelf implements Bookshelf {
+public final class VirtualBookshelf implements Bookshelf {
 
 	private Set<Book> bookshelf;
 	private Set<Bookshelf> shelves;
@@ -31,8 +30,24 @@ public class VirtualBookshelf implements Bookshelf {
 		this.bookshelf = new HashSet<Book>();
 		this.shelves = new HashSet<Bookshelf>();
 		this.properties = new HashMap<String, String>();
+		this.comparable = null;
+	}
+	
+	/**
+	 * A copy constructor for the VirtualBookshelf class. Any classes
+	 * extending VirtualBookshelf should create their own copy
+	 * constructor.
+	 * 
+	 * @param shelf the VirtualBookshelf to copy
+	 */
+	private VirtualBookshelf(VirtualBookshelf fromShelf, Comparable<Book> comparable) {
+		this();
 		
-		//(new QueryBuilderImpl()).shelfStore(this);
+		this.comparable = comparable;
+		if(null == fromShelf)
+			return;
+		
+		fromShelf.deepCopyInto(this);
 	}
 	
 	/**
@@ -128,7 +143,7 @@ public class VirtualBookshelf implements Bookshelf {
 	 * @return an Iterator of books
 	 */
 	public Iterator<Book> enumerate() {
-		return new VirtualBookshelfIterator(this.shelves.iterator(), this.bookshelf.iterator());
+		return new VirtualBookshelfIterator(this.bookshelf, this.shelves, this.comparable);
 	}
 
 	/**
@@ -143,10 +158,9 @@ public class VirtualBookshelf implements Bookshelf {
 			throw new IllegalArgumentException("shelf cannot be null");
 
 		VirtualBookshelf newShelf = new VirtualBookshelf();
-		this.shallowCopyInto(newShelf);
-
+		
 		if(shelf instanceof VirtualBookshelf) 
-			((VirtualBookshelf)shelf).shallowCopyInto(newShelf);
+			newShelf = new VirtualBookshelf(this, null);
 		else
 			newShelf.addBookshelf(shelf);
 		
@@ -196,9 +210,14 @@ public class VirtualBookshelf implements Bookshelf {
 	 * @throws IllegalArgumentException if the book given is null.
 	 */
 	public Bookshelf subset(Comparable<Book> comparable) throws IllegalArgumentException {
-		Bookshelf shelf = new VirtualBookshelf();
-		//shelf.
-		return null;
+		if(null == comparable)
+			throw new NullPointerException("comparable cannot be null");
+		
+		BookQuery subsetComparable = new BookQuery(comparable);
+		if(null != this.comparable)
+			subsetComparable.and(comparable);
+				
+		return new VirtualBookshelf(this, subsetComparable);
 	}
 	
 	/**
@@ -247,6 +266,17 @@ public class VirtualBookshelf implements Bookshelf {
 	}
 	
 	/**
+	 * Gets an iterator of Book Obejct's which will iterate through all books
+	 * on the shelf.
+	 * 
+	 * @return an iterator of Books.
+	 */
+	@Override
+	public Iterator<Book> iterator() {
+		return new VirtualBookshelfIterator(this.bookshelf, this.shelves, this.comparable);
+	}
+	
+	/**
 	 * Adds a bookshelf to this virtual bookshelf, if the shelf already exists
 	 * in this VirtualBookshelf, then this method does nothing.
 	 *
@@ -254,7 +284,7 @@ public class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @throws IllegalArgumentException if the shelf given is null.
 	 */
-	protected void addBookshelf(Bookshelf shelf) throws IllegalArgumentException {
+	private void addBookshelf(Bookshelf shelf) throws IllegalArgumentException {
 		if(null == shelf)
 			throw new IllegalArgumentException("shelf cannot be null");
 
@@ -262,36 +292,11 @@ public class VirtualBookshelf implements Bookshelf {
 	}
 
 	/**
-	 * Removes a bookshelf from this virtual bookshelf, if the VirtualBookshelf
-	 * already contains the shelf then this method does nothing.
-	 * 
-	 * @param shelf the shelf to remove from the VirtualBookshelf
-	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
-	 */
-	protected void removeBookshelf(Bookshelf shelf) throws IllegalArgumentException {
-		if(null == shelf)
-			throw new IllegalArgumentException("shelf cannot be null");
-		
-		this.shelves.remove(shelf);
-	}
-	
-	/**
-	 * Returns an iterator of all the bookshelves contained in this virtual
-	 * bookshelf.
-	 *
-	 * @return an iterator of books
-	 */
-	protected Iterator<Bookshelf> enumerateBookshelves() {
-		return this.shelves.iterator();
-	}
-	
-	/**
 	 * Performs a shallow copy of itself into the given VirtualBookshelf.
 	 * 
 	 * @return a new Bookshelf identical to this.
 	 */
-	protected VirtualBookshelf shallowCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
+	private VirtualBookshelf deepCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
 		if(null == toShelf)
 			throw new IllegalArgumentException("toShelf cannot be null");
 
@@ -304,53 +309,7 @@ public class VirtualBookshelf implements Bookshelf {
 		return toShelf;
 	}
 
-	/* test cases */
-	public static void main(String []args) {
-		VirtualBookshelf a = new VirtualBookshelf("a");
-		VirtualBookshelf b = new VirtualBookshelf("b");
-		
-		a.insert(new VirtualBook("a", "b"));
-		a.insert(new VirtualBook("c", "d"));
-		a.insert(new VirtualBook("e", "f"));
-		a.insert(new VirtualBook("g", "h"));
-		a.insert(new VirtualBook("i", "j"));
-		a.insert(new VirtualBook("k", "l"));
-		
-		b.insert(new VirtualBook("m", "n"));
-		b.insert(new VirtualBook("o", "p"));
-		b.insert(new VirtualBook("q", "r"));
-		b.insert(new VirtualBook("s", "t"));
-		b.insert(new VirtualBook("u", "v"));
-		b.insert(new VirtualBook("w", "x"));
-		
-		Iterator<Book> it = a.enumerate();
-		int i = 0;
-		
-		for(Book book = it.next(); it.hasNext(); book = it.next()) {
-			System.out.println(book.getProperty("author") + " - " + book.getProperty("title"));
-			i += 1;
-		}
-		
-		assert(i == a.size());
-		
-		it = b.enumerate();
-		i = 0;
-		
-		for(Book book = it.next(); it.hasNext(); book = it.next()) {
-			System.out.println(book.getProperty("author") + " - " + book.getProperty("title"));
-			i += 1;
-		}
-		
-		assert(i == b.size());
-		
-		Bookshelf c = a.union(b);
-		it = c.enumerate();
-		System.out.println(it.hasNext());
-		i = 0;
-		
-		for(Book book = it.next(); it.hasNext(); book = it.next()) {
-			System.out.println(book.getProperty("author") + " - " + book.getProperty("title"));
-			i += 1;
-		}
-	}
+	
+
+	
 }

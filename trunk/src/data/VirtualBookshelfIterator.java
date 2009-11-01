@@ -3,79 +3,71 @@ package data;
 import java.util.*;
 
 /**
- * The VirtualBookshelfIterator implements the Iterator interface for a Book
- * object and is able to iterate over every book in a virtual bookshelf.
- *
+ * 
  * @author Andrew Alm
  */
 public class VirtualBookshelfIterator implements Iterator<Book> {
 
-	private Iterator<Bookshelf> shelves;
-	private Iterator<Book> books;
-	private Iterator<Book> current;
-	private Comparable<Bookshelf> comprable;
-
-	/**
-	 * Creates a new VirtualBookshelfIterator from the given VirtualBookshelf.
-	 *
-	 * @param shelf the VirtualBookshelf to iterate over.
-	 *
-	 * @throws IllegalArgumentException if the shelf given is null.
-	 */
-	public VirtualBookshelfIterator(Iterator<Bookshelf> shelves, Iterator<Book> books) throws IllegalArgumentException {
-		this(shelves, books, null);
+	private Book nextBook;
+	private Comparable<Book> comparable;
+	
+	private Iterator<Book> currentShelf;
+	private Iterator<Bookshelf> bookshelves;
+	
+	public VirtualBookshelfIterator(Iterable<Book> books, Iterable<Bookshelf> bookshelves, Comparable<Book> comparable) throws NullPointerException {
+		if((null == books) || (null == bookshelves))
+			throw new NullPointerException("books or bookshelves cannot be null");
+		
+		this.nextBook = null;
+		this.currentShelf = books.iterator();
+		this.bookshelves = bookshelves.iterator();
+		this.comparable = comparable;
+		
+		/* default comparable, everything is equal */
+		if(null == this.comparable) {
+			this.comparable = new Comparable<Book>() {
+				public int compareTo(Book book) {
+					return 0;
+				}
+				public boolean equals(Object obj) {
+					return true;
+				}
+			};
+		}
 	}
 	
-	/**
-	 * Creates a new VirtualBookshelfIterator from the given VirtualBookshelf.
-	 *
-	 * @param shelf the VirtualBookshelf to iterate over.
-	 *
-	 * @throws IllegalArgumentException if the shelf given is null.
-	 */
-	public VirtualBookshelfIterator(Iterator<Bookshelf> shelves, Iterator<Book> books, Comparable<Bookshelf> comparable) throws IllegalArgumentException {
-		if(null == shelves || null == books)
-			throw new IllegalArgumentException("the shelves or books iterator is null");
-
-		this.shelves = shelves;
-		this.books = books;
-		this.current = books;
-		this.comprable = comparable;
-	}
-
-	/**
-	 * Determines whether there is another Book in the iterator.
-	 *
-	 * @return true if there is another book, otherwise false
-	 */
+	@Override
 	public boolean hasNext() {
-		if(this.current.hasNext())
+		if(null != this.nextBook)
 			return true;
-		else if(!this.shelves.hasNext())
+		
+		if(this.currentShelf.hasNext()) {			
+			this.nextBook = this.currentShelf.next();
+			if(!this.comparable.equals(this.nextBook))
+				this.nextBook = null;
+			
+			return this.hasNext();
+		}
+		
+		if(!this.bookshelves.hasNext())
 			return false;
-		else
-			this.current = this.shelves.next().enumerate();
-
+		
+		this.currentShelf = this.bookshelves.next().iterator();
 		return this.hasNext();
 	}
 
-	/**
-	 * Retreives the next book from the Bookshelf.
-	 *
-	 * @return the next book in the iterator.
-	 *
-	 * @throws NoSuchElementException if there are no more books to return.
-	 */
+	@Override
 	public Book next() {
-		if(!this.hasNext())
+		if(null == this.nextBook)
 			throw new NoSuchElementException();
-
-		return this.current.next();
+		
+		Book next = this.nextBook;
+		this.nextBook = null;
+		
+		return next;
 	}
 
-	/**
-	 * Optional... not implemented, probably wont ever need to...
-	 */
+	@Override
 	public void remove() {}
-
+	
 }

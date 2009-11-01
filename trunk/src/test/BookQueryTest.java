@@ -21,15 +21,17 @@ public class BookQueryTest {
 		shelf.insert(new VirtualBook("A Book About Euclid", "Aristotle"));
 		shelf.insert(new VirtualBook("Homer Euclid", "Alighier"));
 		
-		Iterator<Book> bookIter = shelf.enumerate();
-		while(bookIter.hasNext()) {
-			Book book = bookIter.next();
-			System.out.println("ADSFADSF");
+
+		for(Book book : shelf) {
 			if(query.equals(book))
-				System.out.println("Found: " + book.getProperty("title") + " by " + book.getProperty("author"));
+				System.out.println("1Found: " + book.getProperty("title") + " by " + book.getProperty("author"));
 		}
 		
 
+		System.out.println("sdaf");
+		Bookshelf shelf2 = shelf.subset(query);
+		for(Book book : shelf2)
+			System.out.println("2Found: " + book.getProperty("title") + " by " + book.getProperty("author"));
 	}
 	
 }
