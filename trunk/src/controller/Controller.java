@@ -2,12 +2,15 @@ package controller;
 
 import data.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import scripts.Parser;
 import scripts.ScriptGenerator;
+
+import org.joone.engine.Matrix;
 
 
 
@@ -219,4 +222,15 @@ public class Controller {
 	If you need any methods add a quick stub and description and ill get to it
 	this is just an early version more to follow	
 	 */
+	
+	/**
+	 * Returns the set of bias Matrixs for the butler(s) that were stored in the DB.
+	 * ( Antti, can you "make room" in the database to store this as well? :-D )
+	 *
+	 * 
+	 * @return a stored Butler
+	 */
+	public Collection<Matrix> retrieveButler(){
+		return null;
+	}
 }
