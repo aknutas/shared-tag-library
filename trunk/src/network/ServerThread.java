@@ -21,7 +21,7 @@ public class ServerThread extends CommThread {
 	comm = new CommunicationImpl();
 	// Debug
 	System.out.println("Initialized CommServerThread");
-	super.setStatus(CONNECTED);
+	super.setStatus(Definitions.CONNECTED);
     };
 
     @Override
@@ -50,7 +50,7 @@ public class ServerThread extends CommThread {
 		e.printStackTrace();
 	    }
 	}
-	super.setStatus(DISCONNECTED);
+	super.setStatus(Definitions.DISCONNECTED);
 	return;
     }
 }
