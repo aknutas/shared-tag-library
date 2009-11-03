@@ -47,8 +47,14 @@ class ControlImpl implements Control {
      * @param connection
      *            The connection ID to be disconnected.
      */
-    public synchronized int disconnect(int connection) {
-	return 0;
+    public synchronized boolean disconnect(int connection) {
+	try {
+	    threadCollection.get(connection).end();
+	    threadCollection.remove(connection);
+	} catch (Exception e) {
+	    return false;
+	}
+	return true;
     }
 
     /**

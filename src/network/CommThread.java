@@ -5,8 +5,10 @@ import java.net.Socket;
 import java.util.*;
 
 import network.messages.Message;
+import network.messages.Reply;
 import database.QueryBuilder;
 import database.QueryBuilderImpl;
+import network.Definitions;
 
 /**
  * Class CommThread This class provides common functionality for each of the communication thread classes.
@@ -14,10 +16,6 @@ import database.QueryBuilderImpl;
  * @Author Antti Knutas
  */
 public class CommThread extends Thread {
-    
-    //Thread statuses
-    public static final int DISCONNECTED = 0;
-    public static final int CONNECTED = 1;
 
     //Introducing variables
     protected int status;
@@ -27,6 +25,7 @@ public class CommThread extends Thread {
     protected ArrayList<Message> messagequeue;
     protected ArrayList<Message> sendqueue;
     protected long myid;
+    protected HashMap<Long, Reply> replymap;
 
     /**
      * Set the value of status
@@ -55,6 +54,10 @@ public class CommThread extends Thread {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+    
+    public synchronized void sendMsgGetReply(network.messages.Message message) {
+	// TODO Implement this, so that the reply object is remembered with the msgid
     }
 
     public synchronized List<Message> getMsg() {

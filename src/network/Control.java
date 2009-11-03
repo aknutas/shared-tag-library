@@ -28,11 +28,11 @@ public interface Control {
     /**
      * A command to disconnect a certain client or server connection.
      * 
-     * @return int
+     * @return boolean Success status.
      * @param connection
      *            The connection ID to be disconnected.
      */
-    public int disconnect(int connection);
+    public boolean disconnect(int connection);
 
     /**
      * A command to send a data object to the specified connection, expecting a

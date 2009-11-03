@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import network.messages.Message;
+import network.Definitions;
 
 /**
  * Class ClientThread A Thread for connecting to other program instances.
@@ -22,7 +23,7 @@ public class ClientThread extends CommThread {
         comm = new CommunicationImpl();
 	// Debug
 	System.out.println("Initialized CommClientThread");
-	super.setStatus(CONNECTED);
+	super.setStatus(Definitions.CONNECTED);
     };
     
     @Override
@@ -50,7 +51,7 @@ public class ClientThread extends CommThread {
 		e.printStackTrace();
 	    }
 	}
-	super.setStatus(DISCONNECTED);
+	super.setStatus(Definitions.DISCONNECTED);
 	return;
     }
     
