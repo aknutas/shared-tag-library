@@ -59,13 +59,19 @@ public interface Control {
     public void sendMsgNoReply(int connection, Message message);
 
     /**
-     * A query of incoming messages. (chats, disconnections, etc)
+     * A query of incoming messages. (chats, disconnections, etc.)
      * 
      * @return A map that contains a list of all incoming messages. Sorted by
      *         connection id.
-     * @param connection
-     *            The connection ID.
      */
-    public  Map<Integer, List<Message>> whatsUp();
+    public Map<Integer, List<Message>> whatsUp();
+
+    /**
+     * A query of thread statuses. (connection, data transfer, etc.)
+     * 
+     * @return An integer-integer map of statuses. First integer is connection
+     *         id and the second is connection status.
+     */
+    public Map<Integer, Integer> getStatus();
 
 }

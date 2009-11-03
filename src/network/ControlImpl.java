@@ -18,10 +18,11 @@ class ControlImpl implements Control {
     private HashMap<Integer, CommThread> threadCollection;
     private long id;
     private int conncounter;
+    Random rd;
 
     public ControlImpl() {
-	Random random = new Random();
-	id = random.nextLong();
+	rd = new Random();
+	id = rd.nextLong();
 	threadCollection = new HashMap();
     };
 
@@ -76,10 +77,10 @@ class ControlImpl implements Control {
     }
 
     /**
-     * A query of incoming messages. (chats, disconnections, etc)
+     * A query of incoming messages. (chats, disconnections, etc.)
      * 
-     * @param connection
-     *            The connection ID.
+     * @return A map that contains a list of all incoming messages. Sorted by
+     *         connection id.
      */
     public synchronized Map<Integer, List<Message>> whatsUp() {
 	Map<Integer, List<Message>> returnmap = new HashMap<Integer, List<Message>>();
@@ -96,4 +97,16 @@ class ControlImpl implements Control {
 
 	return returnmap;
     }
+    
+    /**
+     * A query of thread statuses. (connection, data transfer, etc.)
+     * 
+     * @return An integer-integer map of statuses. First integer is connection
+     *         id and the second is connection status.
+     */
+    public Map<Integer, Integer> getStatus() {
+	return null;
+
+    }
+    
 }

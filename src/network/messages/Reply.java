@@ -1,5 +1,7 @@
 package network.messages;
 
+import java.io.Serializable;
+
 /**
  * A reply object for library and other data transmissions that expect direct
  * reply message.
@@ -8,7 +10,10 @@ package network.messages;
  * 
  */
 
-public class Reply {
+public class Reply extends Message implements Serializable {
+
+    private static final long serialVersionUID = -4533149474846448423L;
+    
     //Errorcodes defined in network.CommThread and network.ControlImpl
     int errorcode;
     int contenttype;
