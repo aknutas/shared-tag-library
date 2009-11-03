@@ -39,6 +39,7 @@ public class ServerThread extends CommThread {
 	    }
 	    if (obj != null)
 	    {
+		// Debug
 		System.out.println("Thread: Got: " + obj.getClass().getName());
 		super.addQueue((network.messages.Message) obj);
 	    }
