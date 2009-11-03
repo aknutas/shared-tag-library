@@ -10,6 +10,7 @@ import java.util.Random;
 
 import network.CommThread;
 import network.Communication;
+import network.Definitions;
 import network.messages.*;
 
 /**
@@ -70,7 +71,7 @@ public class CommTestClient {
 	}
 
 	// A lot of stuff happens
-	while (ct.getStatus() == CommThread.CONNECTED) {
+	while (ct.getStatus() == Definitions.CONNECTED) {
 	    tempqueue = ct.getMsg();
 
 	    System.out.println("TS: Loopin'");
