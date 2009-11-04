@@ -12,6 +12,8 @@ import java.util.*;
  */
 public class LibraryMessage extends DataMessage {
 	
+	private static final long serialVersionUID = 1L;
+	
 	/* message types */
 	public static final int CLOSE_REQUEST = 0;
 	public static final int CLOSE_RESPONSE = 1;
