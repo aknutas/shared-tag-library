@@ -56,7 +56,7 @@ public class CommThread extends Thread {
     }
     
     public synchronized void sendMsgGetReply(network.messages.Message message) {
-	// TODO Implement this, so that the reply object is remembered with the msgid
+	// TODO Implement this, with proper Message preprocessing
     }
 
     public synchronized List<Message> getMsg() {
