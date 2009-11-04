@@ -55,7 +55,7 @@ public class CommThread extends Thread {
 	}
     }
     
-    public synchronized void sendMsgGetReply(network.messages.Message message) {
+    public synchronized void sendMsgGetReply(network.messages.Message message, ClientMessageReceiver receiver) {
 	// TODO Implement this, with proper Message preprocessing
     }
 
