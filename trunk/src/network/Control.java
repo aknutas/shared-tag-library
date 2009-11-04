@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import network.messages.Message;
-import network.messages.Reply;
 
 /**
  * Interface Control This class allows for control and polling of the networking
@@ -35,17 +34,15 @@ public interface Control {
     public boolean disconnect(int connection);
 
     /**
-     * A command to send a data object to the specified connection, expecting a
-     * reply to the reply object.
+     * A command to send a data object to a remote library.
      * 
-     * @return Reply The reply object.
      * @param connection
      *            The connection ID.
      * @param message
      *            The message to be sent.
-     * @see Reply
+     * @param receiver The message listener which should receive the reply.
      */
-    public Reply sendMsgGetReply(int connection, Message message);
+    public void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver);
 
     /**
      * A command to send a data object to the specified connection, with no
@@ -56,7 +53,7 @@ public interface Control {
      * @param message
      *            The message to be sent.
      */
-    public void sendMsgNoReply(int connection, Message message);
+    public void sendMsg(int connection, Message message);
 
     /**
      * A query of incoming messages. (chats, disconnections, etc.)

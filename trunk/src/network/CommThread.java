@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.util.*;
 
 import network.messages.Message;
-import network.messages.Reply;
 import database.QueryBuilder;
 import database.QueryBuilderImpl;
 import network.Definitions;
@@ -25,7 +24,7 @@ public class CommThread extends Thread {
     protected ArrayList<Message> messagequeue;
     protected ArrayList<Message> sendqueue;
     protected long myid;
-    protected HashMap<Long, Reply> replymap;
+    protected HashMap<Long, ServerMessageReciever> replymap;
 
     /**
      * Set the value of status
