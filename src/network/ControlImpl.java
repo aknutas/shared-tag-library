@@ -3,7 +3,6 @@ package network;
 import java.util.*;
 
 import network.messages.Message;
-import network.messages.Reply;
 import database.QueryBuilder;
 import database.Access;
 
@@ -58,17 +57,16 @@ class ControlImpl implements Control {
     }
 
     /**
-     * A command to send a data object to the specified connection, expecting a
-     * reply to the reply object.
+     * A command to send a data object to a remote library.
      * 
-     * @return Reply The reply object.
      * @param connection
      *            The connection ID.
+     * @param message
+     *            The message to be sent.
+     * @param receiver The message listener which should receive the reply.
      */
-    public synchronized Reply sendMsgGetReply(int connection, Message message) {
-	Reply reply = new Reply();
+    public synchronized void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver) {
 
-	return reply;
     }
 
     /**
@@ -78,7 +76,7 @@ class ControlImpl implements Control {
      * @param connection
      *            The connection ID.
      */
-    public void sendMsgNoReply(int connection, Message message) {
+    public void sendMsg(int connection, Message message) {
 
     }
 
