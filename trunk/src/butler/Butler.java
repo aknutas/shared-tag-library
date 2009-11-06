@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import operations.LibraryOperations;
+import operations.BookOperations;
 
 import org.joone.engine.*;
 import org.joone.engine.learning.TeachingSynapse;
@@ -28,9 +29,9 @@ public class Butler extends Thread implements NeuralNetListener {
 	private boolean isTrained;
 	private IDPairSet idPairs;
 
-	public Butler(String name, Controller control){
+	public Butler(String name){
 		super(name);
-		controller = control;
+		//controller = control;
 	}
 
 	public void firstTrainingData(Library basis) throws IllegalArgumentException{
@@ -73,7 +74,7 @@ public class Butler extends Thread implements NeuralNetListener {
 		
 		INPUT.setRows(i);
 		HIDDEN.setRows(i+1);
-		OUTPUT.setRows(1);
+		OUTPUT.setRows(2);
 		
 		FullSynapse synapse_IH = new FullSynapse();
 		FullSynapse synapse_HO = new FullSynapse();
@@ -109,7 +110,7 @@ public class Butler extends Thread implements NeuralNetListener {
 		TeachingSynapse trainer = new TeachingSynapse();
 		trainer.setMonitor(monitor);
 		
-		double[][] expectedOutputs = {{1.0}};
+		double[][] expectedOutputs = {{1.0,0.0}};
 		
 		MemoryInputSynapse expected = new MemoryInputSynapse();
 		expected.setInputArray(expectedOutputs);
@@ -131,6 +132,16 @@ public class Butler extends Thread implements NeuralNetListener {
 		monitor.Go();
 		isTrained = true;
 	}
+	
+	public ButlerWeights exportWeights(){
+		return new ButlerWeights(INPUT.getBias(),HIDDEN.getBias(),OUTPUT.getBias());
+	}
+	
+	public void inputWeights(ButlerWeights bw){
+		INPUT.setBias(bw.getInputWeights());
+		HIDDEN.setBias(bw.getHiddenWeights());
+		OUTPUT.setBias(bw.getOutputWeights());
+	}
 
 	@Override
 	public void cicleTerminated(NeuralNetEvent e) {
@@ -143,6 +154,10 @@ public class Butler extends Thread implements NeuralNetListener {
 			System.out.println("Cycle " + cyc + " Error remaining: " + mon.getGlobalError());
 	}
 
+	public double[][] examineBook(Book b){
+		return null;
+	}
+	
 	/**
 	 * @unused
 	 */
@@ -181,10 +196,10 @@ public class Butler extends Thread implements NeuralNetListener {
 	
 	public static void main(String[] args){
 		ScriptGenerator sg = new ScriptGenerator("sampleBooks.txt");
-		Controller dummy = new Controller();
-		Butler buddy = new Butler("Buddy", dummy);
-		buddy.firstTrainingData(sg.p.lib);
-		
+		sg.generateLibrary(20, 5);
+		//Controller dummy = new Controller();
+		Butler buddy = new Butler("Buddy");
+		//buddy.firstTrainingData(sg.p.lib);
 		
 	}
 
