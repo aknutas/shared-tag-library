@@ -23,6 +23,7 @@ import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 import controller.Controller;
 import data.VirtualBook;
 import data.VirtualBookshelf;
+import java.awt.Button;
 
 /**
  * @author patrick
@@ -31,7 +32,7 @@ import data.VirtualBookshelf;
 public class Root extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private Controller control = null;
+    private Controller control = null; // @jve:decl-index=0:
 
     /**
      * This method initializes searchField
@@ -43,23 +44,43 @@ public class Root extends JFrame {
 	    searchField = new TextField();
 	    searchField.setPreferredSize(new Dimension(800, 14));
 	    searchField.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    // Search Through Controller
+
+		    draw();
+		    // Refresh current bookshelf view
+		}
+	    });
+	}
+	return searchField;
+    }
+
+    /**
+     * This method initializes button
+     * 
+     * @return java.awt.Button
+     */
+    private Button getButton() {
+	if (button == null) {
+	    button = new Button();
+	    button.setLabel("Connect To...");
+	    button.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent event) {
 
-			// Search Through Controller
-
-			draw();
-			// Refresh current bookshelf view
+			// Connect through Controller.
+			// controller.setConnection ?
 		    }
 		});
 	}
-	return searchField;
+	return button;
     }
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-	// TODO Auto-generated method stub
+
 	SwingUtilities.invokeLater(new Runnable() {
 	    public void run() {
 		Root thisClass = new Root();
@@ -86,6 +107,7 @@ public class Root extends JFrame {
     int currentBookshelfIndex = -1;
     private Label searchLabel = null;
     private TextField searchField = null;
+    private Button button = null;
 
     /**
      * This is the default constructor
@@ -146,7 +168,6 @@ public class Root extends JFrame {
 	    jToolBar = new JToolBar();
 	}
 
-	// TODO: Create & Add Icons
 	ImageIcon icon = new ImageIcon(getClass().getResource(
 		"addBookshelf.png"), "Add Bookshelf");
 	JButton addBookshelf = new JButton(icon);
@@ -199,6 +220,7 @@ public class Root extends JFrame {
 	});
 	jToolBar.add(addBook);
 
+	jToolBar.add(getButton());
 	return jToolBar;
     }
 
