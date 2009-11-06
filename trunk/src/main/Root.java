@@ -70,6 +70,9 @@ public class Root extends JFrame {
 
 			// Connect through Controller.
 			// controller.setConnection ?
+			
+			// Update TreeView
+			// Update SearchResults
 		    }
 		});
 	}
