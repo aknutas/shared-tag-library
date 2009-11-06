@@ -35,6 +35,7 @@ class ControlImpl implements Control, ConnectionCallBack {
     public ControlImpl(ClientMessageReceiver messageReceiver) {
 	this(); //Using the default constructor
 	this.messageReceiver = messageReceiver;
+	cl.run();
     };
 
     /**
@@ -78,6 +79,7 @@ class ControlImpl implements Control, ConnectionCallBack {
      * @param receiver The message listener which should receive the reply.
      */
     public synchronized void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver) {
+	message.setComID(id);
 	threadCollection.get(connection).sendMsgGetReply(message, receiver);
     }
 
@@ -89,7 +91,8 @@ class ControlImpl implements Control, ConnectionCallBack {
      *            The connection ID.
      */
     public void sendMsg(int connection, Message message) {
-
+	message.setComID(id);
+	threadCollection.get(connection).sendMsg(message);
     }
 
     /**
