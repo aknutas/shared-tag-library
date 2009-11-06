@@ -24,6 +24,14 @@ public class CommunicationImplTest {
 	Receiver rec = new Receiver();
 	rec.start();
 	
+	//Waiting for the thread to initialize
+	long t0, t1;
+	t0 = System.currentTimeMillis();
+	do {
+	    t1 = System.currentTimeMillis();
+	} while (t1 - t0 < 100);
+
+	
 	try {
 	    s = new Socket("localhost", Definitions.PORT);
 	} catch (UnknownHostException e) {
@@ -43,6 +51,9 @@ public class CommunicationImplTest {
 	    e.printStackTrace();
 	}
 	
+	Object comparison = Receiver.obj;
+	assert(testmessage.equals(comparison));
+	
     }
 
     public class Sender extends Thread {
@@ -54,15 +65,20 @@ public class CommunicationImplTest {
 
     }
 
-    public class Receiver extends Thread {
+    public static class Receiver extends Thread {
 	public Socket s;
 	public ServerSocket ss;
 	Communication comm;
-	Object obj;
+	public static Object obj;
 	
 	Receiver()
 	{
 	    comm = new CommunicationImpl();
+	}
+	
+	public Object getTest()
+	{
+	    return obj;
 	}
 
 	public void run() {
