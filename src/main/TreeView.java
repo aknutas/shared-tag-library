@@ -50,6 +50,29 @@ public class TreeView extends JPanel {
 	}
 	return tree;
     }
+    
+    
+    /**
+     * Add Bookshelf to Library
+     * 
+     * @return javax.swing.JTree
+     */
+    private JTree addBookshelf( Library l ) {
+	//
+	return tree;
+    }
+    
+    
+    /**
+     * Add Library to tree
+     * 
+     * @return javax.swing.JTree
+     */
+    private JTree addLibrary( Library l ) {
+	//
+	return tree;
+    }
+    
 
     /**
      * This method initializes this
