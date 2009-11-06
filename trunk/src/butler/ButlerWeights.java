@@ -3,6 +3,9 @@ package butler;
 import org.joone.engine.Matrix;
 import java.util.Date;
 
+import javax.jdo.annotations.PersistenceCapable;
+
+@PersistenceCapable(detachable="true")
 public class ButlerWeights {
 
 	Matrix inputs;
