@@ -1,6 +1,8 @@
 package network;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.*;
 
 import network.messages.Message;
@@ -19,21 +21,28 @@ class ControlImpl implements Control, ConnectionCallBack {
     private long id;
     private int conncounter;
     Random rd;
-    ClientMessageReceiver messageReceiver;
+    ServerMessageReciever messageReceiver;
     ConnectionListener cl;
 
-    //For testing purposes only, use the constructor below
+    /**
+     * Public for testing purposes only, use the constructor below
+     */
     public ControlImpl() {
 	rd = new Random();
 	id = rd.nextLong();
 	threadCollection = new HashMap();
-	conncounter=0;
+	conncounter = 0;
 	cl = new ConnectionListener(this);
     };
-    
-    //Use this constructor
-    public ControlImpl(ClientMessageReceiver messageReceiver) {
-	this(); //Using the default constructor
+
+    /**
+     * Use this constructor OR ELSE
+     * 
+     * @param messageReceiver
+     *            A class that answers remote queries.
+     */
+    public ControlImpl(ServerMessageReciever messageReceiver) {
+	this(); // Using the default constructor
 	this.messageReceiver = messageReceiver;
 	cl.run();
     };
@@ -45,11 +54,19 @@ class ControlImpl implements Control, ConnectionCallBack {
      * @return int
      * @param address
      *            Connection IP
+     * @throws IOException
+     * @throws UnknownHostException
      */
-    public synchronized int connect(String address) {
-	// Dummy data
-	Random random = new Random();
-	return random.nextInt();
+    public synchronized int connect(String address)
+	    throws UnknownHostException, IOException {
+	Socket s = new Socket(address, Definitions.PORT);
+	s.setSoTimeout(Definitions.TIMEOUT);
+	ClientThread ct = new ClientThread(id, s);
+	ct.run();
+	threadCollection.put(conncounter, ct);
+
+	conncounter++;
+	return (conncounter - 1);
     }
 
     /**
@@ -76,10 +93,13 @@ class ControlImpl implements Control, ConnectionCallBack {
      *            The connection ID.
      * @param message
      *            The message to be sent.
-     * @param receiver The message listener which should receive the reply.
+     * @param receiver
+     *            The message listener which should receive the reply.
      */
-    public synchronized void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver) {
+    public synchronized void sendLibraryMsg(int connection, Message message,
+	    ClientMessageReceiver receiver) {
 	message.setComID(id);
+	message.setMsgID(rd.nextLong());
 	threadCollection.get(connection).sendMsgGetReply(message, receiver);
     }
 
@@ -116,7 +136,7 @@ class ControlImpl implements Control, ConnectionCallBack {
 
 	return returnmap;
     }
-    
+
     /**
      * A query of thread statuses. (connection, data transfer, etc.)
      * 
@@ -127,17 +147,17 @@ class ControlImpl implements Control, ConnectionCallBack {
 	return null;
 
     }
-    
+
     /**
      * A request to start handle the given socket
      * 
-     * @param socket A new socket.
+     * @param socket
+     *            A new socket.
      */
-    public synchronized void gimmeThread(Socket socket)
-    {
+    public synchronized void gimmeThread(Socket socket) {
 	CommThread ct = new ServerThread(id, socket);
 	threadCollection.put(conncounter, ct);
 	conncounter++;
     }
-    
+
 }

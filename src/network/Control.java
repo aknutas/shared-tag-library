@@ -1,5 +1,7 @@
 package network;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +23,10 @@ public interface Control {
      * @return int
      * @param address
      *            Connection IP
+     * @throws IOException
+     * @throws UnknownHostException
      */
-    public int connect(String address);
+    public int connect(String address) throws UnknownHostException, IOException;
 
     /**
      * A command to disconnect a certain client or server connection.
@@ -40,7 +44,8 @@ public interface Control {
      *            The connection ID.
      * @param message
      *            The message to be sent.
-     * @param receiver The message listener which should receive the reply.
+     * @param receiver
+     *            The message listener which should receive the reply.
      */
     public void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver);
 
