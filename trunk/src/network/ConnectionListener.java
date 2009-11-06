@@ -5,7 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Class ConnectionListener Listens for incoming connections and does a callback for new server thread when necessary.
+ * Class ConnectionListener Listens for incoming connections and does a callback
+ * for new server thread when necessary.
  * 
  * @author Antti Knutas
  * 
@@ -34,6 +35,7 @@ public class ConnectionListener extends Thread {
 	while (status == Definitions.CONNECTED && !ss.isClosed()) {
 	    try {
 		s = ss.accept();
+		s.setSoTimeout(Definitions.TIMEOUT);
 		ccb.gimmeThread(s);
 	    } catch (IOException e) {
 		System.out.println("Accept failed: " + Definitions.PORT);

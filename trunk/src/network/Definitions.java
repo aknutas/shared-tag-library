@@ -8,4 +8,5 @@ public class Definitions {
 
     //Configuration
     public static final int PORT = 24600;
+    public static final int TIMEOUT = 45;
 }

@@ -10,13 +10,14 @@ import database.QueryBuilderImpl;
 import network.Definitions;
 
 /**
- * Class CommThread This class provides common functionality for each of the communication thread classes.
+ * Class CommThread This class provides common functionality for each of the
+ * communication thread classes.
  * 
  * @Author Antti Knutas
  */
 public class CommThread extends Thread {
 
-    //Introducing variables
+    // Introducing variables
     protected int status;
     protected Socket s;
     protected Communication comm;
@@ -54,9 +55,16 @@ public class CommThread extends Thread {
 	    e.printStackTrace();
 	}
     }
-    
-    public synchronized void sendMsgGetReply(network.messages.Message message, ClientMessageReceiver receiver) {
-	// TODO Implement this, with proper Message preprocessing
+
+    public synchronized void sendMsgGetReply(network.messages.Message message,
+	    ClientMessageReceiver receiver) {
+	replymap.put(message.getMsgID(), receiver);
+	try {
+	    comm.Send(s, message);
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     public synchronized List<Message> getMsg() {
@@ -80,10 +88,9 @@ public class CommThread extends Thread {
     protected CommThread() {
 	// Prevents empty default constructor
     }
-    
-    public void end()
-    {
-	run=false;
+
+    public void end() {
+	run = false;
     }
 
 }
