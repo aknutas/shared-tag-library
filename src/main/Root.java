@@ -1,6 +1,9 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Label;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -23,12 +26,34 @@ import data.VirtualBookshelf;
 
 /**
  * @author patrick
- *
+ * 
  */
 public class Root extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private Controller control = null;
+
+    /**
+     * This method initializes searchField
+     * 
+     * @return java.awt.TextField
+     */
+    private TextField getTextField() {
+	if (searchField == null) {
+	    searchField = new TextField();
+	    searchField.setPreferredSize(new Dimension(800, 14));
+	    searchField.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent event) {
+
+			// Search Through Controller
+
+			draw();
+			// Refresh current bookshelf view
+		    }
+		});
+	}
+	return searchField;
+    }
 
     /**
      * @param args
@@ -59,6 +84,8 @@ public class Root extends JFrame {
     private ArrayList<VirtualBookshelf> bookshelves = new ArrayList<VirtualBookshelf>(); // @jve:decl-index=0:
 
     int currentBookshelfIndex = -1;
+    private Label searchLabel = null;
+    private TextField searchField = null;
 
     /**
      * This is the default constructor
@@ -112,6 +139,10 @@ public class Root extends JFrame {
      */
     private JToolBar getJToolBar() {
 	if (jToolBar == null) {
+	    searchLabel = new Label("Search:", 0);
+	    searchLabel.setPreferredSize(new Dimension(100, 14));
+
+	    // searchLabel.setText("Search:");
 	    jToolBar = new JToolBar();
 	}
 
@@ -121,6 +152,8 @@ public class Root extends JFrame {
 	JButton addBookshelf = new JButton(icon);
 	addBookshelf.setBorder(null);
 	addBookshelf.setToolTipText("Add Bookshelf");
+	jToolBar.add(searchLabel);
+	jToolBar.add(getTextField());
 	addBookshelf.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
 
@@ -131,7 +164,8 @@ public class Root extends JFrame {
 		bookshelves.get(currentBookshelfIndex).insert(
 			new VirtualBook("Silence", "John Cage"));
 
-		searchResults.setResults(bookshelves.get(currentBookshelfIndex));
+		searchResults
+			.setResults(bookshelves.get(currentBookshelfIndex));
 
 		draw();
 	    }
@@ -155,8 +189,9 @@ public class Root extends JFrame {
 
 		bookshelves.get(currentBookshelfIndex).insert(
 			new VirtualBook("The Traitor", "Andre Gorz"));
-		
-		searchResults.setResults(bookshelves.get(currentBookshelfIndex));
+
+		searchResults
+			.setResults(bookshelves.get(currentBookshelfIndex));
 
 		draw();
 		// Refresh current bookshelf view
