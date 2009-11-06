@@ -49,7 +49,7 @@ public class Chatterer {
 	System.out.println("\nMain thread initialized in "
 		+ (System.currentTimeMillis() - time) + " milliseconds.\n");
 
-	while (!s.isClosed()) {
+	while (!s.isClosed() && i<=20) {
 	    try {
 		comm.Send(s, new ChatMessage("HILIRIMPSIS " + i));
 		System.out.println("Sent" + i);

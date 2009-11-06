@@ -25,9 +25,10 @@ class ControlImpl implements Control, ConnectionCallBack {
     ConnectionListener cl;
 
     /**
-     * Public for testing purposes only, use the constructor below
+     * Private default constructor prevents object creation without proper
+     * parameters.
      */
-    public ControlImpl() {
+    private ControlImpl() {
 	rd = new Random();
 	id = rd.nextLong();
 	threadCollection = new HashMap();
@@ -39,7 +40,8 @@ class ControlImpl implements Control, ConnectionCallBack {
      * Use this constructor OR ELSE
      * 
      * @param messageReceiver
-     *            A class that answers remote queries.
+     *            A class that answers remote queries. Usually the Library class
+     *            in this context.
      */
     public ControlImpl(ServerMessageReciever messageReceiver) {
 	this(); // Using the default constructor
