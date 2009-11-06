@@ -1,5 +1,6 @@
 package network;
 
+import java.net.Socket;
 import java.util.*;
 
 import network.messages.Message;
@@ -12,17 +13,28 @@ import database.Access;
  * @author Antti Knutas
  * 
  */
-class ControlImpl implements Control {
+class ControlImpl implements Control, ConnectionCallBack {
 
     private HashMap<Integer, CommThread> threadCollection;
     private long id;
     private int conncounter;
     Random rd;
+    ClientMessageReceiver messageReceiver;
+    ConnectionListener cl;
 
+    //For testing purposes only, use the constructor below
     public ControlImpl() {
 	rd = new Random();
 	id = rd.nextLong();
 	threadCollection = new HashMap();
+	conncounter=0;
+	cl = new ConnectionListener(this);
+    };
+    
+    //Use this constructor
+    public ControlImpl(ClientMessageReceiver messageReceiver) {
+	this(); //Using the default constructor
+	this.messageReceiver = messageReceiver;
     };
 
     /**
@@ -66,7 +78,7 @@ class ControlImpl implements Control {
      * @param receiver The message listener which should receive the reply.
      */
     public synchronized void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver) {
-
+	threadCollection.get(connection).sendMsgGetReply(message, receiver);
     }
 
     /**
@@ -111,6 +123,18 @@ class ControlImpl implements Control {
     public Map<Integer, Integer> getStatus() {
 	return null;
 
+    }
+    
+    /**
+     * A request to start handle the given socket
+     * 
+     * @param socket A new socket.
+     */
+    public synchronized void gimmeThread(Socket socket)
+    {
+	CommThread ct = new ServerThread(id, socket);
+	threadCollection.put(conncounter, ct);
+	conncounter++;
     }
     
 }
