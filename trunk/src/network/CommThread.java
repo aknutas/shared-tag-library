@@ -5,9 +5,6 @@ import java.net.Socket;
 import java.util.*;
 
 import network.messages.Message;
-import database.QueryBuilder;
-import database.QueryBuilderImpl;
-import network.Definitions;
 
 /**
  * Class CommThread This class provides common functionality for each of the

@@ -6,8 +6,6 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 import network.messages.Message;
-import database.QueryBuilder;
-import database.Access;
 
 /**
  * Class ControlImpl
@@ -31,7 +29,7 @@ class ControlImpl implements Control, ConnectionCallBack {
     private ControlImpl() {
 	rd = new Random();
 	id = rd.nextLong();
-	threadCollection = new HashMap();
+	threadCollection = new HashMap<Integer, CommThread>();
 	conncounter = 0;
 	cl = new ConnectionListener(this);
     };
