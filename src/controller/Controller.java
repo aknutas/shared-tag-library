@@ -38,7 +38,8 @@ public class Controller {
 	private Vector<String> connections;
 	private QueryBuilder qb;
 	public Control cntrl;
-
+	public Bookshelf focus;
+	public Integer focusID;
 	public Integer nextID;
 
 	/**
@@ -58,6 +59,12 @@ public class Controller {
 		checkedOutBs = new HashMap<Integer,Bookshelf>();
 		controllerPairs = new HashMap<String,Integer>();
 		remoteLibs = new HashMap<Integer,RemoteLibrary>();
+	}
+	public void setFocus(Bookshelf bookshelf,Integer id) throws IllegalArgumentException{
+		if(bookshelf == null || id == null || id == 0)
+			throw new IllegalArgumentException();
+		focus = bookshelf;
+		focusID=id;	
 	}
 
 
@@ -101,9 +108,9 @@ public class Controller {
 	 * @param loc
 	 * @return the key to reference the the object with the get command
 	 */
-	public Integer retrieveShelf(String loc){
+	public Integer retrieveShelf(String loc)throws IllegalArgumentException{
 		if(loc==null)
-			return 0;
+			throw new IllegalArgumentException();
 		Integer num = nextID;
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Bookshelf bs;
@@ -117,9 +124,9 @@ public class Controller {
 		nextID++;
 		return num;
 	}
-	public Integer retrieveShelf(String loc,Integer target){
+	public Integer retrieveShelf(String loc,Integer target)throws IllegalArgumentException{
 		if(loc==null)
-			return 0;
+			throw new IllegalArgumentException();
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Bookshelf bs;
 		while(iter.hasNext()){
@@ -132,7 +139,9 @@ public class Controller {
 		return target;
 	}
 
-	public boolean updateShelf(String loc){
+	public boolean updateShelf(String loc)throws IllegalArgumentException{
+		if(loc==null)
+			throw new IllegalArgumentException();
 		Iterator<Integer> iter = checkedOutBs.keySet().iterator();
 		Bookshelf bs;
 		Integer target;
@@ -177,9 +186,9 @@ public class Controller {
 	 * 
 	 * @return the added book (null if error)
 	 */
-	public Book addBook(Bookshelf bookshelf, String name, String title){
+	public Book addBook(Bookshelf bookshelf, String name, String title)throws IllegalArgumentException{
 		if(name== null || title == null)
-			return null;
+			throw new IllegalArgumentException();
 		return addBook(bookshelf, new VirtualBook(name,title));
 	}
 
@@ -195,7 +204,29 @@ public class Controller {
 		bookshelf.insert(book);
 		return book;
 	}
+	/**
+	 * Add a book to the library
+	 * 
+	 * @return the added book (null if error)
+	 */
+	public Book addBook(String name, String title)throws IllegalArgumentException{
+		if(name== null || title == null||focus==null)
+			throw new IllegalArgumentException();
+		return addBook(focus, new VirtualBook(name,title));
+	}
 
+
+	/**
+	 * Add a book to the library
+	 * 
+	 * @return the added book (null if error)
+	 */
+	public Book addBook(Book book)throws IllegalArgumentException{
+		if(book==null||focus==null)
+			throw new IllegalArgumentException();
+		return addBook(focus, book);
+	}
+	
 	/**
 	 * Remove a book from the library
 	 * 
@@ -236,8 +267,15 @@ public class Controller {
 	 * @return the added bookshelf (null if error)
 	 */
 	public Bookshelf addBookshelf(String name)throws IllegalArgumentException{
+		if(name == null)
+			throw new IllegalArgumentException();
+		
+		Integer tmp = nextID;
 		VirtualBookshelf  bs= new VirtualBookshelf(name);
 		myLib.saveBookshelf(bs);
+		checkedOutBs.put(tmp, bs);
+		setFocus(bs,tmp);
+		nextID++;
 		return bs;
 	}
 
@@ -247,10 +285,16 @@ public class Controller {
 	 * 
 	 * @return the added bookshelf (null if error)
 	 */
-	public Bookshelf addBookshelf(Book book){
+	public Bookshelf addBookshelf(Book book)throws IllegalArgumentException{
+		if(book == null)
+			throw new IllegalArgumentException();
+		Integer tmp = nextID;
 		VirtualBookshelf  bs= new VirtualBookshelf("From book " + book.getProperty("Name"));
 		addBook(bs,book);
 		myLib.saveBookshelf(bs);
+		checkedOutBs.put(tmp, bs);
+		nextID++;
+		setFocus(bs,tmp);
 		return bs;	
 	}
 
