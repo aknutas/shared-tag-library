@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import network.CommThread;
+import network.ClientThread;
 import network.Communication;
 import network.Definitions;
 import network.messages.*;
@@ -28,7 +28,7 @@ public class CommTestClient {
     ServerSocket ss;
     Communication comm;
     long time;
-    CommThread ct;
+    ClientThread ct;
     long myid;
 
     public static void main(String[] args) {
