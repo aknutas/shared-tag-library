@@ -23,7 +23,7 @@ public class CommThread extends Thread {
     protected ArrayList<Message> sendqueue;
     protected long myid;
     protected HashMap<Long, ClientMessageReceiver> replymap;
-    protected ServerMessageReciever messageReceiver;
+    protected ServerMessageReceiver messageReceiver;
 
     /**
      * Set the value of status
