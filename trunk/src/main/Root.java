@@ -254,4 +254,17 @@ public class Root extends JFrame {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Book Butler");
 	}
+	
+    /**
+     * This is the ActionListener that gets activated by the
+     * messagehandlertimer.
+     * 
+     * @Author Antti Knutas
+     */
+    private class msgtrigger implements ActionListener {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    control.messageHandler();
+	}
+    }
 }
