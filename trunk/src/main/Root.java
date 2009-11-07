@@ -79,7 +79,7 @@ public class Root extends JFrame {
 	public Root() {
 		super();
 		msgTrigger = new MsgTrigger();
-		msgTimer = new javax.swing.Timer(200, msgTrigger);
+		msgTimer = new javax.swing.Timer(1000, msgTrigger);
 		msgTimer.setInitialDelay(2000);
 		msgTimer.start();
 		initialize();
