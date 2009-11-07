@@ -18,7 +18,7 @@ public class ServerBookshelf implements ServerResponder {
 	}
 	
 	@Override
-	public Message onMessageRecive(Message message) throws NullPointerException, IllegalArgumentException {
+	public Message onMessage(Message message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
@@ -29,7 +29,7 @@ public class ServerBookshelf implements ServerResponder {
 		case BookshelfMessage.MSG_HELLO:
 			return new BookshelfMessage(BookshelfMessage.MSG_HELLO, this.id);
 		case BookshelfMessage.MSG_PROPERTY:
-			String name = (String)((DataMessage)message).dequeParameter();
+			String name = (String)((RemoteMessage)message).dequeParameter();
 			
 			BookshelfMessage response = new BookshelfMessage(BookshelfMessage.MSG_PROPERTY, this.id);
 			response.queueParameter(name);

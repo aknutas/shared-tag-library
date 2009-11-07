@@ -10,12 +10,11 @@ import java.util.*;
  * 
  * @author Andrew Alm
  */
-public class LibraryMessage extends DataMessage {
+public class LibraryMessage extends RemoteMessage {
 	
 	private static final long serialVersionUID = 1L;
 	
 	/* message types */
-	public static final int MSG_HELLO = 0;
 	public static final int MSG_MORE = 1;
 	public static final int MSG_ITERATOR = 2;
 	public static final int MSG_MASTER = 3;
@@ -32,7 +31,7 @@ public class LibraryMessage extends DataMessage {
 	public LibraryMessage(int messageType) throws IllegalArgumentException {
 		super(messageType);
 
-		if(messageType < LibraryMessage.MSG_HELLO || messageType > LibraryMessage.MSG_MASTER)
+		if(messageType < RemoteMessage.MSG_HELLO || messageType > LibraryMessage.MSG_MASTER)
 			throw new IllegalArgumentException("illegal message type");
 	}
 	

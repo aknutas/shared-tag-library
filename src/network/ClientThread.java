@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import data.messages.DataMessage;
+import data.messages.RemoteMessage;
 
 import network.messages.Message;
 import network.messages.ReplyMessage;
@@ -36,7 +36,7 @@ public class ClientThread extends CommThread {
 	long tempcompid;
 	long tempmsgid;
 	ClientResponder cmr;
-	DataMessage tempdm;
+	RemoteMessage tempdm;
 	ReplyMessage rm;
 	Object obj = null;
 
@@ -52,12 +52,12 @@ public class ClientThread extends CommThread {
 	    }
 	    if (obj != null) {
 		if (obj.getClass().getName().equals(
-			data.messages.DataMessage.class.getName())) {
-		    tempdm = (data.messages.DataMessage) obj;
+			data.messages.RemoteMessage.class.getName())) {
+		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();
 		    tempmsgid = tempdm.getMsgID();
-		    DataMessage replydm = (DataMessage) messageReceiver
-			    .onMessageRecive(tempdm);
+		    RemoteMessage replydm = (RemoteMessage) messageReceiver
+			    .onMessage(tempdm);
 
 		    rm = new ReplyMessage(replydm, tempcompid, tempmsgid);
 		    try {
@@ -74,7 +74,7 @@ public class ClientThread extends CommThread {
 
 		    cmr = replymap.get(tempmsgid);
 		    replymap.remove(tempmsgid);
-		    cmr.onMessageRecive(tempdm);
+		    cmr.onMessage(tempdm);
 		} else {
 		    super.addQueue((network.messages.Message) obj);
 		}

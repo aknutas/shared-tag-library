@@ -51,6 +51,24 @@ public final class VirtualBookshelf implements Bookshelf {
 	}
 	
 	/**
+	 * Performs a shallow copy of itself into the given VirtualBookshelf.
+	 * 
+	 * @return a new Bookshelf identical to this.
+	 */
+	private VirtualBookshelf deepCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
+		if(null == toShelf)
+			throw new IllegalArgumentException("toShelf cannot be null");
+		
+		for(Bookshelf shelf : this.shelves)
+			toShelf.addBookshelf(shelf);
+		
+		for(Book book : this.bookshelf)
+			toShelf.insert(book);
+		
+		return toShelf;
+	}
+	
+	/**
 	 * Creates a new Bookshelf object which contains no books.
 	 * 
 	 * @throws IllegalArgumentException if the name given is null
@@ -63,7 +81,12 @@ public final class VirtualBookshelf implements Bookshelf {
 		
 		this.setProperty("name", name);
 	}
-
+	
+	@Override
+	public Bookshelf subset(Book book) throws IllegalArgumentException {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
 	/**
 	 * Inserts a book onto the VirtualBookshelf, if the book already exists
 	 * on the Bookshelf then this method does nothing.
@@ -167,7 +190,11 @@ public final class VirtualBookshelf implements Bookshelf {
 		return newShelf;
 	}
 
-	/**
+	/**@Override
+	public Bookshelf subset(Book book) throws IllegalArgumentException {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
 	 * Computes the intersection of two bookshelf objects and returns a new
 	 * Bookshelf.
 	 * 
@@ -192,7 +219,11 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @param shelf the bookshelf to difference with.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws IllegalArgumentExcept@Override
+	public Bookshelf subset(Book book) throws IllegalArgumentException {
+	    // TODO Auto-generated method stub
+	    return null;
+	}ion if the shelf given is null.
 	 */
 	public Bookshelf difference(Bookshelf shelf) {
 		if(null == shelf)
@@ -223,7 +254,7 @@ public final class VirtualBookshelf implements Bookshelf {
 	/**
 	 * Gets the value of the given property. If the given property does not
 	 * exist then null is returned.
-	 * 
+	 * 												
 	 * @param name the name of the property to get.
 	 * 
 	 * @return the value of the property
@@ -291,33 +322,6 @@ public final class VirtualBookshelf implements Bookshelf {
 		this.shelves.add(shelf);
 	}
 
-	/**
-	 * Performs a shallow copy of itself into the given VirtualBookshelf.
-	 * 
-	 * @return a new Bookshelf identical to this.
-	 */
-	private VirtualBookshelf deepCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
-		if(null == toShelf)
-			throw new IllegalArgumentException("toShelf cannot be null");
-		
-		System.out.println("this shelf contains "+ shelves.size()+ "shelves and " + bookshelf.size()+" books");
-		
-		for(Bookshelf shelf : this.shelves)
-			toShelf.addBookshelf(shelf);
-		
-		for(Book book : this.bookshelf)
-			toShelf.insert(book);
-		
-		return toShelf;
-	}
-
-	@Override
-	public Bookshelf subset(Book book) throws IllegalArgumentException {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
-
 	
-
 	
 }

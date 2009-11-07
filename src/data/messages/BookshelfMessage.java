@@ -1,6 +1,6 @@
 package data.messages;
 
-public class BookshelfMessage extends DataMessage {
+public class BookshelfMessage extends RemoteMessage {
 
 	public static final int MSG_HELLO = 0;
 	public static final int MSG_PROPERTY = 1;

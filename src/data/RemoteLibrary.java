@@ -13,7 +13,7 @@ import network.messages.*;
  * 
  * @author Andrew Alm
  */
-public class RemoteLibrary implements Library, ClientResponder {
+public class RemoteLibrary extends RemoteObject implements Library, ClientResponder {
 
 	private int connection;
 	private Control network;
@@ -28,6 +28,8 @@ public class RemoteLibrary implements Library, ClientResponder {
 	 * @throws NullPointerException if the network given is null
 	 */
 	public RemoteLibrary(int connection, Control network) throws NullPointerException {
+		super(connection, network);
+		
 		if(null == network)
 			throw new NullPointerException("network cannot be null");
 		
@@ -55,18 +57,12 @@ public class RemoteLibrary implements Library, ClientResponder {
 	}
 
 	/**
-	 * Operation not finished.
+	 * Gets a remote bookshelf.
 	 */
 	@Override
 	public Bookshelf getMasterShelf() {
-		Response response = new Response();
-		this.network.sendLibraryMsg(this.connection, new LibraryMessage(LibraryMessage.MSG_MASTER), response);
-		
-		while(!response.messageRecieved());
-		
-		LibraryMessage message = (LibraryMessage)response.getMessage();
-		int id = (Integer)message.dequeParameter();
-		return new RemoteBookshelf(this.network, connection, id);
+		RemoteMessage response = this.send(new LibraryMessage(LibraryMessage.MSG_MASTER));
+		return new RemoteBookshelf(this.network, this.connection, (Integer)response.dequeParameter());
 	}
 
 	/**
@@ -78,7 +74,7 @@ public class RemoteLibrary implements Library, ClientResponder {
 	}
 
 	@Override
-	public void onMessageRecive(Message message) throws IllegalArgumentException {
+	public void onMessage(Message message) throws IllegalArgumentException {
 		if(!(message instanceof LibraryMessage))
 			throw new IllegalArgumentException("message given is null");
 		

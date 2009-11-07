@@ -164,7 +164,6 @@ public class VirtualBook implements Book {
 		return this.properties.entrySet().iterator();
 	}
 
-	
 	/* unit tests */
 	public static void main(String []args) {
 		Book b = new VirtualBook("Elements", "Euclid");
