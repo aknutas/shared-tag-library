@@ -127,12 +127,18 @@ public class ControlImpl implements Control, ConnectionCallBack {
     public synchronized Map<Integer, List<Message>> whatsUp() {
 	Map<Integer, List<Message>> returnmap = new HashMap<Integer, List<Message>>();
 	List<Message> tempqueue;
+	Integer key;
 
 	Set<Integer> keyset = threadCollection.keySet();
 	Iterator<Integer> i = keyset.iterator();
 
+	//Debug
+	System.out.println("Control here. Iterating through the threadCollection.");
+	
 	while (i.hasNext()) {
-	    tempqueue = threadCollection.get(i.next()).getMsg();
+	    key = i.next();
+	    System.out.println("Iterating key: " + key);
+	    tempqueue = threadCollection.get(key).getMsg();
 	    if (tempqueue != null)
 		returnmap.put(i.next(), tempqueue);
 	}
