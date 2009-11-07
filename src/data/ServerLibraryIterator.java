@@ -8,10 +8,12 @@ public class ServerLibraryIterator implements Iterator<Bookshelf>, ServerRespond
 
 	@Override
 	public boolean hasNext() {
+		return false;
 	}
 
 	@Override
 	public Bookshelf next() {
+		return null;
 	}
 
 	@Override
