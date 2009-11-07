@@ -46,32 +46,43 @@ public class ServerThread extends CommThread {
 	    } catch (IOException e1) {
 		System.out.println(e1);
 	    }
-	    if (obj.getClass().getName().equals(
-		    data.messages.DataMessage.class.getName())) {
-		tempdm = (data.messages.DataMessage) obj;
-		tempcompid = tempdm.getComID();
-		tempmsgid = tempdm.getMsgID();
-		DataMessage replydm = (DataMessage) messageReceiver
-			.onMessageRecive(tempdm);
+	    if (obj != null) {
+		if (obj.getClass().getName().equals(
+			data.messages.DataMessage.class.getName())) {
+		    tempdm = (data.messages.DataMessage) obj;
+		    tempcompid = tempdm.getComID();
+		    tempmsgid = tempdm.getMsgID();
+		    DataMessage replydm = (DataMessage) messageReceiver
+			    .onMessageRecive(tempdm);
 
-		rm = new ReplyMessage(replydm, tempcompid, tempmsgid);
+		    rm = new ReplyMessage(replydm, tempcompid, tempmsgid);
+		    try {
+			comm.Send(s, rm);
+		    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		} else if (obj.getClass().getName().equals(
+			network.messages.ReplyMessage.class.getName())) {
+		    rm = (ReplyMessage) obj;
+		    tempmsgid = rm.getMsgID();
+		    tempdm = rm.getDatamessage();
+
+		    cmr = replymap.get(tempmsgid);
+		    replymap.remove(tempmsgid);
+		    cmr.onMessageRecive(tempdm);
+		} else {
+		    super.addQueue((network.messages.Message) obj);
+		}
+	    }
+	    else
+	    {
 		try {
-		    comm.Send(s, rm);
-		} catch (IOException e) {
+		    Thread.sleep(25);
+		} catch (InterruptedException e) {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
-	    } else if (obj.getClass().getName().equals(
-		    network.messages.ReplyMessage.class.getName())) {
-		rm = (ReplyMessage) obj;
-		tempmsgid = rm.getMsgID();
-		tempdm = rm.getDatamessage();
-
-		cmr = replymap.get(tempmsgid);
-		replymap.remove(tempmsgid);
-		cmr.onMessageRecive(tempdm);
-	    } else {
-		super.addQueue((network.messages.Message) obj);
 	    }
 	    try {
 		Thread.sleep(25);
