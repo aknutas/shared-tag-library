@@ -4,14 +4,18 @@ import data.*;
 import database.*;
 import network.*;
 import network.messages.ChatMessage;
+import network.messages.Message;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import scripts.Parser;
 import scripts.ScriptGenerator;
@@ -407,7 +411,52 @@ public class Controller {
 			bs = iter.next();
 			local.removeBookshelf(bs);
 		}
-	}	
+	}
+	
+    /**
+     * This method is responsible for handling and responding to incoming
+     * messages.
+     */
+    public void messageHandler() {
+	//Getting the message queue map and making sure that there is content
+	Map<Integer, List<Message>> msgMap = cntrl.whatsUp();
+	if (msgMap != null) {
+
+	    Set<Entry<Integer, List<Message>>> entryset = msgMap.entrySet();
+	    Iterator<Entry<Integer, List<Message>>> i = entryset.iterator();
+
+	    //Iterating through each queue
+	    while (i.hasNext()) {
+		List<Message> tempqueue = i.next().getValue();
+
+		// Getting messages from each queu
+		//Debug message
+		System.out.println("MH: Loopin'");
+
+		if (tempqueue != null) {
+		    Iterator<Message> msgiterator = tempqueue.iterator();
+		    System.out.println("Iteratin', size: " + tempqueue.size());
+
+		    while (msgiterator.hasNext()) {
+			Object tryout = msgiterator.next();
+			if (tryout.getClass().getName().equals(
+				network.messages.ChatMessage.class.getName())) {
+			    ChatMessage hello = (ChatMessage) tryout;
+			    System.out.println("Connection "
+				    + i.next().getKey() + " says "
+				    + hello.GetMessage());
+			} else {
+			    System.out
+				    .println("Unknown Foreign Object recieved. UFO ALERT:"
+					    + i.next().getClass().getName());
+			}
+		    }
+		}
+	    }
+	}
+	//Thread status iteration ought to come here
+	Map<Integer, Integer> statusMap = cntrl.getStatus();
+    }
 }
 
 
