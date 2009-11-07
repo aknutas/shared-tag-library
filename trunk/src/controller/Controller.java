@@ -319,8 +319,8 @@ public class Controller {
 
 
 
-	public Integer addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException{
-		Integer id = nextID;
+	public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException{
+
 		if(host!=null){
 			if(connections.contains(host)){
 				throw new IllegalArgumentException();
@@ -331,9 +331,9 @@ public class Controller {
 			remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
 			importAllBookshelves(myLib,remoteLibs.get(temp));
 			nextID++;
-			return id;
+
 		}
-		return 0;
+
 	}
 	public void breakConnection(String host){
 		if(!connections.contains(host)){
