@@ -74,7 +74,8 @@ public class ServerThread extends CommThread {
 		    replymap.remove(tempmsgid);
 		    cmr.onMessageRecive(tempdm);
 		} else {
-		    super.addQueue((network.messages.Message) obj);
+		    Message qo = (network.messages.Message) obj;
+		    super.addQueue(qo);
 		}
 	    }
 	    else

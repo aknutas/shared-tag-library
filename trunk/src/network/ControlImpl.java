@@ -113,7 +113,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
      * @param connection
      *            The connection ID.
      */
-    public void sendMsg(int connection, Message message) {
+    public synchronized void sendMsg(int connection, Message message) {
 	message.setComID(id);
 	threadCollection.get(connection).sendMsg(message);
     }
@@ -134,7 +134,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	while (i.hasNext()) {
 	    tempqueue = threadCollection.get(i.next()).getMsg();
 	    if (tempqueue != null)
-		returnmap.put((Integer) i.next(), tempqueue);
+		returnmap.put(i.next(), tempqueue);
 	}
 
 	if (returnmap.isEmpty())
