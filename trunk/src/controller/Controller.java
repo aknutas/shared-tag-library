@@ -3,6 +3,7 @@ package controller;
 import data.*;
 import database.*;
 import network.*;
+import network.messages.ChatMessage;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -318,7 +319,9 @@ public class Controller {
 	}
 
 
-
+	public Bookshelf search(String str){
+		return null;
+	}
 
 	public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException{
 
@@ -343,7 +346,8 @@ public class Controller {
 		cntrl.disconnect(tmp);
 		connections.remove(host);
 		controllerPairs.remove(host);
-		remoteLibs.remove(tmp);		
+		remoteLibs.remove(tmp);	
+		testconnection(tmp,"Are you still there?");
 	}
 	public Vector<String>getConnections(){
 		return connections;
@@ -360,6 +364,10 @@ public class Controller {
 			local.addBookshelf(bs);
 		}
 	}	
+	
+	public void testconnection(Integer target,String message){
+		cntrl.sendMsg(target, new ChatMessage(message));		
+	}
 
 
 	public void removeAllBookshelves(Library local,Library remote){
