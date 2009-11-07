@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -117,7 +119,18 @@ public class ConnectTo extends JDialog {
 			connectButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					// control.addConnection(addressField.getText());
+					try {
+						control.addConnection(addressField.getText());
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					setVisible(false);
 				}
 			});

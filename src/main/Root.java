@@ -253,7 +253,7 @@ public class Root extends JFrame {
 	 */
 	private TreeView getTreeView() {
 		if (treeView == null) {
-			// treeView = new TreeView();
+			treeView = new TreeView();
 		}
 		return treeView;
 	}
