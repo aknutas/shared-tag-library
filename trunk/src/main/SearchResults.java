@@ -59,8 +59,10 @@ public class SearchResults extends JPanel {
 		removeResults();
 
 		Iterator<Book> result = bookshelf.enumerate();
-		while (result.hasNext()) {
+		int count = 0;
+		while (result.hasNext() && count < 10) {
 			results.add(new Result(result.next()));
+			count++;
 		}
 
 		addResults();
