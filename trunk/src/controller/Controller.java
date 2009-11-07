@@ -328,11 +328,10 @@ public class Controller {
 			}
 			connections.add(host);
 			Integer temp = cntrl.connect(host);
+			System.out.println(" im back");
 			controllerPairs.put(host, temp);
 			remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
 			importAllBookshelves(myLib,remoteLibs.get(temp));
-			nextID++;
-
 		}
 
 	}
