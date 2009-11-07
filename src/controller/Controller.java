@@ -1,7 +1,8 @@
 package controller;
 
 import data.*;
-
+import database.*;
+import network.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,13 +19,17 @@ import org.joone.engine.Matrix;
 
 public class Controller {
 
-	public ClientLibrary myLib;
+	public PersistentLibrary myLib;
 	/**
 	 * Contains bookshelves currently being displayed by the gui or
 	 * being used by the search program
 	 */
 	private Map<Integer,Bookshelf> checkedOutBs;
-
+	
+	private Vector<String> connections;
+	private QueryBuilder qb;
+	public Control cntrl;
+	
 	public Integer nextID;
 	
 	/**
@@ -34,8 +39,11 @@ public class Controller {
 	 */
 	public Controller(){
 		//load in library
-		myLib = new ClientLibrary();
+		
+		qb = new QueryBuilderImpl();
+		myLib = new PersistentLibrary(qb);
 		nextID =0;
+		cntrl= new ControlImpl(new ServerLibrary(myLib));
 		//load the the previous state of the gui if we need it
 		checkedOutBs = new HashMap<Integer,Bookshelf>();
 	}
@@ -59,7 +67,7 @@ public class Controller {
 			System.err.println("error in s processline books "+ e);
 		}
 		
-		myLib = (ClientLibrary)sg.p.lib;
+		myLib = sg.p.lib;
 	}
 	
 	
@@ -95,7 +103,44 @@ public class Controller {
 		nextID++;
 		return num;
 	}
+	public Integer retrieveShelf(String loc,Integer target){
+		Iterator<Bookshelf> iter = myLib.iterator();
+		Bookshelf bs;
+		while(iter.hasNext()){
+			bs = iter.next();
+			if(bs.getProperty("Name")==loc){
+				checkedOutBs.put(target, bs);
+				break;
+			}
+		}
+		return target;
+	}
 
+	public boolean updateShelf(String loc){
+		Iterator<Integer> iter = checkedOutBs.keySet().iterator();
+		Bookshelf bs;
+		Integer target;
+		while(iter.hasNext()){
+			target = iter.next();
+			bs = checkedOutBs.get(target);
+			if(bs.getProperty("Name")==loc){
+				checkedOutBs.remove(target);
+				retrieveShelf(loc,target);
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean updateShelf(Integer target){
+		Bookshelf bs;
+			if(checkedOutBs.containsKey(target)){
+				bs = checkedOutBs.get(target);
+				checkedOutBs.remove(target);
+				retrieveShelf(bs.getProperty("Name"),target);
+				return true;
+			}
+			return false;
+	}
 	
 	public Vector<String> retrieveLibrary(String loc){
 		Iterator<Bookshelf> iter = myLib.iterator();

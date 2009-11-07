@@ -16,13 +16,13 @@ public class Parser {
 	private String bookAuthor ="";
 	private Book b;
 	private Bookshelf s;
-	public Library lib;
+	public PersistentLibrary lib;
 	//	private Book book;
 
 
 	public Parser(String File){
 		bookFile = new File(File);
-		lib = new ClientLibrary();
+		lib = new PersistentLibrary(new QueryBuilderImpl());
 	}
 
 	public final void processLineByLine() throws FileNotFoundException {
