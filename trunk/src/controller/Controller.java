@@ -527,9 +527,10 @@ public class Controller {
 
 	    // Iterating through each queue
 	    while (i.hasNext()) {
-		List<Message> tempqueue = i.next().getValue();
+		Entry<Integer, List<Message>> tryentry = i.next();
+		List<Message> tempqueue = tryentry.getValue();
 
-		// Getting messages from each queu
+		// Getting messages from each queue
 		// Debug message
 		System.out.println("MH: Loopin'");
 
@@ -543,12 +544,12 @@ public class Controller {
 				network.messages.ChatMessage.class.getName())) {
 			    ChatMessage hello = (ChatMessage) tryout;
 			    System.out.println("Connection "
-				    + i.next().getKey() + " says "
+				    + tryentry.getKey() + " says "
 				    + hello.GetMessage());
 			} else {
 			    System.out
 			    .println("Unknown Foreign Object recieved. UFO ALERT:"
-				    + i.next().getClass().getName());
+				    + tryentry.getClass().getName());
 			}
 		    }
 		}
