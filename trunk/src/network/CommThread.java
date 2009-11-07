@@ -12,7 +12,7 @@ import network.messages.Message;
  * 
  * @Author Antti Knutas
  */
-public class CommThread extends Thread {
+abstract class CommThread extends Thread {
 
     // Introducing variables
     protected int status;
@@ -24,7 +24,7 @@ public class CommThread extends Thread {
     protected long myid;
     protected HashMap<Long, ClientResponder> replymap;
     protected ServerResponder messageReceiver;
-
+    
     /**
      * Set the value of status
      * 

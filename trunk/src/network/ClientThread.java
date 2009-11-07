@@ -3,6 +3,7 @@ package network;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import data.messages.DataMessage;
 
@@ -21,6 +22,7 @@ public class ClientThread extends CommThread {
     public ClientThread (long myid, Socket s, ServerResponder messageReceiver) {
         messagequeue = new ArrayList<Message>();
         sendqueue = new ArrayList<Message>();
+        replymap = new HashMap<Long, ClientResponder>();
         this.myid = myid;
         this.s = s;
         comm = new CommunicationImpl();
