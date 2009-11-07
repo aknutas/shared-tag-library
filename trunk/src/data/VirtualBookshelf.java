@@ -145,6 +145,27 @@ public final class VirtualBookshelf implements Bookshelf {
 	public Iterator<Book> enumerate() {
 		return new VirtualBookshelfIterator(this.bookshelf, this.shelves, this.comparable);
 	}
+//
+//	/**
+//	 * Joins two Bookshelves.
+//	 * 
+//	 * @param shelf the bookshelf to wed.
+//	 * 
+//	 * @throws IllegalArgumentException if the shelf given is null.
+//	 */
+//	public Bookshelf union(Bookshelf shelf) throws IllegalArgumentException {
+//		if(null == shelf)
+//			throw new IllegalArgumentException("shelf cannot be null");
+//
+//		VirtualBookshelf newShelf = new VirtualBookshelf();
+//		
+//		if(shelf instanceof VirtualBookshelf) 
+//			newShelf = new VirtualBookshelf(this, null);
+//		else
+//			newShelf.addBookshelf(shelf);
+//		
+//		return newShelf;
+//	}
 
 	/**
 	 * Joins two Bookshelves.
@@ -157,14 +178,12 @@ public final class VirtualBookshelf implements Bookshelf {
 		if(null == shelf)
 			throw new IllegalArgumentException("shelf cannot be null");
 
-		VirtualBookshelf newShelf = new VirtualBookshelf();
-		
 		if(shelf instanceof VirtualBookshelf) 
-			newShelf = new VirtualBookshelf(this, null);
+			((VirtualBookshelf)shelf).deepCopyInto(this);
 		else
-			newShelf.addBookshelf(shelf);
+			this.addBookshelf(shelf);
 		
-		return newShelf;
+		return this;
 	}
 
 	/**
