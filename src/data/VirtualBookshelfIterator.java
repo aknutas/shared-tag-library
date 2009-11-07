@@ -58,7 +58,7 @@ public class VirtualBookshelfIterator implements Iterator<Book> {
 
 	@Override
 	public Book next() {
-		if(null == this.nextBook)
+		if(!this.hasNext())
 			throw new NoSuchElementException();
 		
 		Book next = this.nextBook;
