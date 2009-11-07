@@ -382,6 +382,8 @@ public class Controller {
 		}
 
 		Iterator<Bookshelf> iter =remote.iterator();
+		if(iter==null)
+			throw new IllegalArgumentException();
 		Bookshelf bs;
 		while(iter.hasNext()){
 			bs = iter.next();
