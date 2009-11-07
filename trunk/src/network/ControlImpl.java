@@ -44,7 +44,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     public ControlImpl(ServerMessageReceiver messageReceiver) {
 	this(); // Using the default constructor
 	this.messageReceiver = messageReceiver;
-	cl.run();
+	cl.start();
     };
 
     /**
