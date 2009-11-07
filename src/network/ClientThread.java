@@ -18,7 +18,7 @@ import network.Definitions;
  */
 public class ClientThread extends CommThread {
 
-    public ClientThread (long myid, Socket s, ServerMessageReceiver messageReceiver) {
+    public ClientThread (long myid, Socket s, ServerResponder messageReceiver) {
         messagequeue = new ArrayList<Message>();
         sendqueue = new ArrayList<Message>();
         this.myid = myid;
@@ -33,7 +33,7 @@ public class ClientThread extends CommThread {
     public void run() {
 	long tempcompid;
 	long tempmsgid;
-	ClientMessageReceiver cmr;
+	ClientResponder cmr;
 	DataMessage tempdm;
 	ReplyMessage rm;
 	Object obj = null;

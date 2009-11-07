@@ -8,7 +8,7 @@ import network.messages.*;
  * 
  * @author Andrew Alm
  */
-public interface ClientMessageReceiver {
+public interface ClientResponder {
 
 	/**
 	 * This method will be fired when a Message for this given object

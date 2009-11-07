@@ -47,7 +47,7 @@ public interface Control {
      * @param receiver
      *            The message listener which should receive the reply.
      */
-    public void sendLibraryMsg(int connection, Message message, ClientMessageReceiver receiver);
+    public void sendLibraryMsg(int connection, Message message, ClientResponder receiver);
 
     /**
      * A command to send a data object to the specified connection, with no

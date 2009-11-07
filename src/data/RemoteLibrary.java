@@ -13,7 +13,7 @@ import network.messages.*;
  * 
  * @author Andrew Alm
  */
-public class RemoteLibrary implements Library, ClientMessageReceiver {
+public class RemoteLibrary implements Library, ClientResponder {
 
 	private int connection;
 	private Control network;
@@ -59,7 +59,14 @@ public class RemoteLibrary implements Library, ClientMessageReceiver {
 	 */
 	@Override
 	public Bookshelf getMasterShelf() {
-		return null;
+		Response response = new Response();
+		this.network.sendLibraryMsg(this.connection, new LibraryMessage(LibraryMessage.MSG_MASTER), response);
+		
+		while(!response.messageRecieved());
+		
+		LibraryMessage message = (LibraryMessage)response.getMessage();
+		int id = (Integer)message.dequeParameter();
+		return new RemoteBookshelf(this.network, connection, id);
 	}
 
 	/**

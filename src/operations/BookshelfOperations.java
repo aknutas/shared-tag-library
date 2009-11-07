@@ -39,7 +39,7 @@ public abstract class BookshelfOperations{
 	 * @throws IllegalArgumentException
 	 */
 	
-	public static Bookshelf subset(Collection<Bookshelf> shelfs, Book basis) throws IllegalArgumentException{
+	public static Bookshelf subset(Collection<Bookshelf> shelfs, Comparable<Book> basis) throws IllegalArgumentException{
 
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 
