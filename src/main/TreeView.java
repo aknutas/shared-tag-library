@@ -11,15 +11,19 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
+import data.Bookshelf;
 import data.Library;
 
 public class TreeView extends JPanel implements TreeSelectionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTree tree = new JTree();
+	private DefaultMutableTreeNode top =
+        new DefaultMutableTreeNode("Libraries");
+	private JTree tree = new JTree(top);
 	JScrollPane treeView = new JScrollPane(tree);
 
 	private List<Library> library = new ArrayList<Library>();
@@ -41,15 +45,29 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		initialize();
 	}
 
+	
+	protected void draw() {
+		validate();
+		tree.repaint();
+		this.repaint();
+		super.repaint();
+	}
+	
+	
 	/**
 	 * This method initializes tree
 	 * 
 	 * @return javax.swing.JTree
 	 */
 	private JScrollPane getScrollPane() {
-		
+	    
 		for ( Library l : library ) {
-			//tree.add(comp, constraints);
+			
+			Bookshelf masterShelf = l.getMasterShelf();
+			DefaultMutableTreeNode lib = new DefaultMutableTreeNode(masterShelf.getProperty("name"));
+			top.add(lib);
+			
+			// lib.add(/* Additional Bookshelves */);
 		}
 		
 		return treeView;

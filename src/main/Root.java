@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.Label;
 import java.awt.TextField;
@@ -21,9 +22,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 import controller.Controller;
+import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
-import java.awt.Button;
 
 /**
  * @author patrick
@@ -55,19 +56,16 @@ public class Root extends JFrame {
 		});
 	}
 
-	private ArrayList<VirtualBookshelf> bookshelves = new ArrayList<VirtualBookshelf>();
-
 	private Button connectTo = null;
 
 	private Controller control = null;
 
-	int currentBookshelfIndex = -1;
 	private JPanel jContentPane = null;
 	private JSplitPane jSplitPane = null;
 	private JToolBar jToolBar = null;
 	private TextField searchField = null;
 	private Label searchLabel = null;
-	private VirtualBookshelf currentBookshelf = null;
+	private Bookshelf shelf = null;
 
 	private SearchResults searchResults = null;
 	private TreeView treeView = null;
@@ -84,6 +82,7 @@ public class Root extends JFrame {
      * 
      */
 	protected void draw() {
+		treeView.draw();
 		validate();
 		repaint();
 	}
@@ -102,11 +101,8 @@ public class Root extends JFrame {
 
 					ConnectTo dialog = new ConnectTo(thisClass, control);
 					dialog.setVisible(true);
-					// Connect through Controller.
-					// controller.setConnection ?
 
-					// Update TreeView
-					// Update SearchResults
+					draw();
 				}
 			});
 		}
@@ -152,63 +148,51 @@ public class Root extends JFrame {
 			searchLabel = new Label("Search:", 0);
 			searchLabel.setPreferredSize(new Dimension(100, 14));
 
-			// searchLabel.setText("Search:");
 			jToolBar = new JToolBar();
+
+			ImageIcon icon = new ImageIcon(getClass().getResource(
+					"addBookshelf.png"), "Add Bookshelf");
+			JButton addBookshelf = new JButton(icon);
+			addBookshelf.setBorder(null);
+			addBookshelf.setToolTipText("Add Bookshelf");
+			jToolBar.add(searchLabel);
+			jToolBar.add(getTextField());
+			addBookshelf.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
+
+					shelf = control.addBookshelf("New Bookshelf");
+					control.addBook(shelf, new VirtualBook("Silence",
+							"John Cage"));
+					searchResults.setResults(shelf);
+
+					draw();
+				}
+			});
+			jToolBar.add(addBookshelf);
+
+			ImageIcon icon2 = new ImageIcon(getClass().getResource(
+					"addBook.png"), "Add Book (to Current Bookshelf)");
+			JButton addBook = new JButton(icon2);
+			addBook.setBorder(null);
+			addBook.setToolTipText("Add Book");
+			addBook.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
+
+					if (shelf == null) {
+						shelf = control.addBookshelf("New Bookshelf");
+					}
+
+					control.addBook(shelf, "The Traitor", "Andre Gorz");
+					searchResults.setResults(shelf);
+
+					draw();
+				}
+			});
+
+			jToolBar.add(addBook);
+			jToolBar.add(getButton());
 		}
 
-		ImageIcon icon = new ImageIcon(getClass().getResource(
-				"addBookshelf.png"), "Add Bookshelf");
-		JButton addBookshelf = new JButton(icon);
-		addBookshelf.setBorder(null);
-		addBookshelf.setToolTipText("Add Bookshelf");
-		jToolBar.add(searchLabel);
-		jToolBar.add(getTextField());
-		addBookshelf.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-
-				// Add functionality for changing name
-				bookshelves.add(new VirtualBookshelf("New Bookshelf"));
-				currentBookshelfIndex = bookshelves.size() - 1;
-
-				bookshelves.get(currentBookshelfIndex).insert(
-						new VirtualBook("Silence", "John Cage"));
-
-				searchResults
-						.setResults(bookshelves.get(currentBookshelfIndex));
-
-				draw();
-			}
-		});
-		jToolBar.add(addBookshelf);
-
-		ImageIcon icon2 = new ImageIcon(getClass().getResource("addBook.png"),
-				"Add Book (to Current Bookshelf)");
-		JButton addBook = new JButton(icon2);
-		addBook.setBorder(null);
-		addBook.setToolTipText("Add Book");
-		addBook.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-
-				// Add safety checks
-				// Add functionality for changing name
-				if (currentBookshelfIndex == -1) {
-					bookshelves.add(new VirtualBookshelf("New Bookshelf"));
-					currentBookshelfIndex = bookshelves.size() - 1;
-				}
-
-				bookshelves.get(currentBookshelfIndex).insert(
-						new VirtualBook("The Traitor", "Andre Gorz"));
-
-				searchResults
-						.setResults(bookshelves.get(currentBookshelfIndex));
-
-				draw();
-				// Refresh current bookshelf view
-			}
-		});
-		jToolBar.add(addBook);
-
-		jToolBar.add(getButton());
 		return jToolBar;
 	}
 
@@ -236,13 +220,14 @@ public class Root extends JFrame {
 			searchField.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					// Search Through Controller
+					shelf = control.search(searchField.getText());
+					searchResults.setResults(shelf);
 
 					draw();
-					// Refresh current bookshelf view
 				}
 			});
 		}
+		
 		return searchField;
 	}
 

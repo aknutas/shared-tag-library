@@ -112,6 +112,7 @@ public class Result extends JPanel {
 			tagNameConstraints.gridy = 0;
 			tagNameConstraints.weightx = .6;
 			tagNameConstraints.gridx = 1;
+			tagNameConstraints.insets = new Insets(5, 5, 5, 5);
 			tagContentConstraints = new GridBagConstraints();
 			// tagContentConstraints.fill = GridBagConstraints.VERTICAL;
 			tagContentConstraints.gridx = 2;
@@ -263,7 +264,7 @@ public class Result extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setSize(827, 200);
+		this.setSize(500, 200);
 		this.setBounds(new Rectangle(0, 0, 500, 200));
 		this.add(getRightNavigation(), BorderLayout.EAST);
 		this.add(getTitle(), BorderLayout.NORTH);
