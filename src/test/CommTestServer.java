@@ -9,9 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import network.CommThread;
 import network.Communication;
 import network.Definitions;
+import network.ServerThread;
 import network.messages.*;
 
 /**
@@ -30,7 +30,7 @@ public class CommTestServer {
     ServerSocket ss;
     Communication comm;
     long time;
-    CommThread ct;
+    ServerThread ct;
     long myid;
 
     public static void main(String[] args) {
