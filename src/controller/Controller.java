@@ -325,31 +325,47 @@ public class Controller {
 			if(connections.contains(host)){
 				throw new IllegalArgumentException();
 			}
-				
 			connections.add(host);
 			Integer temp = cntrl.connect(host);
 			controllerPairs.put(host, temp);
 			remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
-			//myLib.
+			importAllBookshelves(myLib,remoteLibs.get(temp));
 			nextID++;
 			return id;
 		}
 		return 0;
 	}
-//	public void importAllBookshelves(Library local,Library remote){
-//		if(local ==null || remote ==null){
-//			throw new IllegalArgumentException();
-//		}
-//		
-//		remote.iterator()
-//		
-//		
-//		
-//	}
+	public void breakConnection(String host){
+		if(!connections.contains(host)){
+			throw new IllegalArgumentException();
+		}
+		Integer tmp =controllerPairs.get(host);
+		cntrl.disconnect(tmp);
+		connections.remove(host);
+		controllerPairs.remove(host);
+		remoteLibs.remove(tmp);		
+	}
+	public Vector<String>getConnections(){
+		return connections;
+	}
+	public void importAllBookshelves(Library local,Library remote){
+		if(local ==null || remote ==null){
+			throw new IllegalArgumentException();
+		}
+		
+		Iterator<Bookshelf> iter =remote.iterator();
+		Bookshelf bs;
+		while(iter.hasNext()){
+			bs = iter.next();
+			local.addBookshelf(bs);
+			}
+	}
 
-
-
-
+		
 }
+
+
+
+
 
 
