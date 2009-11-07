@@ -156,7 +156,10 @@ public class ControlImpl implements Control, ConnectionCallBack {
      */
     public synchronized void gimmeThread(Socket socket) {
 	CommThread ct = new ServerThread(id, socket, messageReceiver);
+	ct.start();
 	threadCollection.put(conncounter, ct);
+	//Debug
+	System.out.println("Controller here. Started listening to connection" + conncounter);
 	conncounter++;
     }
 
