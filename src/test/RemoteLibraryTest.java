@@ -42,7 +42,7 @@ public class RemoteLibraryTest {
 		Library remoteLibrary = new RemoteLibrary(connection, network);
 		
 		Bookshelf remoteShelf = remoteLibrary.getMasterShelf();
-		
+		System.out.println("made it here");
 	}
 	
 }
