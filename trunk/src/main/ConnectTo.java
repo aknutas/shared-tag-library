@@ -30,13 +30,15 @@ public class ConnectTo extends JDialog {
 	private JButton connectButton = null;
 	private JButton cancelButton = null;
 	private Controller control = null;
+	private TreeView tree = null;
 
 	/**
 	 * @param owner
+	 * @param treeView 
 	 */
-	public ConnectTo(Frame owner, Controller ctl) {
+	public ConnectTo(Frame owner, Controller ctl, TreeView treeView) {
 		super(owner);
-
+		tree = treeView;
 		control = ctl;
 		initialize();
 	}
@@ -121,6 +123,7 @@ public class ConnectTo extends JDialog {
 
 					try {
 						control.addConnection(addressField.getText());
+						tree.refresh();
 					} catch (UnknownHostException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -7,8 +7,6 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,8 +21,6 @@ import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
-import data.VirtualBook;
-import data.VirtualBookshelf;
 
 /**
  * @author patrick
@@ -92,6 +88,7 @@ public class Root extends JFrame {
      * 
      */
 	protected void draw() {
+		treeView.validate();
 		treeView.draw();
 		validate();
 		repaint();
@@ -109,7 +106,7 @@ public class Root extends JFrame {
 			connectTo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					ConnectTo dialog = new ConnectTo(thisClass, control);
+					ConnectTo dialog = new ConnectTo(thisClass, control, treeView);
 					dialog.setVisible(true);
 
 					draw();
@@ -171,7 +168,7 @@ public class Root extends JFrame {
 				public void actionPerformed(ActionEvent event) {
 
 					addBookshelfDialog = new AddBookshelf(thisClass, control,
-							searchResults);
+							searchResults, treeView);
 					addBookshelfDialog.setVisible(true);
 
 					draw();
@@ -187,7 +184,7 @@ public class Root extends JFrame {
 			addBook.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					addBookDialog = new AddBook(thisClass, control, shelf, searchResults);
+					addBookDialog = new AddBook(thisClass, control, shelf, searchResults, treeView);
 					addBookDialog.setVisible(true);					
 
 					draw();

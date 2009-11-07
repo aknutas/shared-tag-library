@@ -31,14 +31,17 @@ public class AddBookshelf extends JDialog {
 	private Controller control = null;
 	private Bookshelf shelf = null;
 	private SearchResults results = null;
+	private TreeView tree = null;
 
 	/**
 	 * @param owner
+	 * @param treeView 
 	 */
-	public AddBookshelf(Frame owner, Controller ctl, SearchResults r) {
+	public AddBookshelf(Frame owner, Controller ctl, SearchResults r, TreeView treeView) {
 		super(owner);
 		control = ctl;
 		results = r;
+		tree = treeView;
 		initialize();
 	}
 
@@ -125,6 +128,7 @@ public class AddBookshelf extends JDialog {
 					
 					if (shelf != null) {
 						results.setResults(shelf);
+						tree.refresh();
 					}
 					
 					setVisible(false);
