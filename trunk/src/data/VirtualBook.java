@@ -149,7 +149,6 @@ public class VirtualBook implements Book {
 		if(null == name || null == value)
 			throw new IllegalArgumentException("name or value cannot be null");
 		
-		//this.tag(name);
 		this.tag(value);
 		
 		return this.properties.put(name, value);
