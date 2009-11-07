@@ -89,7 +89,7 @@ public class CommTestClient {
 		    } else {
 			System.out
 				.println("Unknown Foreign Object recieved. UFO ALERT:"
-					+ i.next().getClass().getName());
+					+ tryout.getClass().getName());
 		    }
 		}
 	    } else {
