@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import scripts.Parser;
 import scripts.ScriptGenerator;
@@ -17,23 +18,14 @@ import org.joone.engine.Matrix;
 
 public class Controller {
 
-	public Library myLib;
+	public ClientLibrary myLib;
 	/**
 	 * Contains bookshelves currently being displayed by the gui or
 	 * being used by the search program
 	 */
 	private Map<Integer,Bookshelf> checkedOutBs;
-	/**
-	 * Contains bookshelves currently being displayed by the gui or
-	 * being used by the search program
-	 */
-	private Map<Integer,Book> checkedOutBooks;
-	
-	
+
 	public Integer nextID;
-	
-	
-	
 	
 	/**
 	 * the default controller constructor
@@ -46,7 +38,6 @@ public class Controller {
 		nextID =0;
 		//load the the previous state of the gui if we need it
 		checkedOutBs = new HashMap<Integer,Bookshelf>();
-		checkedOutBooks = new HashMap<Integer,Book>();
 	}
 	
 	
@@ -68,7 +59,7 @@ public class Controller {
 			System.err.println("error in s processline books "+ e);
 		}
 		
-		myLib = sg.p.lib;
+		myLib = (ClientLibrary)sg.p.lib;
 	}
 	
 	
@@ -86,48 +77,35 @@ public class Controller {
 		return checkedOutBs.get(key);
 	}
 	/**
-	 * Used for accessing a books that have been retrieved.
-	 * @param key the unique key handed to the module for retrieving the Book
-	 * @return the bookshelf if the key is valid
-	 * @throws IllegalArgumentException if the key is not in the map
-	 */
-	public Book getBook(Integer key) throws IllegalArgumentException{
-		if(!checkedOutBooks.containsKey(key)){
-			throw new IllegalArgumentException();
-		}
-		else
-		return checkedOutBooks.get(key);
-	}
-	/**
 	 * request a bookshelf from the library or connection
 	 * @param loc
 	 * @return the key to reference the the object with the get command
 	 */
 	public Integer retrieveShelf(String loc){
 		Integer num = nextID;
-
-
-		Iterator<Bookshelf> iter = ((ClientLibrary)myLib).iterator();
+		Iterator<Bookshelf> iter = myLib.iterator();
 		Bookshelf bs;
 		while(iter.hasNext()){
 			bs = iter.next();
 			if(bs.getProperty("Name")==loc){
 				checkedOutBs.put(num, bs);
+				break;
 			}
 		}
 		nextID++;
 		return num;
 	}
-	/**
-	 * request a book from the library or connection
-	 * @param loc
-	 * @return the key to reference the the object with the get command
-	 */
-	public Integer retrieveBook(String loc){
-		
-		Integer num = nextID;
-		
-		return num;
+
+	
+	public Vector<String> retrieveLibrary(String loc){
+		Iterator<Bookshelf> iter = myLib.iterator();
+		Vector<String> names = new Vector<String>();
+		Bookshelf bs;
+		while(iter.hasNext()){
+			bs = iter.next();
+			names.add(bs.getProperty("Name"));
+		}
+		return names;
 	}
 	
 
@@ -136,8 +114,10 @@ public class Controller {
 	 * 
 	 * @return the added book (null if error)
 	 */
-	public Book addBook(Bookshelf bookshelf, String name){
-	    return null;
+	public Book addBook(Bookshelf bookshelf, String name, String title){
+		if(name== null || title == null)
+		    return null;
+		return addBook(bookshelf, new VirtualBook(name,title));
 	}
 	
 	
@@ -147,7 +127,10 @@ public class Controller {
 	 * @return the added book (null if error)
 	 */
 	public Book addBook(Bookshelf bookshelf, Book book){
-	    return null;
+		if(book== null)
+		    return null;
+		bookshelf.insert(book);
+		return book;
 	}
 	
 	/**
@@ -156,7 +139,18 @@ public class Controller {
 	 * @return the removed book (null if error)
 	 */
 	public Book removeBook(Bookshelf bookshelf, String name){
-	    return null;
+		if(name== null )
+		    return null;
+		Iterator<Book> iter = bookshelf.iterator();
+		Book book = null;
+		while(iter.hasNext()){
+			book = iter.next();
+			if(book.getProperty("Name")==name){
+				removeBook(bookshelf,book);
+				break;
+			}
+		}
+		return book;
 	}
 	
 	
@@ -166,7 +160,10 @@ public class Controller {
 	 * @return the removed book (null if error)
 	 */
 	public Book removeBook(Bookshelf bookshelf, Book book){
-	    return null;
+		if(!bookshelf.contains(book))
+		    return null;
+		bookshelf.remove(book);
+		return book;
 	}
 	
 	
@@ -175,8 +172,10 @@ public class Controller {
 	 * 
 	 * @return the added bookshelf (null if error)
 	 */
-	public Bookshelf addBookshelf(Bookshelf bookshelf, String name){
-	    return null;
+	public Bookshelf addBookshelf(Bookshelf bookshelf, String name)throws IllegalArgumentException{
+		Bookshelf  bs= new VirtualBookshelf(name);
+		myLib.addBookshelf(bs);
+	    return bs;
 	}
 	
 	
@@ -186,8 +185,11 @@ public class Controller {
 	 * @return the added bookshelf (null if error)
 	 */
 	public Bookshelf addBookshelf(Bookshelf bookshelf, Book book){
-	    return null;
-	}
+		Bookshelf  bs= new VirtualBookshelf("From book " + book.getProperty("Name"));
+		addBook(bs,book);
+		myLib.addBookshelf(bs);
+	    return bs;	
+	    }
 	
 	/**
 	 * Remove a bookshelf from the library
@@ -195,9 +197,34 @@ public class Controller {
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf removeBookshelf(Bookshelf bookshelf, String name){
+		if(bookshelf== null)
+			return removeBookshelf(name);
+		else 
+			return removeBookshelf(bookshelf);
+	}
+	/**
+	 * Remove a bookshelf from the library
+	 * 
+	 * @return the removed bookshelf (null if error)
+	 */
+	public Bookshelf removeBookshelf(String name){
+		if(name== null)
+			return null;
+		
+			
+		
+		
 	    return null;
 	}
-	
+	/**
+	 * Remove a bookshelf from the library
+	 * 
+	 * @return the removed bookshelf (null if error)
+	 */
+	public Bookshelf removeBookshelf(Bookshelf bookshelf){
+	    return null;
+	}
+
 	
 	/**
 	 * Remove a bookshelf from the library
