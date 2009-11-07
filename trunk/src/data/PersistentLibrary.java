@@ -25,6 +25,15 @@ public class PersistentLibrary extends VirtualLibrary {
 			throw new NullPointerException("database cannot be null");
 		
 		this.database = database;
+		this.loadDatabase();
+	}
+	
+	/**
+	 * Loads bookshelves from the database.
+	 */
+	private void loadDatabase() {
+		for(Bookshelf shelf : this.database.shelfList())
+			this.addBookshelf(shelf);
 	}
 	
 	/**
