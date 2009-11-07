@@ -62,7 +62,7 @@ public class CommTestClient {
 
 	try {
 	    s = ss.accept();
-	    ct = new network.ClientThread(myid, s);
+	    ct = new network.ClientThread(myid, s, null);
 	    ct.start();
 	    System.out.println("Accepted");
 	} catch (IOException e) {
