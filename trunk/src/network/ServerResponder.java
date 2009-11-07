@@ -9,7 +9,7 @@ import network.messages.*;
  * 
  * @author Andrew Alm
  */
-public interface ServerMessageReceiver {
+public interface ServerResponder {
 
 	/**
 	 * This method will be fired when a Message for this given object

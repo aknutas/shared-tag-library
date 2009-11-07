@@ -22,7 +22,7 @@ public interface Bookshelf extends Iterable<Book> {
 	
 	/**
 	 * Removes a book from the Bookshelf, if the Bookshelf does not contain the
-	 * book then this mtehod does nothing.
+	 * book then this method does nothing.
 	 * 
 	 * @param book the Book to remove from the Bookshelf.
 	 * 

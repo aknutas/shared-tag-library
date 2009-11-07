@@ -1,9 +1,10 @@
 package data;
 
 import java.util.*;
-
 import operations.*;
 import database.*;
+import network.*;
+import network.messages.*;
 
 /**
  * The ClientLibrary class implements the Library interface and all of the
@@ -11,7 +12,7 @@ import database.*;
  * 
  * @author Andrew Alm
  */
-public class ClientLibrary implements Library {
+public class ClientLibrary implements Library, ClientResponder {
 
 	private List<Bookshelf> bookshelves;
 	private QueryBuilder database;
@@ -55,13 +56,6 @@ public class ClientLibrary implements Library {
 	}
 	
 	/**
-	 * Returns an iterator containing all the bookshelves in this library.
-	 */
-	public Iterator<Bookshelf> iterator() {
-		return this.bookshelves.iterator();
-	}
-	
-	/**
 	 * Get the master bookshelf of the Library.  The master bookshelf is a shelf
 	 * containing all of the books in the library.
 	 * 
@@ -70,6 +64,21 @@ public class ClientLibrary implements Library {
 	public Bookshelf getMasterShelf() {
 		return BookshelfOperations.union(this.bookshelves);
 	}
+	
+	/**
+	 * Returns an iterator containing all the bookshelves in this library.
+	 */
+	public Iterator<Bookshelf> iterator() {
+		return this.bookshelves.iterator();
+	}
+
+	@Override
+	public void onMessageRecive(Message message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 	
 }
 

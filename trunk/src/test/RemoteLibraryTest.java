@@ -41,6 +41,7 @@ public class RemoteLibraryTest {
 		int connection = network.connect("andrew");
 		Library remoteLibrary = new RemoteLibrary(connection, network);
 		
+		Bookshelf remoteShelf = remoteLibrary.getMasterShelf();
 		
 	}
 	

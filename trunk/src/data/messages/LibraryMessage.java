@@ -33,7 +33,7 @@ public class LibraryMessage extends DataMessage {
 		super(messageType);
 
 		if(messageType < LibraryMessage.MSG_HELLO || messageType > LibraryMessage.MSG_MASTER)
-			throw new IllegalArgumentException("illegal message type");		
+			throw new IllegalArgumentException("illegal message type");
 	}
 	
 }

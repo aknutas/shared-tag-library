@@ -15,7 +15,7 @@ import network.messages.*;
  */
 public class ServerThread extends CommThread {
 
-    public ServerThread(long myid, Socket s, ServerMessageReceiver sr) {
+    public ServerThread(long myid, Socket s, ServerResponder sr) {
 	messagequeue = new ArrayList<Message>();
 	sendqueue = new ArrayList<Message>();
 	this.myid = myid;
@@ -31,7 +31,7 @@ public class ServerThread extends CommThread {
     public void run() {
 	long tempcompid;
 	long tempmsgid;
-	ClientMessageReceiver cmr;
+	ClientResponder cmr;
 	DataMessage tempdm;
 	ReplyMessage rm;
 	Object obj = null;

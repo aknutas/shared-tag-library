@@ -18,11 +18,11 @@ import network.messages.*;
 public class TestNetworkControl extends TestNetwork implements Control {
 	
 	private int connectionID;
-	private Map<Integer, ServerMessageReceiver> connections;
+	private Map<Integer, ServerResponder> connections;
 	
 	public TestNetworkControl() {
 		this.connectionID = 0;
-		this.connections = new HashMap<Integer, ServerMessageReceiver>();
+		this.connections = new HashMap<Integer, ServerResponder>();
 	}
 	
 	@Override
@@ -53,11 +53,11 @@ public class TestNetworkControl extends TestNetwork implements Control {
 	
 
 	@Override
-	public void sendLibraryMsg(final int connection, final Message message, final ClientMessageReceiver receiver) throws NullPointerException, IllegalArgumentException {
+	public void sendLibraryMsg(final int connection, final Message message, final ClientResponder receiver) throws NullPointerException, IllegalArgumentException {
 		if((null == message) || (null == receiver))
 			throw new NullPointerException("message or receiver cannot be null");
 		
-		final ServerMessageReceiver server = this.connections.get(connection);
+		final ServerResponder server = this.connections.get(connection);
 		if(null == server)
 			throw new IllegalArgumentException("unknown connection");
 		
@@ -66,7 +66,7 @@ public class TestNetworkControl extends TestNetwork implements Control {
 				Message response = server.onMessageRecive(message);
 				receiver.onMessageRecive(response);
 			}
-		})).run();
+		})).start();
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class TestNetworkControl extends TestNetwork implements Control {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
-		final ServerMessageReceiver server = this.connections.get(connection);
+		final ServerResponder server = this.connections.get(connection);
 		if(null == server)
 			throw new IllegalArgumentException("unknown connection");
 		
@@ -82,7 +82,7 @@ public class TestNetworkControl extends TestNetwork implements Control {
 			public void run() {
 				server.onMessageRecive(message);
 			}
-		})).run();
+		})).start();
 	}
 
 	/**

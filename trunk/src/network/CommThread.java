@@ -22,8 +22,8 @@ public class CommThread extends Thread {
     protected ArrayList<Message> messagequeue;
     protected ArrayList<Message> sendqueue;
     protected long myid;
-    protected HashMap<Long, ClientMessageReceiver> replymap;
-    protected ServerMessageReceiver messageReceiver;
+    protected HashMap<Long, ClientResponder> replymap;
+    protected ServerResponder messageReceiver;
 
     /**
      * Set the value of status
@@ -55,7 +55,7 @@ public class CommThread extends Thread {
     }
 
     public synchronized void sendMsgGetReply(network.messages.Message message,
-	    ClientMessageReceiver receiver) {
+	    ClientResponder receiver) {
 	replymap.put(message.getMsgID(), receiver);
 	try {
 	    comm.Send(s, message);

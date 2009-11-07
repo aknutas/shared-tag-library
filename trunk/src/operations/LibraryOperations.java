@@ -8,7 +8,7 @@ public abstract class LibraryOperations {
 
 	public static Iterator<Map.Entry<String, Integer>> getTags(Library lib){
 		
-		Iterator<Book> master = lib.getMasterShelf().enumerate();
+		Iterator<Book> master = lib.getMasterShelf().iterator();
 		Map<String, Integer> allTags = new HashMap<String, Integer>();
 		
 		while (master.hasNext()){
@@ -31,7 +31,7 @@ public abstract class LibraryOperations {
 	
 	public static Iterator<Map.Entry<String, String>> getProperties(Library lib){
 		
-		Iterator<Book> master = lib.getMasterShelf().enumerate();
+		Iterator<Book> master = lib.getMasterShelf().iterator();
 		Set<Map.Entry<String, String>> allProperties = new TreeSet<Map.Entry<String, String>>();
 		
 		while (master.hasNext()){

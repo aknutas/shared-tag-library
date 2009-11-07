@@ -19,7 +19,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     private long id;
     private int conncounter;
     Random rd;
-    ServerMessageReceiver messageReceiver;
+    ServerResponder messageReceiver;
     ConnectionListener cl;
 
     /**
@@ -41,7 +41,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
      *            A class that answers remote queries. Usually the Library class
      *            in this context.
      */
-    public ControlImpl(ServerMessageReceiver messageReceiver) {
+    public ControlImpl(ServerResponder messageReceiver) {
 	this(); // Using the default constructor
 	this.messageReceiver = messageReceiver;
 	cl.start();
@@ -100,7 +100,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
      *            The message listener which should receive the reply.
      */
     public synchronized void sendLibraryMsg(int connection, Message message,
-	    ClientMessageReceiver receiver) {
+	    ClientResponder receiver) {
 	message.setComID(id);
 	message.setMsgID(rd.nextLong());
 	threadCollection.get(connection).sendMsgGetReply(message, receiver);
