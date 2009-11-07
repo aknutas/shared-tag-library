@@ -69,45 +69,29 @@ public class Controller {
      */
     public Controller(){
 	//load in library
-
 	qb = new QueryBuilderImpl();
 	myLib = new PersistentLibrary(qb);
 	nextID =1;
 	cntrl= new ControlImpl(new ServerLibrary(myLib));
-	//load the the previous state of the gui if we need it
-//	connections = new Vector<String>();
 	checkedOutBs = new HashMap<Integer,Bookshelf>();
 	controllerPairs = new HashMap<String,Integer>();
 	remoteLibs = new HashMap<Integer,RemoteLibrary>();
     }
+    
+    /**
+     * Sets the focus of the controller to a single bookshelf for use in
+     * methods instead of a bookshelf paramater
+     * @param bookshelf the bookshelf in question
+     * @param id its checkedOutBs id
+     * @throws IllegalArgumentException  the paramaters may not be invalid or null
+     */
     public void setFocus(Bookshelf bookshelf,Integer id) throws IllegalArgumentException{
-	if(bookshelf == null || id == null || id == 0)
+	if(bookshelf == null || id == null || id > 0)
 	    throw new IllegalArgumentException();
 	focus = bookshelf;
 	focusID=id;	
     }
 
-
-    public void setuptestController(){
-	ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
-	try{
-	    sg.processLineByLine();
-	}
-	catch (Exception e){
-	    System.err.println("error in s processline Dic "+ e);
-	}
-	sg.generateLibrary(10,5);
-	sg.p = new Parser("src\\scripts\\books.txt");
-
-	try{
-	    sg.p.processLineByLine();
-	}
-	catch (Exception e){
-	    System.err.println("error in s processline books "+ e);
-	}
-
-	myLib = sg.p.lib;
-    }
 
 
     /**
@@ -124,7 +108,7 @@ public class Controller {
 	    return checkedOutBs.get(key);
     }
     /**
-     * request a bookshelf from the library or connection
+     * request a bookshelf from the library based on a string name
      * @param loc
      * @return the key to reference the the object with the get command
      */
@@ -144,21 +128,22 @@ public class Controller {
 	nextID++;
 	return num;
     }
-    public Integer retrieveShelf(String loc,Integer target)throws IllegalArgumentException{
-	if(loc==null)
-	    throw new IllegalArgumentException();
-	Iterator<Bookshelf> iter = myLib.iterator();
-	Bookshelf bs;
-	while(iter.hasNext()){
-	    bs = iter.next();
-	    if(bs.getProperty("Name")==loc){
-		checkedOutBs.put(target, bs);
-		break;
-	    }
-	}
-	return target;
-    }
-// **************88 these should not be necessary if everything is a pointer
+/* **************88 these should not be necessary if everything is a pointer
+//
+//    public Integer retrieveShelf(String loc,Integer target)throws IllegalArgumentException{
+//	if(loc==null)
+//	    throw new IllegalArgumentException();
+//	Iterator<Bookshelf> iter = myLib.iterator();
+//	Bookshelf bs;
+//	while(iter.hasNext()){
+//	    bs = iter.next();
+//	    if(bs.getProperty("Name")==loc){
+//		checkedOutBs.put(target, bs);
+//		break;
+//	    }
+//	}
+//	return target;
+//    }
 //    public boolean updateShelf(String loc)throws IllegalArgumentException{
 //	if(loc==null)
 //	    throw new IllegalArgumentException();
@@ -186,7 +171,11 @@ public class Controller {
 //	}
 //	return false;
 //    }
-
+*/
+ /**
+  *  Retrieves a vector of all the library's bookshelf names
+  *  @return the vector of names
+  */
     public Vector<String> retrieveLibraryNames(){
 	Iterator<Bookshelf> iter = myLib.iterator();
 	Vector<String> names = new Vector<String>();
@@ -197,6 +186,11 @@ public class Controller {
 	}
 	return names;
     }
+    
+    /**
+     * returns the iterat
+     * @return
+     */
     public Iterator<Bookshelf> retrieveLibrary(){
 	return  myLib.iterator();
     }
@@ -562,6 +556,33 @@ public class Controller {
 	// Thread status iteration ought to come here
 	Map<Integer, Integer> statusMap = cntrl.getStatus();
     }
+    
+    
+    
+
+    /**
+     * a test method
+     */
+        public void setuptestController(){
+    	ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
+    	try{
+    	    sg.processLineByLine();
+    	}
+    	catch (Exception e){
+    	    System.err.println("error in s processline Dic "+ e);
+    	}
+    	sg.generateLibrary(10,5);
+    	sg.p = new Parser("src\\scripts\\books.txt");
+
+    	try{
+    	    sg.p.processLineByLine();
+    	}
+    	catch (Exception e){
+    	    System.err.println("error in s processline books "+ e);
+    	}
+
+    	myLib = sg.p.lib;
+        }
 }
 
 
