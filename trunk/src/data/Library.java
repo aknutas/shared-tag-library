@@ -15,7 +15,7 @@ public interface Library extends Iterable<Bookshelf> {
 	 *
 	 * @throws NullPointerException if the shelf given is null.
 	 */
-	boolean addBookshelf(Bookshelf shelf) throws NullPointerException;
+	boolean addBookshelf(Bookshelf shelf) throws NullPointerException, IllegalArgumentException;
 
 	/**
 	 * Removes a Bookshelf from the library.
