@@ -34,11 +34,14 @@ public class Root extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	static Root thisClass = null;
+	private MsgTrigger msgTrigger;
+	private javax.swing.Timer msgTimer;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+	    	
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -75,6 +78,10 @@ public class Root extends JFrame {
 	 */
 	public Root() {
 		super();
+		msgTrigger = new MsgTrigger();
+		msgTimer = new javax.swing.Timer(200, msgTrigger);
+		msgTimer.setInitialDelay(2000);
+		msgTimer.start();
 		initialize();
 	}
 
@@ -257,14 +264,18 @@ public class Root extends JFrame {
 	
     /**
      * This is the ActionListener that gets activated by the
-     * messagehandlertimer.
+     * messagehandler timer.
      * 
      * @Author Antti Knutas
      */
-    private class msgtrigger implements ActionListener {
+    private class MsgTrigger implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    control.messageHandler();
 	}
+	
+	
     }
+    
+    
 }
