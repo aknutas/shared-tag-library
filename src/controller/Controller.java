@@ -519,19 +519,21 @@ public class Controller {
      * messages.
      */
     public void messageHandler() {
-	//Getting the message queue map and making sure that there is content
+	// Getting the message queue map and making sure that there is content
 	Map<Integer, List<Message>> msgMap = cntrl.whatsUp();
+
+	System.out.println("messageHandler activated");
 	if (msgMap != null) {
 
 	    Set<Entry<Integer, List<Message>>> entryset = msgMap.entrySet();
 	    Iterator<Entry<Integer, List<Message>>> i = entryset.iterator();
 
-	    //Iterating through each queue
+	    // Iterating through each queue
 	    while (i.hasNext()) {
 		List<Message> tempqueue = i.next().getValue();
 
 		// Getting messages from each queu
-		//Debug message
+		// Debug message
 		System.out.println("MH: Loopin'");
 
 		if (tempqueue != null) {
@@ -554,8 +556,10 @@ public class Controller {
 		    }
 		}
 	    }
+	} else {
+	    System.out.println("Read too soon: msgqueues empty");
 	}
-	//Thread status iteration ought to come here
+	// Thread status iteration ought to come here
 	Map<Integer, Integer> statusMap = cntrl.getStatus();
     }
 }
