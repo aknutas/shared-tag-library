@@ -137,10 +137,13 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	
 	while (i.hasNext()) {
 	    key = i.next();
+	    //Debug
 	    System.out.println("Iterating key: " + key);
 	    tempqueue = threadCollection.get(key).getMsg();
+	    //Debug
+	    System.out.println("Queue size: " + tempqueue.size());
 	    if (tempqueue != null)
-		returnmap.put(i.next(), tempqueue);
+		returnmap.put(key, tempqueue);
 	}
 
 	if (returnmap.isEmpty())
