@@ -333,8 +333,9 @@ public class Controller {
 			Integer temp = cntrl.connect(host);
 			System.out.println(" im back");
 			controllerPairs.put(host, temp);
-			remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
-			importAllBookshelves(myLib,remoteLibs.get(temp));
+			testconnection(temp,"Are you still there?");
+			//remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
+			//importAllBookshelves(myLib,remoteLibs.get(temp));
 		}
 
 	}
@@ -347,7 +348,6 @@ public class Controller {
 		connections.remove(host);
 		controllerPairs.remove(host);
 		remoteLibs.remove(tmp);	
-		testconnection(tmp,"Are you still there?");
 	}
 	public Vector<String>getConnections(){
 		return connections;
