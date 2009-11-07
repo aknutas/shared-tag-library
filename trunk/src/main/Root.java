@@ -70,18 +70,21 @@ public class Root extends JFrame {
 	private Label searchLabel = null;
 	private Bookshelf shelf = null;
 
-	private SearchResults searchResults = null;
+	private SearchResults searchResults = new SearchResults();
 	private TreeView treeView = null;
+
+	private AddBookshelf addBookshelfDialog = null;
+	private AddBook addBookDialog = null;
 
 	/**
 	 * This is the default constructor
 	 */
 	public Root() {
 		super();
-		msgTrigger = new MsgTrigger();
-		msgTimer = new javax.swing.Timer(1000, msgTrigger);
-		msgTimer.setInitialDelay(2000);
-		msgTimer.start();
+//		msgTrigger = new MsgTrigger();
+//		msgTimer = new javax.swing.Timer(1000, msgTrigger);
+//		msgTimer.setInitialDelay(2000);
+//		msgTimer.start();
 		initialize();
 	}
 
@@ -167,10 +170,9 @@ public class Root extends JFrame {
 			addBookshelf.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					shelf = control.addBookshelf("New Bookshelf");
-					control.addBook(shelf, new VirtualBook("Silence",
-							"John Cage"));
-					searchResults.setResults(shelf);
+					addBookshelfDialog = new AddBookshelf(thisClass, control,
+							searchResults);
+					addBookshelfDialog.setVisible(true);
 
 					draw();
 				}
@@ -185,12 +187,8 @@ public class Root extends JFrame {
 			addBook.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					if (shelf == null) {
-						shelf = control.addBookshelf("New Bookshelf");
-					}
-
-					control.addBook(shelf, "The Traitor", "Andre Gorz");
-					searchResults.setResults(shelf);
+					addBookDialog = new AddBook(thisClass, control, shelf, searchResults);
+					addBookDialog.setVisible(true);					
 
 					draw();
 				}
@@ -209,9 +207,6 @@ public class Root extends JFrame {
 	 * @return main.SearchResults
 	 */
 	private SearchResults getSearchResults() {
-		if (searchResults == null) {
-			searchResults = new SearchResults();
-		}
 		return searchResults;
 	}
 
@@ -234,7 +229,7 @@ public class Root extends JFrame {
 				}
 			});
 		}
-		
+
 		return searchField;
 	}
 
@@ -245,7 +240,7 @@ public class Root extends JFrame {
 	 */
 	private TreeView getTreeView() {
 		if (treeView == null) {
-			treeView = new TreeView();
+			treeView = new TreeView(control, searchResults);
 		}
 		return treeView;
 	}

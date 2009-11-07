@@ -21,7 +21,7 @@ import data.VirtualBook;
 public class SearchResults extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	static JPanel panel = new JPanel();
 
 	private Bookshelf bookshelf;
@@ -57,18 +57,19 @@ public class SearchResults extends JScrollPane {
 	}
 
 	protected void setResults(Bookshelf shelf) {
+		if (shelf != null) {
+			bookshelf = shelf;
+			removeResults();
 
-		bookshelf = shelf;
-		removeResults();
+			Iterator<Book> result = bookshelf.enumerate();
+			int count = 0;
+			while (result.hasNext() && count < 20) {
+				results.add(new Result(result.next()));
+				count++;
+			}
 
-		Iterator<Book> result = bookshelf.enumerate();
-		int count = 0;
-		while (result.hasNext() && count < 10) {
-			results.add(new Result(result.next()));
-			count++;
+			addResults();
 		}
-
-		addResults();
 	}
 
 	public void resetResults() {
@@ -79,7 +80,13 @@ public class SearchResults extends JScrollPane {
 
 		for (Result r : results) {
 			panel.add(r);
+			r.draw();
 		}
+		
+		validate();
+		panel.repaint();
+		this.repaint();
+		super.repaint();
 	}
 
 	/**
@@ -92,7 +99,7 @@ public class SearchResults extends JScrollPane {
 		panel.setLayout(new GridLayout(0, 1));
 
 		results = new ArrayList<Result>();
-		
+
 		try {
 			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {

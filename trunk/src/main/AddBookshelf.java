@@ -17,50 +17,28 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 import controller.Controller;
-import data.Book;
 import data.Bookshelf;
 
-public class AddBook extends JDialog {
+public class AddBookshelf extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
-	private JLabel jLabel = null;
 	private JLabel jLabel1 = null;
 	private JTextField jTextField = null;
-	private JTextField jTextField1 = null;
 	private JButton commit = null;
 	private JButton cancel = null;
 
 	private Controller control = null;
 	private Bookshelf shelf = null;
-	private Book book = null;
 	private SearchResults results = null;
-
-	public Bookshelf getShelf() {
-		return shelf;
-	}
-
-	public Book getBook() {
-		return book;
-	}
 
 	/**
 	 * @param owner
 	 */
-	public AddBook(Frame owner, Controller ctl, Bookshelf b,
-			SearchResults searchResults) {
+	public AddBookshelf(Frame owner, Controller ctl, SearchResults r) {
 		super(owner);
-
 		control = ctl;
-
-		if (ctl.focus == null) {
-			shelf = control.addBookshelf("New Bookshelf");
-		} else {
-			shelf = b;
-		}
-
-		results = searchResults;
-
+		results = r;
 		initialize();
 	}
 
@@ -102,18 +80,11 @@ public class AddBook extends JDialog {
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.gridy = 1;
 			jLabel1 = new JLabel();
-			jLabel1.setText("Book Author");
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Book Title: ");
+			jLabel1.setText("Name");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());
-			jContentPane.add(jLabel, gridBagConstraints);
 			jContentPane.add(jLabel1, gridBagConstraints1);
 			jContentPane.add(getJTextField(), gridBagConstraints2);
-			jContentPane.add(getJTextField1(), gridBagConstraints3);
 			jContentPane.add(getJButton(), gridBagConstraints4);
 			jContentPane.add(getJButton2(), gridBagConstraints5);
 
@@ -140,18 +111,6 @@ public class AddBook extends JDialog {
 	}
 
 	/**
-	 * This method initializes jTextField1
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getJTextField1() {
-		if (jTextField1 == null) {
-			jTextField1 = new JTextField(14);
-		}
-		return jTextField1;
-	}
-
-	/**
 	 * This method initializes jButton
 	 * 
 	 * @return javax.swing.JButton
@@ -162,18 +121,22 @@ public class AddBook extends JDialog {
 			commit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					book = control.addBook(jTextField.getText(), jTextField1
-							.getText());
-
-					results.setResults(control.focus);
-
+					shelf = control.addBookshelf(jTextField.getText());
+					
+					if (shelf != null) {
+						results.setResults(shelf);
+					}
+					
 					setVisible(false);
 
 				}
 			});
 		}
-
 		return commit;
+	}
+
+	public Bookshelf getShelf() {
+		return shelf;
 	}
 
 	/**
