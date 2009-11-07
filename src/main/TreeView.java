@@ -1,7 +1,8 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -15,73 +16,54 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
+import controller.Controller;
 import data.Bookshelf;
 import data.Library;
 
 public class TreeView extends JPanel implements TreeSelectionListener {
 
 	private static final long serialVersionUID = 1L;
-	private DefaultMutableTreeNode top =
-        new DefaultMutableTreeNode("Libraries");
+	private DefaultMutableTreeNode top = new DefaultMutableTreeNode("Libraries");
 	private JTree tree = new JTree(top);
 	JScrollPane treeView = new JScrollPane(tree);
 
-	private List<Library> library = new ArrayList<Library>();
-
-	/**
-	 * This is the default constructor
-	 */
-	public TreeView() {
-		super();
-		initialize();
-	}
+	private Controller control = null;
+	private SearchResults results = null;
 
 	/**
 	 * @param l
 	 */
-	public TreeView(Library l) {
+	public TreeView(Controller c, SearchResults s) {
 		super();
-		library.add(l);
+		control = c;
+		results = s;
 		initialize();
 	}
 
-	
 	protected void draw() {
 		validate();
 		tree.repaint();
 		this.repaint();
 		super.repaint();
 	}
-	
-	
+
 	/**
 	 * This method initializes tree
 	 * 
 	 * @return javax.swing.JTree
 	 */
 	private JScrollPane getScrollPane() {
-	    
-		for ( Library l : library ) {
-			
-			Bookshelf masterShelf = l.getMasterShelf();
-			DefaultMutableTreeNode lib = new DefaultMutableTreeNode(masterShelf.getProperty("name"));
+
+		Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
+
+		while (bookshelves.hasNext()) {
+
+			TreeNode lib = new TreeNode(bookshelves.next());
+
 			top.add(lib);
-			
-			// lib.add(/* Additional Bookshelves */);
 		}
-		
+
 		return treeView;
-	}
-
-
-	/**
-	 * Add Library to tree
-	 * 
-	 * @return javax.swing.JTree
-	 */
-	public JScrollPane addLibrary(Library l) {
-		library.add(l);
-		return getScrollPane();
 	}
 
 	/**
@@ -93,20 +75,30 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		this.setSize(321, 637);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(getScrollPane());
+		tree.addTreeSelectionListener(this);
+
 		try {
 			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {
 			System.out.println("Cannot set new Theme for Java Look and Feel.");
 		}
-		
-        setVisible(true);
+
+		setVisible(true);
 
 	}
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Bookshelf node = ((TreeNode)tree.getLastSelectedPathComponent()).getUserObject().getShelf();
+			System.out.println(node.getProperty("name") + ": " + node.size());
+			results.setResults(node);
+		} catch (ClassCastException e1) {
+			System.out.println("You don't want to browse the library root...");
+		}
+//		results.setResults(((TreeNode)tree.getLastSelectedPathComponent()).getUserObject().getShelf());
+
+
 	}
 
 } // @jve:decl-index=0:visual-constraint="388,31"
