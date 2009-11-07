@@ -3,6 +3,9 @@ package controller;
 import data.*;
 import database.*;
 import network.*;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,7 +28,8 @@ public class Controller {
 	 * being used by the search program
 	 */
 	private Map<Integer,Bookshelf> checkedOutBs;
-	
+	private Map<String,Integer> controllerPairs;
+	private Map<Integer,RemoteLibrary> remoteLibs;
 	private Vector<String> connections;
 	private QueryBuilder qb;
 	public Control cntrl;
@@ -42,10 +46,12 @@ public class Controller {
 		
 		qb = new QueryBuilderImpl();
 		myLib = new PersistentLibrary(qb);
-		nextID =0;
+		nextID =1;
 		cntrl= new ControlImpl(new ServerLibrary(myLib));
 		//load the the previous state of the gui if we need it
 		checkedOutBs = new HashMap<Integer,Bookshelf>();
+		controllerPairs = new HashMap<String,Integer>();
+		remoteLibs = new HashMap<Integer,RemoteLibrary>();
 	}
 	
 	
@@ -90,6 +96,8 @@ public class Controller {
 	 * @return the key to reference the the object with the get command
 	 */
 	public Integer retrieveShelf(String loc){
+		if(loc==null)
+			return 0;
 		Integer num = nextID;
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Bookshelf bs;
@@ -104,6 +112,8 @@ public class Controller {
 		return num;
 	}
 	public Integer retrieveShelf(String loc,Integer target){
+			if(loc==null)
+				return 0;
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Bookshelf bs;
 		while(iter.hasNext()){
@@ -142,7 +152,7 @@ public class Controller {
 			return false;
 	}
 	
-	public Vector<String> retrieveLibrary(String loc){
+	public Vector<String> retrieveLibrary(){
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Vector<String> names = new Vector<String>();
 		Bookshelf bs;
@@ -305,4 +315,41 @@ public class Controller {
 	public Collection<Matrix> retrieveButler(){
 		return null;
 	}
+
+
+
+
+	public Integer addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException{
+		Integer id = nextID;
+		if(host!=null){
+			if(connections.contains(host)){
+				throw new IllegalArgumentException();
+			}
+				
+			connections.add(host);
+			Integer temp = cntrl.connect(host);
+			controllerPairs.put(host, temp);
+			remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
+			//myLib.
+			nextID++;
+			return id;
+		}
+		return 0;
+	}
+//	public void importAllBookshelves(Library local,Library remote){
+//		if(local ==null || remote ==null){
+//			throw new IllegalArgumentException();
+//		}
+//		
+//		remote.iterator()
+//		
+//		
+//		
+//	}
+
+
+
+
 }
+
+
