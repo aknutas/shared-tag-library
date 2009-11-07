@@ -356,8 +356,8 @@ public class Controller {
 			System.out.println(" im back");
 			controllerPairs.put(host, temp);
 			testconnection(temp,"Are you still there?");
-			//remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
-			//importAllBookshelves(myLib,remoteLibs.get(temp));
+			remoteLibs.put(temp,new RemoteLibrary(temp,cntrl));
+			importAllBookshelves(myLib,remoteLibs.get(temp));
 		}
 
 	}
