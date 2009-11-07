@@ -20,7 +20,6 @@ import data.Bookshelf;
 import data.Library;
 import data.VirtualBook;
 import data.VirtualBookshelf;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -178,6 +177,7 @@ public class Result extends JPanel {
 	 * @deprecated So this isn't really "deprecated" but you should know that is
 	 *             should be disabled if there isn't any progress...
 	 */
+	@Deprecated
 	private JProgressBar getProgressBar() {
 		if (progressBar == null) {
 			progressBar = new JProgressBar();

@@ -1,7 +1,5 @@
 package main;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.BoxLayout;
@@ -13,12 +11,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
-import data.Library;
 
 public class TreeView extends JPanel implements TreeSelectionListener {
 
@@ -47,6 +45,23 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		super.repaint();
 	}
 
+	
+	public void refresh() {
+		
+		top.removeAllChildren();
+		
+		Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
+
+		while (bookshelves.hasNext()) {
+
+			TreeNode lib = new TreeNode(bookshelves.next());
+
+			top.add(lib);
+		}
+		
+		draw();
+	}
+	
 	/**
 	 * This method initializes tree
 	 * 
@@ -72,9 +87,10 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(321, 637);
+		this.setSize(400, 637);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(getScrollPane());
+		tree.setModel(new DefaultTreeModel(top));
 		tree.addTreeSelectionListener(this);
 
 		try {
@@ -91,8 +107,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
 		try {
 			Bookshelf node = ((TreeNode)tree.getLastSelectedPathComponent()).getUserObject().getShelf();
-			System.out.println(node.getProperty("name") + ": " + node.size());
+		//	System.out.println(node.getProperty("name") + ": " + node.size());
 			results.setResults(node);
+			refresh();
 		} catch (ClassCastException e1) {
 			System.out.println("You don't want to browse the library root...");
 		}
