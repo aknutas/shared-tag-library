@@ -38,7 +38,7 @@ public class ServerThread extends CommThread {
 
 	run = true;
 	// Debug
-	System.out.println("Thread: Runnin'");
+	System.out.println("ServerThread: Runnin'");
 
 	while (!s.isClosed() && run) {
 	    try {

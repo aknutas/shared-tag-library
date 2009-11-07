@@ -59,13 +59,16 @@ public class ControlImpl implements Control, ConnectionCallBack {
      */
     public synchronized int connect(String address)
 	    throws UnknownHostException, IOException {
+	//Debug
+	System.out.println("Controller here. Starting to connect.");
 	Socket s = new Socket(address, Definitions.PORT);
 	s.setSoTimeout(Definitions.TIMEOUT);
 	ClientThread ct = new ClientThread(id, s, messageReceiver);
-	ct.run();
+	ct.start();
 	threadCollection.put(conncounter, ct);
-
 	conncounter++;
+	//Debug
+	System.out.println("Controller here. Connected to" + address + "with thread " + (conncounter-1));
 	return (conncounter - 1);
     }
 
@@ -159,7 +162,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	ct.start();
 	threadCollection.put(conncounter, ct);
 	//Debug
-	System.out.println("Controller here. Started listening to connection" + conncounter);
+	System.out.println("Controller here. Started listening to connection " + conncounter);
 	conncounter++;
     }
 

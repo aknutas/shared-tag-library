@@ -40,7 +40,7 @@ public class ClientThread extends CommThread {
 
 	run = true;
 	// Debug
-	System.out.println("Thread: Runnin'");
+	System.out.println("ClientThread: Runnin'");
 
 	while (!s.isClosed() && run) {
 	    try {
