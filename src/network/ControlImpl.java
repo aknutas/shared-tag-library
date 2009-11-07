@@ -61,7 +61,7 @@ class ControlImpl implements Control, ConnectionCallBack {
 	    throws UnknownHostException, IOException {
 	Socket s = new Socket(address, Definitions.PORT);
 	s.setSoTimeout(Definitions.TIMEOUT);
-	ClientThread ct = new ClientThread(id, s);
+	ClientThread ct = new ClientThread(id, s, messageReceiver);
 	ct.run();
 	threadCollection.put(conncounter, ct);
 
@@ -155,7 +155,7 @@ class ControlImpl implements Control, ConnectionCallBack {
      *            A new socket.
      */
     public synchronized void gimmeThread(Socket socket) {
-	CommThread ct = new ServerThread(id, socket);
+	CommThread ct = new ServerThread(id, socket, messageReceiver);
 	threadCollection.put(conncounter, ct);
 	conncounter++;
     }
