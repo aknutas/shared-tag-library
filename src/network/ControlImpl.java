@@ -13,7 +13,7 @@ import network.messages.Message;
  * @author Antti Knutas
  * 
  */
-class ControlImpl implements Control, ConnectionCallBack {
+public class ControlImpl implements Control, ConnectionCallBack {
 
     private HashMap<Integer, CommThread> threadCollection;
     private long id;
