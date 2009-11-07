@@ -19,7 +19,7 @@ class ControlImpl implements Control, ConnectionCallBack {
     private long id;
     private int conncounter;
     Random rd;
-    ServerMessageReciever messageReceiver;
+    ServerMessageReceiver messageReceiver;
     ConnectionListener cl;
 
     /**
@@ -41,7 +41,7 @@ class ControlImpl implements Control, ConnectionCallBack {
      *            A class that answers remote queries. Usually the Library class
      *            in this context.
      */
-    public ControlImpl(ServerMessageReciever messageReceiver) {
+    public ControlImpl(ServerMessageReceiver messageReceiver) {
 	this(); // Using the default constructor
 	this.messageReceiver = messageReceiver;
 	cl.run();
