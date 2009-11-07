@@ -260,7 +260,7 @@ public class Controller {
 	}
 	/**
 	 * Remove a bookshelf from the library
-	 * 
+	 * not currently implemented
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf removeBookshelf(String name){
@@ -274,7 +274,7 @@ public class Controller {
 	}
 	/**
 	 * Remove a bookshelf from the library
-	 * 
+	 * not currently implemented
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf removeBookshelf(Bookshelf bookshelf){
@@ -284,7 +284,7 @@ public class Controller {
 
 	/**
 	 * Remove a bookshelf from the library
-	 * 
+	 * not currently implemented
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf removeBookshelf(Bookshelf bookshelf, Book book){
