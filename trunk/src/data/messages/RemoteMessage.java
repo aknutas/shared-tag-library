@@ -7,14 +7,16 @@ import network.messages.*;
 /**
  * The DataMessage class is an abstract class which extends Message and
  * provides all the required functionality for describing messages sent by the
- * data structures. This class is abstract but doesn't not have any abstract
+ * data structures.  This class is abstract but doesn't not have any abstract
  * methods, it is expected that the extending class will define message types 
  * as static constants (though technically not required).
  * 
  * @author Andrew Alm
  */
-public abstract class RemoteMessage extends Message {
+public class RemoteMessage extends Message {
 
+	public static final int MSG_HELLO = 0;
+	
 	private static final long serialVersionUID = 1L;
 	
 	/* private data */

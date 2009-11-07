@@ -6,7 +6,7 @@ package data.messages;
  *  
  * @author Andrew Alm
  */
-public class IteratorMessage extends DataMessage {
+public class IteratorMessage extends RemoteMessage {
 
 	/**
 	 * Creates a new IteratorMessage object with the given message type.

@@ -1,30 +1,30 @@
 package network.messages;
 
-import data.messages.DataMessage;
+import data.messages.RemoteMessage;
 
 public class ReplyMessage extends Message {
 
     private static final long serialVersionUID = 1041061591404140362L;
     
-    DataMessage datamessage;
+    RemoteMessage datamessage;
     
     private ReplyMessage()
     {
 	
     }
     
-    public ReplyMessage(DataMessage datamessage, long comID, long msgID)
+    public ReplyMessage(RemoteMessage datamessage, long comID, long msgID)
     {
 	this.datamessage=datamessage;
 	this.comID=comID;
 	this.msgID=msgID;
     }
 
-    public synchronized DataMessage getDatamessage() {
+    public synchronized RemoteMessage getDatamessage() {
 	return datamessage;
     }
 
-    public synchronized void setDatamessage(DataMessage datamessage) {
+    public synchronized void setDatamessage(RemoteMessage datamessage) {
 	this.datamessage = datamessage;
     }
 

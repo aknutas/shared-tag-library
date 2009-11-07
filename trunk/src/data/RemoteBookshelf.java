@@ -104,7 +104,7 @@ public class RemoteBookshelf implements Bookshelf, ClientResponder {
 	}
 
 	@Override
-	public void onMessageRecive(Message message) {
+	public void onMessage(Message message) {
 		if(!(message instanceof BookshelfMessage))
 			throw new IllegalArgumentException("message cannot be null");
 		

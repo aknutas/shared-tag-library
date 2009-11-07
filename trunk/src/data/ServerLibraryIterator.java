@@ -20,7 +20,7 @@ public class ServerLibraryIterator implements Iterator<Bookshelf>, ServerRespond
 	public void remove() {}
 	
 	@Override
-	public Message onMessageRecive(Message message) {
+	public Message onMessage(Message message) {
 		// TODO Auto-generated method stub
 		return null;
 	}

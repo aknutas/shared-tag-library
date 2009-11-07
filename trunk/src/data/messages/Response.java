@@ -20,7 +20,7 @@ public class Response implements ClientResponder {
 	}
 	
 	@Override
-	public void onMessageRecive(Message message) {
+	public void onMessage(Message message) {
 		this.message = message;
 	}
 

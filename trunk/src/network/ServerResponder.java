@@ -24,6 +24,6 @@ public interface ServerResponder {
 	 *         processed 
 	 * @throws NullPointerException if the message given is null
 	 */
-	public Message onMessageRecive(Message message);
+	public Message onMessage(Message message);
 	
 }

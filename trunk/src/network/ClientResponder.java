@@ -20,6 +20,6 @@ public interface ClientResponder {
 	 *         processed 
 	 * @throws NullPointerException if the message given is null
 	 */
-	public void onMessageRecive(Message message);
+	public void onMessage(Message message) throws NullPointerException, IllegalArgumentException;
 	
 }

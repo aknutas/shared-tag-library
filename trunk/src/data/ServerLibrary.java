@@ -26,7 +26,7 @@ public class ServerLibrary implements ServerResponder {
 	}
 	
 	@Override
-	public Message onMessageRecive(Message message) throws NullPointerException, IllegalArgumentException {
+	public Message onMessage(Message message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
@@ -37,14 +37,14 @@ public class ServerLibrary implements ServerResponder {
 			if(null == responder)
 				throw new IllegalArgumentException("unknown bookshelf id");
 			
-			return responder.onMessageRecive(message);
+			return responder.onMessage(message);
 		}
 		
 		if(!(message instanceof LibraryMessage))
 			throw new IllegalArgumentException("illegal message type");
 		
 		LibraryMessage libraryMessage = (LibraryMessage)message;
-		DataMessage response = null;
+		RemoteMessage response = null;
 		
 		switch(libraryMessage.getMessageType()) {
 		case LibraryMessage.MSG_HELLO:
