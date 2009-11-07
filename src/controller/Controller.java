@@ -188,18 +188,21 @@ public class Controller {
     }
     
     /**
-     * returns the iterat
-     * @return
+     * returns the iterator containing all bookshelfs
+     * @return the iterator
      */
     public Iterator<Bookshelf> retrieveLibrary(){
 	return  myLib.iterator();
     }
 
-    /**
-     * Add a book to the library
-     * 
-     * @return the added book (null if error)
-     */
+/**
+ * Add a book to the library
+ * @param bookshelf the target bookshelf
+ * @param name
+ * @param title
+ * @return the added book
+ * @throws IllegalArgumentException
+ */
     public Book addBook(Bookshelf bookshelf, String name, String title)throws IllegalArgumentException{
 	if(name== null || title == null|| !(bookshelf instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
