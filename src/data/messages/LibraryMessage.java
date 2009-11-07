@@ -15,12 +15,10 @@ public class LibraryMessage extends DataMessage {
 	private static final long serialVersionUID = 1L;
 	
 	/* message types */
-	public static final int CLOSE_REQUEST = 0;
-	public static final int CLOSE_RESPONSE = 1;
-	public static final int MASTER_REQUEST = 2;
-	public static final int MASTER_RESPONSE = 3;
-	public static final int ITERATE_REQUEST = 4;
-	public static final int ITERATE_RESPONSE = 5;
+	public static final int MSG_HELLO = 0;
+	public static final int MSG_MORE = 1;
+	public static final int MSG_ITERATOR = 2;
+	public static final int MSG_MASTER = 3;
 	
 	/**
 	 * Creates a new LibraryMessage with the given messageType. The messageType
@@ -34,7 +32,7 @@ public class LibraryMessage extends DataMessage {
 	public LibraryMessage(int messageType) throws IllegalArgumentException {
 		super(messageType);
 
-		if(messageType < LibraryMessage.CLOSE_REQUEST || messageType > LibraryMessage.ITERATE_RESPONSE)
+		if(messageType < LibraryMessage.MSG_HELLO || messageType > LibraryMessage.MSG_MASTER)
 			throw new IllegalArgumentException("illegal message type");		
 	}
 	
