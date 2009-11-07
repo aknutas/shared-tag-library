@@ -49,6 +49,7 @@ public class Controller {
 		nextID =1;
 		cntrl= new ControlImpl(new ServerLibrary(myLib));
 		//load the the previous state of the gui if we need it
+		connections = new Vector<String>();
 		checkedOutBs = new HashMap<Integer,Bookshelf>();
 		controllerPairs = new HashMap<String,Integer>();
 		remoteLibs = new HashMap<Integer,RemoteLibrary>();
