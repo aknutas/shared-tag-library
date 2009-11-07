@@ -331,7 +331,7 @@ public class Controller {
 			bs = iter.next();
 			Iterator<Book> bsiter = bs.iterator();
 			Book book = null;
-			while(iter.hasNext()){
+			while(bsiter.hasNext()){
 				book = bsiter.next();
 				if(bq.compareTo(book)==0){
 					result.insert(book);
