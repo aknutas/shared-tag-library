@@ -299,7 +299,9 @@ public final class VirtualBookshelf implements Bookshelf {
 	private VirtualBookshelf deepCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
 		if(null == toShelf)
 			throw new IllegalArgumentException("toShelf cannot be null");
-
+		
+		System.out.println("this shelf contains "+ shelves.size()+ "shelves and " + bookshelf.size()+" books");
+		
 		for(Bookshelf shelf : this.shelves)
 			toShelf.addBookshelf(shelf);
 		
