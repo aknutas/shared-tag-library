@@ -229,9 +229,9 @@ public class Controller {
 	 * 
 	 * @return the added bookshelf (null if error)
 	 */
-	public Bookshelf addBookshelf(Bookshelf bookshelf, String name)throws IllegalArgumentException{
-		Bookshelf  bs= new VirtualBookshelf(name);
-		myLib.addBookshelf(bs);
+	public Bookshelf addBookshelf(String name)throws IllegalArgumentException{
+		VirtualBookshelf  bs= new VirtualBookshelf(name);
+		myLib.saveBookshelf(bs);
 		return bs;
 	}
 
@@ -241,10 +241,10 @@ public class Controller {
 	 * 
 	 * @return the added bookshelf (null if error)
 	 */
-	public Bookshelf addBookshelf(Bookshelf bookshelf, Book book){
-		Bookshelf  bs= new VirtualBookshelf("From book " + book.getProperty("Name"));
+	public Bookshelf addBookshelf(Book book){
+		VirtualBookshelf  bs= new VirtualBookshelf("From book " + book.getProperty("Name"));
 		addBook(bs,book);
-		myLib.addBookshelf(bs);
+		myLib.saveBookshelf(bs);
 		return bs;	
 	}
 
@@ -320,9 +320,31 @@ public class Controller {
 
 
 	public Bookshelf search(String str){
-		return null;
+		if(str==null)
+			return null;
+		Bookshelf result = new VirtualBookshelf("Search of "+ str);
+		BookQuery bq = new BookQuery();
+		bq.match(str);
+		Iterator<Bookshelf> iter = myLib.iterator();
+		Bookshelf bs;
+		while(iter.hasNext()){
+			bs = iter.next();
+			Iterator<Book> bsiter = bs.iterator();
+			Book book = null;
+			while(iter.hasNext()){
+				book = bsiter.next();
+				if(bq.compareTo(book)==0){
+					result.insert(book);
+				}
+			}
+
+		}
+		return result;
 	}
 
+	
+	
+	
 	public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException{
 
 		if(host!=null){
