@@ -35,7 +35,7 @@ public class VirtualBookshelfTest {
 			System.out.println(book.getProperty("author") + " - " + book.getProperty("title"));
 			i += 1;
 		}
-		
+		System.out.println("asdfasfd");
 		assert(i == a.size());
 		
 		it = b.enumerate();

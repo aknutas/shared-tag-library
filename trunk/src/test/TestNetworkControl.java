@@ -63,8 +63,8 @@ public class TestNetworkControl extends TestNetwork implements Control {
 		
 		(new Thread(new Runnable() {
 			public void run() {
-				Message response = server.onMessageRecive(message);
-				receiver.onMessageRecive(response);
+				Message response = server.onMessage(message);
+				receiver.onMessage(response);
 			}
 		})).start();
 	}
@@ -80,7 +80,7 @@ public class TestNetworkControl extends TestNetwork implements Control {
 		
 		(new Thread(new Runnable() {
 			public void run() {
-				server.onMessageRecive(message);
+				server.onMessage(message);
 			}
 		})).start();
 	}
