@@ -1,13 +1,14 @@
 package main;
 
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneLayout;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -16,11 +17,12 @@ import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 import data.Book;
 import data.Bookshelf;
 import data.VirtualBook;
-import java.awt.FlowLayout;
 
-public class SearchResults extends JPanel {
+public class SearchResults extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
+	
+	static JPanel panel = new JPanel();
 
 	private Bookshelf bookshelf;
 	List<Result> results;
@@ -29,7 +31,7 @@ public class SearchResults extends JPanel {
 	 * This is the default constructor
 	 */
 	public SearchResults() {
-		super();
+		super(panel);
 		initialize();
 
 		// Just a demo, will be adding full event/interaction logic...
@@ -47,7 +49,8 @@ public class SearchResults extends JPanel {
 
 	protected Result addResult(Result result) {
 
-		this.add(result);
+		panel.add(result);
+		panel.repaint();
 		this.repaint();
 		super.repaint();
 		return result;
@@ -75,7 +78,7 @@ public class SearchResults extends JPanel {
 	private void addResults() {
 
 		for (Result r : results) {
-			this.add(r);
+			panel.add(r);
 		}
 	}
 
@@ -85,10 +88,11 @@ public class SearchResults extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(529, 381);
-		this.setLayout(new FlowLayout());
+		panel.setSize(529, 381);
+		panel.setLayout(new GridLayout(0, 1));
 
 		results = new ArrayList<Result>();
+		
 		try {
 			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {
@@ -98,13 +102,13 @@ public class SearchResults extends JPanel {
 
 	protected Result removeResult(Result result) {
 
-		this.remove(result);
+		panel.remove(result);
 		return result;
 	}
 
 	private void removeResults() {
 		for (Result r : results) {
-			this.remove(r);
+			panel.remove(r);
 		}
 		results.clear();
 	}

@@ -142,6 +142,7 @@ public class ConnectTo extends JDialog {
 	 * This method initializes jButton1
 	 * 
 	 * @return javax.swing.JButton
+	 * 
 	 */
 	private JButton cancel() {
 		if (cancelButton == null) {
