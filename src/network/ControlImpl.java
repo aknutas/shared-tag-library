@@ -137,6 +137,8 @@ public class ControlImpl implements Control, ConnectionCallBack {
 		returnmap.put((Integer) i.next(), tempqueue);
 	}
 
+	if (returnmap.isEmpty())
+		return null;
 	return returnmap;
     }
 
