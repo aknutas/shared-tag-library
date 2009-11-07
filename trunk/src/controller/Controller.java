@@ -33,9 +33,9 @@ public class Controller {
 	private Vector<String> connections;
 	private QueryBuilder qb;
 	public Control cntrl;
-	
+
 	public Integer nextID;
-	
+
 	/**
 	 * the default controller constructor
 	 * 
@@ -43,7 +43,7 @@ public class Controller {
 	 */
 	public Controller(){
 		//load in library
-		
+
 		qb = new QueryBuilderImpl();
 		myLib = new PersistentLibrary(qb);
 		nextID =1;
@@ -54,8 +54,8 @@ public class Controller {
 		controllerPairs = new HashMap<String,Integer>();
 		remoteLibs = new HashMap<Integer,RemoteLibrary>();
 	}
-	
-	
+
+
 	public void setuptestController(){
 		ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
 		try{
@@ -73,11 +73,11 @@ public class Controller {
 		catch (Exception e){
 			System.err.println("error in s processline books "+ e);
 		}
-		
+
 		myLib = sg.p.lib;
 	}
-	
-	
+
+
 	/**
 	 * Used for accessing a bookshelf that have been retrieved.
 	 * @param key the unique key handed to the module for retrieving the BS
@@ -89,7 +89,7 @@ public class Controller {
 			throw new IllegalArgumentException();
 		}
 		else
-		return checkedOutBs.get(key);
+			return checkedOutBs.get(key);
 	}
 	/**
 	 * request a bookshelf from the library or connection
@@ -113,8 +113,8 @@ public class Controller {
 		return num;
 	}
 	public Integer retrieveShelf(String loc,Integer target){
-			if(loc==null)
-				return 0;
+		if(loc==null)
+			return 0;
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Bookshelf bs;
 		while(iter.hasNext()){
@@ -144,15 +144,15 @@ public class Controller {
 	}
 	public boolean updateShelf(Integer target){
 		Bookshelf bs;
-			if(checkedOutBs.containsKey(target)){
-				bs = checkedOutBs.get(target);
-				checkedOutBs.remove(target);
-				retrieveShelf(bs.getProperty("Name"),target);
-				return true;
-			}
-			return false;
+		if(checkedOutBs.containsKey(target)){
+			bs = checkedOutBs.get(target);
+			checkedOutBs.remove(target);
+			retrieveShelf(bs.getProperty("Name"),target);
+			return true;
+		}
+		return false;
 	}
-	
+
 	public Vector<String> retrieveLibrary(){
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Vector<String> names = new Vector<String>();
@@ -163,7 +163,7 @@ public class Controller {
 		}
 		return names;
 	}
-	
+
 
 	/**
 	 * Add a book to the library
@@ -172,11 +172,11 @@ public class Controller {
 	 */
 	public Book addBook(Bookshelf bookshelf, String name, String title){
 		if(name== null || title == null)
-		    return null;
+			return null;
 		return addBook(bookshelf, new VirtualBook(name,title));
 	}
-	
-	
+
+
 	/**
 	 * Add a book to the library
 	 * 
@@ -184,11 +184,11 @@ public class Controller {
 	 */
 	public Book addBook(Bookshelf bookshelf, Book book){
 		if(book== null)
-		    return null;
+			return null;
 		bookshelf.insert(book);
 		return book;
 	}
-	
+
 	/**
 	 * Remove a book from the library
 	 * 
@@ -196,7 +196,7 @@ public class Controller {
 	 */
 	public Book removeBook(Bookshelf bookshelf, String name){
 		if(name== null )
-		    return null;
+			return null;
 		Iterator<Book> iter = bookshelf.iterator();
 		Book book = null;
 		while(iter.hasNext()){
@@ -208,8 +208,8 @@ public class Controller {
 		}
 		return book;
 	}
-	
-	
+
+
 	/**
 	 * Remove a book from the library
 	 * 
@@ -217,12 +217,12 @@ public class Controller {
 	 */
 	public Book removeBook(Bookshelf bookshelf, Book book){
 		if(!bookshelf.contains(book))
-		    return null;
+			return null;
 		bookshelf.remove(book);
 		return book;
 	}
-	
-	
+
+
 	/**
 	 * Add a bookshelf to the library
 	 * 
@@ -231,10 +231,10 @@ public class Controller {
 	public Bookshelf addBookshelf(Bookshelf bookshelf, String name)throws IllegalArgumentException{
 		Bookshelf  bs= new VirtualBookshelf(name);
 		myLib.addBookshelf(bs);
-	    return bs;
+		return bs;
 	}
-	
-	
+
+
 	/**
 	 * Add a bookshelf to the library
 	 * 
@@ -244,9 +244,9 @@ public class Controller {
 		Bookshelf  bs= new VirtualBookshelf("From book " + book.getProperty("Name"));
 		addBook(bs,book);
 		myLib.addBookshelf(bs);
-	    return bs;	
-	    }
-	
+		return bs;	
+	}
+
 	/**
 	 * Remove a bookshelf from the library
 	 * 
@@ -266,11 +266,11 @@ public class Controller {
 	public Bookshelf removeBookshelf(String name){
 		if(name== null)
 			return null;
-		
-			
-		
-		
-	    return null;
+
+
+
+
+		return null;
 	}
 	/**
 	 * Remove a bookshelf from the library
@@ -278,34 +278,34 @@ public class Controller {
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf removeBookshelf(Bookshelf bookshelf){
-	    return null;
+		return null;
 	}
 
-	
+
 	/**
 	 * Remove a bookshelf from the library
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf removeBookshelf(Bookshelf bookshelf, Book book){
-	    return null;
+		return null;
 	}
-	
-	
+
+
 	/**
 	 * Initialize a bookshelf with dummy data entries
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
 	public Bookshelf initializeDummyData(){
-	    return null;
+		return null;
 	}
-	
+
 	/*
 	If you need any methods add a quick stub and description and ill get to it
 	this is just an early version more to follow	
 	 */
-	
+
 	/**
 	 * Returns the set of bias Matrixs for the butler(s) that were stored in the DB.
 	 * ( Antti, can you "make room" in the database to store this as well? :-D )
@@ -353,19 +353,29 @@ public class Controller {
 		if(local ==null || remote ==null){
 			throw new IllegalArgumentException();
 		}
-		
+
 		Iterator<Bookshelf> iter =remote.iterator();
 		Bookshelf bs;
 		while(iter.hasNext()){
 			bs = iter.next();
 			local.addBookshelf(bs);
-			}
-	}
+		}
+	}	
 
-		
+
+	public void removeAllBookshelves(Library local,Library remote){
+		if(local ==null || remote ==null){
+			throw new IllegalArgumentException();
+		}
+
+		Iterator<Bookshelf> iter =remote.iterator();
+		Bookshelf bs;
+		while(iter.hasNext()){
+			bs = iter.next();
+			local.removeBookshelf(bs);
+		}
+	}	
 }
-
-
 
 
 
