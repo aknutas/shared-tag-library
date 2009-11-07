@@ -154,7 +154,7 @@ public class Controller {
 		return false;
 	}
 
-	public Vector<String> retrieveLibrary(){
+	public Vector<String> retrieveLibraryNames(){
 		Iterator<Bookshelf> iter = myLib.iterator();
 		Vector<String> names = new Vector<String>();
 		Bookshelf bs;
@@ -164,7 +164,9 @@ public class Controller {
 		}
 		return names;
 	}
-
+	public Iterator<Bookshelf> retrieveLibrary(){
+		return  myLib.iterator();
+	}
 
 	/**
 	 * Add a book to the library
