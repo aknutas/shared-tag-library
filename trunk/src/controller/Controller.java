@@ -72,7 +72,7 @@ public class Controller {
 	qb = new QueryBuilderImpl();
 	myLib = new PersistentLibrary(qb);
 	nextID =1;
-	cntrl= new ControlImpl(new ServerLibrary(myLib));
+	cntrl= new ControlImpl(new LibraryResponder(myLib));
 	checkedOutBs = new HashMap<Integer,Bookshelf>();
 	controllerPairs = new HashMap<String,Integer>();
 	remoteLibs = new HashMap<Integer,RemoteLibrary>();
@@ -451,7 +451,7 @@ public class Controller {
 
 
 
-    public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException{
+    public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException, NullPointerException, RemoteObjectException{
 
 	if(host!=null){
 	    if(controllerPairs.keySet().contains(host)){
