@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import network.Communication;
+import network.Definitions;
 import network.messages.*;
 
 /**
@@ -36,7 +37,7 @@ public class Chatterer {
 	System.out.println("Initializing client");
 	comm = new network.CommunicationImpl();
 	try {
-	    s = new Socket("127.0.0.1", PORT);
+	    s = new Socket("127.0.0.1", Definitions.PORT);
 	} catch (UnknownHostException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {
