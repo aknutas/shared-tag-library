@@ -516,10 +516,12 @@ public class Controller {
      * messages.
      */
     public void messageHandler() {
+	// Debug
+	System.out.println("messageHandler activated");
+	
 	// Getting the message queue map and making sure that there is content
 	Map<Integer, List<Message>> msgMap = cntrl.whatsUp();
 
-	System.out.println("messageHandler activated");
 	if (msgMap != null) {
 
 	    Set<Entry<Integer, List<Message>>> entryset = msgMap.entrySet();
