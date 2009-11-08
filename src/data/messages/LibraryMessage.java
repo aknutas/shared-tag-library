@@ -15,9 +15,8 @@ public class LibraryMessage extends RemoteMessage {
 	private static final long serialVersionUID = 1L;
 	
 	/* message types */
-	public static final int MSG_MORE = 1;
-	public static final int MSG_ITERATOR = 2;
-	public static final int MSG_MASTER = 3;
+	public static final int MSG_MASTER = 2;
+	public static final int MSG_ITERATOR = 3;
 	
 	/**
 	 * Creates a new LibraryMessage with the given messageType. The messageType
@@ -31,7 +30,7 @@ public class LibraryMessage extends RemoteMessage {
 	public LibraryMessage(int messageType) throws IllegalArgumentException {
 		super(messageType);
 
-		if(messageType < RemoteMessage.MSG_HELLO || messageType > LibraryMessage.MSG_MASTER)
+		if(messageType < RemoteMessage.MSG_PING || messageType > LibraryMessage.MSG_MASTER)
 			throw new IllegalArgumentException("illegal message type");
 	}
 	

@@ -39,10 +39,38 @@ public class RemoteLibraryTest {
 		
 		/* connect */
 		int connection = network.connect("andrew");
-		Library remoteLibrary = new RemoteLibrary(connection, network);
+		Library remoteLibrary = null;
+		
+		try {
+			remoteLibrary = new RemoteLibrary(connection, network);
+		}
+		catch(Exception ex) {
+			System.out.println("timeout");
+			return;
+		}
 		
 		Bookshelf remoteShelf = remoteLibrary.getMasterShelf();
-		System.out.println("made it here");
+		
+		long messagesSent = ((TestNetworkControl)network).getMessagesSent();
+		long bytesSent = ((TestNetworkControl)network).getBytesSent();;
+		
+		long messagesReceived = ((TestNetworkControl)network).getMessagesReceived();
+		long bytesReceived = ((TestNetworkControl)network).getBytesReceived();
+		
+		System.out.println("# == Network Statistics ==");
+		System.out.println("# Message Sent           : " + messagesSent);
+		System.out.println("# Bytes Sent             : " + bytesSent);
+		System.out.println("# Mean Message Size Sent : " + (((double)bytesSent) / ((double)messagesSent)));
+		System.out.println("#");
+		System.out.println("# Message Received           : " + messagesReceived);
+		System.out.println("# Bytes Received             : " + bytesReceived);
+		System.out.println("# Mean Message Size Received : " + (((double)bytesReceived) / ((double)messagesReceived)));
+		System.out.println("#");
+		System.out.println("# Message Transferred           : " + (messagesSent + messagesReceived));
+		System.out.println("# Bytes Transferred             : " + (bytesSent + bytesReceived));
+		System.out.println("# Mean Message Size Transferred : " + (((double)(bytesSent + bytesReceived)) / ((double)(messagesSent + messagesReceived))));
+		
+		
 	}
 	
 }

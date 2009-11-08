@@ -20,9 +20,39 @@ public class TestNetworkControl extends TestNetwork implements Control {
 	private int connectionID;
 	private Map<Integer, ServerResponder> connections;
 	
+	/* statistics */
+	private long messagesSent;
+	private long messagesReceived;
+	private long bytesSent;
+	private long bytesReceived;
+	
+	
 	public TestNetworkControl() {
 		this.connectionID = 0;
 		this.connections = new HashMap<Integer, ServerResponder>();
+		
+		/* initialize statistics */
+		this.messagesSent = 0;
+		this.bytesSent = 0;
+		
+		this.messagesReceived = 0;
+		this.bytesReceived = 0;
+	}
+	
+	public long getMessagesSent() {
+		return this.messagesSent;
+	}
+	
+	public long getMessagesReceived() {
+		return this.messagesReceived;
+	}
+	
+	public long getBytesSent() {
+		return this.bytesSent;
+	}
+	
+	public long getBytesReceived() {
+		return this.bytesReceived;
 	}
 	
 	@Override
@@ -40,7 +70,7 @@ public class TestNetworkControl extends TestNetwork implements Control {
 		this.connectionID += 1;
 		
 		/* initialize server object */
-		this.connections.put(connectionID, new ServerLibrary(library));
+		this.connections.put(connectionID, new LibraryResponder(library));
 				
 		return connectionID;
 	}
@@ -61,12 +91,18 @@ public class TestNetworkControl extends TestNetwork implements Control {
 		if(null == server)
 			throw new IllegalArgumentException("unknown connection");
 		
+		final TestNetworkControl self = this;
+		
 		(new Thread(new Runnable() {
 			public void run() {
 				Message response = server.onMessage(message);
 				receiver.onMessage(response);
+				
+				self.recordReceive(message);
 			}
 		})).start();
+		
+		this.recordSend(message);
 	}
 
 	@Override
@@ -83,8 +119,34 @@ public class TestNetworkControl extends TestNetwork implements Control {
 				server.onMessage(message);
 			}
 		})).start();
+		
+		this.recordSend(message);
 	}
 
+	private void recordSend(Message message) {
+		try {
+			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			(new ObjectOutputStream(bytes)).writeObject(message);
+			this.bytesSent += bytes.size();
+			this.messagesSent += 1;
+		}
+		catch(Exception ex) {
+			/* no stats... oh well */
+		}
+	}
+	
+	private void recordReceive(Message message) {
+		try {
+			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			(new ObjectOutputStream(bytes)).writeObject(message);
+			this.bytesReceived += bytes.size();
+			this.messagesReceived += 1;
+		}
+		catch(Exception ex) {
+			/* no stats... oh well */
+		}
+	}
+	
 	/**
 	 * Not implemented.
 	 */

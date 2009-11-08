@@ -105,8 +105,15 @@ public class RemoteBookshelf implements Bookshelf, ClientResponder {
 
 	@Override
 	public void onMessage(Message message) {
+		if(null == message)
+			throw new NullPointerException("message cannot be null");
+		
+		if(message instanceof RemoteMessage) {
+			return;
+		}
+		
 		if(!(message instanceof BookshelfMessage))
-			throw new IllegalArgumentException("message cannot be null");
+			throw new IllegalArgumentException("illegal message type");
 		
 		switch(((BookshelfMessage)message).getMessageType()) {
 		case BookshelfMessage.MSG_HELLO:
