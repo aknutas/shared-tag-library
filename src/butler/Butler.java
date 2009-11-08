@@ -25,7 +25,7 @@ import data.VirtualBook;
 import data.VirtualBookshelf;
 import data.VirtualLibrary;
 
-public class EncogButler{
+public class Butler{
 
 	private IDPairSet idPairs;
 	private ButlerWeights prevWeights;
@@ -33,7 +33,7 @@ public class EncogButler{
 	private int numTags;
 	private static final String OTHER = "___OTHER___";
 
-	public EncogButler(){
+	public Butler(){
 		brain = new BasicNetwork();
 	}
 
@@ -386,7 +386,7 @@ public class EncogButler{
 		Bookshelf shelf = new VirtualBookshelf();
 		shelf.insert(it);
 		antiBasis.addBookshelf(shelf);
-		EncogButler buddy = new EncogButler();
+		Butler buddy = new Butler();
 		buddy.firstTrainingData(basis, antiBasis);
 
 		Book catBack = new VirtualBook("The Cat in the Hat Comes Back", "Dr. Seuss");
