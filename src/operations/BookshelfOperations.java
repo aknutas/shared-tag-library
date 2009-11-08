@@ -19,13 +19,22 @@ public abstract class BookshelfOperations{
 
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 
-		VirtualBookshelf newBS = new VirtualBookshelf();
-
+		Bookshelf newBS = new VirtualBookshelf();
+		
+		int i = 0;
+		int currentSize = 0;
+		
 		for( Bookshelf s: shelfs ){
+			//System.out.println("Shelf " + i);
+			//System.out.println("   has " + s.size() + " books.");
+			currentSize += s.size();
 			if (null == s) throw new IllegalArgumentException("Collection contains a null shelf");
-			newBS = (VirtualBookshelf) newBS.union(s);	
+			newBS = newBS.union(s);
+			i++;
 		}
 
+		//System.out.println("Total there are " + currentSize + " books.");
+		
 		return newBS;
 	}
 

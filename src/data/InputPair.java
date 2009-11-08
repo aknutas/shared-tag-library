@@ -7,12 +7,12 @@ import java.util.Map.Entry;
  * @author Steve
  *
  */
-public class InputPair implements Entry<Integer, Integer> {
+public class InputPair implements Entry<Integer, Double>, Comparable {
 
 	Integer key;
-	Integer value;
+	Double value;
 	
-	public InputPair(Integer key, Integer value){
+	public InputPair(Integer key, Double value){
 		this.key = key;
 		this.value = value;
 	}
@@ -20,13 +20,26 @@ public class InputPair implements Entry<Integer, Integer> {
 	public Integer getKey() {return key;}
 
 	@Override
-	public Integer getValue() {return value;}
+	public Double getValue() {return value;}
 
 	@Override
-	public Integer setValue(Integer newValue) {
-		int oldValue = value.intValue();
+	public Double setValue(Double newValue) {
+		double oldValue = value.doubleValue();
 		value = newValue;
 		return oldValue;
+	}
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof InputPair){
+			InputPair id = (InputPair)o;
+			if ((this.key == id.key) && (this.value == id.value))
+				return 0;
+			else
+				return this.key.compareTo(id.key);
+			
+		}
+		else
+			return -42;
 	}
 	
 
