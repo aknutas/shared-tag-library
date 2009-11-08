@@ -30,7 +30,7 @@ public class LibraryMessage extends RemoteMessage {
 	public LibraryMessage(int messageType) throws IllegalArgumentException {
 		super(messageType);
 
-		if(messageType < RemoteMessage.MSG_PING || messageType > LibraryMessage.MSG_MASTER)
+		if(messageType < RemoteMessage.MSG_PING || messageType > LibraryMessage.MSG_ITERATOR)
 			throw new IllegalArgumentException("illegal message type");
 	}
 	
