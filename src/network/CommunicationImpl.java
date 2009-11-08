@@ -16,35 +16,35 @@ import java.net.SocketTimeoutException;
 
 public class CommunicationImpl implements Communication {
 
-    private final static int SO_TIMEOUT = 50;
-
     public synchronized Object Receive(Socket _socket) throws IOException {
-		try {
-		    _socket.setSoTimeout(SO_TIMEOUT);
-	
-		    try {
-				if (_socket.getInputStream().available() < 10)
-				    return null;
-			} catch (IOException ioe) {
-				return null;
-			}
-			
-			ObjectInputStream recvstream = new ObjectInputStream(_socket.getInputStream());
-			Object obj = recvstream.readObject();
+	try {
+	    _socket.setSoTimeout(Definitions.SO_TIMEOUT);
 
-			// recvstream.close();
-			return obj;
+	    try {
+		if (_socket.getInputStream().available() < 10)
+		    return null;
+	    } catch (IOException ioe) {
+		return null;
+	    }
 
-		} catch (SocketTimeoutException e) {
-			return null;
-		} catch (ClassNotFoundException e) {
-			return null;
-		} catch (StreamCorruptedException e) {
-			throw new IOException(e.getMessage());
-		}
+	    ObjectInputStream recvstream = new ObjectInputStream(_socket
+		    .getInputStream());
+	    Object obj = recvstream.readObject();
+
+	    // recvstream.close();
+	    return obj;
+
+	} catch (SocketTimeoutException e) {
+	    return null;
+	} catch (ClassNotFoundException e) {
+	    return null;
+	} catch (StreamCorruptedException e) {
+	    throw new IOException(e.getMessage());
+	}
     }
 
-    public synchronized void Send(Socket _socket, Object _data) throws IOException {
+    public synchronized void Send(Socket _socket, Object _data)
+	    throws IOException {
 
 	ObjectOutputStream sendstream;
 	sendstream = new ObjectOutputStream(_socket.getOutputStream());

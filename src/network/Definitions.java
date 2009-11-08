@@ -8,5 +8,8 @@ public class Definitions {
 
     //Configuration
     public static final int PORT = 24600;
-    public static final int TIMEOUT = 45;
+    //The connection timeout
+    public static final int TIMEOUT = 4;
+    //Timeout during communication
+    public static final int SO_TIMEOUT = 45;
 }

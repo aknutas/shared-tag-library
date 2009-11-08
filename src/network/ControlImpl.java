@@ -1,6 +1,7 @@
 package network;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -61,8 +62,10 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    throws UnknownHostException, IOException {
 	//Debug
 	System.out.println("Controller here. Starting to connect.");
-	Socket s = new Socket(address, Definitions.PORT);
+	InetSocketAddress caddress = new InetSocketAddress(address, Definitions.PORT);
+	Socket s = new Socket();
 	s.setSoTimeout(Definitions.TIMEOUT);
+	s.connect(caddress, Definitions.PORT);
 	ClientThread ct = new ClientThread(id, s, messageReceiver);
 	ct.start();
 	threadCollection.put(conncounter, ct);
