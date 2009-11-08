@@ -78,9 +78,7 @@ public class ClientThread extends CommThread {
 		} else {
 		    super.addQueue((network.messages.Message) obj);
 		}
-	    }
-	    else
-	    {
+	    } else {
 		try {
 		    Thread.sleep(25);
 		} catch (InterruptedException e) {
@@ -89,7 +87,7 @@ public class ClientThread extends CommThread {
 		}
 	    }
 	    try {
-		Thread.sleep(25);
+		Thread.sleep(5);
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

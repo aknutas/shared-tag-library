@@ -77,9 +77,7 @@ public class ServerThread extends CommThread {
 		    Message qo = (network.messages.Message) obj;
 		    super.addQueue(qo);
 		}
-	    }
-	    else
-	    {
+	    } else {
 		try {
 		    Thread.sleep(25);
 		} catch (InterruptedException e) {
@@ -88,7 +86,7 @@ public class ServerThread extends CommThread {
 		}
 	    }
 	    try {
-		Thread.sleep(25);
+		Thread.sleep(5);
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
