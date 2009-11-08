@@ -14,6 +14,10 @@ public class InputPairSet implements Set<InputPair> {
 
 	TreeSet<InputPair> set;
 	
+	public InputPairSet(){
+		set = new TreeSet<InputPair>();
+	}
+	
 	/**
 	 * Attempts to add an InputPair to the set.
 	 * If the key already exists, the corresponding

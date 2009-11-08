@@ -1,6 +1,6 @@
 package butler;
 
-import org.joone.engine.Matrix;
+import org.encog.matrix.Matrix;
 import java.util.Date;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -9,14 +9,12 @@ import javax.jdo.annotations.PersistenceCapable;
 public class ButlerWeights {
 
 	Matrix inputs;
-	Matrix hidden;
 	Matrix outputs;
 	Long timestamp;
 	
-	public ButlerWeights(Matrix in, Matrix hid, Matrix out){
-		inputs = in;
-		hidden = hid;
-		outputs = out;
+	public ButlerWeights(Matrix[] vals){
+		inputs = vals[0];
+		outputs = vals[1];
 		Date time = new Date();
 		timestamp = time.getTime();
 		
@@ -25,21 +23,13 @@ public class ButlerWeights {
 	public Matrix getInputWeights(){
 		return inputs;
 	}
-	
-	public Matrix getHiddenWeights(){
-		return hidden;
-	}
-	
+		
 	public Matrix getOutputWeights(){
 		return outputs;
 	}
 	
 	public void setInputWeights(Matrix in){
 		inputs = in;
-	}
-	
-	public void setHiddenWeights(Matrix hid){
-		hidden = hid;
 	}
 	
 	public void setOutputWeights(Matrix out){

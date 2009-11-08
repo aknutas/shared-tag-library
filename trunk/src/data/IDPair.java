@@ -7,7 +7,7 @@ import java.util.Map.Entry;
  * @author Steve
  *
  */
-public class IDPair implements Entry<String, Integer> {
+public class IDPair implements Entry<String, Integer>, Comparable {
 
 	String key;
 	Integer value;
@@ -27,6 +27,19 @@ public class IDPair implements Entry<String, Integer> {
 		int oldValue = value.intValue();
 		value = newValue;
 		return oldValue;
+	}
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof IDPair){
+			IDPair id = (IDPair)o;
+			if ((this.key == id.key) && (this.value == id.value))
+				return 0;
+			else
+				return this.key.compareTo(id.key);
+			
+		}
+		else
+			return -42;
 	}
 	
 

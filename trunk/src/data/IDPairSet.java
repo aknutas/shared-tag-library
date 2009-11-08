@@ -83,7 +83,15 @@ public class IDPairSet implements Set<IDPair> {
 	public IDPair get(String name) {
 		
 		for (IDPair i : set)
-			if (i.getKey() == name)
+			if (i.getKey().equalsIgnoreCase(name))
+				return i;
+		return null;
+	}
+	
+	public IDPair get(Integer num){
+		
+		for (IDPair i : set)
+			if (i.getValue().equals(num))
 				return i;
 		return null;
 	}
