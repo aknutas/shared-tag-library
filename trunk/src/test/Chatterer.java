@@ -50,7 +50,7 @@ public class Chatterer {
 	System.out.println("\nMain thread initialized in "
 		+ (System.currentTimeMillis() - time) + " milliseconds.\n");
 
-	while (!s.isClosed() && i<=20) {
+	while (!s.isClosed()) {
 	    try {
 		comm.Send(s, new ChatMessage("HILIRIMPSIS " + i));
 		System.out.println("Sent" + i);
@@ -61,7 +61,7 @@ public class Chatterer {
 		break;
 	    }
 	    try {
-		Thread.sleep(50);
+		Thread.sleep(100);
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
