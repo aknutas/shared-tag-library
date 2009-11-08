@@ -132,22 +132,26 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	Set<Integer> keyset = threadCollection.keySet();
 	Iterator<Integer> i = keyset.iterator();
 
-	//Debug
-	System.out.println("Control here. Iterating through the threadCollection.");
-	
+	// Debug
+	System.out
+		.println("Control here. Iterating through the threadCollection.");
+
 	while (i.hasNext()) {
 	    key = i.next();
-	    //Debug
-	    System.out.println("Iterating key: " + key);
+	    // Debug
+	    System.out.println("Iterating, queue: " + key);
 	    tempqueue = threadCollection.get(key).getMsg();
-	    //Debug
-	    System.out.println("Queue size: " + tempqueue.size());
-	    if (tempqueue != null)
+	    // Debug
+	    if (tempqueue != null) {
+		System.out.println("Queue size: " + tempqueue.size());
 		returnmap.put(key, tempqueue);
+	    } else {
+		System.out.println("Queue size: null");
+	    }
 	}
 
 	if (returnmap.isEmpty())
-		return null;
+	    return null;
 	return returnmap;
     }
 
