@@ -129,6 +129,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	List<Message> tempqueue;
 	Integer key;
 
+	//TODO Iterate with entrysets instead (full iterator faster than .get() seeks)
 	Set<Integer> keyset = threadCollection.keySet();
 	Iterator<Integer> i = keyset.iterator();
 
@@ -167,6 +168,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	Integer key;
 	Integer status;
 
+	//TODO Iterate with entrysets instead (full iterator faster than .get() seeks)
 	Set<Integer> keyset = threadCollection.keySet();
 	Iterator<Integer> i = keyset.iterator();
 
