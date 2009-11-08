@@ -20,6 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 import controller.Controller;
+import data.RemoteObjectException;
 
 public class ConnectTo extends JDialog {
 
@@ -131,6 +132,14 @@ public class ConnectTo extends JDialog {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch (NullPointerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch (RemoteObjectException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
