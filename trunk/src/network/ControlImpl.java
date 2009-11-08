@@ -68,7 +68,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	threadCollection.put(conncounter, ct);
 	conncounter++;
 	//Debug
-	System.out.println("Controller here. Connected to" + address + "with thread " + (conncounter-1));
+	System.out.println("Controller here. Connected to " + address + " with thread " + (conncounter-1));
 	return (conncounter - 1);
     }
 
@@ -161,9 +161,24 @@ public class ControlImpl implements Control, ConnectionCallBack {
      * @return An integer-integer map of statuses. First integer is connection
      *         id and the second is connection status.
      */
-    public Map<Integer, Integer> getStatus() {
-	return null;
+    public synchronized Map<Integer, Integer> getStatus() {
+	Map<Integer, Integer> returnmap = new HashMap<Integer, Integer>();
+	
+	Integer key;
+	Integer status;
 
+	Set<Integer> keyset = threadCollection.keySet();
+	Iterator<Integer> i = keyset.iterator();
+
+	while (i.hasNext()) {
+	    key = i.next();
+	    status = threadCollection.get(key).getStatus();
+	    returnmap.put(key, status);
+	}
+	
+	if (returnmap.isEmpty())
+	    return null;
+	return returnmap;
     }
 
     /**
