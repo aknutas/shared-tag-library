@@ -1,21 +1,45 @@
 package data;
 
+import java.util.concurrent.*;
 import network.*;
 import network.messages.Message;
 import data.messages.*;
-
+/**
+ * The RemoteObject class implements the ClientResponder interface and is used
+ * as the base object for all Remote (client side) Libraries, Bookshelves, and
+ * Books. It provides simple communication facilities (blocking send, ping) for
+ * all objects. 
+ * 
+ * @author Andrew Alm
+ */
 public abstract class RemoteObject implements ClientResponder {
-
-	boolean alive;
-	private int connection;
-	private Control network;
 	
+	final protected int connection;
+	final protected Control network;
+	
+	/* used to provide simple blocking */
 	private class Response implements ClientResponder {
 
+		private Semaphore lock;
 		private RemoteMessage message;
 		
-		public boolean isReady() {
-			return (null != message);
+		public Response() {
+			this.message = null;
+			this.lock = new Semaphore(0);
+		}
+				
+		public RemoteMessage block(long timeout) {
+			try {
+				if(0 == timeout)
+					this.lock.tryAcquire();
+				else
+					this.lock.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+				
+				return null;
+			}
+			catch(InterruptedException ex) {
+				return this.message;
+			}
 		}
 		
 		public RemoteMessage getMessage() {
@@ -28,33 +52,109 @@ public abstract class RemoteObject implements ClientResponder {
 				throw new IllegalArgumentException("illegal message type");
 			
 			this.message = (RemoteMessage)message;
+			this.lock.release();
 		}
 		
 	}
 	
-	public RemoteObject(int connection, Control network) throws NullPointerException {
+	/**
+	 * Creates a new RemoteObject from the given connection and
+	 * network Control object.
+	 * 
+	 * @param connection the connection id
+	 * @param network the network Control object
+	 * 
+	 * @throws NullPointerException if the network control object is
+	 *         null
+	 * @throws RemoteObjectException if the RemoteObject cannot be
+	 *         created (timeout = 5000 ms)
+	 */
+	public RemoteObject(int connection, Control network) throws NullPointerException, RemoteObjectException {
+		this(connection, network, 5000);
+	}
+	
+	/**
+	 * Creates a new RemoteObject from the given connection and
+	 * network Control object. In order for a remote object to be
+	 * created, the connection must respond to a ping.
+	 * 
+	 * @param connection the connection id
+	 * @param network the network Control object
+	 * 
+	 * @throws NullPointerException if the network control object is
+	 *         null
+	 * @throws RemoteObjectException if the RemoteObject cannot be
+	 *         created
+	 */
+	public RemoteObject(int connection, Control network, long timeout) throws NullPointerException, RemoteObjectException {
 		if(null == network)
 			throw new NullPointerException("network cannot be null");
 		
 		this.connection = connection;
 		this.network = network;
-		this.alive = false;
 		
-		this.network.sendLibraryMsg(this.connection, new RemoteMessage(RemoteMessage.MSG_HELLO), this);
+		if(this.ping(timeout))
+			throw new RemoteObjectException();
 	}
 	
+	/**
+	 * Sends the given message over the connection this RemoteObject
+	 * contains, returning the response message. This method will 
+	 * block until there is a response.
+	 * 
+	 * @param message the message to send
+	 * 
+	 * @return the response message
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 */
 	public RemoteMessage send(RemoteMessage message) throws NullPointerException {
+		return this.send(message, 0);
+	}
+	
+	/**
+	 * Sends the given message over the connection this RemoteObject
+	 * contains, returning the response message. This method will 
+	 * block until there is a response, or the timeout is reached.
+	 * 
+	 * @param message the message to send
+	 * @param timeout the maximum amount of time to wait for a
+	 *        response, or 0 to wait indefinitely
+	 *        
+	 * @return the response message, or null if the operation timed
+	 *         out
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 */
+	public RemoteMessage send(RemoteMessage message, long timeout) throws NullPointerException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
 		Response response = new Response();
 		
 		this.network.sendLibraryMsg(this.connection, message, response);
-		while(!response.isReady());
-		
-		return response.getMessage();
+		return response.block(timeout);
 	}
 	
+	/**
+	 * Pings the remote connection to determine if the connection is
+	 * still alive.
+	 * 
+	 * @return true if there was a response, false otherwise
+	 */
+	public boolean ping(long timeout) {
+		Response response = new Response();
+		
+		this.network.sendLibraryMsg(this.connection, new RemoteMessage(RemoteMessage.MSG_PING), response);
+		if(null == response.block(timeout))
+			return false;
+
+		return true;
+	}
+	
+	/**
+	 * This method is fired when a message is received.  The remote object only 
+	 */
 	public void onMessage(Message message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -62,7 +162,8 @@ public abstract class RemoteObject implements ClientResponder {
 		if(!(message instanceof RemoteMessage))
 			throw new IllegalArgumentException("illegal message type");
 		
-		//if((message.getMessageType())
+		if(RemoteMessage.MSG_PING == ((RemoteMessage)message).getMessageType())
+			return;
 	}
 	
 }

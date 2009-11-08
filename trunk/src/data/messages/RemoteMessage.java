@@ -5,7 +5,7 @@ import java.util.*;
 import network.messages.*;
 
 /**
- * The DataMessage class is an abstract class which extends Message and
+ * The RemoteMessage class is an abstract class which extends Message and
  * provides all the required functionality for describing messages sent by the
  * data structures.  This class is abstract but doesn't not have any abstract
  * methods, it is expected that the extending class will define message types 
@@ -15,7 +15,8 @@ import network.messages.*;
  */
 public class RemoteMessage extends Message {
 
-	public static final int MSG_HELLO = 0;
+	public static final int MSG_PING = 0;
+	public static final int MSG_ERROR = 1;
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -24,7 +25,7 @@ public class RemoteMessage extends Message {
 	private final Queue<Serializable> parameters;
 	
 	/**
-	 * Creates a new DataMessage with the given message type.
+	 * Creates a new RemoteMessage with the given message type.
 	 * 
 	 * @param messageType
 	 */
@@ -61,8 +62,14 @@ public class RemoteMessage extends Message {
 	 * 
 	 * @return the next parameter added, or null if no more exist
 	 */
-	public Serializable dequeParameter() {
-		return this.parameters.poll();
+	@SuppressWarnings("unchecked")
+	public <T> T dequeParameter() {
+		try { /* not sure why this is unchecked... */
+			return (T)this.parameters.poll();
+		}
+		catch(RuntimeException ex) {
+			return null;
+		}
 	}
 	
 }

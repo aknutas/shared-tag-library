@@ -6,15 +6,21 @@ package data.messages;
  *  
  * @author Andrew Alm
  */
-public class IteratorMessage extends RemoteMessage {
+public class IteratorMessage extends RoutedMessage {
 
+	public static final int MSG_MORE = 2;
+	
+	private static final long serialVersionUID = 1L;
+	
 	/**
-	 * Creates a new IteratorMessage object with the given message type.
+	 * Creates a new IteratorMessage object with the given message
+	 * type and id.
 	 * 
 	 * @param messageType the message type
+	 * @param id the iterator id
 	 */
-	public IteratorMessage(int messageType) {
-		super(messageType);
+	public IteratorMessage(int messageType, int id) {
+		super(messageType, id);
 	}
 
 }
