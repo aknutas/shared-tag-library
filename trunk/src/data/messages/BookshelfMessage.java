@@ -2,7 +2,7 @@ package data.messages;
 
 public class BookshelfMessage extends RoutedMessage {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4554402322430170431L;
 	
 	/* message types */
 	public static final int MSG_SIZE = 2;

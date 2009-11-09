@@ -8,7 +8,7 @@ package data.messages;
  */
 public class RoutedMessage extends RemoteMessage {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5611699267122408137L;
 	
 	private final int id;
 

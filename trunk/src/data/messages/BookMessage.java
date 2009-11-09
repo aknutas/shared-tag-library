@@ -2,7 +2,7 @@ package data.messages;
 
 public class BookMessage extends RoutedMessage {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2627248649500987680L;
 	
 	public static final int MSG_TAG = 2;
 	public static final int MSG_UNTAG = 3;
