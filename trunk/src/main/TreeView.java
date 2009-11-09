@@ -108,6 +108,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		try {
 			Bookshelf node = ((TreeNode) tree.getLastSelectedPathComponent())
 					.getUserObject().getShelf();
+			System.out.println("++++++++++");
+			System.out.println(node.size());
+			System.out.println("++++++++++");
 			control.setFocus(node, 0);
 			results.setResults(node);
 			refresh();

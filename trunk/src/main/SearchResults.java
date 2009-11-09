@@ -51,8 +51,10 @@ public class SearchResults extends JScrollPane {
 			removeResults();
 
 			Iterator<Book> result = bookshelf.iterator();
+			System.out.println("hasnext:" + result.hasNext());
 			int count = 0;
 			while (result.hasNext() && count < 20) {
+				System.out.println("DSAFDSAFDSAF");
 				results.add(new Result(result.next()));
 				count++;
 			}

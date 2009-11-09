@@ -91,6 +91,12 @@ public class Controller {
 		if (bookshelf == null || id == null || id < 0)
 			throw new IllegalArgumentException();
 		focus = bookshelf;
+		
+		System.out.println(bookshelf.iterator().hasNext());
+		
+		for(Book b : bookshelf)
+			System.out.println(b.getProperty("title"));
+		
 		focusID = id;
 	}
 
