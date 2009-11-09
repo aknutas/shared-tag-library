@@ -36,15 +36,6 @@ public class SearchResults extends JScrollPane {
 		// addDemoResult();
 	}
 
-	private void addDemoResult() {
-		results.add(new Result(new VirtualBook("Andre Gorz", "Traitor")));
-		results
-				.add(new Result(
-						new VirtualBook("Vegan Cooks", "Vegan Cookbook")));
-		results.add(new Result(new VirtualBook("John Cage", "Silence")));
-		addResults();
-	}
-
 	protected Result addResult(Result result) {
 
 		panel.add(result);

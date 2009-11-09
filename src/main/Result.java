@@ -57,6 +57,7 @@ public class Result extends JPanel {
      * 
      */
 	protected void draw() {
+
 		validate();
 		this.repaint();
 		super.repaint();
@@ -124,6 +125,11 @@ public class Result extends JPanel {
 			tagTitleConstraints.gridx = 0;
 			Content = new JPanel();
 			Content.setLayout(new GridBagLayout());
+			
+			JLabel add = new JLabel("Add Tag");
+			Content.add(add, tagTitleConstraints);
+			Content.add(getJTextField(), tagContentConstraints);
+			Content.add(getJTextField1(), tagNameConstraints);
 		}
 
 		int yOffset = 10;
@@ -142,6 +148,7 @@ public class Result extends JPanel {
 					titleC.gridy = yOffset;
 
 					JLabel value = new JLabel(e.getValue());
+					System.out.println(value.getText());
 					value.setFont(new Font("Sans", Font.BOLD, 14));
 					GridBagConstraints valueC = (GridBagConstraints) tagContentConstraints
 							.clone();
@@ -156,16 +163,8 @@ public class Result extends JPanel {
 				draw();
 			}
 
-		} else if (bookshelf != null) {
-			// not implemented
-		} else {
-			// not implemented (library or tag)
-		}
+		} 
 
-		JLabel add = new JLabel("Add Tag");
-		Content.add(add, tagTitleConstraints);
-		Content.add(getJTextField(), tagContentConstraints);
-		Content.add(getJTextField1(), tagNameConstraints);
 		return Content;
 	}
 
