@@ -24,7 +24,7 @@ public class ServerThread extends CommThread {
 	this.s = s;
 	comm = new CommunicationImpl();
 	// Debug
-	System.out.println("Initialized CommServerThread");
+	// System.out.println("Initialized CommServerThread");
 	super.setStatus(Definitions.CONNECTED);
 	messageReceiver = sr;
     };
@@ -40,7 +40,7 @@ public class ServerThread extends CommThread {
 
 	run = true;
 	// Debug
-	System.out.println("ServerThread: Runnin'");
+	// System.out.println("ServerThread: Runnin'");
 
 	while (!s.isClosed() && run) {
 	    try {
@@ -50,8 +50,9 @@ public class ServerThread extends CommThread {
 	    }
 	    if (obj != null) {
 		// Debug
+		/*
 		System.out.println("ServerThread Got: "
-			+ obj.getClass().getName());
+			+ obj.getClass().getName()); */
 		if (obj instanceof data.messages.RemoteMessage) {
 		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();
