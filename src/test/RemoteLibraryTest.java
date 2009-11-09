@@ -53,7 +53,13 @@ public class RemoteLibraryTest {
 		Bookshelf remoteShelf = remoteLibrary.getMasterShelf();
 		Iterator<Bookshelf> it = remoteLibrary.iterator();
 		for(Bookshelf shelf : remoteLibrary) {
-			System.out.println("shelf");
+			System.out.println("shelf size: " + shelf.size());
+			
+			Iterator<Book> it2 = shelf.iterator();
+			for(Book book : shelf) {
+				System.out.println("book title: " + book.getProperty("title"));
+				System.out.println("book author: " + book.getProperty("author"));
+			}
 		}
 		
 		long messagesSent = ((TestNetworkControl)network).getMessagesSent();

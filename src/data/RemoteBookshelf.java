@@ -16,14 +16,6 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	}
 
 	@Override
-	public boolean contains(Book book) throws IllegalArgumentException {
-		RemoteMessage message = new BookshelfMessage(BookshelfMessage.MSG_CONTAINS, this.id);
-		
-		//RemoteMessage response = this.send(new , timeout)
-		return false;
-	}
-
-	@Override
 	public boolean empty() {
 		return (0 == this.size());
 	}
@@ -45,41 +37,95 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	}
 
 	@Override
-	public Iterator<Entry<String, String>> enumerateProperties() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getProperty(String name) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		if(null == name)
+			throw new NullPointerException("name cannot be null");
+		
+		/* send message */
+		BookshelfMessage message = new BookshelfMessage(BookshelfMessage.MSG_GET, this.id);
+		message.queueParameter(name);
+		RemoteMessage response = this.send(message, 5000);
+		if(null == response)
+			return null;
+		
+		if(!(response instanceof BookshelfMessage))
+			return null;
+		
+		if(BookshelfMessage.MSG_GET != response.getMessageType())
+			return null;
+		
+		return response.dequeParameter();
 	}
-
-	@Override
-	public void insert(Book book) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		System.out.println("shelf");
-	}
-
-	@Override
-	public Bookshelf intersect(Bookshelf shelf) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean remove(Book book) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	@Override
 	public String setProperty(String name, String value) {
-		// TODO Auto-generated method stub
-		return null;
+		if((null == name) || (null == value))
+			throw new NullPointerException("name or value cannot be null");
+		
+		/* send message */
+		BookshelfMessage message = new BookshelfMessage(BookshelfMessage.MSG_SET, this.id);
+		message.queueParameter(name);
+		message.queueParameter(value);
+		RemoteMessage response = this.send(message, 5000);
+		if(null == response)
+			return null;
+		
+		if(!(response instanceof BookshelfMessage))
+			return null;
+		
+		if(BookshelfMessage.MSG_SET != response.getMessageType())
+			return null;
+		
+		return response.dequeParameter();
 	}
 
+	@Override
+	public Iterator<Entry<String, String>> enumerateProperties() {
+		try {
+			BookshelfMessage message = new BookshelfMessage(BookshelfMessage.MSG_PROPERTY_ITERATOR, this.id);
+			RemoteMessage response = this.send(message, 5000);
+			if(null == response)
+				return null;
+			
+			if(!(response instanceof BookshelfMessage))
+				return null;
+			
+			if(BookshelfMessage.MSG_PROPERTY_ITERATOR != response.getMessageType())
+				return null;
+			
+			Integer id = response.dequeParameter();
+			if(null == id)
+				return null;
+			
+			return new RemotePropertyIterator(this.network, this.connection, id.intValue());
+		}
+		catch(RemoteObjectException ex) {
+			return null;
+		}
+	}
+	
+	@Override
+	public Iterator<Book> iterator() {
+		try {
+			RemoteMessage response = this.send(new BookshelfMessage(BookshelfMessage.MSG_ITERATOR, this.id), 5000);
+			
+			if((null == response) || !(response instanceof BookshelfMessage))
+				return null;
+			
+			if(BookshelfMessage.MSG_ERROR == response.getMessageType())
+				return null;
+			
+			Integer id = response.dequeParameter();
+			if(null == id)
+				return null;
+			
+			return new RemoteBookIterator(this.network, this.connection, id.intValue());
+		}
+		catch(RemoteObjectException ex) {
+			return null;
+		}
+	}
+	
 	@Override
 	public Bookshelf subset(Comparable<Book> comparable) throws IllegalArgumentException {
 		if(null == comparable)
@@ -88,14 +134,20 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 		return new VirtualBookshelf(this, comparable);
 	}
 
+	/**
+	 * Not implemented (yet).
+	 */
 	@Override
 	public Bookshelf union(Bookshelf shelf) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
+	/**
+	 * Not implemented (yet).
+	 */
 	@Override
-	public Iterator<Book> iterator() {
+	public Bookshelf intersect(Bookshelf shelf) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -106,6 +158,32 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	@Override
 	public Bookshelf difference(Bookshelf shelf) throws IllegalArgumentException {
 		return null;
+	}
+	
+	/**
+	 * Not implemented (yet).
+	 */
+	@Override
+	public boolean contains(Book book) throws IllegalArgumentException {
+		return false;
+	}
+	
+	/**
+	 * Not implemented (yet).
+	 */
+	@Override
+	public void insert(Book book) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		System.out.println("shelf");
+	}
+
+	/**
+	 * Not implemented (yet).
+	 */
+	@Override
+	public boolean remove(Book book) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -1,15 +1,16 @@
 package data;
 
+import data.messages.IteratorMessage;
 import network.Control;
 
 /**
- * The RemoteLibraryIterator extends the RemoteIterator and is used to iterate
+ * The RemoteBookshelfIterator extends the RemoteIterator and is used to iterate
  * over a set of bookshelves. This class is used to translate remote message
  * parameters into RemoteBookshelf objects.
  * 
  * @author Andrew Alm
  */
-public class RemoteLibraryIterator extends RemoteIterator<Bookshelf> {
+public class RemoteBookshelfIterator extends RemoteIterator<Bookshelf> {
 
 	/**
 	 * Creates a new RemoteLibraryIterator with the given network
@@ -23,7 +24,7 @@ public class RemoteLibraryIterator extends RemoteIterator<Bookshelf> {
 	 * @throws RemoteObjectException if the object cannot establish a
 	 *         connection
 	 */
-	public RemoteLibraryIterator(Control network, int connection, int id) throws NullPointerException, RemoteObjectException {
+	public RemoteBookshelfIterator(Control network, int connection, int id) throws NullPointerException, RemoteObjectException {
 		super(network, connection, id);
 	}
 
@@ -39,17 +40,21 @@ public class RemoteLibraryIterator extends RemoteIterator<Bookshelf> {
 	 *         be handled by this function
 	 */
 	@Override
-	public Bookshelf createObject(Object parameter) throws NullPointerException, IllegalArgumentException {
+	public Bookshelf createObject(IteratorMessage message) throws NullPointerException, IllegalArgumentException {
 		try {
-			if(null == parameter)
-				throw new NullPointerException("parameter cannot be null");
+			if(null == message)
+				throw new NullPointerException("message cannot be null");
 			
-			if(!(parameter instanceof Integer))
-				throw new NullPointerException("illegal parameter type");
+			if(IteratorMessage.MSG_MORE != message.getMessageType())
+				throw new IllegalArgumentException("illegal message type");
 			
-			return new RemoteBookshelf(this.network, this.connection, ((Integer)parameter).intValue());
+			Integer id = message.dequeParameter();
+			if(null == id)
+				return null;
+			
+			return new RemoteBookshelf(this.network, this.connection, id.intValue());
 		}
-		catch(Exception ex) { //TODO CHANGE ME TO REMOTEOBJECTEXCEPTION
+		catch(RemoteObjectException ex) {
 			return null;
 		}
 	}

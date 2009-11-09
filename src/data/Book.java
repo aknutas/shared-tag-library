@@ -20,9 +20,9 @@ public interface Book {
 	 *
 	 * @return the weight of the tag.
 	 *
-	 * @throws IllegalArgumentException if the tag given is null
+	 * @throws NullPointerException if the tag given is null
 	 */
-	public int tag(String tag) throws IllegalArgumentException;
+	public int tag(String tag) throws NullPointerException;
 
 	/**
 	 * The weight of the given tag is decreased.
@@ -31,9 +31,9 @@ public interface Book {
 	 *
 	 * @return the weight of the tag
 	 *
-	 * @throws IllegalArgumentException if the tag given is null
+	 * @throws NullPointerException if the tag given is null
 	 */
-	public int untag(String tag) throws IllegalArgumentException;
+	public int untag(String tag) throws NullPointerException;
 
 	/**
 	 * Gets the weight of a given tag. If the tag has never been used 
@@ -45,9 +45,9 @@ public interface Book {
 	 *
 	 * @return the weight of the tag
 	 *
-	 * @throws IllegalArgumentException if the tag given is null
+	 * @throws NullPointerException if the tag given is null
 	 */
-	public int weight(String tag) throws IllegalArgumentException;
+	public int weight(String tag) throws NullPointerException;
 
 	/**
 	 * Returns an iterator of all tags on a book and their associated
@@ -65,9 +65,9 @@ public interface Book {
 	 * 
 	 * @return the value of the property
 	 * 
-	 * @throws IllegalArgumentException if the property given is null
+	 * @throws NullPointerException if the property given is null
 	 */
-	public String getProperty(String name) throws IllegalArgumentException;
+	public String getProperty(String name) throws NullPointerException;
 	
 	
 	/**
@@ -77,9 +77,9 @@ public interface Book {
 	 * @param name the name of the property
 	 * @param value the value to set the property to
 	 * 
-	 * @return IllegalArgumentException if the name of value given is null
+	 * @return NullPointerException if the name of value given is null
 	 */
-	public String setProperty(String name, String value);
+	public String setProperty(String name, String value) throws NullPointerException;
 	
 	/**
 	 * Returns an iterator containing the key-value pairs of all the properties

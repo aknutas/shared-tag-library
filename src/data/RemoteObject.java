@@ -20,7 +20,7 @@ public abstract class RemoteObject implements ClientResponder {
 	/* used to provide simple blocking */
 	private class Response implements ClientResponder {
 
-		private Semaphore lock;
+		private final Semaphore lock;
 		private RemoteMessage message;
 		
 		public Response() {
@@ -44,11 +44,6 @@ public abstract class RemoteObject implements ClientResponder {
 			}
 		}
 		
-		public RemoteMessage getMessage() {
-			return this.message;
-		}
-		
-		@Override
 		public void onMessage(Message message) {
 			if(!(message instanceof RemoteMessage))
 				throw new IllegalArgumentException("illegal message type");
