@@ -20,7 +20,7 @@ import java.util.Map.Entry;
 import scripts.Parser;
 import scripts.ScriptGenerator;
 
-import org.joone.engine.Matrix;
+//import org.joone.engine.Matrix;
 
 
 
@@ -86,7 +86,7 @@ public class Controller {
      * @throws IllegalArgumentException  the paramaters may not be invalid or null
      */
     public void setFocus(Bookshelf bookshelf,Integer id) throws IllegalArgumentException{
-	if(bookshelf == null || id == null || id > 0)
+	if(bookshelf == null || id == null || id < 0)
 	    throw new IllegalArgumentException();
 	focus = bookshelf;
 	focusID=id;	
@@ -420,9 +420,9 @@ public class Controller {
      * 
      * @return a stored Butler
      */
-    public Collection<Matrix> retrieveButler(){
-	return null;
-    }
+    //public Collection<Matrix> retrieveButler(){
+	//return null;
+    //}
 
 
     public Bookshelf search(String str){
