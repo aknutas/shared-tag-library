@@ -42,8 +42,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	protected void draw() {
 
 		((DefaultTreeModel)tree.getModel()).reload();
-		revalidate();
-		tree.repaint();
+	//	revalidate();
+		//tree.repaint();
 		treeView.repaint();
 		this.repaint();
 		super.repaint();
@@ -108,12 +108,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		try {
 			Bookshelf node = ((TreeNode) tree.getLastSelectedPathComponent())
 					.getUserObject().getShelf();
-			System.out.println("++++++++++");
-			System.out.println(node.size());
-			System.out.println("++++++++++");
 			control.setFocus(node, 0);
 			results.setResults(node);
-			refresh();
+			draw();
 		} catch (ClassCastException e1) {
 			System.out.println("You don't want to browse the library root...");
 		} catch (NullPointerException e2) {
