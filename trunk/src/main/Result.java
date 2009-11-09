@@ -43,8 +43,8 @@ public class Result extends JPanel {
 	private JPanel Content = null;
 	private JProgressBar progressBar = null;
 
-	private VirtualBook book = null;
-	private VirtualBookshelf bookshelf = null;
+	private Book book = null;
+	private Bookshelf bookshelf = null;
 	private Library library = null;
 	private JTextField tagContent = null;
 
@@ -86,7 +86,7 @@ public class Result extends JPanel {
 	 */
 	public Result(Book b) {
 		super();
-		book = (VirtualBook) b;
+		book = b;
 		initialize();
 	}
 
@@ -95,7 +95,7 @@ public class Result extends JPanel {
 	 */
 	public Result(Bookshelf b) {
 		super();
-		bookshelf = (VirtualBookshelf) b;
+		bookshelf = b;
 		initialize();
 	}
 

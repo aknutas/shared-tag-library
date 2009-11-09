@@ -37,7 +37,6 @@ public class SearchResults extends JScrollPane {
 	}
 
 	protected Result addResult(Result result) {
-
 		panel.add(result);
 		panel.repaint();
 		this.repaint();
@@ -54,8 +53,9 @@ public class SearchResults extends JScrollPane {
 			System.out.println("hasnext:" + result.hasNext());
 			int count = 0;
 			while (result.hasNext() && count < 20) {
-				System.out.println("DSAFDSAFDSAF");
-				results.add(new Result(result.next()));
+				Book b = result.next();
+				System.out.println("TITLE: " + b.getProperty("title"));
+				results.add(new Result(b));
 				count++;
 			}
 
