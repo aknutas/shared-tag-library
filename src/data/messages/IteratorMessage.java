@@ -8,9 +8,9 @@ package data.messages;
  */
 public class IteratorMessage extends RoutedMessage {
 
-	public static final int MSG_MORE = 2;
+	private static final long serialVersionUID = 4603374207926067891L;
 	
-	private static final long serialVersionUID = 1L;
+	public static final int MSG_MORE = 2;
 	
 	/**
 	 * Creates a new IteratorMessage object with the given message

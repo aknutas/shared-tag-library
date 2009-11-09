@@ -15,10 +15,12 @@ import network.messages.*;
  */
 public class RemoteMessage extends Message {
 
+	private static final long serialVersionUID = 2649706187934307008L;
+	
 	public static final int MSG_PING = 0;
 	public static final int MSG_ERROR = 1;
 	
-	private static final long serialVersionUID = 1L;
+	
 	
 	/* private data */
 	private final int messageType;

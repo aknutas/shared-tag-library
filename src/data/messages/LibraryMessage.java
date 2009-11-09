@@ -11,8 +11,8 @@ import java.util.*;
  * @author Andrew Alm
  */
 public class LibraryMessage extends RemoteMessage {
-	
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 441639840954967391L;
 	
 	/* message types */
 	public static final int MSG_MASTER = 2;
