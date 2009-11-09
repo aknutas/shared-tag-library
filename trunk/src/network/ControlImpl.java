@@ -60,9 +60,10 @@ public class ControlImpl implements Control, ConnectionCallBack {
      */
     public synchronized int connect(String address)
 	    throws UnknownHostException, IOException {
-	//Debug
+	// Debug
 	System.out.println("Controller here. Starting to connect.");
-	InetSocketAddress caddress = new InetSocketAddress(address, Definitions.PORT);
+	InetSocketAddress caddress = new InetSocketAddress(address,
+		Definitions.PORT);
 	Socket s = new Socket();
 	s.setSoTimeout(Definitions.TIMEOUT);
 	s.connect(caddress, Definitions.PORT);
@@ -70,8 +71,9 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	ct.start();
 	threadCollection.put(conncounter, ct);
 	conncounter++;
-	//Debug
-	System.out.println("Controller here. Connected to " + address + " with thread " + (conncounter-1));
+	// Debug
+	System.out.println("Controller here. Connected to " + address
+		+ " with thread " + (conncounter - 1));
 	return (conncounter - 1);
     }
 
@@ -106,8 +108,10 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    ClientResponder receiver) {
 	message.setComID(id);
 	message.setMsgID(rd.nextLong());
-	//Debug
-	System.out.println("Control here. Sent: " + message.getClass().getName() + " to connection " + connection);
+	// Debug
+	System.out
+		.println("Control here. Sent: " + message.getClass().getName()
+			+ " to connection " + connection);
 	threadCollection.get(connection).sendMsgGetReply(message, receiver);
     }
 
@@ -134,7 +138,8 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	List<Message> tempqueue;
 	Integer key;
 
-	//TODO Iterate with entrysets instead (full iterator faster than .get() seeks)
+	// TODO Iterate with entrysets instead (full iterator faster than .get()
+	// seeks)
 	Set<Integer> keyset = threadCollection.keySet();
 	Iterator<Integer> i = keyset.iterator();
 
@@ -169,11 +174,12 @@ public class ControlImpl implements Control, ConnectionCallBack {
      */
     public synchronized Map<Integer, Integer> getStatus() {
 	Map<Integer, Integer> returnmap = new HashMap<Integer, Integer>();
-	
+
 	Integer key;
 	Integer status;
 
-	//TODO Iterate with entrysets instead (full iterator faster than .get() seeks)
+	// TODO Iterate with entrysets instead (full iterator faster than .get()
+	// seeks)
 	Set<Integer> keyset = threadCollection.keySet();
 	Iterator<Integer> i = keyset.iterator();
 
@@ -182,7 +188,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    status = threadCollection.get(key).getStatus();
 	    returnmap.put(key, status);
 	}
-	
+
 	if (returnmap.isEmpty())
 	    return null;
 	return returnmap;
@@ -198,8 +204,9 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	CommThread ct = new ServerThread(id, socket, messageReceiver);
 	ct.start();
 	threadCollection.put(conncounter, ct);
-	//Debug
-	System.out.println("Controller here. Started listening to connection " + conncounter);
+	// Debug
+	System.out.println("Controller here. Started listening to connection "
+		+ conncounter);
 	conncounter++;
     }
 

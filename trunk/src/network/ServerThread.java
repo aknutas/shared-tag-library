@@ -19,7 +19,7 @@ public class ServerThread extends CommThread {
     public ServerThread(long myid, Socket s, ServerResponder sr) {
 	messagequeue = new ArrayList<Message>();
 	sendqueue = new ArrayList<Message>();
-        replymap = new HashMap<Long, ClientResponder>();
+	replymap = new HashMap<Long, ClientResponder>();
 	this.myid = myid;
 	this.s = s;
 	comm = new CommunicationImpl();
@@ -49,9 +49,10 @@ public class ServerThread extends CommThread {
 		System.out.println(e1);
 	    }
 	    if (obj != null) {
-		//Debug
-		System.out.println("ServerThread Got: " + obj.getClass().getName());
-		if(obj instanceof data.messages.RemoteMessage) {
+		// Debug
+		System.out.println("ServerThread Got: "
+			+ obj.getClass().getName());
+		if (obj instanceof data.messages.RemoteMessage) {
 		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();
 		    tempmsgid = tempdm.getMsgID();
