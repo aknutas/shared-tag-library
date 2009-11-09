@@ -14,7 +14,9 @@ public class RemoteLibraryTest {
 	
 	public static void main(String []args) throws UnknownHostException, IOException {
 		Control network = new TestNetworkControl();
-		Library library = new VirtualLibrary();
+		Library library1 = new VirtualLibrary();
+		Library library2 = new VirtualLibrary();
+		Library library3 = new VirtualLibrary();
 		
 		/* a bookshelf about programming */
 		Bookshelf shelf1 = new VirtualBookshelf();
@@ -24,7 +26,7 @@ public class RemoteLibraryTest {
 		shelf1.insert(new VirtualBook("Discrete Structures", "Jones"));
 		shelf1.insert(new VirtualBook("Linux Programming", "Torvalds"));
 		shelf1.insert(new VirtualBook("Parallel Structures", "Stevenson"));
-		library.addBookshelf(shelf1);
+		library1.addBookshelf(shelf1);
 		
 		/* a bookshelf of classics */
 		Bookshelf shelf2 = new VirtualBookshelf();
@@ -33,26 +35,38 @@ public class RemoteLibraryTest {
 		shelf2.insert(new VirtualBook("Macbeth", "Shakesphere"));
 		shelf2.insert(new VirtualBook("Catcher in the Rye", "Salinger"));
 		shelf2.insert(new VirtualBook("Crime and Punishment", "Dostoyevsky"));
-		library.addBookshelf(shelf2);
+		library2.addBookshelf(shelf2);
+		
+		//library3.addBookshelf(shelf1);
 		
 		/* add library to network */
-		((TestNetwork)network).addLibrary("andrew", library);
+		((TestNetwork)network).addLibrary("andrew", library1);
+		((TestNetwork)network).addLibrary("antti", library1);
+		((TestNetwork)network).addLibrary("patrick", library1);
 		
 		/* connect */
-		int connection = network.connect("andrew");
-		Library remoteLibrary = null;
+		int connection1 = network.connect("andrew");
+		int connection2 = network.connect("antti");
+		int connection3 = network.connect("patrick");
+	
+		Library remoteLibrary1 = null;
+		Library remoteLibrary2 = null;
+		Library remoteLibrary3 = null;
 		
 		try {
-			remoteLibrary = new RemoteLibrary(connection, network);
+			remoteLibrary1 = new RemoteLibrary(connection1, network);
+			remoteLibrary2 = new RemoteLibrary(connection2, network);
+			remoteLibrary3 = new RemoteLibrary(connection3, network);
+			
+			library3.addBookshelf(remoteLibrary1.getMasterShelf());
+			library3.addBookshelf(remoteLibrary2.getMasterShelf());
 		}
 		catch(RemoteObjectException ex) {
 			System.out.println("timeoutdf");
 			return;
 		}
 		
-		Bookshelf remoteShelf = remoteLibrary.getMasterShelf();
-		Iterator<Bookshelf> it = remoteLibrary.iterator();
-		for(Bookshelf shelf : remoteLibrary) {
+		for(Bookshelf shelf : remoteLibrary3) {
 			System.out.println("shelf size: " + shelf.size());
 			
 			Iterator<Book> it2 = shelf.iterator();
