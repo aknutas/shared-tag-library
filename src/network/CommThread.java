@@ -24,7 +24,7 @@ abstract class CommThread extends Thread {
     protected long myid;
     protected HashMap<Long, ClientResponder> replymap;
     protected ServerResponder messageReceiver;
-    
+
     /**
      * Set the value of status
      * 

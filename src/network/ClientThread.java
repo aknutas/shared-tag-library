@@ -19,18 +19,18 @@ import network.Definitions;
  */
 public class ClientThread extends CommThread {
 
-    public ClientThread (long myid, Socket s, ServerResponder messageReceiver) {
-        messagequeue = new ArrayList<Message>();
-        sendqueue = new ArrayList<Message>();
-        replymap = new HashMap<Long, ClientResponder>();
-        this.myid = myid;
-        this.s = s;
-        comm = new CommunicationImpl();
+    public ClientThread(long myid, Socket s, ServerResponder messageReceiver) {
+	messagequeue = new ArrayList<Message>();
+	sendqueue = new ArrayList<Message>();
+	replymap = new HashMap<Long, ClientResponder>();
+	this.myid = myid;
+	this.s = s;
+	comm = new CommunicationImpl();
 	// Debug
 	System.out.println("Initialized CommClientThread");
 	super.setStatus(Definitions.CONNECTED);
     };
-    
+
     @Override
     public void run() {
 	long tempcompid;
@@ -51,9 +51,10 @@ public class ClientThread extends CommThread {
 		System.out.println(e1);
 	    }
 	    if (obj != null) {
-		//Debug
-		System.out.println("ServerThread Got: " + obj.getClass().getName());
-		if(obj instanceof data.messages.RemoteMessage) {
+		// Debug
+		System.out.println("ServerThread Got: "
+			+ obj.getClass().getName());
+		if (obj instanceof data.messages.RemoteMessage) {
 		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();
 		    tempmsgid = tempdm.getMsgID();
