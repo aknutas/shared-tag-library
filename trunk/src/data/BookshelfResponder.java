@@ -36,6 +36,13 @@ public class BookshelfResponder extends RoutedResponder {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public RemoteMessage onRemoteMessage(RemoteMessage message)
+			throws NullPointerException, IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 //	@Override
 //	public Message onMessage(Message message) throws NullPointerException, IllegalArgumentException {

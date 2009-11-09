@@ -21,8 +21,11 @@ public class LibraryResponder extends RemoteResponder {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
+		if(message instanceof RoutedMessage)
+			return RoutedResponder.routeMessage((RoutedMessage)message);
+		
 		if(!(message instanceof LibraryMessage))
-			throw new IllegalArgumentException("illegal message type");
+			throw new IllegalArgumentException("illegal message type" + message.getClass().toString());
 		
 		switch(((RemoteMessage)message).getMessageType()) {
 		case LibraryMessage.MSG_MASTER:
@@ -37,7 +40,7 @@ public class LibraryResponder extends RemoteResponder {
 	}
 	
 	private LibraryMessage handleMasterRequest(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
-		LibraryMessage response;
+		LibraryMessage response = new LibraryMessage(LibraryMessage.MSG_MASTER);
 		
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -53,7 +56,6 @@ public class LibraryResponder extends RemoteResponder {
 		}
 		
 		/* create response, and responder object */
-		response = new LibraryMessage(LibraryMessage.MSG_MASTER);
 		response.queueParameter((new BookshelfResponder(masterShelf)).getID());
 		return response;
 	}
@@ -67,8 +69,8 @@ public class LibraryResponder extends RemoteResponder {
 		if(LibraryMessage.MSG_ITERATOR != message.getMessageType())
 			throw new IllegalArgumentException("illegal message type");
 		
-		// this.library.iterator()
-		
+		LibraryIteratorResponder responder = new LibraryIteratorResponder(this.library.iterator());
+		response.queueParameter(responder.getID());
 		return response;
 	}
 

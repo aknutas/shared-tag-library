@@ -1,20 +1,15 @@
 package data.messages;
 
-public class BookshelfMessage extends RemoteMessage {
+public class BookshelfMessage extends RoutedMessage {
 
-	public static final int MSG_HELLO = 0;
-	public static final int MSG_PROPERTY = 1;
-	
-	private int id;
+	/* message types */
+	public static final int MSG_SIZE = 2;
+	public static final int MSG_CONTAINS = 3;
+	public static final int MSG_EMPTY = 4;
+	public static final int MSG_PROPERTY = 5;
 	
 	public BookshelfMessage(int messageType, int id) {
-		super(messageType);
-		
-		this.id = id;
-	}
-	
-	public int getId() {
-		return this.id;
-	}
+		super(messageType, id);
+	}	
 
 }

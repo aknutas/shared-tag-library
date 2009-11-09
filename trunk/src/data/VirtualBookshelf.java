@@ -40,14 +40,17 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @param shelf the VirtualBookshelf to copy
 	 */
-	private VirtualBookshelf(VirtualBookshelf fromShelf, Comparable<Book> comparable) {
+	public VirtualBookshelf(Bookshelf fromShelf, Comparable<Book> comparable) {
 		this();
 		
 		this.comparable = comparable;
 		if(null == fromShelf)
 			return;
 		
-		fromShelf.deepCopyInto(this);
+		if(fromShelf instanceof VirtualBookshelf)
+			((VirtualBookshelf) fromShelf).deepCopyInto(this);
+		else
+			this.addBookshelf(fromShelf);
 	}
 	
 	/**
@@ -82,11 +85,6 @@ public final class VirtualBookshelf implements Bookshelf {
 		this.setProperty("name", name);
 	}
 	
-	@Override
-	public Bookshelf subset(Book book) throws IllegalArgumentException {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
 	/**
 	 * Inserts a book onto the VirtualBookshelf, if the book already exists
 	 * on the Bookshelf then this method does nothing.
@@ -321,7 +319,5 @@ public final class VirtualBookshelf implements Bookshelf {
 
 		this.shelves.add(shelf);
 	}
-
-	
 	
 }

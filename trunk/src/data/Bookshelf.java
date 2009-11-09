@@ -56,13 +56,6 @@ public interface Bookshelf extends Iterable<Book> {
 	 * @return the number of books contained in the Bookshelf.
 	 */
 	public int size();
-	
-	/**
-	 * Retreives an iterator containing all books on the Bookshelf.
-	 * 
-	 * @return an iterator.
-	 */
-	public Iterator<Book> enumerate();
 
 	/**
 	 * Joins two Bookshelfs together into a new bookshelf. This method does not
@@ -142,6 +135,4 @@ public interface Bookshelf extends Iterable<Book> {
 	 * @return an iterator of properties
 	 */
 	public Iterator<Map.Entry<String, String>> enumerateProperties();
-
-	Bookshelf subset(Book book) throws IllegalArgumentException;
 }

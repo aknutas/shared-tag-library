@@ -1,5 +1,6 @@
 package data;
 
+import java.io.*;
 import java.util.*;
 import java.util.Map.*;
 import javax.jdo.annotations.*;
@@ -11,7 +12,9 @@ import javax.jdo.annotations.*;
  * @author AndrewAlm
  */
 @PersistenceCapable(detachable="true")
-public class VirtualBook implements Book {
+public class VirtualBook implements Book, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Map<String, Integer> tags;
 	private Map<String, String> properties;

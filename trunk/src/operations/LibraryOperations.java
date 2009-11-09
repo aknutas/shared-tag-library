@@ -20,7 +20,7 @@ public abstract class LibraryOperations {
 		numBooks = 0;
 		//System.out.println("master has " + masterShelf.size() + " books.");
 		
-		Iterator<Book> master = masterShelf.enumerate();
+		Iterator<Book> master = masterShelf.iterator();
 		Map<String, Integer> allTags = new HashMap<String, Integer>();
 		
 		//System.out.println("master.hasNext(): " + master.hasNext());
@@ -57,7 +57,7 @@ public abstract class LibraryOperations {
 		
 		//System.out.println("master has " + masterShelf.size() + " books.");
 		
-		Iterator<Book> master = masterShelf.enumerate();
+		Iterator<Book> master = masterShelf.iterator();
 		Map<String, String> allProperties = new HashMap<String, String>();
 		
 		while (master.hasNext()){

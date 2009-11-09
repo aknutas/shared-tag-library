@@ -16,23 +16,63 @@ public abstract class RoutedResponder extends RemoteResponder {
 	private static Map<Integer, RoutedResponder> responders;
 	private static int nextID;
 	
+	private final int id;
+	
 	static {
 		RoutedResponder.responders = new HashMap<Integer, RoutedResponder>();
 		RoutedResponder.nextID = 0;
 	}
 	
-	public RemoteMessage onRemoteMessage(RemoteMessage message) throws NullPointerException, IllegalArgumentException {
+	/**
+	 * Creates a new RoutedResponder object. Each RoutedResponder is
+	 * put into a static routing table and given a unique id.
+	 */
+	public RoutedResponder() {
+		this.id = RoutedResponder.putResponder(this);
+	}
+	
+	/**
+	 * Gets the ID of this RoutedResponder.
+	 * 
+	 * @return the ID
+	 */
+	public int getID() {
+		return this.id;
+	}
+	
+//	/**
+//	 * This method is called when a RemoteMessage is received. This
+//	 * method routes the RemoteMesssage to the proper responder.
+//	 * 
+//	 * @param message the Message to respond to
+//	 * 
+//	 * @throws NullPointerException if the message given is null
+//	 * @throws IllegalArgumentException if the message type cannot
+//	 *         be processed by this handler. 
+//	 */
+//	public  RemoteMessage onRemoteMessage(RemoteMessage message) throws NullPointerException, IllegalArgumentException {
+//		if(null == message)
+//			throw new NullPointerException("message cannot be null");
+//		
+//		if(!(message instanceof RoutedMessage))
+//			throw new IllegalArgumentException("illegal message type");
+//		
+//		RoutedResponder responder = RoutedResponder.responders.get(((RoutedMessage)message).getID());
+//		if(null == responder)
+//			return new RemoteMessage(RemoteMessage.MSG_ERROR);
+//		
+//		return responder.onRoutedMessage((RoutedMessage)message);
+//	}
+	
+	public static RoutedMessage routeMessage(RoutedMessage message) {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
-		if(!(message instanceof RoutedMessage))
-			throw new IllegalArgumentException("illegal message type");
-		
 		RoutedResponder responder = RoutedResponder.responders.get(((RoutedMessage)message).getID());
 		if(null == responder)
-			return new RemoteMessage(RemoteMessage.MSG_ERROR);
+			return new RoutedMessage(RoutedMessage.MSG_ERROR, message.getID());
 		
-		return responder.onRoutedMessage((RoutedMessage)message);
+		return responder.onRoutedMessage(message);
 	}
 	
 	/**

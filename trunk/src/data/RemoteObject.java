@@ -30,15 +30,17 @@ public abstract class RemoteObject implements ClientResponder {
 				
 		public RemoteMessage block(long timeout) {
 			try {
-				if(0 == timeout)
-					this.lock.tryAcquire();
-				else
-					this.lock.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+				boolean acquired;
 				
-				return null;
+				if(0 == timeout)
+					acquired = this.lock.tryAcquire();
+				else
+					acquired = this.lock.tryAcquire(timeout, TimeUnit.MILLISECONDS);
+				
+				return (true == acquired) ? this.message : null;
 			}
 			catch(InterruptedException ex) {
-				return this.message;
+				return null;
 			}
 		}
 		
@@ -93,7 +95,7 @@ public abstract class RemoteObject implements ClientResponder {
 		this.connection = connection;
 		this.network = network;
 		
-		if(this.ping(timeout))
+		if(!this.ping(timeout))
 			throw new RemoteObjectException();
 	}
 	
@@ -131,9 +133,9 @@ public abstract class RemoteObject implements ClientResponder {
 			throw new NullPointerException("message cannot be null");
 		
 		Response response = new Response();
-		
 		this.network.sendLibraryMsg(this.connection, message, response);
-		return response.block(timeout);
+		RemoteMessage m = response.block(timeout);
+		return m;
 	}
 	
 	/**
