@@ -95,8 +95,8 @@ public class Butler{
 
 		String[] names = new String[numBooks];
 
-		Iterator<Book> basisBooks = basis.getMasterShelf().enumerate();
-		Iterator<Book> antiBasisBooks = antiBasis.getMasterShelf().enumerate();
+		Iterator<Book> basisBooks = basis.getMasterShelf().iterator();
+		Iterator<Book> antiBasisBooks = antiBasis.getMasterShelf().iterator();
 		int j = 0;
 		while (basisBooks.hasNext()){
 			Book current = basisBooks.next();

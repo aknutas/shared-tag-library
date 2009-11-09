@@ -53,7 +53,7 @@ public abstract class BookshelfOperations{
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 
 		Bookshelf allShelfs = union(shelfs);
-		Iterator<Book> allBooks = allShelfs.enumerate();
+		Iterator<Book> allBooks = allShelfs.iterator();
 
 		return allShelfs.subset(basis);
 	}
@@ -80,7 +80,7 @@ public abstract class BookshelfOperations{
 	
 	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Bookshelf shelf){
 		
-		Iterator<Book> shelfIt = shelf.enumerate();
+		Iterator<Book> shelfIt = shelf.iterator();
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
 		while (shelfIt.hasNext()){		//each book on the shelf

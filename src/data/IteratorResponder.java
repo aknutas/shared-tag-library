@@ -4,9 +4,20 @@ import java.io.*;
 import java.util.*;
 import data.messages.*;
 
-public class IteratorResponder extends RoutedResponder {
+public abstract class IteratorResponder<T> extends RoutedResponder {
 
-	private Iterator<Serializable> it;
+	private final Iterator<T> iter;
+	
+	public IteratorResponder(Iterator<T> iter) throws NullPointerException {
+		super();
+		
+		if(null == iter)
+			throw new NullPointerException("iter cannot be null");
+		
+		this.iter = iter;
+	}
+	
+	public abstract Serializable serializeObject(T object) throws NullPointerException, IllegalArgumentException;
 	
 	public RoutedMessage onRoutedMessage(RoutedMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
@@ -15,10 +26,13 @@ public class IteratorResponder extends RoutedResponder {
 		if(!(message instanceof IteratorMessage))
 			throw new IllegalArgumentException("illegal message type");
 		
-		if(IteratorMessage.MSG_MORE != message.getMessageType())
+		if(this.getID() != message.getID())
+			throw new IllegalArgumentException("illegal route");
+		
+		if(IteratorMessage.MSG_MORE == message.getMessageType())
 			return this.handleMoreMessage((IteratorMessage)message);
 		
-		RoutedMessage error = new RoutedMessage(RemoteMessage.MSG_ERROR, message.getID());
+		RoutedMessage error = new RoutedMessage(RemoteMessage.MSG_ERROR, this.getID());
 		error.queueParameter("unknown message type");
 		return error;
 	}
@@ -32,15 +46,19 @@ public class IteratorResponder extends RoutedResponder {
 		
 		Integer elementCount = message.dequeParameter();
 		if(null == elementCount) {
-			IteratorMessage error = new IteratorMessage(IteratorMessage.MSG_ERROR, message.getID());
+			IteratorMessage error = new IteratorMessage(IteratorMessage.MSG_ERROR, this.getID());
 			error.queueParameter("could not read element count");
 			return error;
 		}
 		
-		IteratorMessage response = new IteratorMessage(IteratorMessage.MSG_MORE, message.getID());
+		/* if the iterator is empty, give an error*/
+		if(!iter.hasNext())
+			return new IteratorMessage(IteratorMessage.MSG_ERROR, this.getID());
+		
+		IteratorMessage response = new IteratorMessage(IteratorMessage.MSG_MORE, this.getID());
 		int i = elementCount.intValue();
-		for(; it.hasNext() && i > 0; --i)
-			response.queueParameter((Serializable)it.next());
+		for(; iter.hasNext() && i > 0; --i)
+			response.queueParameter(this.serializeObject(iter.next()));
 		
 		return response;
 	}

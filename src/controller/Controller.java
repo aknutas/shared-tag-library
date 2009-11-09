@@ -451,7 +451,7 @@ public class Controller {
 
 
 
-    public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException, NullPointerException, RemoteObjectException{
+    public void addConnection(String host) throws UnknownHostException, IOException, IllegalArgumentException, NullPointerException, RemoteObjectException {
 
 	if(host!=null){
 	    if(controllerPairs.keySet().contains(host)){

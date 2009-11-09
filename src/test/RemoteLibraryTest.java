@@ -2,6 +2,7 @@ package test;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Iterator;
 
 import data.*;
 import data.messages.*;
@@ -32,7 +33,7 @@ public class RemoteLibraryTest {
 		shelf2.insert(new VirtualBook("Macbeth", "Shakesphere"));
 		shelf2.insert(new VirtualBook("Catcher in the Rye", "Salinger"));
 		shelf2.insert(new VirtualBook("Crime and Punishment", "Dostoyevsky"));
-		library.addBookshelf(shelf1);
+		library.addBookshelf(shelf2);
 		
 		/* add library to network */
 		((TestNetwork)network).addLibrary("andrew", library);
@@ -44,12 +45,16 @@ public class RemoteLibraryTest {
 		try {
 			remoteLibrary = new RemoteLibrary(connection, network);
 		}
-		catch(Exception ex) {
-			System.out.println("timeout");
+		catch(RemoteObjectException ex) {
+			System.out.println("timeoutdf");
 			return;
 		}
 		
 		Bookshelf remoteShelf = remoteLibrary.getMasterShelf();
+		Iterator<Bookshelf> it = remoteLibrary.iterator();
+		for(Bookshelf shelf : remoteLibrary) {
+			System.out.println("shelf");
+		}
 		
 		long messagesSent = ((TestNetworkControl)network).getMessagesSent();
 		long bytesSent = ((TestNetworkControl)network).getBytesSent();;

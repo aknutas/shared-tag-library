@@ -3,7 +3,6 @@ package data;
 import java.util.*;
 import data.messages.*;
 import network.*;
-import network.messages.*;
 
 
 
@@ -36,16 +35,21 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	 */
 	@Override
 	public Bookshelf getMasterShelf() {
-		RemoteMessage response = this.send(new LibraryMessage(LibraryMessage.MSG_MASTER), 5000);
-		
-		if((null == response) || !(response instanceof LibraryMessage))
+		try {
+			RemoteMessage response = this.send(new LibraryMessage(LibraryMessage.MSG_MASTER), 5000);
+			
+			if((null == response) || !(response instanceof LibraryMessage))
+				return null;
+			
+			Integer id = response.dequeParameter();
+			if(null == id)
+				return null;
+			
+			return new RemoteBookshelf(this.network, this.connection, id.intValue());
+		}
+		catch(RemoteObjectException ex) {
 			return null;
-		
-		Integer id = response.dequeParameter();
-		if(null == id)
-			return null;
-		
-		return new RemoteBookshelf(this.network, this.connection, id.intValue());
+		}
 	}
 
 	/**
@@ -57,19 +61,24 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	 */
 	@Override
 	public Iterator<Bookshelf> iterator() {
-		RemoteMessage response = this.send(new LibraryMessage(LibraryMessage.MSG_ITERATOR), 5000);
-		
-		if((null == response) || !(response instanceof LibraryMessage))
+		try {
+			RemoteMessage response = this.send(new LibraryMessage(LibraryMessage.MSG_ITERATOR), 5000);
+			
+			if((null == response) || !(response instanceof LibraryMessage))
+				return null;
+			
+			if(LibraryMessage.MSG_ERROR == response.getMessageType())
+				return null;
+			
+			Integer id = response.dequeParameter();
+			if(null == id)
+				return null;
+			
+			return new RemoteLibraryIterator(this.network, this.connection, id.intValue());
+		}
+		catch(RemoteObjectException ex) {
 			return null;
-		
-		if(LibraryMessage.MSG_ERROR == response.getMessageType())
-			return null;
-		
-		Integer id = response.dequeParameter();
-		if(null == id)
-			return null;
-		
-		return null;
+		}
 	}
 
 	/**

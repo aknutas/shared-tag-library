@@ -11,10 +11,10 @@ import network.*;
  * 
  * @author Andrew Alm
  */
-public abstract class RemoteIterator extends RemoteObject implements Iterator<RemoteObject> {
+public abstract class RemoteIterator<T> extends RemoteObject implements Iterator<T> {
 
-	private int id;
-	private Queue<RemoteObject> objectQueue;
+	private final int id;
+	private Queue<T> objectQueue;
 	
 	/**
 	 * Creates a new RemoteIterator object with the given id. Each
@@ -33,13 +33,34 @@ public abstract class RemoteIterator extends RemoteObject implements Iterator<Re
 		super(connection, network);
 		
 		this.id = id;
-		this.objectQueue = new LinkedList<RemoteObject>();
+		this.objectQueue = new LinkedList<T>();
 		
 		/* populate remote iterator */
 		if(0 > this.recieveMessages(20))
 			throw new RemoteObjectException();
 	}
-		
+	
+	/**
+	 * Gets the ID of the RemoteIterator object.
+	 * 
+	 * @return the id
+	 */
+	public int getID() {
+		return this.id;
+	}
+	
+	/**
+	 * Used to convert an object parameter into a RemoteObject.
+	 * 
+	 * @param parameter the Object to attempt to convert
+	 * @return the RemoteObject, or null if there was a problem
+	 * 
+	 * @throws NullPointerException if the parameter given is null.
+	 * @throws IllegalArgumentException if parameter given is of the 
+	 *         wrong type.
+	 */
+	public abstract T createObject(Object parameter) throws NullPointerException, IllegalArgumentException;
+	
 	/**
 	 * Determines whether this remote iterator has any elements left
 	 * to iterator over.
@@ -48,10 +69,10 @@ public abstract class RemoteIterator extends RemoteObject implements Iterator<Re
 	 */
 	@Override
 	public boolean hasNext() {
-		final RemoteIterator self = this;
+		final RemoteIterator<T> self = this;
 		
 		if(this.objectQueue.isEmpty())
-			return (1 > this.recieveMessages(10));
+			return (1 < this.recieveMessages(10));
 		
 		/* we are running low on objects, get some more */
 		if(20 > this.objectQueue.size()) {
@@ -64,7 +85,33 @@ public abstract class RemoteIterator extends RemoteObject implements Iterator<Re
 		
 		return true;
 	}
+	
+	/**
+	 * Returns the next RemoteObject available, or throws an
+	 * exception.
+	 * 
+	 * @return the next available RemoteObject
+	 * 
+	 * @throws NoSuchElementException if there are no more 
+	 *         RemoteObjects to return.
+	 */
+	@Override
+	public T next() {
+		if(!this.hasNext())
+			throw new NoSuchElementException();
+		
+		if(this.objectQueue.isEmpty())
+			throw new NoSuchElementException();
+		
+		return this.objectQueue.poll();
+	}
 
+	/**
+	 * Not implemented (optional)
+	 */
+	@Override
+	public void remove() {}
+	
 	/**
 	 * This method is used to fetch the given number of RemoteObjects
 	 * for the RemoteIterator. If the number of objects fetched is
@@ -95,7 +142,7 @@ public abstract class RemoteIterator extends RemoteObject implements Iterator<Re
 			if(null == parameter)
 				break;
 			
-			RemoteObject object = this.createObject(parameter);
+			T object = this.createObject(parameter);
 			if(null == object)
 				break;
 			
@@ -104,43 +151,5 @@ public abstract class RemoteIterator extends RemoteObject implements Iterator<Re
 		
 		return i;
 	}
-	
-	/**
-	 * Used to convert an object parameter into a RemoteObject.
-	 * 
-	 * @param parameter the Object to attempt to convert
-	 * @return the RemoteObject, or null if there was a problem
-	 * 
-	 * @throws NullPointerException if the parameter given is null.
-	 * @throws IllegalArgumentException if parameter given is of the 
-	 *         wrong type.
-	 */
-	public abstract RemoteObject createObject(Object parameter) throws NullPointerException, IllegalArgumentException;
-	
-	/**
-	 * Returns the next RemoteObject available, or throws an
-	 * exception.
-	 * 
-	 * @return the next available RemoteObject
-	 * 
-	 * @throws NoSuchElementException if there are no more 
-	 *         RemoteObjects to return.
-	 */
-	@Override
-	public RemoteObject next() {
-		if(!this.hasNext())
-			throw new NoSuchElementException();
-		
-		if(this.objectQueue.isEmpty())
-			throw new NoSuchElementException();
-		
-		return this.objectQueue.poll();
-	}
-
-	/**
-	 * Not implemented (optional)
-	 */
-	@Override
-	public void remove() {}
 	
 }
