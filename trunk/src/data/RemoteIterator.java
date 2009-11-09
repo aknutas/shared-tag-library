@@ -14,6 +14,7 @@ import network.*;
 public abstract class RemoteIterator<T> extends RemoteObject implements Iterator<T> {
 
 	private final int id;
+	private boolean exhausted;
 	private Queue<T> objectQueue;
 	
 	/**
@@ -33,6 +34,7 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 		super(connection, network);
 		
 		this.id = id;
+		this.exhausted = false;
 		this.objectQueue = new LinkedList<T>();
 		
 		/* populate remote iterator */
@@ -59,7 +61,7 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 	 * @throws IllegalArgumentException if parameter given is of the 
 	 *         wrong type.
 	 */
-	public abstract T createObject(Object parameter) throws NullPointerException, IllegalArgumentException;
+	public abstract T createObject(IteratorMessage message) throws NullPointerException, IllegalArgumentException;
 	
 	/**
 	 * Determines whether this remote iterator has any elements left
@@ -71,11 +73,14 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 	public boolean hasNext() {
 		final RemoteIterator<T> self = this;
 		
+		if(this.exhausted)
+			return false;
+		
 		if(this.objectQueue.isEmpty())
-			return (1 < this.recieveMessages(10));
+			this.exhausted = (1 > this.recieveMessages(10));
 		
 		/* we are running low on objects, get some more */
-		if(20 > this.objectQueue.size()) {
+		if((!this.exhausted && (20 > this.objectQueue.size()))) {
 			new Thread(new Runnable() {
 				public void run() {
 					self.recieveMessages(10);
@@ -83,7 +88,7 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 			}).start();
 		}
 		
-		return true;
+		return (!this.exhausted);
 	}
 	
 	/**
@@ -124,10 +129,12 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 	private int recieveMessages(int count) {
 		int i;
 		
-		RemoteMessage message = new IteratorMessage(IteratorMessage.MSG_MORE, this.id);
-		message.queueParameter(new Integer(count));
+		if(this.exhausted)
+			return 0;
 		
 		/* send for more troops! */
+		RemoteMessage message = new IteratorMessage(IteratorMessage.MSG_MORE, this.id);
+		message.queueParameter(new Integer(count));
 		message = this.send(message, 5000);
 		if(null == message)
 			return -1;
@@ -136,13 +143,9 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 		if(IteratorMessage.MSG_ERROR == message.getMessageType())
 			return 0;
 		
-		/* empty message parameter queue */
+		/* drain message parameter queue */
 		for(i = 0; ; ++i) {
-			Object parameter = message.dequeParameter();
-			if(null == parameter)
-				break;
-			
-			T object = this.createObject(parameter);
+			T object = this.createObject((IteratorMessage)message);
 			if(null == object)
 				break;
 			

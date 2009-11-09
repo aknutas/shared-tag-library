@@ -74,7 +74,7 @@ public class RemoteLibrary extends RemoteObject implements Library {
 			if(null == id)
 				return null;
 			
-			return new RemoteLibraryIterator(this.network, this.connection, id.intValue());
+			return new RemoteBookshelfIterator(this.network, this.connection, id.intValue());
 		}
 		catch(RemoteObjectException ex) {
 			return null;

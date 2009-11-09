@@ -6,12 +6,12 @@ import java.io.*;
 import data.messages.RemoteMessage;
 
 /**
- * A LibraryIteratorResponder extends an IteratorResponder for Bookshelf
+ * A BookshelfIteratorResponder extends an IteratorResponder for Bookshelf
  * objects
  * 
  * @author Andrew Alm
  */
-public class LibraryIteratorResponder extends IteratorResponder<Bookshelf> {
+public class BookshelfIteratorResponder extends IteratorResponder<Bookshelf> {
 
 	/**
 	 * Creates a new LibraryIteratorResponder from the given Iterator
@@ -21,7 +21,7 @@ public class LibraryIteratorResponder extends IteratorResponder<Bookshelf> {
 	 * 
 	 * @throws NullPointerException if the iterator given is null
 	 */
-	public LibraryIteratorResponder(Iterator<Bookshelf> iter) throws NullPointerException {
+	public BookshelfIteratorResponder(Iterator<Bookshelf> iter) throws NullPointerException {
 		super(iter);
 	}
 
@@ -34,9 +34,7 @@ public class LibraryIteratorResponder extends IteratorResponder<Bookshelf> {
 	}
 
 	@Override
-	public RemoteMessage onRemoteMessage(RemoteMessage message)
-			throws NullPointerException, IllegalArgumentException {
-		// TODO Auto-generated method stub
+	public RemoteMessage onRemoteMessage(RemoteMessage message) throws NullPointerException, IllegalArgumentException {
 		return null;
 	}
 	
