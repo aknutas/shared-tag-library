@@ -516,7 +516,7 @@ public class Controller {
 	 */
 	public void messageHandler() {
 		// Debug
-		System.out.println("messageHandler activated");
+		// System.out.println("messageHandler activated");
 
 		// Getting the message queue map and making sure that there is content
 		Map<Integer, List<Message>> msgMap = cntrl.whatsUp();
@@ -533,21 +533,25 @@ public class Controller {
 
 				// Getting messages from each queue
 				// Debug message
-				System.out.println("MH: Loopin'");
+				// System.out.println("MH: Loopin'");
 
 				if (tempqueue != null) {
 					Iterator<Message> msgiterator = tempqueue.iterator();
-					System.out.println("Iteratin', size: " + tempqueue.size());
+					//Debug
+					//System.out.println("Iteratin', size: " + tempqueue.size());
 
 					while (msgiterator.hasNext()) {
+					    	//TODO Do actual message-based functionality here
 						Object tryout = msgiterator.next();
 						if (tryout.getClass().getName().equals(
 								network.messages.ChatMessage.class.getName())) {
 							ChatMessage hello = (ChatMessage) tryout;
+							//TODO Replace console printout with small GUI notification
 							System.out.println("Connection "
 									+ tryentry.getKey() + " says "
 									+ hello.GetMessage());
 						} else {
+						    	//Error: This shouldn't happen.
 							System.out
 									.println("Unknown Foreign Object recieved. UFO ALERT:"
 											+ tryentry.getClass().getName());
@@ -556,7 +560,8 @@ public class Controller {
 				}
 			}
 		} else {
-			System.out.println("Read too soon: msgqueues empty");
+		    	//Debug
+			//System.out.println("Read too soon: msgqueues empty");
 		}
 		// Thread status iteration ought to come here
 		Map<Integer, Integer> statusMap = cntrl.getStatus();

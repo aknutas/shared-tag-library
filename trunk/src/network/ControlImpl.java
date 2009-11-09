@@ -109,10 +109,11 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	message.setComID(id);
 	message.setMsgID(rd.nextLong());
 	// Debug
+	/*
 	System.out
 		.println("Control here. Sent: " + message.getClass().getName()
 			+ " to connection " + connection);
-	threadCollection.get(connection).sendMsgGetReply(message, receiver);
+	threadCollection.get(connection).sendMsgGetReply(message, receiver); */
     }
 
     /**
@@ -144,8 +145,9 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	Iterator<Integer> i = keyset.iterator();
 
 	// Debug
+	/*
 	System.out
-		.println("Control here. Iterating through the threadCollection.");
+		.println("Control here. Iterating through the threadCollection.");*/
 
 	while (i.hasNext()) {
 	    key = i.next();
