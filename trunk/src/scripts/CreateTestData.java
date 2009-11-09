@@ -52,12 +52,15 @@ public class CreateTestData {
 		
 		int[] oldManWeights = {51,50,34,29,25,24,23,12,12,6,5,3,2,2,1,1,
 				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1};
 		
 		for (int i = 0; i < oldManTags.length; ++i){
 			int num = oldManWeights[i];
-			while (num > 0)
+			while (num > 0){
 				oldMan.tag(oldManTags[i]);
+				--num;
+			}
 		}
 		
 		shelf2.insert(oldMan);
@@ -102,8 +105,10 @@ public class CreateTestData {
 		
 		for (int i = 0; i < ryeTags.length; ++i){
 			int num = ryeWeights[i];
-			while (num > 0)
+			while (num > 0){
 				oldMan.tag(ryeTags[i]);
+				--num;
+			}
 		}
 		
 		shelf2.insert(rye);
