@@ -488,6 +488,7 @@ public class Controller {
 	    throw new IllegalArgumentException();
 	Bookshelf bs;
 	while(iter.hasNext()){
+		//System.out.println("dsaf");
 	    bs = iter.next();
 	    local.addBookshelf(bs);
 	}
