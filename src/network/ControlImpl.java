@@ -106,6 +106,8 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    ClientResponder receiver) {
 	message.setComID(id);
 	message.setMsgID(rd.nextLong());
+	//Debug
+	System.out.println("Control here. Sent: " + message.getClass().getName() + " to connection " + connection);
 	threadCollection.get(connection).sendMsgGetReply(message, receiver);
     }
 
