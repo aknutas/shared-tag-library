@@ -32,6 +32,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	 * @param l
 	 */
 	public TreeView(Controller c, SearchResults s) {
+
 		super();
 		control = c;
 		results = s;
@@ -39,29 +40,28 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	}
 
 	protected void draw() {
-		validate();
+
+		((DefaultTreeModel)tree.getModel()).reload();
+		revalidate();
 		tree.repaint();
+		treeView.repaint();
 		this.repaint();
 		super.repaint();
 	}
 
-	
 	public void refresh() {
-		
+
 		top.removeAllChildren();
-		
+
 		Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
 
 		while (bookshelves.hasNext()) {
-
-			TreeNode lib = new TreeNode(bookshelves.next());
-
-			top.add(lib);
+			top.add(new TreeNode(bookshelves.next()));
 		}
-		
+
 		draw();
 	}
-	
+
 	/**
 	 * This method initializes tree
 	 * 
@@ -106,16 +106,16 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		try {
-			Bookshelf node = ((TreeNode)tree.getLastSelectedPathComponent()).getUserObject().getShelf();
-		//	System.out.println(node.getProperty("name") + ": " + node.size());
+			Bookshelf node = ((TreeNode) tree.getLastSelectedPathComponent())
+					.getUserObject().getShelf();
+			control.setFocus(node, 0);
 			results.setResults(node);
 			refresh();
 		} catch (ClassCastException e1) {
 			System.out.println("You don't want to browse the library root...");
+		} catch (NullPointerException e2) {
+			
 		}
-//		results.setResults(((TreeNode)tree.getLastSelectedPathComponent()).getUserObject().getShelf());
-
-
 	}
 
 } // @jve:decl-index=0:visual-constraint="388,31"
