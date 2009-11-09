@@ -49,9 +49,8 @@ public class ServerThread extends CommThread {
 		System.out.println(e1);
 	    }
 	    if (obj != null) {
+		//Debug
 		System.out.println("ServerThread Got: " + obj.getClass().getName());
-		/*if (obj.getClass().getName().equals(
-			data.messages.RemoteMessage.class.getName())) {*/
 		if(obj instanceof data.messages.RemoteMessage) {
 		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();
