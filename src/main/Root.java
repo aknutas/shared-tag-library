@@ -89,7 +89,7 @@ public class Root extends JFrame {
      * 
      */
 	protected void draw() {
-		treeView.refresh();
+		treeView.draw();
 		validate();
 		repaint();
 	}
