@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.Map.Entry;
 
 import network.messages.Message;
 
@@ -112,8 +113,8 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	/*
 	System.out
 		.println("Control here. Sent: " + message.getClass().getName()
-			+ " to connection " + connection);
-	threadCollection.get(connection).sendMsgGetReply(message, receiver); */
+			+ " to connection " + connection); */
+	threadCollection.get(connection).sendMsgGetReply(message, receiver); 
     }
 
     /**
@@ -137,12 +138,15 @@ public class ControlImpl implements Control, ConnectionCallBack {
     public synchronized Map<Integer, List<Message>> whatsUp() {
 	Map<Integer, List<Message>> returnmap = new HashMap<Integer, List<Message>>();
 	List<Message> tempqueue;
-	Integer key;
+	Entry<Integer, CommThread> entry;
 
 	// TODO Iterate with entrysets instead (full iterator faster than .get()
 	// seeks)
-	Set<Integer> keyset = threadCollection.keySet();
-	Iterator<Integer> i = keyset.iterator();
+//	Set<Integer> keyset = threadCollection.keySet();
+//	Iterator<Integer> i = keyset.iterator();
+	
+	Set<Entry<Integer, CommThread>> entryset = threadCollection.entrySet();
+	Iterator<Entry<Integer, CommThread>> i = entryset.iterator();
 
 	// Debug
 	/*
@@ -150,17 +154,17 @@ public class ControlImpl implements Control, ConnectionCallBack {
 		.println("Control here. Iterating through the threadCollection.");*/
 
 	while (i.hasNext()) {
-	    key = i.next();
+	    entry = i.next();
 	    // Debug
-	    System.out.println("Iterating, queue: " + key);
-	    tempqueue = threadCollection.get(key).getMsg();
-	    // Debug
+	    // System.out.println("Iterating, queue: " + entry.getKey());
+	    tempqueue = entry.getValue().getMsg();
 	    if (tempqueue != null) {
-		System.out.println("Queue size: " + tempqueue.size());
-		returnmap.put(key, tempqueue);
-	    } else {
+		//Debug
+		//System.out.println("Queue size: " + tempqueue.size());
+		returnmap.put(entry.getKey(), tempqueue);
+	    } /* else {
 		System.out.println("Queue size: null");
-	    }
+	    } */ // Debug
 	}
 
 	if (returnmap.isEmpty())
@@ -176,19 +180,19 @@ public class ControlImpl implements Control, ConnectionCallBack {
      */
     public synchronized Map<Integer, Integer> getStatus() {
 	Map<Integer, Integer> returnmap = new HashMap<Integer, Integer>();
-
-	Integer key;
-	Integer status;
+	Entry<Integer, CommThread> entry;
 
 	// TODO Iterate with entrysets instead (full iterator faster than .get()
 	// seeks)
-	Set<Integer> keyset = threadCollection.keySet();
-	Iterator<Integer> i = keyset.iterator();
+	//Set<Integer> keyset = threadCollection.keySet();
+	//Iterator<Integer> i = keyset.iterator();
+	
+	Set<Entry<Integer, CommThread>> entryset = threadCollection.entrySet();
+	Iterator<Entry<Integer, CommThread>> i = entryset.iterator();
 
 	while (i.hasNext()) {
-	    key = i.next();
-	    status = threadCollection.get(key).getStatus();
-	    returnmap.put(key, status);
+	    entry = i.next();
+	    returnmap.put(entry.getKey(), entry.getValue().getStatus());
 	}
 
 	if (returnmap.isEmpty())
