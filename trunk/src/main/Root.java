@@ -79,7 +79,7 @@ public class Root extends JFrame {
 		super();
 		//This is where message trigger handler gets created and started up.
 		msgTrigger = new MsgTrigger();
-		msgTimer = new javax.swing.Timer(5000, msgTrigger);
+		msgTimer = new javax.swing.Timer(1000, msgTrigger);
 		msgTimer.setInitialDelay(2000);
 		msgTimer.start();
 		initialize();
