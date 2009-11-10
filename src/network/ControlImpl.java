@@ -139,11 +139,6 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	Map<Integer, List<Message>> returnmap = new HashMap<Integer, List<Message>>();
 	List<Message> tempqueue;
 	Entry<Integer, CommThread> entry;
-
-	// TODO Iterate with entrysets instead (full iterator faster than .get()
-	// seeks)
-//	Set<Integer> keyset = threadCollection.keySet();
-//	Iterator<Integer> i = keyset.iterator();
 	
 	Set<Entry<Integer, CommThread>> entryset = threadCollection.entrySet();
 	Iterator<Entry<Integer, CommThread>> i = entryset.iterator();
@@ -181,11 +176,6 @@ public class ControlImpl implements Control, ConnectionCallBack {
     public synchronized Map<Integer, Integer> getStatus() {
 	Map<Integer, Integer> returnmap = new HashMap<Integer, Integer>();
 	Entry<Integer, CommThread> entry;
-
-	// TODO Iterate with entrysets instead (full iterator faster than .get()
-	// seeks)
-	//Set<Integer> keyset = threadCollection.keySet();
-	//Iterator<Integer> i = keyset.iterator();
 	
 	Set<Entry<Integer, CommThread>> entryset = threadCollection.entrySet();
 	Iterator<Entry<Integer, CommThread>> i = entryset.iterator();
