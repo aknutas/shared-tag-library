@@ -42,7 +42,7 @@ public class Result extends JPanel {
 	private JProgressBar progressBar = null;
 
 	private Book book = null;
-	
+
 	public Book getBook() {
 		return book;
 	}
@@ -53,7 +53,7 @@ public class Result extends JPanel {
 	GridBagConstraints tagTitleConstraints;
 	GridBagConstraints tagConstraints;
 	GridBagConstraints tagsConstraints;
-	
+
 	private SearchResults results;
 	private Result self;
 
@@ -77,7 +77,7 @@ public class Result extends JPanel {
 		book = b;
 		initialize();
 	}
-	
+
 	/**
 	 * This method initializes Content
 	 * 
@@ -103,7 +103,7 @@ public class Result extends JPanel {
 			tagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
 			tagConstraints.fill = GridBagConstraints.NONE;
 			tagConstraints.weighty = 1;
-			
+
 			tagsConstraints = new GridBagConstraints();
 			tagsConstraints.gridx = 2;
 			tagsConstraints.gridy = 1;
@@ -123,10 +123,10 @@ public class Result extends JPanel {
 
 			Content = new JPanel();
 			Content.setLayout(new GridBagLayout());
-			
+
 			JLabel addTag = new JLabel("Add Tag: ");
 			addTag.setFont(new Font("Sans", Font.PLAIN, 14));
-			
+
 			JLabel tags = new JLabel("Tags: ");
 			tags.setFont(new Font("Sans", Font.PLAIN, 14));
 
@@ -222,7 +222,7 @@ public class Result extends JPanel {
 	 * @return javax.swing.JButton
 	 */
 	private JButton deleteResult() {
-		
+
 		if (delete == null) {
 			delete = new JButton();
 			delete.setText("Delete");
@@ -247,7 +247,7 @@ public class Result extends JPanel {
 	 */
 	private JPanel getTitle() {
 		if (Title == null) {
-			
+
 			GridBagConstraints name = new GridBagConstraints();
 			name.gridx = 0;
 			name.gridy = 0;
@@ -258,7 +258,7 @@ public class Result extends JPanel {
 
 			title = new JLabel("Title?");
 			title.setFont(new Font("Sans", Font.BOLD, 14));
-			
+
 			if (book != null) {
 				title.setText("  Book: " + book.getProperty("title")
 						+ "   |   By: " + book.getProperty("author"));
@@ -278,8 +278,8 @@ public class Result extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setSize(500, 200);
-		this.setBounds(new Rectangle(0, 0, 500, 200));
+		this.setSize(800, 200);
+		this.setBounds(new Rectangle(0, 0, 800, 200));
 		this.add(getRightNavigation(), BorderLayout.EAST);
 		this.add(getTitle(), BorderLayout.NORTH);
 		this.add(getContent(), BorderLayout.CENTER);

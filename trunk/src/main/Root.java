@@ -153,10 +153,10 @@ public class Root extends JFrame {
 	 */
 	private JToolBar getJToolBar() {
 		if (jToolBar == null) {
-			searchLabel = new Label("Search:", 0);
+			searchLabel = new Label("Search: ", 0);
 			searchLabel.setPreferredSize(new Dimension(100, 14));
 
-			jToolBar = new JToolBar();
+			jToolBar = new JToolBar("Search", 0);
 
 			ImageIcon icon = new ImageIcon(getClass().getResource(
 					"addBookshelf.png"), "Add Bookshelf");
@@ -220,7 +220,7 @@ public class Root extends JFrame {
 	private TextField getTextField() {
 		if (searchField == null) {
 			searchField = new TextField();
-			searchField.setPreferredSize(new Dimension(800, 14));
+			searchField.setPreferredSize(new Dimension(600, 14));
 			searchField.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
@@ -254,7 +254,7 @@ public class Root extends JFrame {
 	 */
 	private void initialize() {
 		control = new Controller();
-		this.setSize(1280, 800);
+		this.setSize(1000, 800);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Book Butler");
 	}
