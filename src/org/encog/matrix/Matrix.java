@@ -27,6 +27,8 @@ package org.encog.matrix;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.PersistenceCapable;
+
 import org.encog.Encog;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;
@@ -40,6 +42,8 @@ import org.slf4j.LoggerFactory;
  * neural network processing. Many of the neural network classes make use of the
  * matrix classes in this package.
  */
+
+@PersistenceCapable(detachable="true")
 public class Matrix implements Cloneable, Serializable, EncogPersistedObject {
 
 	/**
@@ -94,7 +98,7 @@ public class Matrix implements Cloneable, Serializable, EncogPersistedObject {
 	/**
 	 * The matrix data.
 	 */
-	private final double[][] matrix;
+	private double[][] matrix;
 
 	/**
 	 * Construct a bipolar matrix from an array of booleans.

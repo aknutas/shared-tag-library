@@ -12,7 +12,7 @@ import network.messages.Message;
  * 
  * @Author Antti Knutas
  */
-abstract class CommThread extends Thread {
+public class CommThread extends Thread {
 
     // Introducing variables
     protected int status;
