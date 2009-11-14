@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE orm PUBLIC 
+    "-//Sun Microsystems, Inc.//DTD Java Data Objects Metadata 2.0//EN" 
+    "http://java.sun.com/dtd/orm_2_0.dtd">
+<orm>
+    <package name="butler">
+        <class name="ButlerWeights" identity-type="datastore">
+            <inheritance strategy="new-table"/>
+            <field name="inputs" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+            </field>
+            <field name="outputs" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+            </field>
+        </class>
+    </package>
+</orm>
