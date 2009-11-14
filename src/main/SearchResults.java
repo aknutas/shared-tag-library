@@ -43,7 +43,6 @@ public class SearchResults extends JScrollPane {
 		gbc.gridy = gbc.gridy + 1;
 		panel.repaint();
 		this.repaint();
-		super.repaint();
 		return result;
 	}
 
@@ -79,9 +78,7 @@ public class SearchResults extends JScrollPane {
 		}
 
 		validate();
-		panel.repaint();
 		this.repaint();
-		super.repaint();
 	}
 
 	/**

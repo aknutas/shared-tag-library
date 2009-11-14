@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
+import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
@@ -93,7 +93,7 @@ public class AddBookshelf extends JDialog {
 			jContentPane.add(getJButton2(), gridBagConstraints5);
 
 			try {
-				UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+				UIManager.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 			} catch (UnsupportedLookAndFeelException ex) {
 				System.out
 						.println("Cannot set new Theme for Java Look and Feel.");
