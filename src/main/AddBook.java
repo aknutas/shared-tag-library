@@ -47,14 +47,14 @@ public class AddBook extends JDialog {
 
 	/**
 	 * @param owner
-	 * @param treeView 
+	 * @param treeView
 	 */
 	public AddBook(Frame owner, Controller ctl, Bookshelf b,
 			SearchResults searchResults, TreeView treeView) {
 		super(owner);
 
 		control = ctl;
-		
+
 		tree = treeView;
 
 		if (ctl.focus == null) {

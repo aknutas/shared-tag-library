@@ -15,11 +15,11 @@ public class TreeNode extends DefaultMutableTreeNode {
 
 	private Bookshelf shelf;
 
-	public TreeNode( Bookshelf b ) {
+	public TreeNode(Bookshelf b) {
 		shelf = b;
 		name = shelf.getProperty("name");
 	}
-	
+
 	public String getName() {
 		return name;
 	}
