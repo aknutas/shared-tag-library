@@ -1,6 +1,8 @@
 package main;
 
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +27,7 @@ public class SearchResults extends JScrollPane {
 	private Bookshelf bookshelf;
 	List<Result> results;
 	Controller control = null;
+	GridBagConstraints gbc;
 
 	/**
 	 * This is the default constructor
@@ -36,7 +39,8 @@ public class SearchResults extends JScrollPane {
 	}
 
 	protected Result addResult(Result result) {
-		panel.add(result);
+		panel.add(result, gbc);
+		gbc.gridy = gbc.gridy + 1;
 		panel.repaint();
 		this.repaint();
 		super.repaint();
@@ -69,7 +73,8 @@ public class SearchResults extends JScrollPane {
 	private void addResults() {
 
 		for (Result r : results) {
-			panel.add(r);
+			panel.add(r, gbc);
+			gbc.gridy = gbc.gridy + 1;
 			r.draw();
 		}
 
@@ -85,10 +90,16 @@ public class SearchResults extends JScrollPane {
 	 * @return void
 	 */
 	private void initialize() {
-		panel.setSize(529, 381);
-		panel.setLayout(new GridLayout(0, 1));
+		panel.setSize(600, 600);
+		panel.setLayout(new GridBagLayout());
 
 		results = new ArrayList<Result>();
+
+		gbc = new GridBagConstraints();
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.NORTH;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(5, 5, 5, 5);
 
 		try {
 			UIManager
@@ -101,10 +112,10 @@ public class SearchResults extends JScrollPane {
 	protected Result removeResult(Result result) {
 
 		panel.remove(result);
-		
+
 		control.removeBook(bookshelf, result.getBook());
 		resetResults();
-		
+
 		return result;
 	}
 

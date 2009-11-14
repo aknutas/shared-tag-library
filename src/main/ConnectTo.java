@@ -17,8 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
-
+import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 import controller.Controller;
 import data.RemoteObjectException;
 
@@ -63,7 +62,8 @@ public class ConnectTo extends JDialog {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			try {
-				UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+				UIManager
+						.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 			} catch (UnsupportedLookAndFeelException ex) {
 				System.out
 						.println("Cannot set new Theme for Java Look and Feel.");
