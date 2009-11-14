@@ -256,6 +256,7 @@ public final class BookQuery implements Comparable<Book> {
 		final Pattern namePattern = (null != nameRegexp) ? this.createRegexp(nameRegexp) : null;
 		final Pattern valuePattern = (null != valueRegexp) ? this.createRegexp(valueRegexp) : null;
 		
+		
 		this.addPropertyComparable(new Comparable<Entry<String, String>>() {
 			public int compareTo(Entry<String, String> property) {
 				if((null == property.getKey()) || (null == property.getValue()))
@@ -296,11 +297,11 @@ public final class BookQuery implements Comparable<Book> {
 		
 		if(null == pattern) {
 			try {
-				pattern = Pattern.compile(regexp);
+				pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
 				this.regexpCache.put(regexp, pattern);
 			}
 			catch(PatternSyntaxException ex) {
-				throw new IllegalArgumentException("invalid regular expression");
+				throw new IllegalArgumentException("invalid regular nameRegexpexpression");
 			}
 		}
 		
