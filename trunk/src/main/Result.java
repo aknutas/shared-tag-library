@@ -48,10 +48,9 @@ public class Result extends JPanel {
 	private Library library = null;
 	private JTextField tagContent = null;
 
-	GridBagConstraints tagNameConstraints;
 	GridBagConstraints tagContentConstraints;
 	GridBagConstraints tagTitleConstraints;
-	private JTextField tagName = null;
+	GridBagConstraints tagConstraints;
 
 	/**
      * 
@@ -107,65 +106,68 @@ public class Result extends JPanel {
 	private JPanel getContent() {
 		if (Content == null) {
 
-			tagNameConstraints = new GridBagConstraints();
-			// tagNameConstraints.fill = GridBagConstraints.VERTICAL;
-			tagNameConstraints.gridy = 0;
-			tagNameConstraints.weightx = .6;
-			tagNameConstraints.gridx = 1;
-			tagNameConstraints.insets = new Insets(5, 5, 5, 5);
 			tagContentConstraints = new GridBagConstraints();
-			// tagContentConstraints.fill = GridBagConstraints.VERTICAL;
-			tagContentConstraints.gridx = 2;
+			tagContentConstraints.gridx = 1;
 			tagContentConstraints.gridy = 0;
 			tagContentConstraints.weightx = .8;
-			tagContentConstraints.insets = new Insets(5, 0, 5, 300);
+			tagContentConstraints.insets = new Insets(5, 0, 5, 5);
+			tagContentConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+			tagConstraints = new GridBagConstraints();
+			tagConstraints.gridx = 2;
+			tagConstraints.gridy = 0;
+			tagConstraints.weightx = .8;
+			tagConstraints.insets = new Insets(5, 0, 5, 5);
+			tagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
 			tagTitleConstraints = new GridBagConstraints();
-			tagTitleConstraints.insets = new Insets(5, 300, 5, 5);
+			tagTitleConstraints.insets = new Insets(8, 5, 5, 5);
 			tagTitleConstraints.gridy = 0;
 			tagTitleConstraints.gridx = 0;
+			tagTitleConstraints.anchor = GridBagConstraints.FIRST_LINE_END;
+
 			Content = new JPanel();
 			Content.setLayout(new GridBagLayout());
-			
-			JLabel add = new JLabel("Add Tag");
-			Content.add(add, tagTitleConstraints);
+
+			Content.add(new JLabel("Add Tag: "), tagTitleConstraints);
+			Content.add(new JLabel("Tags: "), tagConstraints);
 			Content.add(getJTextField(), tagContentConstraints);
-			Content.add(getJTextField1(), tagNameConstraints);
 		}
 
 		int yOffset = 10;
 		if (book != null) {
-			Iterator<Entry<String, String>> properties = book
-					.enumerateProperties();
+
+			Iterator<Entry<String, Integer>> properties = book.enumerateTags();
 			while (properties.hasNext()) {
 
-				Entry<String, String> e = properties.next();
-				if ((e.getKey().compareTo("title") != 0)
-						&& (e.getKey().compareTo("author") != 0)) {
-					JLabel title = new JLabel(e.getKey());
-					title.setFont(new Font("Sans", Font.BOLD, 16));
-					GridBagConstraints titleC = (GridBagConstraints) tagTitleConstraints
-							.clone();
-					titleC.gridy = yOffset;
+				Entry<String, Integer> e = properties.next();
 
-					JLabel value = new JLabel(e.getValue());
-					System.out.println(value.getText());
-					value.setFont(new Font("Sans", Font.BOLD, 14));
-					GridBagConstraints valueC = (GridBagConstraints) tagContentConstraints
-							.clone();
-					valueC.gridy = yOffset;
-					valueC.anchor = GridBagConstraints.FIRST_LINE_START;
+				JLabel value = new JLabel(e.getKey());
+				value.setFont(new Font("Sans", Font.BOLD, 14));
 
-					Content.add(title, titleC);
-					Content.add(value, valueC);
-					++yOffset;
-				}
+				tagConstraints.gridy = yOffset;
 
-				draw();
+				Content.add(value, tagConstraints);
+
+				++yOffset;
 			}
 
-		} 
+			draw();
+
+		}
 
 		return Content;
+	}
+
+	private void addTag(String s) {
+
+		if (Content != null && !s.isEmpty()) {
+
+			JLabel value = new JLabel(s);
+			value.setFont(new Font("Sans", Font.BOLD, 14));
+
+			tagConstraints.gridy = tagConstraints.gridy + 10;
+
+			Content.add(value, tagConstraints);
+		}
 	}
 
 	/**
@@ -292,32 +294,16 @@ public class Result extends JPanel {
 			public void actionPerformed(ActionEvent event) {
 
 				if (book != null) {
-					if (tagName.getText().isEmpty()) {
-						book.setProperty("tag", tagContent.getText());
-					} else {
-						book.setProperty(tagName.getText() + ": ", tagContent
-								.getText());
-					}
+
+					book.tag(tagContent.getText());
+					addTag(tagContent.getText());
 				}
 
 				draw();
-				// Refresh current bookshelf view
 			}
 		});
 
 		return tagContent;
 	}
 
-	/**
-	 * This method initializes tagName
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getJTextField1() {
-		if (tagName == null) {
-			tagName = new JTextField(15);
-		}
-		return tagName;
-	}
-
-} // @jve:decl-index=0:visual-constraint="207,107"
+}
