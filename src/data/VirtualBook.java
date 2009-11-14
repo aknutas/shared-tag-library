@@ -152,9 +152,14 @@ public class VirtualBook implements Book, Serializable {
 		if(null == name || null == value)
 			throw new IllegalArgumentException("name or value cannot be null");
 		
+		String oldValue = this.properties.put(name, value);
+
+		/* update tags */
 		this.tag(value);
+		if(null != oldValue)
+			this.untag(oldValue);
 		
-		return this.properties.put(name, value);
+		return oldValue;
 	}
 
 	/**
