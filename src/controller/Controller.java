@@ -510,55 +510,57 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * This method is responsible for handling and responding to incoming
-	 * messages.
-	 */
-	public void messageHandler() {
-		// Debug
-		// System.out.println("messageHandler activated");
+    /**
+     * This method is responsible for handling and responding to incoming
+     * messages and status changes.
+     */
+    public void messageHandler() {
+	// Debug
+	// System.out.println("messageHandler activated");
 
-		// Getting the message queue map and making sure that there is content
-		Map<Integer, List<Message>> msgMap = cntrl.whatsUp();
+	// Getting the message queue map and making sure that there is content
+	Map<Integer, List<Message>> msgMap = cntrl.whatsUp();
 
-		if (msgMap != null) {
+	if (msgMap != null) {
 
-			Set<Entry<Integer, List<Message>>> entryset = msgMap.entrySet();
-			Iterator<Entry<Integer, List<Message>>> i = entryset.iterator();
+	    Set<Entry<Integer, List<Message>>> entryset = msgMap.entrySet();
+	    Iterator<Entry<Integer, List<Message>>> i = entryset.iterator();
 
-			// Iterating through each queue
-			while (i.hasNext()) {
-				Entry<Integer, List<Message>> tryentry = i.next();
-				List<Message> tempqueue = tryentry.getValue();
+	    // Iterating through each queue
+	    while (i.hasNext()) {
+		Entry<Integer, List<Message>> tryentry = i.next();
+		List<Message> tempqueue = tryentry.getValue();
 
-				// Getting messages from each queue
-				// Debug message
-				// System.out.println("MH: Loopin'");
+		// Getting messages from each queue
+		// Debug message
+		// System.out.println("MH: Loopin'");
 
-				if (tempqueue != null) {
-					Iterator<Message> msgiterator = tempqueue.iterator();
-					//Debug
-					//System.out.println("Iteratin', size: " + tempqueue.size());
+		if (tempqueue != null) {
+		    Iterator<Message> msgiterator = tempqueue.iterator();
+		    // Debug
+		    // System.out.println("Iteratin', size: " +
+		    // tempqueue.size());
 
-					while (msgiterator.hasNext()) {
-					    	//TODO Do actual message-based functionality here
-						Object tryout = msgiterator.next();
-						if (tryout.getClass().getName().equals(
-								network.messages.ChatMessage.class.getName())) {
-							ChatMessage hello = (ChatMessage) tryout;
-							//TODO Replace console printout with small GUI notification
-							System.out.println("Connection "
-									+ tryentry.getKey() + " says "
-									+ hello.GetMessage());
-						} else {
-						    	//Error: This shouldn't happen.
-							System.out
-									.println("Unknown Foreign Object recieved. UFO ALERT:"
-											+ tryentry.getClass().getName());
-						}
-					}
-				}
+		    while (msgiterator.hasNext()) {
+			// TODO Do actual message-based functionality here
+			Object tryout = msgiterator.next();
+			if (tryout.getClass().getName().equals(
+				network.messages.ChatMessage.class.getName())) {
+			    ChatMessage hello = (ChatMessage) tryout;
+			    // TODO Replace console printout with small GUI
+			    // notification
+			    System.out.println("Connection "
+				    + tryentry.getKey() + " says "
+				    + hello.GetMessage());
+			} else {
+			    // Error: This shouldn't happen.
+			    System.out
+				    .println("Unknown Foreign Object recieved. UFO ALERT:"
+					    + tryentry.getClass().getName());
 			}
+		    }
+		}
+	    }
 	} else {
 	    // Debug
 	    // System.out.println("Read too soon: msgqueues empty");
@@ -570,17 +572,17 @@ public class Controller {
 	if (statusMap != null) {
 	    Set<Entry<Integer, Integer>> statusEntries = statusMap.entrySet();
 	    Iterator<Entry<Integer, Integer>> statusIter = statusEntries
-	    .iterator();
+		    .iterator();
 
 	    while (statusIter.hasNext()) {
 		Entry<Integer, Integer> tryentry = statusIter.next();
-		if(tryentry.getValue()==Definitions.DISCONNECTED);
+		if (tryentry.getValue() == Definitions.DISCONNECTED)
 		{
 		    cntrl.disconnect(tryentry.getKey());
 		}
 	    }
 	}
-	}
+    }
 
 	/**
 	 * a test method
