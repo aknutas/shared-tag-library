@@ -11,12 +11,13 @@ public class ButlerWeights {
 	Matrix inputs;
 	Matrix outputs;
 	Long timestamp;
+	final int numTags;
 	
-	public ButlerWeights(Matrix[] vals){
-		inputs = vals[0];
-		outputs = vals[1];
-		Date time = new Date();
-		timestamp = time.getTime();
+	public ButlerWeights(Matrix input, Matrix output, int tags){
+		inputs = input;
+		outputs = output;
+		timestamp = new Date().getTime();
+		numTags = tags;
 		
 	}
 	
@@ -38,5 +39,9 @@ public class ButlerWeights {
 	
 	public Long getTimestamp(){
 		return timestamp;
+	}
+	
+	public int getNumTags(){
+		return numTags;
 	}
 }
