@@ -6,6 +6,9 @@ import java.util.*;
 
 public abstract class BookshelfOperations{
 
+	private static int numBooks;
+	private static int numTags;
+
 	/**
 	 * This operation takes a Collection of Bookshelfs and unions
 	 * all of them into one Bookshelf.
@@ -14,16 +17,15 @@ public abstract class BookshelfOperations{
 	 * @return a new Bookshelf containing all of the books of the input.
 	 * @throws IllegalArgumentException if collection is/contains a null shelf.
 	 */
-
 	public static Bookshelf union(Collection<Bookshelf> shelfs) throws IllegalArgumentException{
 
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 
 		Bookshelf newBS = new VirtualBookshelf();
-		
+
 		int i = 0;
 		int currentSize = 0;
-		
+
 		for( Bookshelf s: shelfs ){
 			//System.out.println("Shelf " + i);
 			//System.out.println("   has " + s.size() + " books.");
@@ -34,7 +36,7 @@ public abstract class BookshelfOperations{
 		}
 
 		//System.out.println("Total there are " + currentSize + " books.");
-		
+
 		return newBS;
 	}
 
@@ -47,13 +49,11 @@ public abstract class BookshelfOperations{
 	 * @return a new bookshelf containing a subset of Books from the Collection that are similar to the basis.
 	 * @throws IllegalArgumentException
 	 */
-	
 	public static Bookshelf subset(Collection<Bookshelf> shelfs, Comparable<Book> basis) throws IllegalArgumentException{
 
 		if (null == shelfs) throw new IllegalArgumentException("collection cannot be null");
 
 		Bookshelf allShelfs = union(shelfs);
-		Iterator<Book> allBooks = allShelfs.iterator();
 
 		return allShelfs.subset(basis);
 	}
@@ -69,41 +69,159 @@ public abstract class BookshelfOperations{
 	}
 
 	/**
-	 * if needed
-	 * @param book
-	 * @return
+	 * Returns an iterator of all of the tags on the given bookshelf. (not sorted)
+	 * @param shelf the input bookshelf
+	 * @return see description
 	 */
-	private static boolean isVirtual(Book book){
-
-		return book instanceof VirtualBook;
-	}
-	
 	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Bookshelf shelf){
-		
+
+		numBooks = 0;
+		numTags = 0;
+
 		Iterator<Book> shelfIt = shelf.iterator();
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		
+
 		while (shelfIt.hasNext()){		//each book on the shelf
-			
 			Book current = shelfIt.next();
 			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
-			
+			++numBooks;
+
 			while (tags.hasNext()){		//each tag on a book
 				Map.Entry<String, Integer> temp = tags.next();
 				map.put(temp.getKey(), temp.getValue());
-				
+				++numTags;
+
 			}
-			
+
 		}
 		return map.entrySet().iterator();
-		
+
 	}
-	
-	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Collection<Bookshelf> shelfs){
+
+	/**
+	 * Returns an iterator containing the first num tags on a bookshelf (sorted by weight).
+	 * 
+	 * @param shelf the input bookshelf
+	 * @param num the number of tags
+	 * @return see description
+	 */
+	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Bookshelf shelf, int num){
+
+		numBooks = 0;
+		numTags = 0;
+
+		Iterator<Book> shelfIt = shelf.iterator();
+		ArrayList<Map.Entry<String, Integer>> tagList = new ArrayList<Map.Entry<String, Integer>>();
+		Map<String, Integer> map = new HashMap<String, Integer>();
+
+
+		while (shelfIt.hasNext()){		//each book on the shelf
+			Book current = shelfIt.next();
+			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
+			++numBooks;
+
+			while (tags.hasNext()){		//each tag on a book
+				Map.Entry<String, Integer> temp = tags.next();
+
+				if (map.containsKey(temp.getKey()))	//a shelf's tags are the sum of its books' tags
+					map.put(temp.getKey(), temp.getValue() + map.remove(temp.getKey()));
+				else
+					map.put(temp.getKey(), temp.getValue());
+				++numTags;
+			}
+		}
+
+
+		int i = 0;
+
+		tagList.addAll(map.entrySet());
+
+		do {
+
+		} while (i < num);
+
+		return mergeSort(tagList).iterator();
+
+	}
+
+	private static List<Map.Entry<String, Integer>> mergeSort(List<Map.Entry<String, Integer>> list){
+
+		int size = list.size();
+		int half = size/2;
+
+		if (size <= 1)
+			return list;
+		else {
+			List<Map.Entry<String, Integer>> list1 = list.subList(0, half-1);
+			List<Map.Entry<String, Integer>> list2 = list.subList(half, size-1);
+			list1 = mergeSort(list1);
+			list2 = mergeSort(list2);
+			return merge(list1, list2);
+		}
+	}
+
+	private static List<Map.Entry<String, Integer>> merge(List<Map.Entry<String, Integer>> list1, List<Map.Entry<String, Integer>> list2){
+
+		List<Map.Entry<String, Integer>> mergedList = new ArrayList<Map.Entry<String, Integer>>();
+
+		int i = 0;	//index for list1
+		int j = 0;	//index for list2
+
+		Map.Entry<String, Integer> tag1;
+		Map.Entry<String, Integer> tag2;
 		
+		while (i < list1.size() && j < list2.size()){	//increment through the lists until the end of one.
+			
+			tag1 = list1.get(i);
+			tag2 = list2.get(j);
+
+			if (tag1.getValue() >= tag2.getValue()){
+				mergedList.add(tag1);
+				++i;
+			}
+			else{
+				mergedList.add(tag2);
+				++j;
+			}
+		}
+		
+		//only 1 of these while loops should execute. 
+		
+		while (i < list1.size()){	//if list1 is not empty, merge the remaining tags
+			tag1 = list1.get(i);
+			mergedList.add(tag1);
+			++i;
+		}
+		
+		while (j < list2.size()){	//if list2 is not empty, merge the remaining tags
+			tag2 = list2.get(j);
+			mergedList.add(tag2);
+			++j;
+		}
+
+		return mergedList;
+	}
+
+	/**
+	 * Returns the number of books in the last shelf that was operated on.
+	 * @return see description
+	 */
+	public static int getNumBooks(){
+		return numBooks;
+	}
+
+	/**
+	 * Returns the number of tags in the last shelf that was operated on.
+	 * @return see description
+	 */
+	public static int getNumTags(){
+		return numTags;
+	}
+
+	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Collection<Bookshelf> shelfs){
+
 		Bookshelf newShelf = union(shelfs);
 		return enumerateTags(newShelf);
-		
 	}
 
 	/*	public static void main(String []args){
