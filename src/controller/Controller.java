@@ -559,12 +559,27 @@ public class Controller {
 					}
 				}
 			}
-		} else {
-		    	//Debug
-			//System.out.println("Read too soon: msgqueues empty");
+	} else {
+	    // Debug
+	    // System.out.println("Read too soon: msgqueues empty");
+	}
+	// Thread status iteration ought to come here
+	Map<Integer, Integer> statusMap = cntrl.getStatus();
+
+	// Iterating through thread statuses
+	if (statusMap != null) {
+	    Set<Entry<Integer, Integer>> statusEntries = statusMap.entrySet();
+	    Iterator<Entry<Integer, Integer>> statusIter = statusEntries
+	    .iterator();
+
+	    while (statusIter.hasNext()) {
+		Entry<Integer, Integer> tryentry = statusIter.next();
+		if(tryentry.getValue()==Definitions.DISCONNECTED);
+		{
+		    cntrl.disconnect(tryentry.getKey());
 		}
-		// Thread status iteration ought to come here
-		Map<Integer, Integer> statusMap = cntrl.getStatus();
+	    }
+	}
 	}
 
 	/**
