@@ -16,9 +16,9 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @param book the Book to add to the Bookshelf.
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public void insert(Book book) throws IllegalArgumentException;
+	public void insert(Book book) throws NullPointerException;
 	
 	/**
 	 * Removes a book from the Bookshelf, if the Bookshelf does not contain the
@@ -26,9 +26,9 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @param book the Book to remove from the Bookshelf.
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public boolean remove(Book book) throws IllegalArgumentException;
+	public boolean remove(Book book) throws NullPointerException;
 	
 	/**
 	 * Determines whether the bookshelf contains the given book.
@@ -37,9 +37,9 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @return true if the the bookshelf has the book, otherwise false
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public boolean contains(Book book) throws IllegalArgumentException;
+	public boolean contains(Book book) throws NullPointerException;
 	
 	/**
 	 * Determines whether the Bookshelf is empty. An empty bookshelf contains no
@@ -65,9 +65,9 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @return a new Bookshelf object.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
-	public Bookshelf union(Bookshelf shelf) throws IllegalArgumentException;
+	public Bookshelf union(Bookshelf shelf) throws NullPointerException;
 	
 	/**
 	 * Returns a bookshelf containing only that are contained in each Bookshelf
@@ -77,20 +77,20 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @return a new Bookshelf obejct.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
-	public Bookshelf intersect(Bookshelf shelf) throws IllegalArgumentException;
+	public Bookshelf intersect(Bookshelf shelf) throws NullPointerException;
 	
 	/**
-	 * Returns a bookshelf containly found only on this Bookshelf.
+	 * Returns a bookshelf containing found only on this Bookshelf.
 	 * 
 	 * @param shelf the shelf to take the difference with.
 	 * 
 	 * @return a new Bookshelf object.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
-	public Bookshelf difference(Bookshelf shelf) throws IllegalArgumentException;
+	public Bookshelf difference(Bookshelf shelf) throws NullPointerException;
 	
 	/**
 	 * Returns a bookshelf containing a subset of Book objects which
@@ -100,9 +100,9 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @return a new Bookshelf object.
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public Bookshelf subset(Comparable<Book> comparable) throws IllegalArgumentException;
+	public Bookshelf subset(Comparable<Book> comparable) throws NullPointerException;
 
 	/**
 	 * Gets the value of the given property. If the given property does not
@@ -112,9 +112,9 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @return the value of the property
 	 * 
-	 * @throws IllegalArgumentException if the property given is null
+	 * @throws NullPointerException if the property given is null
 	 */
-	public String getProperty(String name) throws IllegalArgumentException;
+	public String getProperty(String name) throws NullPointerException;
 	
 	
 	/**
