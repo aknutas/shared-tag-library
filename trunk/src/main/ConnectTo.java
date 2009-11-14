@@ -35,7 +35,7 @@ public class ConnectTo extends JDialog {
 
 	/**
 	 * @param owner
-	 * @param treeView 
+	 * @param treeView
 	 */
 	public ConnectTo(Frame owner, Controller ctl, TreeView treeView) {
 		super(owner);
@@ -134,12 +134,10 @@ public class ConnectTo extends JDialog {
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					catch (NullPointerException e) {
+					} catch (NullPointerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					catch (RemoteObjectException e) {
+					} catch (RemoteObjectException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

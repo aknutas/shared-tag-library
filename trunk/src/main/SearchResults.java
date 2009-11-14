@@ -10,11 +10,11 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
+import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
+import controller.Controller;
 import data.Book;
 import data.Bookshelf;
-import data.VirtualBook;
 
 public class SearchResults extends JScrollPane {
 
@@ -24,16 +24,15 @@ public class SearchResults extends JScrollPane {
 
 	private Bookshelf bookshelf;
 	List<Result> results;
+	Controller control = null;
 
 	/**
 	 * This is the default constructor
 	 */
-	public SearchResults() {
+	public SearchResults(Controller c) {
 		super(panel);
+		control = c;
 		initialize();
-
-		// Just a demo, will be adding full event/interaction logic...
-		// addDemoResult();
 	}
 
 	protected Result addResult(Result result) {
@@ -55,7 +54,7 @@ public class SearchResults extends JScrollPane {
 			while (result.hasNext() && count < 20) {
 				Book b = result.next();
 				System.out.println("TITLE: " + b.getProperty("title"));
-				results.add(new Result(b));
+				results.add(new Result(b, this));
 				count++;
 			}
 
@@ -73,7 +72,7 @@ public class SearchResults extends JScrollPane {
 			panel.add(r);
 			r.draw();
 		}
-		
+
 		validate();
 		panel.repaint();
 		this.repaint();
@@ -92,7 +91,8 @@ public class SearchResults extends JScrollPane {
 		results = new ArrayList<Result>();
 
 		try {
-			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+			UIManager
+					.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {
 			System.out.println("Cannot set new Theme for Java Look and Feel.");
 		}
@@ -101,6 +101,10 @@ public class SearchResults extends JScrollPane {
 	protected Result removeResult(Result result) {
 
 		panel.remove(result);
+		
+		control.removeBook(bookshelf, result.getBook());
+		resetResults();
+		
 		return result;
 	}
 

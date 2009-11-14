@@ -13,7 +13,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
+import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
@@ -41,12 +41,12 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	protected void draw() {
 
-		((DefaultTreeModel)tree.getModel()).reload();
+		((DefaultTreeModel) tree.getModel()).reload();
 		this.repaint();
 	}
-	
+
 	public void addChild(Bookshelf shelf) {
-		
+
 		if (shelf != null) {
 			top.add(new TreeNode(shelf));
 		}
@@ -97,7 +97,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		tree.addTreeSelectionListener(this);
 
 		try {
-			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+			UIManager
+					.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {
 			System.out.println("Cannot set new Theme for Java Look and Feel.");
 		}
@@ -117,7 +118,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 		} catch (ClassCastException e1) {
 			System.out.println("You don't want to browse the library root...");
 		} catch (NullPointerException e2) {
-			
+
 		}
 	}
 

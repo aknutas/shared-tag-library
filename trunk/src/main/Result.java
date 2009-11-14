@@ -2,31 +2,28 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
-
-import data.Book;
-import data.Bookshelf;
-import data.Library;
-import data.VirtualBook;
-import data.VirtualBookshelf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map.Entry;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
+
+import data.Book;
 
 /**
  * @author patrick
@@ -35,22 +32,30 @@ import java.awt.Insets;
 public class Result extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static final int tagOffset = 5;
 	private JPanel RightNavigation = null;
 	private JPanel Title = null;
-	private JButton save = null;
-	private JButton send = null;
+	private JCheckBox save = null;
+	private JButton delete = null;
 	private JLabel title = null;
 	private JPanel Content = null;
 	private JProgressBar progressBar = null;
 
 	private Book book = null;
-	private Bookshelf bookshelf = null;
-	private Library library = null;
+	
+	public Book getBook() {
+		return book;
+	}
+
 	private JTextField tagContent = null;
 
 	GridBagConstraints tagContentConstraints;
 	GridBagConstraints tagTitleConstraints;
 	GridBagConstraints tagConstraints;
+	GridBagConstraints tagsConstraints;
+	
+	private SearchResults results;
+	private Result self;
 
 	/**
      * 
@@ -63,41 +68,16 @@ public class Result extends JPanel {
 	}
 
 	/**
-	 * This is the default constructor
-	 */
-	public Result() {
-		super();
-		initialize();
-
-	}
-
-	/**
-	 * @param l
-	 */
-	public Result(Library l) {
-		super();
-		library = l;
-		initialize();
-	}
-
-	/**
 	 * @param b
 	 */
-	public Result(Book b) {
+	public Result(Book b, SearchResults c) {
 		super();
+		self = this;
+		results = c;
 		book = b;
 		initialize();
 	}
-
-	/**
-	 * @param b
-	 */
-	public Result(Bookshelf b) {
-		super();
-		bookshelf = b;
-		initialize();
-	}
-
+	
 	/**
 	 * This method initializes Content
 	 * 
@@ -109,30 +89,52 @@ public class Result extends JPanel {
 			tagContentConstraints = new GridBagConstraints();
 			tagContentConstraints.gridx = 1;
 			tagContentConstraints.gridy = 0;
-			tagContentConstraints.weightx = .8;
-			tagContentConstraints.insets = new Insets(5, 0, 5, 5);
+			tagContentConstraints.weightx = 0;
+			tagContentConstraints.weighty = 1;
+			tagContentConstraints.insets = new Insets(5, 5, 5, 5);
 			tagContentConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+			tagContentConstraints.fill = GridBagConstraints.NONE;
+
 			tagConstraints = new GridBagConstraints();
 			tagConstraints.gridx = 2;
 			tagConstraints.gridy = 0;
-			tagConstraints.weightx = .8;
-			tagConstraints.insets = new Insets(5, 0, 5, 5);
+			tagConstraints.weightx = 1;
+			tagConstraints.insets = new Insets(8, 5, 5, 5);
 			tagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+			tagConstraints.fill = GridBagConstraints.NONE;
+			tagConstraints.weighty = 1;
+			
+			tagsConstraints = new GridBagConstraints();
+			tagsConstraints.gridx = 2;
+			tagsConstraints.gridy = 1;
+			tagsConstraints.weightx = 1;
+			tagsConstraints.insets = new Insets(8, 5, 5, 5);
+			tagsConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+			tagsConstraints.fill = GridBagConstraints.VERTICAL;
+			tagsConstraints.weighty = 2;
+
 			tagTitleConstraints = new GridBagConstraints();
 			tagTitleConstraints.insets = new Insets(8, 5, 5, 5);
 			tagTitleConstraints.gridy = 0;
 			tagTitleConstraints.gridx = 0;
-			tagTitleConstraints.anchor = GridBagConstraints.FIRST_LINE_END;
+			tagTitleConstraints.weighty = 1;
+			tagTitleConstraints.anchor = GridBagConstraints.PAGE_START;
+			tagTitleConstraints.fill = GridBagConstraints.NONE;
 
 			Content = new JPanel();
 			Content.setLayout(new GridBagLayout());
+			
+			JLabel addTag = new JLabel("Add Tag: ");
+			addTag.setFont(new Font("Sans", Font.PLAIN, 14));
+			
+			JLabel tags = new JLabel("Tags: ");
+			tags.setFont(new Font("Sans", Font.PLAIN, 14));
 
-			Content.add(new JLabel("Add Tag: "), tagTitleConstraints);
-			Content.add(new JLabel("Tags: "), tagConstraints);
+			Content.add(addTag, tagTitleConstraints);
+			Content.add(tags, tagConstraints);
 			Content.add(getJTextField(), tagContentConstraints);
 		}
 
-		int yOffset = 10;
 		if (book != null) {
 
 			Iterator<Entry<String, Integer>> properties = book.enumerateTags();
@@ -143,15 +145,12 @@ public class Result extends JPanel {
 				JLabel value = new JLabel(e.getKey());
 				value.setFont(new Font("Sans", Font.BOLD, 14));
 
-				tagConstraints.gridy = yOffset;
+				tagsConstraints.gridy = tagsConstraints.gridy + tagOffset;
 
-				Content.add(value, tagConstraints);
-
-				++yOffset;
+				Content.add(value, tagsConstraints);
 			}
 
 			draw();
-
 		}
 
 		return Content;
@@ -164,7 +163,7 @@ public class Result extends JPanel {
 			JLabel value = new JLabel(s);
 			value.setFont(new Font("Sans", Font.BOLD, 14));
 
-			tagConstraints.gridy = tagConstraints.gridy + 10;
+			tagConstraints.gridy = tagConstraints.gridy + tagOffset;
 
 			Content.add(value, tagConstraints);
 		}
@@ -196,8 +195,8 @@ public class Result extends JPanel {
 			RightNavigation = new JPanel();
 			RightNavigation.setLayout(new BoxLayout(getRightNavigation(),
 					BoxLayout.Y_AXIS));
-			// RightNavigation.add(getSave(), null);
-			// RightNavigation.add(getSend(), null);
+			RightNavigation.add(getSave(), null);
+			RightNavigation.add(deleteResult(), null);
 		}
 		return RightNavigation;
 	}
@@ -207,10 +206,10 @@ public class Result extends JPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getSave() {
+	private JCheckBox getSave() {
 		if (save == null) {
-			save = new JButton();
-			save.setName("jButton");
+			save = new JCheckBox();
+			save.setName("Save");
 			save.setText("Save");
 			save.setAlignmentY(CENTER_ALIGNMENT);
 		}
@@ -222,15 +221,23 @@ public class Result extends JPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getSend() {
-		if (send == null) {
-			send = new JButton();
-			send.setText("Send");
-			send.setName("jButton1");
-			send.setText("Send");
-			send.setAlignmentY(CENTER_ALIGNMENT);
+	private JButton deleteResult() {
+		
+		if (delete == null) {
+			delete = new JButton();
+			delete.setText("Delete");
+			delete.setName("Delete");
+			delete.setAlignmentY(CENTER_ALIGNMENT);
+			delete.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
+
+					if (book != null) {
+						results.removeResult(self);
+					}
+				}
+			});
 		}
-		return send;
+		return delete;
 	}
 
 	/**
@@ -240,20 +247,26 @@ public class Result extends JPanel {
 	 */
 	private JPanel getTitle() {
 		if (Title == null) {
+			
+			GridBagConstraints name = new GridBagConstraints();
+			name.gridx = 0;
+			name.gridy = 0;
+			name.weightx = 0;
+			name.insets = new Insets(5, 5, 5, 5);
+			name.anchor = GridBagConstraints.FIRST_LINE_START;
+			name.fill = GridBagConstraints.NONE;
 
 			title = new JLabel("Title?");
+			title.setFont(new Font("Sans", Font.BOLD, 14));
+			
 			if (book != null) {
-				title.setText("Book: " + book.getProperty("title") + " | By: "
-						+ book.getProperty("author"));
-			} else if (bookshelf != null) {
-				title.setText("Bookshelf: " + bookshelf.getProperty("name"));
+				title.setText("  Book: " + book.getProperty("title")
+						+ "   |   By: " + book.getProperty("author"));
 			}
 
 			Title = new JPanel();
-			Title.setLayout(new BoxLayout(getTitle(), BoxLayout.X_AXIS));
-			Title.add(title, null);
-			Title.setAlignmentX(CENTER_ALIGNMENT);
-			Title.setAlignmentY(CENTER_ALIGNMENT);
+			Title.setLayout(new GridBagLayout());
+			Title.add(title, name);
 		}
 		return Title;
 	}
@@ -272,7 +285,8 @@ public class Result extends JPanel {
 		this.add(getContent(), BorderLayout.CENTER);
 		this.add(getProgressBar(), BorderLayout.SOUTH);
 		try {
-			UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+			UIManager
+					.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {
 			System.out.println("Cannot set new Theme for Java Look and Feel.");
 		}

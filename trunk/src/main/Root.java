@@ -7,6 +7,7 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +18,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
+import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
@@ -37,7 +38,6 @@ public class Root extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-	    	
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -46,7 +46,7 @@ public class Root extends JFrame {
 				thisClass.setVisible(true);
 				try {
 					UIManager
-							.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+							.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
 				} catch (UnsupportedLookAndFeelException ex) {
 					System.out
 							.println("Cannot set new Theme for Java Look and Feel.");
@@ -66,7 +66,7 @@ public class Root extends JFrame {
 	private Label searchLabel = null;
 	private Bookshelf shelf = null;
 
-	private SearchResults searchResults = new SearchResults();
+	private SearchResults searchResults = null;
 	private TreeView treeView = null;
 
 	private AddBookshelf addBookshelfDialog = null;
@@ -77,7 +77,7 @@ public class Root extends JFrame {
 	 */
 	public Root() {
 		super();
-		//This is where message trigger handler gets created and started up.
+		// This is where message trigger handler gets created and started up.
 		msgTrigger = new MsgTrigger();
 		msgTimer = new javax.swing.Timer(1000, msgTrigger);
 		msgTimer.setInitialDelay(2000);
@@ -106,7 +106,8 @@ public class Root extends JFrame {
 			connectTo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					ConnectTo dialog = new ConnectTo(thisClass, control, treeView);
+					ConnectTo dialog = new ConnectTo(thisClass, control,
+							treeView);
 					dialog.setVisible(true);
 
 					draw();
@@ -139,8 +140,8 @@ public class Root extends JFrame {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
-			jSplitPane.setLeftComponent(getTreeView());
 			jSplitPane.setRightComponent(getSearchResults());
+			jSplitPane.setLeftComponent(getTreeView());
 		}
 		return jSplitPane;
 	}
@@ -184,8 +185,9 @@ public class Root extends JFrame {
 			addBook.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
-					addBookDialog = new AddBook(thisClass, control, shelf, searchResults, treeView);
-					addBookDialog.setVisible(true);					
+					addBookDialog = new AddBook(thisClass, control, shelf,
+							searchResults, treeView);
+					addBookDialog.setVisible(true);
 
 					draw();
 				}
@@ -204,6 +206,9 @@ public class Root extends JFrame {
 	 * @return main.SearchResults
 	 */
 	private SearchResults getSearchResults() {
+		if (searchResults == null) {
+			searchResults = new SearchResults(control);
+		}
 		return searchResults;
 	}
 
@@ -253,21 +258,19 @@ public class Root extends JFrame {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Book Butler");
 	}
-	
-    /**
-     * This is the ActionListener that gets activated by the
-     * messagehandler timer.
-     * 
-     * @Author Antti Knutas
-     */
-    private class MsgTrigger implements ActionListener {
-	@Override
-	public void actionPerformed(ActionEvent e) {
-	    control.messageHandler();
+
+	/**
+	 * This is the ActionListener that gets activated by the messagehandler
+	 * timer.
+	 * 
+	 * @Author Antti Knutas
+	 */
+	private class MsgTrigger implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			control.messageHandler();
+		}
+
 	}
-	
-	
-    }
-    
-    
+
 }
