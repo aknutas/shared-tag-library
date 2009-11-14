@@ -3,6 +3,7 @@ package butler;
 import java.util.Iterator;
 import java.util.Map;
 
+import operations.BookshelfOperations;
 import operations.LibraryOperations;
 
 import org.encog.matrix.Matrix;
@@ -20,33 +21,51 @@ import data.Book;
 import data.Bookshelf;
 import data.IDPair;
 import data.IDPairSet;
-import data.Library;
 import data.VirtualBook;
 import data.VirtualBookshelf;
-import data.VirtualLibrary;
 
 public class Butler{
 
 	private IDPairSet idPairs;
-	private ButlerWeights prevWeights;
+	private ButlerWeights currentWeights;
 	private BasicNetwork brain;
 	private int numTags;
 	private static final String OTHER = "___OTHER___";
 
+	/**
+	 * Default constructor. Initializes this with a new BasicNetwork brain.
+	 */
 	public Butler(){
 		brain = new BasicNetwork();
 	}
+	
+	/**
+	 * Creates this with an existing ButlerWeights object
+	 * @param weights the existing ButlerWeights object.
+	 */
+	public Butler(ButlerWeights weights){
+		brain = new BasicNetwork();
+		setMatrixes(weights);
+	}
 
-	public void firstTrainingData(Library basis, Library antiBasis) throws IllegalArgumentException{
+	/**
+	 * Initializes brain from basis and antiBasis
+	 * @param basis books to return 1.0
+	 * @param antiBasis books to return -1.0
+	 * @throws IllegalArgumentException
+	 */
+	public void firstTrainingData(Bookshelf basis, Bookshelf antiBasis) throws IllegalArgumentException{
 
 		if (null == basis)
 			throw new IllegalArgumentException("basis cannot be null.");
+		if (null == antiBasis)
+			throw new IllegalArgumentException("antiBasis cannot be null.");
 
-		Iterator<Map.Entry<String, Integer>> tags = LibraryOperations.getTags(basis);
+		Iterator<Map.Entry<String, Integer>> tags = BookshelfOperations.enumerateTags(basis);
 		int numBooks = LibraryOperations.getNumBooks();
 		numTags = LibraryOperations.getNumTags();
 		//System.out.println("numTags = " + numTags);
-		Iterator<Map.Entry<String, Integer>> antiTags = LibraryOperations.getTags(antiBasis);
+		Iterator<Map.Entry<String, Integer>> antiTags = BookshelfOperations.enumerateTags(antiBasis);
 		numBooks += LibraryOperations.getNumBooks();
 		numTags += LibraryOperations.getNumTags() + 1;
 		//System.out.println("numTags = " + numTags);
@@ -93,10 +112,10 @@ public class Butler{
 
 		//System.out.println("there are: " + i + " tags.");
 
-		String[] names = new String[numBooks];
+		//String[] names = new String[numBooks];
 
-		Iterator<Book> basisBooks = basis.getMasterShelf().iterator();
-		Iterator<Book> antiBasisBooks = antiBasis.getMasterShelf().iterator();
+		Iterator<Book> basisBooks = basis.iterator();
+		Iterator<Book> antiBasisBooks = antiBasis.iterator();
 		int j = 0;
 		while (basisBooks.hasNext()){
 			Book current = basisBooks.next();
@@ -114,7 +133,7 @@ public class Butler{
 				//inputValues[j][index] = -1.0;
 			}
 			expected[j][0] = 1.0;
-			names[j] = current.getProperty("title");
+			//names[j] = current.getProperty("title");
 			++j;
 
 		}
@@ -132,7 +151,7 @@ public class Butler{
 				//inputValues[j][index] = -1.0;
 			}
 			expected[j][0] = -1.0;
-			names[j] = current.getProperty("title");
+			//names[j] = current.getProperty("title");
 			++j;
 
 		}
@@ -159,11 +178,9 @@ public class Butler{
 		} while(train.getError() > 0.01);
 
 		Iterator<Synapse> currentWeights = brain.getStructure().getSynapses().iterator();
-		Matrix[] weights = new Matrix[brain.getStructure().getSynapses().size()];
-		int cur = 0;
-		while (currentWeights.hasNext())
-			weights[cur] = currentWeights.next().getMatrix();
-		prevWeights = new ButlerWeights(weights);
+		Matrix input = currentWeights.next().getMatrix();
+		Matrix output = currentWeights.next().getMatrix();
+		this.currentWeights = new ButlerWeights(input, output, numTags);
 		
 		// test the neural network
 		//System.out.println("Neural Network Results:");
@@ -188,6 +205,13 @@ public class Butler{
 
 	}
 
+	/**
+	 * Returns a double between -1.0 and 1.0 indicating how likely the input book
+	 * would belong with the learned books.
+	 * @param b the book to examine
+	 * @return see description
+	 */
+	
 	public double examineBook(Book b){
 
 		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
@@ -219,16 +243,29 @@ public class Butler{
 
 	}
 	
-	//public void setMatrixes(Matrix[] weights){
-	//	brain.addLayer(new ContextLayer());
-	//}
+	/**
+	 * Sets the weights within brain to those found in the input
+	 * ButlerWeights object.
+	 * @param weights the existing weights to copy.
+	 */
+	protected void setMatrixes(ButlerWeights weights){
+		
+		numTags = weights.getNumTags();
+		
+		brain.addLayer(new ContextLayer(numTags));
+		brain.addLayer(new ContextLayer(1));
+
+		brain.getStructure().finalizeStructure();
+		
+		Iterator<Synapse> synapses = brain.getStructure().getSynapses().iterator();
+		synapses.next().setMatrix(weights.getInputWeights());
+		synapses.next().setMatrix(weights.getOutputWeights());
+	}
 	
 	public static void main(String[] args){
 		//ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
 		//sg.generateLibrary(20, 5);
 
-		Library basis = new VirtualLibrary();
-		Library antiBasis = new VirtualLibrary();
 		Bookshelf bs = new VirtualBookshelf();
 
 		Book green = new VirtualBook("Green Eggs and Ham", "Dr. Seuss");
@@ -354,8 +391,6 @@ public class Butler{
 
 		bs.insert(places);
 
-		basis.addBookshelf(bs);
-
 		Book it = new VirtualBook("It", "Stephen King");
 		String[] itTags = {"stephen king","horror","horror book","fiction",
 				"book recommendations","yearly harvest","dark fantasy",
@@ -385,12 +420,11 @@ public class Butler{
 		}
 		Bookshelf shelf = new VirtualBookshelf();
 		shelf.insert(it);
-		antiBasis.addBookshelf(shelf);
 		Butler buddy = new Butler();
-		buddy.firstTrainingData(basis, antiBasis);
+		buddy.firstTrainingData(bs, shelf);
 
 		Book catBack = new VirtualBook("The Cat in the Hat Comes Back", "Dr. Seuss");
-		String[] backTags = {"dr seuss","childrens books)","beginner books",
+		String[] backTags = {"dr seuss","childrens books","beginner books",
 				"childrens classics","classic","rhyming","collectible",
 				"kids","beginner readers","childrens","childrens series",
 				"1958 edition","cat in the hat","cat in the hat 2",
