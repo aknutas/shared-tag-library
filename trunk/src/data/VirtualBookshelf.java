@@ -38,14 +38,16 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * extending VirtualBookshelf should create their own copy
 	 * constructor.
 	 * 
-	 * @param shelf the VirtualBookshelf to copy
+	 * @param fromShelf the VirtualBookshelf to copy
+	 * @param comparable the comparable to use with the iterator of
+	 *        this VirtualBookshelf
 	 */
-	public VirtualBookshelf(Bookshelf fromShelf, Comparable<Book> comparable) {
+	public VirtualBookshelf(Bookshelf fromShelf, Comparable<Book> comparable) throws NullPointerException {
 		this();
 		
 		this.comparable = comparable;
 		if(null == fromShelf)
-			return;
+			throw new NullPointerException("fromShelf cannot be null");
 		
 		if(fromShelf instanceof VirtualBookshelf)
 			((VirtualBookshelf) fromShelf).deepCopyInto(this);
@@ -58,9 +60,9 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @return a new Bookshelf identical to this.
 	 */
-	private VirtualBookshelf deepCopyInto(VirtualBookshelf toShelf) throws IllegalArgumentException {
+	private VirtualBookshelf deepCopyInto(VirtualBookshelf toShelf) throws NullPointerException {
 		if(null == toShelf)
-			throw new IllegalArgumentException("toShelf cannot be null");
+			throw new NullPointerException("toShelf cannot be null");
 		
 		for(Bookshelf shelf : this.shelves)
 			toShelf.addBookshelf(shelf);
@@ -72,15 +74,15 @@ public final class VirtualBookshelf implements Bookshelf {
 	}
 	
 	/**
-	 * Creates a new Bookshelf object which contains no books.
+	 * Creates a new Bookshelf object which contains no boIllegalArgumentExceptionoks.
 	 * 
 	 * @throws IllegalArgumentException if the name given is null
 	 */
-	public VirtualBookshelf(String name) throws IllegalArgumentException {
+	public VirtualBookshelf(String name) throws NullPointerException {
 		this();
 		
 		if(null == name)
-			throw new IllegalArgumentException("name given is null");
+			throw new NullPointerException("name given is null");
 		
 		this.setProperty("name", name);
 	}
@@ -91,11 +93,11 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @param book the book to add to the bookshelf.
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public void insert(Book book) throws IllegalArgumentException {
+	public void insert(Book book) throws NullPointerException {
 		if(null == book)
-			throw new IllegalArgumentException("book cannot be null");
+			throw new NullPointerException("book cannot be null");
 
 		this.bookshelf.add(book);
 	}
@@ -110,18 +112,18 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @return true if the book was removed, otherwise false.
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public boolean remove(Book book) throws IllegalArgumentException {
+	public boolean remove(Book book) throws NullPointerException {
 		if(null == book)
-			throw new IllegalArgumentException("book cannot be null");
+			throw new NullPointerException("book cannot be null");
 
 		return false;
 	}
 
-	public boolean contains(Book book) throws IllegalArgumentException {
+	public boolean contains(Book book) throws NullPointerException {
 		if(null == book)
-			throw new IllegalArgumentException("book cannot be null");
+			throw new NullPointerException("book cannot be null");
 		
 		return this.bookshelf.contains(book);
 	}
@@ -172,9 +174,9 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @param shelf the bookshelf to wed.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
-	public Bookshelf union(Bookshelf shelf) throws IllegalArgumentException {
+	public Bookshelf union(Bookshelf shelf) throws NullPointerException {
 		if(null == shelf)
 			throw new IllegalArgumentException("shelf cannot be null");
 
@@ -188,21 +190,17 @@ public final class VirtualBookshelf implements Bookshelf {
 		return newShelf;
 	}
 
-	/**@Override
-	public Bookshelf subset(Book book) throws IllegalArgumentException {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
+	/**
 	 * Computes the intersection of two bookshelf objects and returns a new
 	 * Bookshelf.
 	 * 
 	 * @param shelf the bookshelf to intersect with.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
 	public Bookshelf intersect(Bookshelf shelf) {
 		if(null == shelf)
-			throw new IllegalArgumentException("shelf cannot be null");
+			throw new NullPointerException("shelf cannot be null");
 
 		if(shelf instanceof VirtualBookshelf) {
 			// merge
@@ -217,15 +215,11 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @param shelf the bookshelf to difference with.
 	 * 
-	 * @throws IllegalArgumentExcept@Override
-	public Bookshelf subset(Book book) throws IllegalArgumentException {
-	    // TODO Auto-generated method stub
-	    return null;
-	}ion if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
 	public Bookshelf difference(Bookshelf shelf) {
 		if(null == shelf)
-			throw new IllegalArgumentException("shelf cannot be null");
+			throw new NullPointerException("shelf cannot be null");
 
 		return null;
 	}
@@ -236,9 +230,9 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @param book the model book.
 	 * 
-	 * @throws IllegalArgumentException if the book given is null.
+	 * @throws NullPointerException if the book given is null.
 	 */
-	public Bookshelf subset(Comparable<Book> comparable) throws IllegalArgumentException {
+	public Bookshelf subset(Comparable<Book> comparable) throws NullPointerException {
 		if(null == comparable)
 			throw new NullPointerException("comparable cannot be null");
 		
@@ -257,11 +251,11 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @return the value of the property
 	 * 
-	 * @throws IllegalArgumentException if the property given is null
+	 * @throws NullPointerException if the property given is null
 	 */
-	public String getProperty(String name) throws IllegalArgumentException {
+	public String getProperty(String name) throws NullPointerException {
 		if(null == name)
-			throw new IllegalArgumentException("name cannot be null");
+			throw new NullPointerException("name cannot be null");
 		
 		return this.properties.get(name);
 	}
@@ -275,11 +269,11 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @return the old property value
 	 * 
-	 * @throws IllegalArgumentException if the name of value given is null
+	 * @throws NullPointerException if the name of value given is null
 	 */
 	public String setProperty(String name, String value) {
 		if(null == name || null == value)
-			throw new IllegalArgumentException("name or value cannot be null");
+			throw new NullPointerException("name or value cannot be null");
 		
 		return this.properties.put(name, value);
 	}
@@ -311,9 +305,9 @@ public final class VirtualBookshelf implements Bookshelf {
 	 *
 	 * @param shelf the shelf to add.
 	 * 
-	 * @throws IllegalArgumentException if the shelf given is null.
+	 * @throws NullPointerException if the shelf given is null.
 	 */
-	private void addBookshelf(Bookshelf shelf) throws IllegalArgumentException {
+	private void addBookshelf(Bookshelf shelf) throws NullPointerException {
 		if(null == shelf)
 			throw new IllegalArgumentException("shelf cannot be null");
 
