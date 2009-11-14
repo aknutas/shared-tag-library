@@ -8,10 +8,10 @@ import javax.jdo.annotations.PersistenceCapable;
 @PersistenceCapable(detachable="true")
 public class ButlerWeights {
 
-	Matrix inputs;
-	Matrix outputs;
-	Long timestamp;
-	final int numTags;
+	private Matrix inputs;
+	private Matrix outputs;
+	private Long timestamp;
+	private final int numTags;
 	
 	public ButlerWeights(Matrix input, Matrix output, int tags){
 		inputs = input;
