@@ -128,7 +128,8 @@ public class AddBookshelf extends JDialog {
 					
 					if (shelf != null) {
 						results.setResults(shelf);
-						tree.refresh();
+						tree.addChild(shelf);
+						tree.draw();
 					}
 					
 					setVisible(false);
