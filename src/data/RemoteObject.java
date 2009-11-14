@@ -1,9 +1,12 @@
 package data;
 
+import java.util.*;
 import java.util.concurrent.*;
 import network.*;
 import network.messages.Message;
 import data.messages.*;
+
+
 /**
  * The RemoteObject class implements the ClientResponder interface and is used
  * as the base object for all Remote (client side) Libraries, Bookshelves, and
@@ -13,6 +16,8 @@ import data.messages.*;
  * @author Andrew Alm
  */
 public abstract class RemoteObject implements ClientResponder {
+	
+	//final private Map<Integer, Integer> messageCount;
 	
 	final protected int connection;
 	final protected Control network;
@@ -58,7 +63,7 @@ public abstract class RemoteObject implements ClientResponder {
 	 * Creates a new RemoteObject from the given connection and
 	 * network Control object.
 	 * 
-	 * @param connection the connection id
+	 * @param connection the conne#ifdef DSAFction id
 	 * @param network the network Control object
 	 * 
 	 * @throws NullPointerException if the network control object is
@@ -92,6 +97,15 @@ public abstract class RemoteObject implements ClientResponder {
 		
 		if(!this.ping(timeout))
 			throw new RemoteObjectException();
+	}
+	
+	/**
+	 * Gets the connection ID of the RemoteObject.
+	 * 
+	 * @return the connection ID
+	 */
+	public int getConnectionID() {
+		return this.connection;
 	}
 	
 	/**
