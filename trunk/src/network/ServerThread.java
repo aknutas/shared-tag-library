@@ -82,7 +82,7 @@ public class ServerThread extends CommThread {
 		}
 	    } else {
 		try {
-		    Thread.sleep(25);
+		    Thread.sleep(15);
 		} catch (InterruptedException e) {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
