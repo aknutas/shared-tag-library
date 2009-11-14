@@ -118,7 +118,7 @@ public final class VirtualBookshelf implements Bookshelf {
 		if(null == book)
 			throw new NullPointerException("book cannot be null");
 
-		return false;
+		return this.bookshelf.remove(book);
 	}
 
 	public boolean contains(Book book) throws NullPointerException {
