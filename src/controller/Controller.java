@@ -17,10 +17,13 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.Map.Entry;
 
+import org.encog.matrix.Matrix;
+
+import butler.ButlerWeights;
+
 import scripts.Parser;
 import scripts.ScriptGenerator;
 
-//import org.joone.engine.Matrix;
 
 public class Controller {
 
@@ -410,17 +413,19 @@ public class Controller {
 	 * it this is just an early version more to follow
 	 */
 
-	/**
-	 * Returns the set of bias Matrixs for the butler(s) that were stored in the
-	 * DB. ( Antti, can you "make room" in the database to store this as well?
-	 * :-D )
-	 * 
-	 * 
-	 * @return a stored Butler
-	 */
-	// public Collection<Matrix> retrieveButler(){
-	// return null;
-	// }
+    /**
+     * Returns a butlerweights if something has been stored, or a null otherwise.
+     * 
+     * @return a stored Butler
+     */
+    public ButlerWeights retrieveButlerWeights() {
+	List<ButlerWeights> butlerList = qb.getButlerWeights();
+	if (butlerList.size() == 0)
+	    return null;
+
+	//TODO Storing several butlers and then retrieving the one you want
+	return butlerList.get(0);
+    }
 
 	public Bookshelf search(String str) {
 		if (str == null)
@@ -513,6 +518,8 @@ public class Controller {
     /**
      * This method is responsible for handling and responding to incoming
      * messages and status changes.
+     * 
+     * @author Antti Knutas (Complain to him about errors)
      */
     public void messageHandler() {
 	// Debug
@@ -565,7 +572,8 @@ public class Controller {
 	    // Debug
 	    // System.out.println("Read too soon: msgqueues empty");
 	}
-	// Thread status iteration ought to come here
+	// This is where the heartbeat-initiated connection status iteration
+	// happens
 	Map<Integer, Integer> statusMap = cntrl.getStatus();
 
 	// Iterating through thread statuses
@@ -576,8 +584,10 @@ public class Controller {
 
 	    while (statusIter.hasNext()) {
 		Entry<Integer, Integer> tryentry = statusIter.next();
-		if (tryentry.getValue() == Definitions.DISCONNECTED)
-		{
+		if (tryentry.getValue() == Definitions.DISCONNECTED) {
+		    // Events to be triggered with a connection is disconnected.
+		    // tryentry.getKey will give the disconnected thread's
+		    // connection id as an integer
 		    cntrl.disconnect(tryentry.getKey());
 		}
 	    }

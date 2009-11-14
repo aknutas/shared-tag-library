@@ -2,6 +2,8 @@ package database;
 
 import java.util.*;
 
+import butler.ButlerWeights;
+
 import data.Bookshelf;
 import network.Control;
 
@@ -67,5 +69,20 @@ public interface QueryBuilder {
      * @param shelf
      */
     public int shelfRemove(Bookshelf shelf);
-
+    
+    /**
+     * Checks if the database has a stored butlerweights object, and returns a list with them.
+     * 
+     * @return int
+     */
+    public List<ButlerWeights> getButlerWeights();
+    
+    /**
+     * Stores a butlerweights object into the database.
+     *  
+     * @param butler The butler to be stored.
+     * @return int
+     */
+    public int storeButler(ButlerWeights butler);
+    
 }
