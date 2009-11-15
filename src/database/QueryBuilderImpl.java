@@ -2,6 +2,8 @@ package database;
 
 import java.util.*;
 
+import controller.ProgramProperties;
+
 import butler.ButlerWeights;
 
 import data.Bookshelf;
@@ -137,6 +139,16 @@ public final class QueryBuilderImpl implements QueryBuilder {
 	db.removeOne(butler);
 	int returnvalue = db.commitOne(butler);
 	return returnvalue;
+    }
+
+    public ProgramProperties getProperties() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    public int storeProperties(ProgramProperties properties) {
+	// TODO Auto-generated method stub
+	return 0;
     }
 
 }

@@ -110,6 +110,7 @@ public class CommunicationImplTest {
 	    }
 
 	    testmessage = new ChatMessage("HULABALOO");
+	    Communication comm = new CommunicationImpl();
 
 	    try {
 		comm.Send(s, testmessage);

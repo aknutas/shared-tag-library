@@ -10,13 +10,25 @@ import controller.*;
  * @author Andrew Alm
  */
 public class DefaultProperties {
+    
+    	ProgramProperties props;
+    
+    	public DefaultProperties()
+    	{
+    	    props = ProgramProperties.getInstance();
+    	}
+    	
+    	public DefaultProperties(ProgramProperties props)
+    	{
+    	    this.props = props;
+    	}
 
 	/**
 	 * This method is used to set all the default properties for the
 	 * ProgramProperties class and then save to the database. This
 	 * method will overwrite and previous values.
 	 */
-	public static void generate() {
+	public void generate() {
 		/* butler package properties */
 		// TODO: add butler package properties
 		
@@ -24,8 +36,8 @@ public class DefaultProperties {
 		// TODO: add controller package properties
 		
 		/* data package properties */
-		ProgramProperties.setProperty("data::timeout", new Integer(5000)); /* controls message timeout */
-		ProgramProperties.setProperty("data::iter_chunk", new Integer(20)); /* default iterator message chunk size */
+		props.setProperty("data::timeout", new Integer(5000)); /* controls message timeout */
+		props.setProperty("data::iter_chunk", new Integer(20)); /* default iterator message chunk size */
 		
 		/* main package properties */
 		// TODO: add main package properties
@@ -37,14 +49,15 @@ public class DefaultProperties {
 		// TODO: add operations package properties
 		
 		/* global properties */
-		ProgramProperties.setProperty("global::version", new Integer(1)); /* version (example) */
+		props.setProperty("global::version", new Integer(1)); /* version (example) */
 		
 		/* save to database */
-		ProgramProperties.saveProperties();
+		props.saveProperties();
 	}
 	
 	public static void main(String args[]) {
-		DefaultProperties.generate();
+	    	DefaultProperties propset = new DefaultProperties();
+		propset.generate();
 	}
 	
 }
