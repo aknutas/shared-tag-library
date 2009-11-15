@@ -38,7 +38,6 @@ public class ProgramProperties {
 
     private Map<String, Object> properties = new HashMap<String, Object>();
     private static ProgramProperties instance;
-    private static QueryBuilder qb;
 
     /**
      * Returns the singleton object reference. Use this to access the object.
@@ -47,7 +46,7 @@ public class ProgramProperties {
      */
     public synchronized static ProgramProperties getInstance() {
 	if (instance == null) {
-	    qb = new QueryBuilderImpl();
+	    QueryBuilder qb = new QueryBuilderImpl();
 	    instance = qb.getProperties();
 	}
 	if (instance == null)
@@ -68,6 +67,7 @@ public class ProgramProperties {
      * This method is used to to store all properties to the database backend.
      */
     public synchronized void saveProperties() {
+	QueryBuilder qb = new QueryBuilderImpl();
 	qb.storeProperties(this);
     }
 
