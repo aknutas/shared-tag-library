@@ -45,18 +45,21 @@ public class ProgramProperties {
      * @return ProgramProperties Singleton object reference
      */
     public synchronized static ProgramProperties getInstance() {
+	// Checking to see if we can load up the instance from the database.
 	if (instance == null) {
 	    QueryBuilder qb = new QueryBuilderImpl();
 	    instance = qb.getProperties();
 	}
+	// Don't put "else if" here. qb.getProperties can return null.
 	if (instance == null)
 	    instance = new ProgramProperties();
 	return instance;
     }
 
     /**
-     * The default constructor. If the class cannot be loaded from database, it
-     * will populate the class with the default settings.
+     * The default constructor. If the class cannot be loaded from database in
+     * the getInstance method, this will populate the class with the default
+     * settings.
      */
     protected ProgramProperties() {
 	DefaultProperties dp = new scripts.DefaultProperties(this);
