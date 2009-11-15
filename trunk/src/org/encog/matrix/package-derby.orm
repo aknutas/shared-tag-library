@@ -7,6 +7,7 @@
         <class name="Matrix" identity-type="datastore">
             <inheritance strategy="new-table"/>
             <field name="matrix" serialized="true" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+            	<column jdbc-type="BLOB"/>	
             </field>
         </class>
     </package>

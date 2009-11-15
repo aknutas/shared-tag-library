@@ -2,6 +2,8 @@ package database;
 
 import java.util.*;
 
+import controller.ProgramProperties;
+
 import butler.ButlerWeights;
 
 import data.Bookshelf;
@@ -84,5 +86,17 @@ public interface QueryBuilder {
      * @return int
      */
     public int storeButler(ButlerWeights butler);
+    
+    /**
+     * Stores ProgramProperties
+     * @return int Storing status.
+     */
+    public int storeProperties(ProgramProperties properties);
+    
+    /**
+     * Gets the stored ProgramProperties from the database.
+     * @return ProgramProperties
+     */
+    public ProgramProperties getProperties();
     
 }
