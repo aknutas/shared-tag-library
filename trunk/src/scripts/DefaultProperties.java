@@ -51,6 +51,10 @@ public class DefaultProperties {
 		/* global properties */
 		props.setProperty("global::version", new Integer(1)); /* version (example) */
 		
+	}
+	
+	public void store()
+	{
 		/* save to database */
 		props.saveProperties();
 	}
@@ -58,6 +62,7 @@ public class DefaultProperties {
 	public static void main(String args[]) {
 	    	DefaultProperties propset = new DefaultProperties();
 		propset.generate();
+		propset.store();
 	}
 	
 }

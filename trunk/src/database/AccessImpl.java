@@ -48,7 +48,11 @@ public class AccessImpl implements Access {
 		tx.rollback();
 	    }
 	}
-	ArrayList results = new ArrayList(queryresults);
+	ArrayList results = null;
+	if (queryresults==null)
+	    results = new ArrayList();
+	else
+	    results = new ArrayList(queryresults);
 	q.closeAll();
 	
 	return results;
