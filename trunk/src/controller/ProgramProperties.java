@@ -29,7 +29,7 @@ import java.util.*;
  */
 public final class ProgramProperties {
 
-	private static final Map<String, Serializable> properties = new HashMap<String, Serializable>();
+	private static final Map<String, byte[]> properties = new HashMap<String, byte[]>();
 	
 	/**
 	 * This method is used to load properties from the database. If a
@@ -66,7 +66,7 @@ public final class ProgramProperties {
 		if(null == value)
 			obj = ProgramProperties.properties.remove(name);
 		else
-			obj = ProgramProperties.properties.put(name, value);
+			obj = ProgramProperties.properties.put(name, ProgramProperties.serialize(value));
 		
 		return obj;
 	}
@@ -86,7 +86,48 @@ public final class ProgramProperties {
 		if(name == null)
 			throw new NullPointerException("name cannot be null");
 		
-		return ProgramProperties.properties.get(name);
+		return ProgramProperties.deserialize(ProgramProperties.properties.get(name));
+	}
+	
+	/**
+	 * This method is used to serialize an object into a byte array
+	 * to store in the database.
+	 * 
+	 * @param object the object to convert to a byte array
+	 * 
+	 * @return a byte array representing the object, or null on error
+	 * 
+	 * @throws NullPointerException if the object given is null
+	 */
+	private static byte[] serialize(Serializable object) throws NullPointerException {
+		if(object == null)
+			throw new NullPointerException("object cannot be null");
+		
+		try {
+			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+			(new ObjectOutputStream(byteStream)).writeObject(object);
+			return byteStream.toByteArray();
+		} catch (IOException ex) {
+			return null;
+		}
+	}
+	
+	/**
+	 * This method is used to convert a byte array into an Object.
+	 * 
+	 * @param buffer the byte array to convert to an object
+	 * 
+	 * @return the deserialized object, or null on error
+	 */
+	private static Object deserialize(byte[] buffer) {
+		if(null == buffer)
+			throw new NullPointerException("buffer cannot be null");
+		
+		try {
+			return (new ObjectInputStream(new ByteArrayInputStream(buffer))).readObject();
+		} catch(Exception ex) {
+			return null;
+		}
 	}
 	
 	/* unit test */
