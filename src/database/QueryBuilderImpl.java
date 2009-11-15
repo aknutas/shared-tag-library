@@ -141,14 +141,32 @@ public final class QueryBuilderImpl implements QueryBuilder {
 	return returnvalue;
     }
 
+    /**
+     * Stores ProgramProperties
+     * @return int Storing status.
+     */
+    @SuppressWarnings("unchecked")
     public ProgramProperties getProperties() {
-	// TODO Auto-generated method stub
-	return null;
+	Access db = AccessImpl.getInstance();
+	String querystring = "SELECT FROM controller.ProgramProperties";
+
+	List<ProgramProperties> returnlist = (List<ProgramProperties>) db
+		.query(querystring);
+
+	if (returnlist.size() == 0)
+	    return null;
+
+	return returnlist.get(0);
     }
 
+    /**
+     * Gets the stored ProgramProperties from the database.
+     * @return ProgramProperties
+     */
     public int storeProperties(ProgramProperties properties) {
-	// TODO Auto-generated method stub
-	return 0;
+	Access db = AccessImpl.getInstance();
+	int returnvalue = db.commitOne(properties);
+	return returnvalue;
     }
 
 }

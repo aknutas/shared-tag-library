@@ -68,7 +68,7 @@ public class ProgramProperties {
      */
     public synchronized void saveProperties() {
 	QueryBuilder qb = new QueryBuilderImpl();
-	qb.storeProperties(this);
+	qb.storeProperties(instance);
     }
 
     /**
