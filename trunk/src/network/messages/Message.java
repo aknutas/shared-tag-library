@@ -15,6 +15,7 @@ public abstract class Message implements Serializable {
 
     long msgID;
     long comID;
+    long orgID;
 
     public synchronized long getMsgID() {
 	return msgID;
@@ -30,6 +31,14 @@ public abstract class Message implements Serializable {
 
     public synchronized void setComID(long comID) {
 	this.comID = comID;
+    }
+
+    public long getOrgID() {
+        return orgID;
+    }
+
+    public void setOrgID(long orgID) {
+        this.orgID = orgID;
     }
 
 }
