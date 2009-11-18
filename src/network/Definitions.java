@@ -4,9 +4,13 @@ import controller.ProgramProperties;
 
 public class Definitions {
     
+    //Reference to the global ProgramProperties
     static ProgramProperties pp;
+    //Listening and connection port
     public static final int PORT;
+    //Connection timeout
     public static final int TIMEOUT;
+    //Socket timeout
     public static final int SO_TIMEOUT;
     
     static
@@ -20,11 +24,7 @@ public class Definitions {
     //Thread statuses
     public static final int DISCONNECTED = 10;
     public static final int CONNECTED = 11;
+    public static final int LOOP_OUT = 12;
+    public static final int LOOP_IN = 13;
 
-    //Configuration
-//    public static final int PORT = 24600;
-    //The connection timeout
-//    public static final int TIMEOUT = 4;
-    //Timeout during communication
-//    public static final int SO_TIMEOUT = 45;
 }
