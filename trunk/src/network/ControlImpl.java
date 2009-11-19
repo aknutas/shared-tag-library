@@ -191,7 +191,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     }
 
     /**
-     * A request to start handle the given socket
+     * A request to start handling the given socket
      * 
      * @param socket
      *            A new socket.
@@ -205,5 +205,17 @@ public class ControlImpl implements Control, ConnectionCallBack {
 		+ conncounter);
 	conncounter++;
     }
-
+    
+    /**
+     * A request to start shutdown routines regarding networking. This stops
+     * connection listening, and starts to disconnect threads.
+     */
+    public synchronized void shutDown() {
+	Collection<CommThread> shutlist = threadCollection.values();
+	Iterator<CommThread> i = shutlist.iterator();
+	while (i.hasNext()) {
+	    i.next().end();
+	    i.remove();
+	}
+    }
 }
