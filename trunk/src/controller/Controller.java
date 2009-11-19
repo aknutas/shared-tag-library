@@ -740,7 +740,7 @@ public class Controller {
 	    public void run() {
 		
 		//Closing off network connections
-		
+		cntrl.shutDown();
 		
 		//These commands absolutely need to run last, and in this order
 		ProgramProperties pp = ProgramProperties.getInstance();

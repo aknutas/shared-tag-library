@@ -205,12 +205,15 @@ public class ControlImpl implements Control, ConnectionCallBack {
 		+ conncounter);
 	conncounter++;
     }
-    
+
     /**
      * A request to start shutdown routines regarding networking. This stops
      * connection listening, and starts to disconnect threads.
      */
     public synchronized void shutDown() {
+	//Collectionlistener stops
+	cl.shutdown();
+	//Iterates through all the threads and tells them to stop
 	Collection<CommThread> shutlist = threadCollection.values();
 	Iterator<CommThread> i = shutlist.iterator();
 	while (i.hasNext()) {
