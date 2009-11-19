@@ -75,6 +75,8 @@ public class Controller {
 	checkedOutBs = new HashMap<Integer, Bookshelf>();
 	controllerPairs = new HashMap<String, Integer>();
 	remoteLibs = new HashMap<Integer, RemoteLibrary>();
+	// Registering shutdown hooks
+	addShutdownHooks();
     }
 
     /**
@@ -725,6 +727,29 @@ public class Controller {
 		}
 	    }
 	}
+    }
+    
+    /**
+     * This method registers shutdown hook in the runtime system. The hook is
+     * basically a thread that gets executed moments before the program
+     * terminates. Do not add any commands here that would take longer than a
+     * second to run.
+     */
+    public void addShutdownHooks() {
+	Runtime.getRuntime().addShutdownHook(new Thread() {
+	    public void run() {
+		
+		//Closing off network connections
+		
+		
+		//These commands absolutely need to run last, and in this order
+		ProgramProperties pp = ProgramProperties.getInstance();
+		pp.saveProperties();
+		Access access = AccessImpl.getInstance();
+		access.shutdown();
+	    }
+	});
+
     }
 
     /**

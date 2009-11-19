@@ -19,8 +19,15 @@ public class AccessImpl implements Access {
 	initialize();
     };
 
-    public void finalize() {
+    /**
+     * Shuts down all database connections and removes the local reference to
+     * singleton instance.
+     */
+    public void shutdown() {
 	pm.close();
+	pmf.close();
+	pm = null;
+	pmf = null;
 	instance = null;
     }
 
