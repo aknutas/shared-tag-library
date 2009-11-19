@@ -16,9 +16,7 @@ import data.messages.*;
  * @author Andrew Alm
  */
 public abstract class RemoteObject implements ClientResponder {
-	
-	//final private Map<Integer, Integer> messageCount;
-	
+		
 	final protected int connection;
 	final protected Control network;
 	
@@ -140,11 +138,18 @@ public abstract class RemoteObject implements ClientResponder {
 	public RemoteMessage send(RemoteMessage message, long timeout) throws NullPointerException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
+	
+		if(message instanceof TrackedMessage)
+			((TrackedMessage)message).messageSent();
 		
 		Response response = new Response();
 		this.network.sendLibraryMsg(this.connection, message, response);
-		RemoteMessage m = response.block(timeout);
-		return m;
+		RemoteMessage responseMessage = response.block(timeout);
+		
+		if(responseMessage instanceof TrackedMessage)
+			((TrackedMessage)message).messageReceived();
+		
+		return responseMessage;
 	}
 	
 	/**

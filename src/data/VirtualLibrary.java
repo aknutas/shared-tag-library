@@ -5,7 +5,7 @@ import operations.*;
 
 /**
  * The VirtualLibrary implements the Library interface and is used for storing
- * Bookshelve objects in memory during program execution.  Unless specifically
+ * Bookshelf objects in memory during program execution.  Unless specifically
  * saved, bookshelves in a VirtualLibrary will be lost when the program exits.
  *
  * @author Andrew Alm

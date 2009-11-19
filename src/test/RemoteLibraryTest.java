@@ -77,7 +77,7 @@ public class RemoteLibraryTest {
 		}
 		
 		long messagesSent = ((TestNetworkControl)network).getMessagesSent();
-		long bytesSent = ((TestNetworkControl)network).getBytesSent();;
+		long bytesSent = ((TestNetworkControl)network).getBytesSent();
 		
 		long messagesReceived = ((TestNetworkControl)network).getMessagesReceived();
 		long bytesReceived = ((TestNetworkControl)network).getBytesReceived();
@@ -94,6 +94,8 @@ public class RemoteLibraryTest {
 		System.out.println("# Message Transferred           : " + (messagesSent + messagesReceived));
 		System.out.println("# Bytes Transferred             : " + (bytesSent + bytesReceived));
 		System.out.println("# Mean Message Size Transferred : " + (((double)(bytesSent + bytesReceived)) / ((double)(messagesSent + messagesReceived))));
+		System.out.println("#");
+		System.out.println("# Iterator Message Count : " + TrackedMessage.countReceivedMessages(IteratorMessage.class, IteratorMessage.MSG_ERROR));
 		
 		
 	}
