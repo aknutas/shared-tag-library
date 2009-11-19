@@ -75,5 +75,11 @@ public interface Control {
      *         id and the second is connection status.
      */
     public Map<Integer, Integer> getStatus();
+    
+    /**
+     * A request to start shutdown routines regarding networking. This stops
+     * connection listening, and starts to disconnect threads.
+     */
+    public void shutDown();
 
 }
