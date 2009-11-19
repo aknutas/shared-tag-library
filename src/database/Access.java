@@ -19,9 +19,10 @@ import java.util.List;
 public interface Access {
 
     /**
-     * Orders the persistence manager to close connections and finish.
+     * Orders the persistence manager to close connections and finish. Call
+     * right before program halt.
      */
-    public void finalize();
+    public void shutdown();
 
     /**
      * Takes a string as a query, and returns the result as an array of objects.

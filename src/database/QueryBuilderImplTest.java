@@ -40,7 +40,7 @@ public class QueryBuilderImplTest {
 	qb.shelfRemove(shelf);
 	qb = null;
 	Access access = AccessImpl.getInstance();
-	access.finalize();
+	access.shutdown();
     }
 
     @Test
