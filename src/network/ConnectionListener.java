@@ -22,6 +22,11 @@ public class ConnectionListener extends Thread {
 	this.ccb = ccb;
 	status = Definitions.CONNECTED;
     }
+    
+    public void shutdown()
+    {
+	status = Definitions.DISCONNECTED;
+    }
 
     public void run() {
 	try {
@@ -36,6 +41,10 @@ public class ConnectionListener extends Thread {
 	    try {
 		s = ss.accept();
 		s.setSoTimeout(Definitions.TIMEOUT);
+		if (status == Definitions.DISCONNECTED) {
+		    s.close();
+		    break;
+		}
 		ccb.gimmeThread(s);
 	    } catch (IOException e) {
 		System.out.println("Accept failed: " + Definitions.PORT);
