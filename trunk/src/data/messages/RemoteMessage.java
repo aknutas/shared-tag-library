@@ -14,13 +14,11 @@ import network.messages.*;
  * @author Andrew Alm
  */
 public class RemoteMessage extends Message {
-
 	private static final long serialVersionUID = 2649706187934307008L;
 	
+	/* message types */
 	public static final int MSG_PING = 0;
 	public static final int MSG_ERROR = 1;
-	
-	
 	
 	/* private data */
 	private final int messageType;

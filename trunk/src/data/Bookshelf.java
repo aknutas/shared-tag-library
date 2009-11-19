@@ -51,7 +51,7 @@ public interface Bookshelf extends Iterable<Book> {
 	
 	/**
 	 * Determines the size of the Bookshelf. A bookshelf's size is equal to the
-	 * number of book it conatins.
+	 * number of book it contains.
 	 * 
 	 * @return the number of books contained in the Bookshelf.
 	 */
@@ -75,7 +75,7 @@ public interface Bookshelf extends Iterable<Book> {
 	 * 
 	 * @param shelf the shelf to intersect with.
 	 * 
-	 * @return a new Bookshelf obejct.
+	 * @return a new Bookshelf object.
 	 * 
 	 * @throws NullPointerException if the shelf given is null.
 	 */

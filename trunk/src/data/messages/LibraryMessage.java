@@ -10,7 +10,7 @@ import java.util.*;
  * 
  * @author Andrew Alm
  */
-public class LibraryMessage extends RemoteMessage {
+public class LibraryMessage extends TrackedMessage {
 
 	private static final long serialVersionUID = 441639840954967391L;
 	
