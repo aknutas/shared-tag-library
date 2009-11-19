@@ -158,5 +158,14 @@ public class TestNetworkControl extends TestNetwork implements Control {
 	 */
 	@Override
 	public Map<Integer, List<Message>> whatsUp() { return null; }
+
+	/**
+	 * Not implemented.
+	 */
+	@Override
+	public void shutDown() {
+	    // TODO Auto-generated method stub
+	    
+	}
 	
 }
