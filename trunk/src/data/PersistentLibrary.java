@@ -1,6 +1,9 @@
 package data;
 
+import controller.ProgramProperties;
 import database.*;
+import java.util.*;
+import java.util.Map.*;
 
 /**
  * The PersistentLibrary class extends the VirtualLibrary class and is used to
@@ -29,11 +32,19 @@ public class PersistentLibrary extends VirtualLibrary {
 	}
 	
 	/**
-	 * Loads bookshelves from the database.
+	 * Loads bookshelves and properties from the database.
 	 */
 	private void loadDatabase() {
 		for(Bookshelf shelf : this.database.shelfList())
 			this.addBookshelf(shelf);
+		
+		Object obj = ProgramProperties.getInstance().getProperty("data::library_properties");
+		if(obj instanceof Map)
+			return;
+			
+		Map<String,String> properties = (Map<String,String>)obj;
+		for(Entry<String,String> property : properties.entrySet())
+			this.setProperty(property.getKey(), property.getValue());
 	}
 	
 	/**

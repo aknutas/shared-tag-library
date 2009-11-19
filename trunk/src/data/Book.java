@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author Andrew Alm
  */
-public interface Book {
+public interface Book extends Properties {
 
 	/**
 	 * The weight of the given tag is increased.
@@ -38,7 +38,7 @@ public interface Book {
 	/**
 	 * Gets the weight of a given tag. If the tag has never been used 
 	 * with this VirtualBook then the weight will be zero. (Note: A 
-	 * return value of zero does not necessicarily indicate that a tag
+	 * return value of zero does not necessarily indicate that a tag
 	 * has never been used with the book.)
 	 *
 	 * @param tag the name of the tag
@@ -56,38 +56,6 @@ public interface Book {
 	 * @return an Iterator of map entries.
 	 */
 	public Iterator<Map.Entry<String, Integer>> enumerateTags();
-	
-	/**
-	 * Gets the value of the given property. If the given property does not
-	 * exist then null is returned.
-	 * 
-	 * @param property the name of the property to get.
-	 * 
-	 * @return the value of the property
-	 * 
-	 * @throws NullPointerException if the property given is null
-	 */
-	public String getProperty(String name) throws NullPointerException;
-	
-	
-	/**
-	 * Sets the named property to the given value, returning the old value for
-	 * the property. If the Book did not have the property, null returned.
-	 * 
-	 * @param name the name of the property
-	 * @param value the value to set the property to
-	 * 
-	 * @return NullPointerException if the name of value given is null
-	 */
-	public String setProperty(String name, String value) throws NullPointerException;
-	
-	/**
-	 * Returns an iterator containing the key-value pairs of all the properties
-	 * the book has.
-	 * 
-	 * @return an iterator of properties
-	 */
-	public Iterator<Map.Entry<String, String>> enumerateProperties();
 
 }
 
