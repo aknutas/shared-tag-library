@@ -1,6 +1,8 @@
 package data;
 
 import java.util.*;
+import java.util.Map.Entry;
+
 import data.messages.*;
 import network.*;
 
@@ -13,7 +15,7 @@ import network.*;
  * @author Andrew Alm
  */
 public class RemoteLibrary extends RemoteObject implements Library {
-
+	
 	/**
 	 * Creates a new RemoteLibrary object with the given connection
 	 * and network.
@@ -28,7 +30,9 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	}
 		
 	/**
-	 * Gets the master Bookshelf of this RemoteLibrary object, or
+	 * Gets the maste {
+		
+	}r Bookshelf of this RemoteLibrary object, or
 	 * returns null on error.
 	 * 
 	 * @return the Bookshelf object, or null on error
@@ -96,5 +100,43 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	public boolean removeBookshelf(Bookshelf shelf) throws NullPointerException {
 		return false;
 	}
+	
+	@Override
+	public String getProperty(String name) throws NullPointerException {
+		// TODO Auto-generate method stub
+		return null;
+	}
+
+	@Override
+	public String setProperty(String name, String value) throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Iterator<Entry<String, String>> enumerateProperties() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Bookshelf getBookshelf(String name) throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterator<Bookshelf> getBookshelf(Collection<String> names)
+			throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterator<String> getBookshelfNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

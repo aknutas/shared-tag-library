@@ -8,11 +8,11 @@ import java.util.*;
  * 
  * @author Andrew Alm
  */
-public interface Bookshelf extends Iterable<Book> {
+public interface Bookshelf extends Properties, Iterable<Book> {
 	
 	/**
-	 * Adds a book to the Bookshelf, if the Bookshelf already contains the book
-	 * then this method does nothing.
+	 * Adds a book to the Bookshelf, if the Bookshelf already 
+	 * contains the book then this method does nothing.
 	 * 
 	 * @param book the Book to add to the Bookshelf.
 	 * 
@@ -21,8 +21,8 @@ public interface Bookshelf extends Iterable<Book> {
 	public void insert(Book book) throws NullPointerException;
 	
 	/**
-	 * Removes a book from the Bookshelf, if the Bookshelf does not contain the
-	 * book then this method does nothing.
+	 * Removes a book from the Bookshelf, if the Bookshelf does not
+	 * contain the book then this method does nothing.
 	 * 
 	 * @param book the Book to remove from the Bookshelf.
 	 * 
@@ -42,24 +42,24 @@ public interface Bookshelf extends Iterable<Book> {
 	public boolean contains(Book book) throws NullPointerException;
 	
 	/**
-	 * Determines whether the Bookshelf is empty. An empty bookshelf contains no
-	 * books and has a size of 0.
+	 * Determines whether the Bookshelf is empty. An empty bookshelf
+	 * contains no books and has a size of 0.
 	 * 
 	 * @return true if the Bookshelf is empty, otherwise false.
 	 */
 	public boolean empty();
 	
 	/**
-	 * Determines the size of the Bookshelf. A bookshelf's size is equal to the
-	 * number of book it contains.
+	 * Determines the size of the Bookshelf. A bookshelf's size is
+	 * equal to the number of book it contains.
 	 * 
 	 * @return the number of books contained in the Bookshelf.
 	 */
 	public int size();
 
 	/**
-	 * Joins two Bookshelfs together into a new bookshelf. This method does not
-	 * change any old bookshelves.
+	 * Joins two Bookshelfs together into a new bookshelf. This
+	 * method does not change any old bookshelves.
 	 * 
 	 * @param shelf the shelf to union with.
 	 * 
@@ -70,8 +70,8 @@ public interface Bookshelf extends Iterable<Book> {
 	public Bookshelf union(Bookshelf shelf) throws NullPointerException;
 	
 	/**
-	 * Returns a bookshelf containing only that are contained in each Bookshelf
-	 * object.
+	 * Returns a bookshelf containing only that are contained in each
+	 * Bookshelf object.
 	 * 
 	 * @param shelf the shelf to intersect with.
 	 * 
@@ -103,30 +103,6 @@ public interface Bookshelf extends Iterable<Book> {
 	 * @throws NullPointerException if the book given is null.
 	 */
 	public Bookshelf subset(Comparable<Book> comparable) throws NullPointerException;
-
-	/**
-	 * Gets the value of the given property. If the given property does not
-	 * exist then null is returned.
-	 * 
-	 * @param property the name of the property to get.
-	 * 
-	 * @return the value of the property
-	 * 
-	 * @throws NullPointerException if the property given is null
-	 */
-	public String getProperty(String name) throws NullPointerException;
-	
-	
-	/**
-	 * Sets the named property to the given value, returning the old value for
-	 * the property. If the Book did not have the property, null returned.
-	 * 
-	 * @param name the name of the property
-	 * @param value the value to set the property to
-	 * 
-	 * @return IllegalArgumentException if the name of value given is null
-	 */
-	public String setProperty(String name, String value);
 	
 	/**
 	 * Returns an iterator containing the key-value pairs of all the properties

@@ -1,6 +1,8 @@
 package data;
 
 import java.util.*;
+import java.util.Map.Entry;
+
 import operations.*;
 
 /**
@@ -13,6 +15,7 @@ import operations.*;
 public class VirtualLibrary implements Library {
 
 	private List<Bookshelf> shelves;
+	private Map<String,String> properties;
 	
 	/**
 	 * Creates a new empty VirtualLibrary. An empty VirtualLibrary
@@ -76,6 +79,47 @@ public class VirtualLibrary implements Library {
 	@Override
 	public Iterator<Bookshelf> iterator() {
 		return this.shelves.iterator();
+	}
+
+	
+	@Override
+	public String getProperty(String name) throws NullPointerException {
+		if(null == name)
+			throw new NullPointerException("name cannot be null");
+		
+		return this.properties.get(name);
+	}
+
+	@Override
+	public String setProperty(String name, String value) {
+		if(null == name)
+			throw new NullPointerException("name cannot be null");
+		
+		return this.properties.put(name, value);
+	}
+	
+	@Override
+	public Iterator<Entry<String, String>> enumerateProperties() {
+		return this.properties.entrySet().iterator();
+	}
+
+	@Override
+	public Bookshelf getBookshelf(String name) throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterator<Bookshelf> getBookshelf(Collection<String> names)
+			throws NullPointerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterator<String> getBookshelfNames() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
