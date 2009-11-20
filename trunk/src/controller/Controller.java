@@ -7,6 +7,7 @@ import network.messages.ChatMessage;
 import network.messages.Message;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.Map.Entry;
 
-import org.encog.matrix.Matrix;
+
 
 import butler.ButlerWeights;
 
@@ -35,23 +36,21 @@ public class Controller {
      */
     private Map<Integer, Bookshelf> checkedOutBs;
     /**
-     * the Name or ip address of a connection and its ID
+     * the Name or ip address of a connection and its ID <IP/name  , id>
      */
     private Map<String, Integer> connectionIds;
-    
+
     /**
-     * the rename of a ip or Name for representing connections
-     * <IP/name  , Alias>  
+     * the rename of a ip or Name for representing connections <IP/name  , Alias>  
      */
-    private Map<String, String> connectionAlias;
+    private HashMap<String, String> connectionAlias;
     /**
      * the id of a connection and the remotelibrary that represents it
      */
     private Map<Integer, RemoteLibrary> remoteLibs;
-    
+
     private Map<Integer, VirtualLibrary> importedLibs;
-    
-    
+
     /**
      * the united querybuilder for the program
      */
@@ -72,28 +71,58 @@ public class Controller {
      * the next sequential id for storage
      */
     public Integer nextID;
-
     /**
      * the default controller constructor
      * 
      * all things that need to be initialized on startup should be here
+     * @throws RemoteObjectException 
+     * @throws IOException 
+     * @throws NullPointerException 
+     * @throws IllegalArgumentException 
+     * @throws UnknownHostException 
      */
-    public Controller() {
+    public Controller() throws UnknownHostException, IllegalArgumentException, NullPointerException, IOException, RemoteObjectException {
 	// load in library
 	qb = new QueryBuilderImpl();
 	myLib = new PersistentLibrary(qb);
 	nextID = 1;
 	cntrl = new ControlImpl(new LibraryResponder(myLib));
+	ProgramProperties props=ProgramProperties.getInstance();
 	checkedOutBs = new HashMap<Integer, Bookshelf>();
-	connectionIds = new HashMap<String, Integer>();
-	connectionAlias = new HashMap<String, String>();
-	remoteLibs = new HashMap<Integer, RemoteLibrary>();
-	importedLibs = new HashMap<Integer, VirtualLibrary>();
+
+	setupconnections(props);
+
 	// Registering shutdown hooks
 	addShutdownHooks();
 
     }
 
+    @SuppressWarnings("unchecked")
+    private void setupconnections(ProgramProperties props) throws UnknownHostException, IllegalArgumentException, NullPointerException, IOException, RemoteObjectException{
+	Object o =props.getProperty("controller::connections");
+	if(o== null){
+	    connectionIds = new HashMap<String, Integer>();
+	    connectionAlias = new HashMap<String, String>();
+	    remoteLibs = new HashMap<Integer, RemoteLibrary>();
+	    importedLibs = new HashMap<Integer, VirtualLibrary>();
+	}
+	else if(!(o instanceof HashMap<?, ?>)){
+	    connectionIds = new HashMap<String, Integer>();
+	    remoteLibs = new HashMap<Integer, RemoteLibrary>();
+	    importedLibs = new HashMap<Integer, VirtualLibrary>();
+	    HashMap<String, String> tmp = (HashMap<String,String>)o;
+	    connectionAlias = tmp;
+	    connectionIds = new HashMap<String, Integer>();
+	    Iterator<Entry<String, String>> iter =tmp.entrySet().iterator();
+	    Entry<String, String> e;
+	    while(iter.hasNext()){
+		e = iter.next();
+		reconnect(e.getKey());
+	    }
+	}
+
+
+    }
     /**
      * Sets the focus of the controller to a single bookshelf for use in methods
      * instead of a bookshelf paramater
@@ -106,7 +135,7 @@ public class Controller {
      *             the paramaters may not be invalid or null
      */
     public void setFocus(Bookshelf bookshelf, Integer id)
-	    throws IllegalArgumentException {
+    throws IllegalArgumentException {
 	if (bookshelf == null || id == null || id < 0)
 	    throw new IllegalArgumentException();
 	focus = bookshelf;
@@ -190,7 +219,7 @@ public class Controller {
     public Collection<String> retrieveRemoteLibraryNames() {
 	return connectionAlias.values();
     }
-    
+
     /**
      * Add a book to the library
      * 
@@ -202,7 +231,7 @@ public class Controller {
      * @throws IllegalArgumentException
      */
     public Book addBook(Bookshelf bookshelf, String name, String title)
-	    throws IllegalArgumentException {
+    throws IllegalArgumentException {
 	if (name == null || title == null
 		|| !(bookshelf instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
@@ -230,7 +259,7 @@ public class Controller {
      * @return the added book (null if error)
      */
     public Book addBook(String name, String title)
-	    throws IllegalArgumentException {
+    throws IllegalArgumentException {
 	if (name == null || title == null
 		|| !(focus instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
@@ -258,7 +287,7 @@ public class Controller {
      * @return the removed book (null if error)
      */
     public Book removeBook(Bookshelf bookshelf, String name)
-	    throws IllegalArgumentException {
+    throws IllegalArgumentException {
 	if (name == null || !(bookshelf instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
 	Iterator<Book> iter = bookshelf.iterator();
@@ -301,7 +330,7 @@ public class Controller {
      * @return the removed book (null if error)
      */
     public Book removeBook(Bookshelf bookshelf, Book book)
-	    throws IllegalArgumentException {
+    throws IllegalArgumentException {
 	if (!bookshelf.contains(book)
 		|| !(bookshelf instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
@@ -380,7 +409,7 @@ public class Controller {
     public Bookshelf removeBookshelf(String name) {
 	if (name == null)
 	    return null;
-	
+
 	return null;
     }
 
@@ -484,8 +513,8 @@ public class Controller {
 	Bookshelf result = new VirtualBookshelf("Search Result shelf");
 	BookQuery bq = new BookQuery();
 	Iterator<Entry<String, Vector<String>>> iter = list.entrySet()
-		.iterator();
-	String s = "";
+	.iterator();
+
 	while (iter.hasNext()) {
 	    Entry<String, Vector<String>> enter = iter.next();
 	    Vector<String> v = enter.getValue();
@@ -535,8 +564,7 @@ public class Controller {
 	Bookshelf result = new VirtualBookshelf("Search Result shelf");
 	BookQuery bq = new BookQuery();
 	Iterator<Entry<String, Vector<String>>> iter = list.entrySet()
-		.iterator();
-	String s = "";
+	.iterator();
 	while (iter.hasNext()) {
 	    Entry<String, Vector<String>> enter = iter.next();
 	    Vector<String> v = enter.getValue();
@@ -569,8 +597,8 @@ public class Controller {
     }
 
     public void addConnection(String host) throws UnknownHostException,
-	    IOException, IllegalArgumentException, NullPointerException,
-	    RemoteObjectException {
+    IOException, IllegalArgumentException, NullPointerException,
+    RemoteObjectException {
 
 	if (host != null) {
 	    if (connectionIds.keySet().contains(host)) {
@@ -593,8 +621,33 @@ public class Controller {
 	    // add change to utilise new structure even though no selective add
 	    importAllBookshelves(vl, remoteLibs.get(temp));
 	}
+    }
+    private void reconnect(String host) throws UnknownHostException,
+    IOException, IllegalArgumentException, NullPointerException,
+    RemoteObjectException {
+
+	if (host != null) {
+	    if (connectionIds.keySet().contains(host)) {
+		throw new IllegalArgumentException();
+	    }
+	    Integer temp = cntrl.connect(host);
+	    System.out.println(" im back");
+	    connectionIds.put(host, temp);
+	    RemoteLibrary rl =new RemoteLibrary(temp, cntrl);
+	    VirtualLibrary vl =new VirtualLibrary();
+	    rl.setProperty(libID, connectionAlias.get(host));
+	    vl.setProperty(libID, connectionAlias.get(host));
+	    rl.setProperty(connectionID, host);
+	    vl.setProperty(connectionID, host);
+	    remoteLibs.put(temp, rl);
+	    importedLibs.put(temp, vl);
+	    // TODO remove add all and set up for selective add
+	    // add change to utilise new structure even though no selective add
+	    importAllBookshelves(vl, remoteLibs.get(temp));
+	}
 
     }
+
 
     public void breakConnection(String host) {
 	if (!connectionIds.keySet().contains(host)) {
@@ -606,7 +659,7 @@ public class Controller {
 	connectionAlias.remove(host);
 	remoteLibs.remove(tmp);
 	importedLibs.remove(tmp);
-	
+
     }
 
     public Set<String> getConnections() {
@@ -626,7 +679,7 @@ public class Controller {
 	remoteLibs.get(name).setProperty(libID, newalias);
 	return temp;
     }
-    
+
     public void importAllBookshelves(Library local, Library remote) {
 	if (local == null || remote == null) {
 	    throw new IllegalArgumentException();
@@ -641,9 +694,9 @@ public class Controller {
 	    local.addBookshelf(bs);
 	}
     }
-    
-    
-    
+
+
+
     public void importSelectBookshelves(Library local, Library remote,Collection<String> select) {
 	if (local == null || remote == null) {
 	    throw new IllegalArgumentException();
@@ -731,8 +784,8 @@ public class Controller {
 			} else {
 			    // Error: This shouldn't happen.
 			    System.out
-				    .println("Unknown Foreign Object recieved. UFO ALERT:"
-					    + tryentry.getClass().getName());
+			    .println("Unknown Foreign Object recieved. UFO ALERT:"
+				    + tryentry.getClass().getName());
 			}
 		    }
 		}
@@ -749,7 +802,7 @@ public class Controller {
 	if (statusMap != null) {
 	    Set<Entry<Integer, Integer>> statusEntries = statusMap.entrySet();
 	    Iterator<Entry<Integer, Integer>> statusIter = statusEntries
-		    .iterator();
+	    .iterator();
 
 	    while (statusIter.hasNext()) {
 		Entry<Integer, Integer> tryentry = statusIter.next();
@@ -762,7 +815,7 @@ public class Controller {
 	    }
 	}
     }
-    
+
     /**
      * This method registers shutdown hook in the runtime system. The hook is
      * basically a thread that gets executed moments before the program
@@ -772,12 +825,13 @@ public class Controller {
     public void addShutdownHooks() {
 	Runtime.getRuntime().addShutdownHook(new Thread() {
 	    public void run() {
-		
+
 		//Closing off network connections
 		cntrl.shutDown();
 		
 		//These commands absolutely need to run last, and in this order
 		ProgramProperties pp = ProgramProperties.getInstance();
+		pp.setProperty("controller::connections", connectionAlias);
 		pp.saveProperties();
 		Access access = AccessImpl.getInstance();
 		access.shutdown();

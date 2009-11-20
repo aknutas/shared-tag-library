@@ -22,6 +22,7 @@ import database.QueryBuilderImpl;
  * 
  * 	1. butler package
  * 	2. controller package
+ * 		controller::connections  the map of connection names to alias
  * 	3. data package
  * 		data::timeout		the default timeout of a remote object
  *		data::iter_block	the fetch block size for remote iterators
