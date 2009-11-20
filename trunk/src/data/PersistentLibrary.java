@@ -34,6 +34,7 @@ public class PersistentLibrary extends VirtualLibrary {
 	/**
 	 * Loads bookshelves and properties from the database.
 	 */
+	@SuppressWarnings("unchecked") /* grr... */
 	private void loadDatabase() {
 		for(Bookshelf shelf : this.database.shelfList())
 			this.addBookshelf(shelf);

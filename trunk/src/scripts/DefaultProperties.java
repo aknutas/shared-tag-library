@@ -1,6 +1,7 @@
 package scripts;
 
 import controller.*;
+import java.util.HashMap;
 
 /**
  * This class is used to set the default properties for the application.  This
@@ -38,17 +39,15 @@ public class DefaultProperties {
 		/* data package properties */
 		props.setProperty("data::timeout", new Integer(5000)); /* controls message timeout */
 		props.setProperty("data::iter_chunk", new Integer(20)); /* default iterator message chunk size */
+		props.setProperty("data::library_properties", new HashMap<String, String>()); /* properties of the library */
 		
 		/* main package properties */
 		// TODO: add main package properties
 		
 		/* network package properties */
-		//Listening port
-		props.setProperty("network::port", new Integer(24600));
-		//Connection timeout, in seconds
-		props.setProperty("network::timeout", new Integer(4000));
-		//Network timeout, in milliseconds
-		props.setProperty("network::so_timeout", new Integer(35));
+		props.setProperty("network::port", new Integer(24600)); /* listening port */
+		props.setProperty("network::timeout", new Integer(4000)); /* connection timeout */
+		props.setProperty("network::so_timeout", new Integer(35)); /* network timeout */
 		
 		/* operations package properties */
 		// TODO: add operations package properties

@@ -49,10 +49,17 @@ public abstract class RemoteResponder implements ServerResponder {
 		if(!(message instanceof RemoteMessage))
 			throw new IllegalArgumentException("illegal message type");
 		
+		if(message instanceof TrackedMessage)
+			((TrackedMessage)message).messageReceived();
+		
 		if(RemoteMessage.MSG_PING == ((RemoteMessage)message).getMessageType())
 			return new RemoteMessage(RemoteMessage.MSG_PING);
 		
-		return this.onRemoteMessage((RemoteMessage)message);
+		RemoteMessage response = this.onRemoteMessage((RemoteMessage)message);
+		if(response instanceof TrackedMessage)
+			((TrackedMessage)response).messageSent();
+		
+		return response;
 	}
 
 }
