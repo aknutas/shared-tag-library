@@ -7,6 +7,8 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
+import data.RemoteObjectException;
 
 /**
  * @author patrick
@@ -253,7 +256,24 @@ public class Root extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		control = new Controller();
+		try {
+		    control = new Controller();
+		} catch (UnknownHostException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		} catch (NullPointerException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		} catch (RemoteObjectException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
 		this.setSize(1000, 800);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Book Butler");
