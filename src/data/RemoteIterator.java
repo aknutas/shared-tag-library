@@ -126,7 +126,7 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 	 * @return the number of RemoteObjects read, or -1 to indicate an
 	 *         error occurred
 	 */
-	private int recieveMessages(int count) {
+	private synchronized int recieveMessages(int count) {
 		int i;
 		
 		if(this.exhausted)
@@ -140,8 +140,10 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 			return -1;
 		
 		/* an iterator error indicates the iterator is empty */
-		if(IteratorMessage.MSG_ERROR == message.getMessageType())
+		if(IteratorMessage.MSG_ERROR == message.getMessageType()) {
+			this.exhausted = true;
 			return 0;
+		}
 		
 		/* drain message parameter queue */
 		for(i = 0; ; ++i) {

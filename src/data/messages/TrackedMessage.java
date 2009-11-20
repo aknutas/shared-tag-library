@@ -277,8 +277,8 @@ public abstract class TrackedMessage extends RemoteMessage {
 	 * logs the messageType and message size.
 	 */
 	public void messageReceived() {
-		TrackedMessage.accumulateMap(TrackedMessage.unmapType(TrackedMessage.messagesRecieved, TrackedMessage.class), this.getMessageType(), 1);
-		TrackedMessage.accumulateMap(TrackedMessage.unmapType(TrackedMessage.bytesRecieved, TrackedMessage.class), this.getMessageType(), TrackedMessage.objectSize(this));
+		TrackedMessage.accumulateMap(TrackedMessage.unmapType(TrackedMessage.messagesRecieved, this.getClass()), this.getMessageType(), 1);
+		TrackedMessage.accumulateMap(TrackedMessage.unmapType(TrackedMessage.bytesRecieved, this.getClass()), this.getMessageType(), TrackedMessage.objectSize(this));
 	}
 	
 	/**

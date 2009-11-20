@@ -44,6 +44,10 @@ public abstract class IteratorResponder<T> extends RoutedResponder {
 		if(IteratorMessage.MSG_MORE != message.getMessageType())
 			throw new IllegalArgumentException("illegal message type");
 		
+		/* if the iterator is empty, give an error*/
+		if(!this.iter.hasNext())
+			return new IteratorMessage(IteratorMessage.MSG_ERROR, this.getID());
+		
 		Integer elementCount = message.dequeParameter();
 		if(null == elementCount) {
 			IteratorMessage error = new IteratorMessage(IteratorMessage.MSG_ERROR, this.getID());
@@ -51,14 +55,10 @@ public abstract class IteratorResponder<T> extends RoutedResponder {
 			return error;
 		}
 		
-		/* if the iterator is empty, give an error*/
-		if(!iter.hasNext())
-			return new IteratorMessage(IteratorMessage.MSG_ERROR, this.getID());
-		
 		IteratorMessage response = new IteratorMessage(IteratorMessage.MSG_MORE, this.getID());
 		int i = elementCount.intValue();
-		for(; iter.hasNext() && i > 0; --i)
-			response.queueParameter(this.serializeObject(iter.next()));
+		for(; this.iter.hasNext() && i > 0; --i)
+			response.queueParameter(this.serializeObject(this.iter.next()));
 		
 		return response;
 	}

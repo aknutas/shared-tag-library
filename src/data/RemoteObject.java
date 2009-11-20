@@ -25,6 +25,7 @@ public abstract class RemoteObject implements ClientResponder {
 
 		private final Semaphore lock;
 		private RemoteMessage message;
+		private long time;
 		
 		public Response() {
 			this.message = null;
@@ -32,19 +33,28 @@ public abstract class RemoteObject implements ClientResponder {
 		}
 				
 		public RemoteMessage block(long timeout) {
+			boolean acquired;
+			
 			try {
-				boolean acquired;
+				this.time = System.currentTimeMillis();
 				
 				if(0 == timeout)
 					acquired = this.lock.tryAcquire();
 				else
 					acquired = this.lock.tryAcquire(timeout, TimeUnit.MILLISECONDS);
 				
+				this.time = System.currentTimeMillis() - this.time;
+				
 				return (true == acquired) ? this.message : null;
 			}
 			catch(InterruptedException ex) {
+				this.time = 0;
 				return null;
 			}
+		}
+		
+		public long getResponseTime() {
+			return this.time;
 		}
 		
 		public void onMessage(Message message) {
@@ -61,7 +71,7 @@ public abstract class RemoteObject implements ClientResponder {
 	 * Creates a new RemoteObject from the given connection and
 	 * network Control object.
 	 * 
-	 * @param connection the conne#ifdef DSAFction id
+	 * @param connection the connection id
 	 * @param network the network Control object
 	 * 
 	 * @throws NullPointerException if the network control object is
