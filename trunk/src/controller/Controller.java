@@ -26,6 +26,8 @@ import scripts.ScriptGenerator;
 
 public class Controller {
 
+    public String libID = "ID";
+    public String connectionID = "conID";    
     public PersistentLibrary myLib;
     /**
      * Contains bookshelves currently being displayed by the gui or being used
@@ -35,11 +37,21 @@ public class Controller {
     /**
      * the Name or ip address of a connection and its ID
      */
-    private Map<String, Integer> controllerPairs;
+    private Map<String, Integer> connectionIds;
+    
+    /**
+     * the rename of a ip or Name for representing connections
+     * <IP/name  , Alias>  
+     */
+    private Map<String, String> connectionAlias;
     /**
      * the id of a connection and the remotelibrary that represents it
      */
     private Map<Integer, RemoteLibrary> remoteLibs;
+    
+    private Map<Integer, VirtualLibrary> importedLibs;
+    
+    
     /**
      * the united querybuilder for the program
      */
@@ -73,10 +85,13 @@ public class Controller {
 	nextID = 1;
 	cntrl = new ControlImpl(new LibraryResponder(myLib));
 	checkedOutBs = new HashMap<Integer, Bookshelf>();
-	controllerPairs = new HashMap<String, Integer>();
+	connectionIds = new HashMap<String, Integer>();
+	connectionAlias = new HashMap<String, String>();
 	remoteLibs = new HashMap<Integer, RemoteLibrary>();
+	importedLibs = new HashMap<Integer, VirtualLibrary>();
 	// Registering shutdown hooks
 	addShutdownHooks();
+
     }
 
     /**
@@ -143,46 +158,6 @@ public class Controller {
 	return num;
     }
 
-    /*
-     * **************88 these should not be necessary if everything is a pointer
-     * // // public Integer retrieveShelf(String loc,Integer target)throws
-     * IllegalArgumentException{ // if(loc==null) // throw new
-     * IllegalArgumentException(); // Iterator<Bookshelf> iter =
-     * myLib.iterator(); // Bookshelf bs; // while(iter.hasNext()){ // bs =
-     * iter.next(); // if(bs.getProperty("Name" /* **************88 these should
-     * not be necessary if everything is a pointer // // public Integer
-     * retrieveShelf(String loc,Integer target)throws IllegalArgumentException{
-     * // if(loc==null) // throw new IllegalArgumentException(); //
-     * Iterator<Bookshelf> iter = myLib.iterator(); // Bookshelf bs; //
-     * while(iter.hasNext()){ // bs = iter.next(); //
-     * if(bs.getProperty("Name")==loc){ // checkedOutBs.put(target, bs); //
-     * break; // } // } // return target; // } // public boolean
-     * updateShelf(String loc)throws IllegalArgumentException{ // if(loc==null)
-     * // throw new IllegalArgumentException(); // Iterator<Integer> iter =
-     * checkedOutBs.keySet().iterator(); // Bookshelf bs; // Integer target; //
-     * while(iter.hasNext()){ // target = iter.next(); // bs =
-     * checkedOutBs.get(target); // if(bs.getProperty("Name")==loc){ //
-     * checkedOutBs.remove(target); // retrieveShelf(loc,target); // return
-     * true; // } // } // return false; // } // public boolean
-     * updateShelf(Integer target){ // Bookshelf bs; //
-     * if(checkedOutBs.containsKey(target)){ // bs = checkedOutBs.get(target);
-     * // checkedOutBs.remove(target); //
-     * retrieveShelf(bs.getProperty("Name"),target); // return true; // } //
-     * return false; // })==loc){ // checkedOutBs.put(target, bs); // break; //
-     * } // } // return target; // } // public boolean updateShelf(String
-     * loc)throws IllegalArgumentException{ // if(loc==null) // throw new
-     * IllegalArgumentException(); // Iterator<Integer> iter =
-     * checkedOutBs.keySet().iterator(); // Bookshelf bs; // Integer target; //
-     * while(iter.hasNext()){ // target = iter.next(); // bs =
-     * checkedOutBs.get(target); // if(bs.getProperty("Name")==loc){ //
-     * checkedOutBs.remove(target); // retrieveShelf(loc,target); // return
-     * true; // } // } // return false; // } // public boolean
-     * updateShelf(Integer target){ // Bookshelf bs; //
-     * if(checkedOutBs.containsKey(target)){ // bs = checkedOutBs.get(target);
-     * // checkedOutBs.remove(target); //
-     * retrieveShelf(bs.getProperty("Name"),target); // return true; // } //
-     * return false; // }
-     */
     /**
      * Retrieves a vector of all the library's bookshelf names
      * 
@@ -207,7 +182,15 @@ public class Controller {
     public Iterator<Bookshelf> retrieveLibrary() {
 	return myLib.iterator();
     }
-
+    /**
+     * returns the collection of the current aliases of the lib
+     * 
+     * @return the iterator
+     */
+    public Collection<String> retrieveRemoteLibraryNames() {
+	return connectionAlias.values();
+    }
+    
     /**
      * Add a book to the library
      * 
@@ -397,7 +380,7 @@ public class Controller {
     public Bookshelf removeBookshelf(String name) {
 	if (name == null)
 	    return null;
-
+	
 	return null;
     }
 
@@ -590,38 +573,64 @@ public class Controller {
 	    RemoteObjectException {
 
 	if (host != null) {
-	    if (controllerPairs.keySet().contains(host)) {
+	    if (connectionIds.keySet().contains(host)) {
 		throw new IllegalArgumentException();
 	    }
 	    Integer temp = cntrl.connect(host);
 	    System.out.println(" im back");
-	    controllerPairs.put(host, temp);
+	    connectionIds.put(host, temp);
+	    connectionAlias.put(host, host);
 	    testconnection(temp, "Are you still there?");
-	    remoteLibs.put(temp, new RemoteLibrary(temp, cntrl));
-	    importAllBookshelves(myLib, remoteLibs.get(temp));
+	    RemoteLibrary rl =new RemoteLibrary(temp, cntrl);
+	    VirtualLibrary vl =new VirtualLibrary();
+	    rl.setProperty(libID, host);
+	    vl.setProperty(libID, host);
+	    rl.setProperty(connectionID, host);
+	    vl.setProperty(connectionID, host);
+	    remoteLibs.put(temp, rl);
+	    importedLibs.put(temp, vl);
+	    // TODO remove add all and set up for selective add
+	    // add change to utilise new structure even though no selective add
+	    importAllBookshelves(vl, remoteLibs.get(temp));
 	}
 
     }
 
     public void breakConnection(String host) {
-	if (!controllerPairs.keySet().contains(host)) {
+	if (!connectionIds.keySet().contains(host)) {
 	    throw new IllegalArgumentException();
 	}
-	Integer tmp = controllerPairs.get(host);
+	Integer tmp = connectionIds.get(host);
 	cntrl.disconnect(tmp);
-	controllerPairs.remove(host);
+	connectionIds.remove(host);
+	connectionAlias.remove(host);
 	remoteLibs.remove(tmp);
+	importedLibs.remove(tmp);
+	
     }
 
     public Set<String> getConnections() {
-	return controllerPairs.keySet();
+	return connectionIds.keySet();
     }
-
+    public Set<String> getConnectionsAlias() {
+	return connectionAlias.keySet();
+    }
+    public Map<String, String> getConnectionsAliasPairs() {
+	return connectionAlias;
+    }
+    public String setConnectionAlias(String name,String newalias){
+	if(!connectionAlias.containsKey(name))
+	    throw new IllegalArgumentException();
+	String temp = connectionAlias.put(name, newalias);
+	importedLibs.get(name).setProperty(libID, newalias);
+	remoteLibs.get(name).setProperty(libID, newalias);
+	return temp;
+    }
+    
     public void importAllBookshelves(Library local, Library remote) {
 	if (local == null || remote == null) {
 	    throw new IllegalArgumentException();
 	}
-
 	Iterator<Bookshelf> iter = remote.iterator();
 	if (iter == null)
 	    throw new IllegalArgumentException();
@@ -632,7 +641,32 @@ public class Controller {
 	    local.addBookshelf(bs);
 	}
     }
-
+    
+    
+    
+    public void importSelectBookshelves(Library local, Library remote,Collection<String> select) {
+	if (local == null || remote == null) {
+	    throw new IllegalArgumentException();
+	}
+	Iterator<Bookshelf> iter = remote.getBookshelf(select);
+	if (iter == null)
+	    throw new IllegalArgumentException();
+	Bookshelf bs;
+	while (iter.hasNext()) {
+	    // System.out.println("dsaf");
+	    bs = iter.next();
+	    local.addBookshelf(bs);
+	}
+    }
+    public void importABookshelves(Library local, Library remote,String select) {
+	if (local == null || remote == null) {
+	    throw new IllegalArgumentException();
+	}
+	Bookshelf bs = remote.getBookshelf(select);
+	if (bs == null)
+	    throw new IllegalArgumentException();
+	local.addBookshelf(bs);
+    }
     public void testconnection(Integer target, String message) {
 	cntrl.sendMsg(target, new ChatMessage(message));
     }
