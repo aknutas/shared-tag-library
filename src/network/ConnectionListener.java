@@ -31,7 +31,8 @@ public class ConnectionListener extends Thread {
     public void run() {
 	try {
 	    ss = new ServerSocket(Definitions.PORT);
-	    System.out.println("Listening for connections.");
+	    //Debug
+//	    System.out.println("Listening for connections.");
 	} catch (IOException e) {
 	    System.out.println("Could not listen on port: " + Definitions.PORT);
 	    status = Definitions.DISCONNECTED;

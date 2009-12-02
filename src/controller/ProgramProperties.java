@@ -20,20 +20,15 @@ import database.QueryBuilderImpl;
  * 
  * Below is a list of properties the program stores (please add):
  * 
- * 	1. butler package
- * 	2. controller package
- * 		controller::connections  the map of connection names to alias
- * 	3. data package
- * 		data::timeout		the default timeout of a remote object
- *		data::iter_block	the fetch block size for remote iterators
- *	4. database package
- *	5. main package
- *	6. operations package
- *	7. scripts package
- *	8. global
+ * 1. butler package 2. controller package controller::connections the map of
+ * connection names to alias 3. data package data::timeout the default timeout
+ * of a remote object data::iter_block the fetch block size for remote iterators
+ * 4. database package 5. main package 6. operations package 7. scripts package
+ * 8. global
  * 
  * @author Andrew Alm
  */
+
 @PersistenceCapable(detachable = "true")
 public class ProgramProperties {
 
@@ -101,19 +96,26 @@ public class ProgramProperties {
 	return obj;
     }
 
-    /** Gets the property of the given name from the property map. If the
+    /**
+     * Gets the property of the given name from the property map. If the
      * property does not exist in the property map then null is returned.
      * 
-     * @param name the name of the property
+     * @param name
+     *            the name of the property
      * 
      * @return the Object from the property map, or null if not found
      * 
-     * @throws NullPointerException if the name given is null
+     * @throws NullPointerException
+     *             if the name given is null
      */
     public synchronized Object getProperty(String name)
 	    throws NullPointerException {
 	if (name == null)
 	    throw new NullPointerException("name cannot be null");
+
+	// Debug
+	// System.out.println("Returned property " + name + " value " +
+	// properties.get(name));
 
 	return properties.get(name);
     }
