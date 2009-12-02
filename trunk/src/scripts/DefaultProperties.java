@@ -46,7 +46,7 @@ public class DefaultProperties {
 		
 		/* network package properties */
 		props.setProperty("network::port", new Integer(24600)); /* listening port */
-		props.setProperty("network::timeout", new Integer(4000)); /* connection timeout */
+		props.setProperty("network::timeout", new Integer(2000)); /* connection timeout */
 		props.setProperty("network::so_timeout", new Integer(35)); /* network timeout */
 		
 		/* operations package properties */

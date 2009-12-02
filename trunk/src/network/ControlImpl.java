@@ -1,6 +1,7 @@
 package network;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -60,14 +61,13 @@ public class ControlImpl implements Control, ConnectionCallBack {
      * @throws UnknownHostException
      */
     public synchronized int connect(String address)
-	    throws UnknownHostException, IOException {
+	    throws UnknownHostException, IOException, ConnectException {
 	// Debug
 	System.out.println("Controller here. Starting to connect.");
 	InetSocketAddress caddress = new InetSocketAddress(address,
 		Definitions.PORT);
 	Socket s = new Socket();
-	s.setSoTimeout(Definitions.TIMEOUT);
-	s.connect(caddress, Definitions.PORT);
+	s.connect(caddress, Definitions.TIMEOUT);
 	ClientThread ct = new ClientThread(id, s, messageReceiver);
 	ct.start();
 	threadCollection.put(conncounter, ct);
@@ -111,10 +111,10 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	message.setMsgID(rd.nextLong());
 	// Debug
 	/*
-	System.out
-		.println("Control here. Sent: " + message.getClass().getName()
-			+ " to connection " + connection); */
-	threadCollection.get(connection).sendMsgGetReply(message, receiver); 
+	 * System.out .println("Control here. Sent: " +
+	 * message.getClass().getName() + " to connection " + connection);
+	 */
+	threadCollection.get(connection).sendMsgGetReply(message, receiver);
     }
 
     /**
@@ -139,14 +139,15 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	Map<Integer, List<Message>> returnmap = new HashMap<Integer, List<Message>>();
 	List<Message> tempqueue;
 	Entry<Integer, CommThread> entry;
-	
+
 	Set<Entry<Integer, CommThread>> entryset = threadCollection.entrySet();
 	Iterator<Entry<Integer, CommThread>> i = entryset.iterator();
 
 	// Debug
 	/*
-	System.out
-		.println("Control here. Iterating through the threadCollection.");*/
+	 * System.out
+	 * .println("Control here. Iterating through the threadCollection.");
+	 */
 
 	while (i.hasNext()) {
 	    entry = i.next();
@@ -154,12 +155,12 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    // System.out.println("Iterating, queue: " + entry.getKey());
 	    tempqueue = entry.getValue().getMsg();
 	    if (tempqueue != null) {
-		//Debug
-		//System.out.println("Queue size: " + tempqueue.size());
+		// Debug
+		// System.out.println("Queue size: " + tempqueue.size());
 		returnmap.put(entry.getKey(), tempqueue);
-	    } /* else {
-		System.out.println("Queue size: null");
-	    } */ // Debug
+	    } /*
+	       * else { System.out.println("Queue size: null"); }
+	       */// Debug
 	}
 
 	if (returnmap.isEmpty())
@@ -176,7 +177,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     public synchronized Map<Integer, Integer> getStatus() {
 	Map<Integer, Integer> returnmap = new HashMap<Integer, Integer>();
 	Entry<Integer, CommThread> entry;
-	
+
 	Set<Entry<Integer, CommThread>> entryset = threadCollection.entrySet();
 	Iterator<Entry<Integer, CommThread>> i = entryset.iterator();
 
@@ -202,7 +203,8 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	threadCollection.put(conncounter, ct);
 	// Debug
 	System.out.println("Controller here. Started listening to connection "
-		+ conncounter);
+		+ conncounter + " from "
+		+ socket.getInetAddress().getHostName().toString());
 	conncounter++;
     }
 
@@ -211,9 +213,9 @@ public class ControlImpl implements Control, ConnectionCallBack {
      * connection listening, and starts to disconnect threads.
      */
     public synchronized void shutDown() {
-	//Collectionlistener stops
+	// Collectionlistener stops
 	cl.shutdown();
-	//Iterates through all the threads and tells them to stop
+	// Iterates through all the threads and tells them to stop
 	Collection<CommThread> shutlist = threadCollection.values();
 	Iterator<CommThread> i = shutlist.iterator();
 	while (i.hasNext()) {

@@ -8,6 +8,7 @@ import network.messages.Message;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -101,7 +102,7 @@ public class Controller {
 	@SuppressWarnings("unchecked")
 	private void setupconnections(ProgramProperties props)
 			throws UnknownHostException, IllegalArgumentException,
-			NullPointerException, IOException, RemoteObjectException {
+			NullPointerException, ConnectException, IOException, RemoteObjectException {
 		Object o = props.getProperty("controller::connections");
 		if (o == null) {
 			connectionIds = new HashMap<String, Integer>();
@@ -600,7 +601,7 @@ public class Controller {
 	}
 
 	public void addConnection(String host) throws UnknownHostException,
-			IOException, IllegalArgumentException, NullPointerException,
+			IOException, ConnectException, IllegalArgumentException, NullPointerException,
 			RemoteObjectException {
 
 		if (host != null) {
