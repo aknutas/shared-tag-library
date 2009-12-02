@@ -31,6 +31,10 @@ import database.QueryBuilderImpl;
  *	6. operations package
  *	7. scripts package
  *	8. global
+ *	9. network package
+ *		network::timeout	Connection timeout
+ *		network::so_timeout	Timeout when transferring data
+ *		network::port		Listening port
  * 
  * @author Andrew Alm
  */
