@@ -20,11 +20,17 @@ import database.QueryBuilderImpl;
  * 
  * Below is a list of properties the program stores (please add):
  * 
- * 1. butler package 2. controller package controller::connections the map of
- * connection names to alias 3. data package data::timeout the default timeout
- * of a remote object data::iter_block the fetch block size for remote iterators
- * 4. database package 5. main package 6. operations package 7. scripts package
- * 8. global
+ * 	1. butler package
+ * 	2. controller package
+ * 		controller::connections  the map of connection names to alias
+ * 	3. data package
+ * 		data::timeout		the default timeout of a remote object
+ *		data::iter_block	the fetch block size for remote iterators
+ *	4. database package
+ *	5. main package
+ *	6. operations package
+ *	7. scripts package
+ *	8. global
  * 
  * @author Andrew Alm
  */
