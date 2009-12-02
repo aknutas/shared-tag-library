@@ -20,107 +20,107 @@ import data.Bookshelf;
 
 public class SearchResults extends JScrollPane {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	static JPanel panel = new JPanel();
+    static JPanel panel = new JPanel();
 
-	private Bookshelf bookshelf;
-	List<Result> results;
-	Controller control = null;
-	GridBagConstraints gbc;
+    private Bookshelf bookshelf;
+    List<Result> results;
+    Controller control = null;
+    GridBagConstraints gbc;
 
-	/**
-	 * This is the default constructor
-	 */
-	public SearchResults(Controller c) {
-		super(panel);
-		control = c;
-		initialize();
+    /**
+     * This is the default constructor
+     */
+    public SearchResults(Controller c) {
+	super(panel);
+	control = c;
+	initialize();
+    }
+
+    protected Result addResult(Result result) {
+	panel.add(result, gbc);
+	gbc.gridy = gbc.gridy + 1;
+	panel.repaint();
+	this.repaint();
+	return result;
+    }
+
+    protected void setResults(Bookshelf shelf) {
+	if (shelf != null) {
+	    bookshelf = shelf;
+	    removeResults();
+
+	    Iterator<Book> result = bookshelf.iterator();
+	    System.out.println("hasnext:" + result.hasNext());
+	    int count = 0;
+	    while (result.hasNext() && count < 20) {
+		Book b = result.next();
+		System.out.println("TITLE: " + b.getProperty("title"));
+		results.add(new Result(b, this));
+		count++;
+	    }
+
+	    addResults();
+	}
+    }
+
+    public void resetResults() {
+	setResults(bookshelf);
+    }
+
+    private void addResults() {
+
+	for (Result r : results) {
+	    panel.add(r, gbc);
+	    gbc.gridy = gbc.gridy + 1;
+	    r.draw();
 	}
 
-	protected Result addResult(Result result) {
-		panel.add(result, gbc);
-		gbc.gridy = gbc.gridy + 1;
-		panel.repaint();
-		this.repaint();
-		return result;
+	validate();
+	this.repaint();
+    }
+
+    /**
+     * This method initializes this
+     * 
+     * @return void
+     */
+    private void initialize() {
+	panel.setSize(600, 600);
+	panel.setLayout(new GridBagLayout());
+
+	results = new ArrayList<Result>();
+
+	gbc = new GridBagConstraints();
+	gbc.gridy = 1;
+	gbc.anchor = GridBagConstraints.NORTH;
+	gbc.fill = GridBagConstraints.HORIZONTAL;
+	gbc.insets = new Insets(5, 5, 5, 5);
+
+	try {
+	    UIManager
+		    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
+	} catch (UnsupportedLookAndFeelException ex) {
+	    System.out.println("Cannot set new Theme for Java Look and Feel.");
 	}
+    }
 
-	protected void setResults(Bookshelf shelf) {
-		if (shelf != null) {
-			bookshelf = shelf;
-			removeResults();
+    protected Result removeResult(Result result) {
 
-			Iterator<Book> result = bookshelf.iterator();
-			System.out.println("hasnext:" + result.hasNext());
-			int count = 0;
-			while (result.hasNext() && count < 20) {
-				Book b = result.next();
-				System.out.println("TITLE: " + b.getProperty("title"));
-				results.add(new Result(b, this));
-				count++;
-			}
+	panel.remove(result);
 
-			addResults();
-		}
+	control.removeBook(bookshelf, result.getBook());
+	resetResults();
+
+	return result;
+    }
+
+    private void removeResults() {
+	for (Result r : results) {
+	    panel.remove(r);
 	}
-
-	public void resetResults() {
-		setResults(bookshelf);
-	}
-
-	private void addResults() {
-
-		for (Result r : results) {
-			panel.add(r, gbc);
-			gbc.gridy = gbc.gridy + 1;
-			r.draw();
-		}
-
-		validate();
-		this.repaint();
-	}
-
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
-	private void initialize() {
-		panel.setSize(600, 600);
-		panel.setLayout(new GridBagLayout());
-
-		results = new ArrayList<Result>();
-
-		gbc = new GridBagConstraints();
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.NORTH;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 5, 5, 5);
-
-		try {
-			UIManager
-					.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-		} catch (UnsupportedLookAndFeelException ex) {
-			System.out.println("Cannot set new Theme for Java Look and Feel.");
-		}
-	}
-
-	protected Result removeResult(Result result) {
-
-		panel.remove(result);
-
-		control.removeBook(bookshelf, result.getBook());
-		resetResults();
-
-		return result;
-	}
-
-	private void removeResults() {
-		for (Result r : results) {
-			panel.remove(r);
-		}
-		results.clear();
-	}
+	results.clear();
+    }
 
 } // @jve:decl-index=0:visual-constraint="266,31"
