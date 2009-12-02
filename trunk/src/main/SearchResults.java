@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,7 +23,7 @@ public class SearchResults extends JScrollPane {
 
     private static final long serialVersionUID = 1L;
 
-    static JPanel panel = new JPanel();
+    public static JPanel panel = new JPanel();
 
     private Bookshelf bookshelf;
     List<Result> results;
@@ -87,14 +88,16 @@ public class SearchResults extends JScrollPane {
      * @return void
      */
     private void initialize() {
-	panel.setSize(600, 600);
-	panel.setLayout(new GridBagLayout());
-
+	GridBagLayout layout = new GridBagLayout();
+	panel.setLayout(layout);
+	panel.setBackground(Color.WHITE);
 	results = new ArrayList<Result>();
 
 	gbc = new GridBagConstraints();
-	gbc.gridy = 1;
-	gbc.anchor = GridBagConstraints.NORTH;
+	gbc.gridy = 0;
+	gbc.weightx = 1; // 1: Fill, 0: Center
+	gbc.weighty = 1;
+	gbc.anchor = GridBagConstraints.NORTHWEST;
 	gbc.fill = GridBagConstraints.HORIZONTAL;
 	gbc.insets = new Insets(5, 5, 5, 5);
 
