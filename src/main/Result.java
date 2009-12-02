@@ -278,8 +278,8 @@ public class Result extends JPanel {
      */
     private void initialize() {
 	this.setLayout(new BorderLayout());
-	this.setSize(800, 200);
-	this.setBounds(new Rectangle(0, 0, 800, 200));
+	this.setSize(1000, 200);
+	this.setBounds(new Rectangle(0, 0, 1000, 200));
 	this.add(getRightNavigation(), BorderLayout.EAST);
 	this.add(getTitle(), BorderLayout.NORTH);
 	this.add(getContent(), BorderLayout.CENTER);
