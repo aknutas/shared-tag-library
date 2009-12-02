@@ -626,6 +626,33 @@ public class Controller {
 			importAllBookshelves(vl, remoteLibs.get(temp));
 		}
 	}
+	public void addConnection(String host,String alias) throws UnknownHostException,
+	IOException, ConnectException, IllegalArgumentException, NullPointerException,
+	RemoteObjectException {
+
+if (host != null) {
+	if (connectionIds.keySet().contains(host)) {
+		throw new IllegalArgumentException();
+	}
+	Integer temp = cntrl.connect(host);
+	System.out.println(" im back");
+	connectionIds.put(host, temp);
+	connectionAlias.put(host, host);
+	testconnection(temp, "Are you still there?");
+	RemoteLibrary rl = new RemoteLibrary(temp, cntrl);
+	VirtualLibrary vl = new VirtualLibrary();
+	rl.setProperty(libID, host);
+	vl.setProperty(libID, host);
+	rl.setProperty(connectionID, host);
+	vl.setProperty(connectionID, host);
+	remoteLibs.put(temp, rl);
+	importedLibs.put(temp, vl);
+	setConnectionAlias(host,alias);
+	// TODO remove add all and set up for selective add
+	// add change to utilise new structure even though no selective add
+	importAllBookshelves(vl, remoteLibs.get(temp));
+}
+}
 
 	private void reconnect(String host) throws UnknownHostException,
 			IOException, IllegalArgumentException, NullPointerException,
