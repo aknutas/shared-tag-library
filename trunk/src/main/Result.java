@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,13 +12,14 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -33,14 +35,10 @@ public class Result extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private static final int tagOffset = 5;
-    private JPanel RightNavigation = null;
     private JPanel Title = null;
-    private JCheckBox save = null;
     private JButton delete = null;
     private JLabel title = null;
     private JPanel Content = null;
-    private JProgressBar progressBar = null;
-
     private Book book = null;
 
     public Book getBook() {
@@ -56,6 +54,7 @@ public class Result extends JPanel {
 
     private SearchResults results;
     private Result self;
+    private JToggleButton jToggleButton = null;
 
     /**
      * 
@@ -133,6 +132,8 @@ public class Result extends JPanel {
 	    Content.add(addTag, tagTitleConstraints);
 	    Content.add(tags, tagConstraints);
 	    Content.add(getJTextField(), tagContentConstraints);
+	    this.setBorder(BorderFactory.createLineBorder(Color.black));
+
 	}
 
 	if (book != null) {
@@ -170,53 +171,6 @@ public class Result extends JPanel {
     }
 
     /**
-     * This method initializes progressBar
-     * 
-     * @return javax.swing.JProgressBar
-     * 
-     * @deprecated So this isn't really "deprecated" but you should know that is
-     *             should be disabled if there isn't any progress...
-     */
-    @Deprecated
-    private JProgressBar getProgressBar() {
-	if (progressBar == null) {
-	    progressBar = new JProgressBar();
-	}
-	return progressBar;
-    }
-
-    /**
-     * This method initializes RightNavigation
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getRightNavigation() {
-	if (RightNavigation == null) {
-	    RightNavigation = new JPanel();
-	    RightNavigation.setLayout(new BoxLayout(getRightNavigation(),
-		    BoxLayout.Y_AXIS));
-	    RightNavigation.add(getSave(), null);
-	    RightNavigation.add(deleteResult(), null);
-	}
-	return RightNavigation;
-    }
-
-    /**
-     * This method initializes save
-     * 
-     * @return javax.swing.JButton
-     */
-    private JCheckBox getSave() {
-	if (save == null) {
-	    save = new JCheckBox();
-	    save.setName("Save");
-	    save.setText("Save");
-	    save.setAlignmentY(CENTER_ALIGNMENT);
-	}
-	return save;
-    }
-
-    /**
      * This method initializes send
      * 
      * @return javax.swing.JButton
@@ -247,13 +201,28 @@ public class Result extends JPanel {
      */
     private JPanel getTitle() {
 	if (Title == null) {
+	    
+	    GridBagConstraints deleteB  = new GridBagConstraints();
+	    deleteB.gridx = 2;
+	    deleteB.gridy = 0;
+	    deleteB.weightx = 0;
+	    deleteB.insets = new Insets(5, 5, 5, 5);
+	    deleteB.anchor = GridBagConstraints.CENTER;
+
+	    GridBagConstraints expand = new GridBagConstraints();
+	    expand.gridx = 0;
+	    expand.gridy = 0;
+	    expand.weightx = 0;
+	    expand.insets = new Insets(5, 5, 5, 5);
+	    expand.anchor = GridBagConstraints.CENTER;
 
 	    GridBagConstraints name = new GridBagConstraints();
-	    name.gridx = 0;
+	    name.gridx = 1;
 	    name.gridy = 0;
-	    name.weightx = 0;
+	    name.weightx = 1;
 	    name.insets = new Insets(5, 5, 5, 5);
-	    name.anchor = GridBagConstraints.FIRST_LINE_START;
+	    name.anchor = GridBagConstraints.CENTER;
+
 	    name.fill = GridBagConstraints.NONE;
 
 	    title = new JLabel("Title?");
@@ -265,8 +234,12 @@ public class Result extends JPanel {
 	    }
 
 	    Title = new JPanel();
-	    Title.setLayout(new GridBagLayout());
+	    GridBagLayout layout = new GridBagLayout();
+	    Title.setLayout(layout);
+
 	    Title.add(title, name);
+	    Title.add(getJToggleButton(), expand);
+	    Title.add(deleteResult(), deleteB);
 	}
 	return Title;
     }
@@ -280,10 +253,8 @@ public class Result extends JPanel {
 	this.setLayout(new BorderLayout());
 	this.setSize(1000, 200);
 	this.setBounds(new Rectangle(0, 0, 1000, 200));
-	this.add(getRightNavigation(), BorderLayout.EAST);
 	this.add(getTitle(), BorderLayout.NORTH);
 	this.add(getContent(), BorderLayout.CENTER);
-	this.add(getProgressBar(), BorderLayout.SOUTH);
 	try {
 	    UIManager
 		    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
@@ -318,6 +289,18 @@ public class Result extends JPanel {
 	});
 
 	return tagContent;
+    }
+
+    /**
+     * This method initializes jToggleButton
+     * 
+     * @return javax.swing.JToggleButton
+     */
+    private JToggleButton getJToggleButton() {
+	if (jToggleButton == null) {
+	    jToggleButton = new JToggleButton("Details");
+	}
+	return jToggleButton;
     }
 
 }
