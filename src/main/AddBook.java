@@ -3,6 +3,7 @@ package main;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +20,7 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 import controller.Controller;
 import data.Book;
 import data.Bookshelf;
+import java.awt.Dimension;
 
 public class AddBook extends JDialog {
 
@@ -75,7 +77,7 @@ public class AddBook extends JDialog {
      * @return void
      */
     private void initialize() {
-	this.setSize(300, 200);
+	this.setSize(270, 132);
 	this.setContentPane(getJContentPane());
     }
 
@@ -88,29 +90,37 @@ public class AddBook extends JDialog {
 	if (jContentPane == null) {
 
 	    GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-	    gridBagConstraints5.gridx = 1;
-	    gridBagConstraints5.gridy = 3;
+	    gridBagConstraints5.gridx = 2;
+	    gridBagConstraints5.gridy = 2;
+	    gridBagConstraints5.insets = new Insets(10, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 	    gridBagConstraints4.gridx = 1;
 	    gridBagConstraints4.gridy = 2;
+	    gridBagConstraints4.insets = new Insets(10, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-	    gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
+	    gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 	    gridBagConstraints3.gridy = 1;
-	    gridBagConstraints3.weightx = 1.0;
+	    gridBagConstraints3.gridwidth = 2;
 	    gridBagConstraints3.gridx = 1;
+	    gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-	    gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
+	    gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
 	    gridBagConstraints2.gridy = 0;
-	    gridBagConstraints2.weightx = 1.0;
+	    gridBagConstraints2.gridwidth = 2;
 	    gridBagConstraints2.gridx = 1;
+	    gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 	    gridBagConstraints1.gridx = 0;
 	    gridBagConstraints1.gridy = 1;
+	    gridBagConstraints1.anchor = GridBagConstraints.EAST;
+	    gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
 	    jLabel1 = new JLabel();
-	    jLabel1.setText("Book Author");
+	    jLabel1.setText("Book Author: ");
 	    GridBagConstraints gridBagConstraints = new GridBagConstraints();
 	    gridBagConstraints.gridx = 0;
 	    gridBagConstraints.gridy = 0;
+	    gridBagConstraints.anchor = GridBagConstraints.EAST;
+	    gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 	    jLabel = new JLabel();
 	    jLabel.setText("Book Title: ");
 	    jContentPane = new JPanel();
@@ -201,4 +211,4 @@ public class AddBook extends JDialog {
 	return cancel;
     }
 
-}
+} // @jve:decl-index=0:visual-constraint="10,10"

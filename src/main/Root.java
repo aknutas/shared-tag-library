@@ -129,6 +129,7 @@ public class Root extends JFrame {
 
 		    ConnectTo dialog = new ConnectTo(thisClass, control,
 			    treeView);
+		    dialog.setLocationRelativeTo(jContentPane);
 		    dialog.setVisible(true);
 
 		    draw();
@@ -160,6 +161,7 @@ public class Root extends JFrame {
 
 		    addBookDialog = new AddBook(thisClass, control, shelf,
 			    searchResults, treeView);
+		    addBookDialog.setLocationRelativeTo(jContentPane);
 		    addBookDialog.setVisible(true);
 
 		    draw();
@@ -182,6 +184,7 @@ public class Root extends JFrame {
 
 		    addBookshelfDialog = new AddBookshelf(thisClass, control,
 			    searchResults, treeView);
+		    addBookshelfDialog.setLocationRelativeTo(jContentPane);
 		    addBookshelfDialog.setVisible(true);
 
 		    draw();
