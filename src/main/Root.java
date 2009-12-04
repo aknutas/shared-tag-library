@@ -73,37 +73,39 @@ public class Root extends JFrame {
 	});
     }
 
-    private MsgTrigger msgTrigger;
+    private AddBook addBookDialog = null;
 
-    private javax.swing.Timer msgTimer;
+    private JMenuItem addBookMenuItem = null;
+
+    private AddBookshelf addBookshelfDialog = null;
+
+    private JMenuItem addBookshelfMenuItem = null;
+
+    private JMenuItem connectToMenuItem = null;
 
     private Controller control = null;
 
     private JPanel jContentPane = null;
 
-    private JSplitPane jSplitPane = null;
-
-    private JToolBar jToolBar = null;
-
-    private TextField searchField = null;
-
-    private Label searchLabel = null;
-
-    private Bookshelf shelf = null;
-
-    private SearchResults searchResults = null;
-    private TreeView treeView = null;
-    private AddBookshelf addBookshelfDialog = null;
-    private AddBook addBookDialog = null;
     private JMenuBar jJMenuBar = null;
+
     private JMenu jMenu = null;
 
-    private JMenuItem quitMenuItem = null;
-    private JMenuItem connectToMenuItem = null;
-
     private JMenu jMenu1 = null;
-    private JMenuItem addBookshelfMenuItem = null;
-    private JMenuItem addBookMenuItem = null;
+
+    private JSplitPane jSplitPane = null;
+    private JToolBar jToolBar = null;
+    private javax.swing.Timer msgTimer;
+    private MsgTrigger msgTrigger;
+    private JMenuItem quitMenuItem = null;
+    private JMenuItem removeSelectedMenuItem = null;
+
+    private TextField searchField = null;
+    private Label searchLabel = null;
+
+    private SearchResults searchResults = null;
+    private Bookshelf shelf = null;
+    private TreeView treeView = null;
 
     /**
      * This is the default constructor
@@ -128,7 +130,7 @@ public class Root extends JFrame {
 	    connectToMenuItem = new JMenuItem("Connect To...");
 	    connectToMenuItem.setMnemonic(KeyEvent.VK_C);
 	    connectToMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		    KeyEvent.VK_C, ActionEvent.ALT_MASK));
 	    connectToMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -163,7 +165,7 @@ public class Root extends JFrame {
 	    addBookMenuItem = new JMenuItem("Add Book");
 	    addBookMenuItem.setMnemonic(KeyEvent.VK_B);
 	    addBookMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_B, ActionEvent.ALT_MASK));
+		    KeyEvent.VK_B, ActionEvent.ALT_MASK));
 	    addBookMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -189,8 +191,7 @@ public class Root extends JFrame {
 	    addBookshelfMenuItem = new JMenuItem("Add Bookshelf");
 	    addBookshelfMenuItem.setMnemonic(KeyEvent.VK_S);
 	    addBookshelfMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_S, ActionEvent.ALT_MASK));
-
+		    KeyEvent.VK_S, ActionEvent.ALT_MASK));
 
 	    addBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
@@ -263,6 +264,7 @@ public class Root extends JFrame {
 	    jMenu1.add(connectTo());
 	    jMenu1.add(getAddBookshelfMenuItem());
 	    jMenu1.add(getAddBookMenuItem());
+	    jMenu1.add(getRemoveSelectedMenuItem());
 	}
 	return jMenu1;
     }
@@ -296,6 +298,28 @@ public class Root extends JFrame {
 	}
 
 	return jToolBar;
+    }
+
+    /**
+     * This method initializes removeSelectedMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getRemoveSelectedMenuItem() {
+	if (removeSelectedMenuItem == null) {
+	    removeSelectedMenuItem = new JMenuItem("Delete Selected");
+	    removeSelectedMenuItem.setMnemonic(KeyEvent.VK_D);
+	    removeSelectedMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_D, ActionEvent.ALT_MASK));
+	    removeSelectedMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    searchResults.removeSelected();
+		    draw();
+		}
+	    });
+	}
+	return removeSelectedMenuItem;
     }
 
     /**
@@ -370,7 +394,7 @@ public class Root extends JFrame {
 	    e.printStackTrace();
 	}
 	this.setSize(800, 800);
-	this.setMinimumSize(new Dimension(650,400));
+	this.setMinimumSize(new Dimension(650, 400));
 	this.setJMenuBar(getJJMenuBar());
 	this.setContentPane(getJContentPane());
 	this.setTitle("Book Butler");
@@ -385,8 +409,8 @@ public class Root extends JFrame {
 	if (quitMenuItem == null) {
 	    quitMenuItem = new JMenuItem("Quit");
 	    quitMenuItem.setMnemonic(KeyEvent.VK_Q);
-	    quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_Q, ActionEvent.ALT_MASK));
+	    quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
+		    ActionEvent.ALT_MASK));
 	    quitMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 

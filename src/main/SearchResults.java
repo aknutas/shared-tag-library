@@ -25,7 +25,7 @@ public class SearchResults extends JScrollPane {
 
     public static JPanel panel = new JPanel();
 
-    private Bookshelf bookshelf;  //  @jve:decl-index=0:
+    private Bookshelf bookshelf; // @jve:decl-index=0:
     List<Result> results;
     Controller control = null;
     GridBagConstraints gbc;
@@ -101,6 +101,18 @@ public class SearchResults extends JScrollPane {
 	    panel.remove(r);
 	}
 	results.clear();
+    }
+
+    protected void removeSelected() {
+
+	for (Result r : results) {
+	    if (r.isSelected()) {
+		panel.remove(r);
+		control.removeBook(bookshelf, r.getBook());
+	    }
+	}
+
+	resetResults();
     }
 
     public void resetResults() {
