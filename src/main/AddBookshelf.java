@@ -19,6 +19,7 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
+import java.awt.Dimension;
 
 public class AddBookshelf extends JDialog {
 
@@ -162,7 +163,7 @@ public class AddBookshelf extends JDialog {
      * @return void
      */
     private void initialize() {
-	this.setSize(234, 129);
+	this.setSize(265, 154);
 	this.setContentPane(getJContentPane());
     }
 
