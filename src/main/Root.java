@@ -7,6 +7,7 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -17,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -124,6 +126,9 @@ public class Root extends JFrame {
     private JMenuItem connectTo() {
 	if (connectToMenuItem == null) {
 	    connectToMenuItem = new JMenuItem("Connect To...");
+	    connectToMenuItem.setMnemonic(KeyEvent.VK_C);
+	    connectToMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_C, ActionEvent.ALT_MASK));
 	    connectToMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -156,6 +161,9 @@ public class Root extends JFrame {
     private JMenuItem getAddBookMenuItem() {
 	if (addBookMenuItem == null) {
 	    addBookMenuItem = new JMenuItem("Add Book");
+	    addBookMenuItem.setMnemonic(KeyEvent.VK_B);
+	    addBookMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_B, ActionEvent.ALT_MASK));
 	    addBookMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -179,6 +187,11 @@ public class Root extends JFrame {
     private JMenuItem getAddBookshelfMenuItem() {
 	if (addBookshelfMenuItem == null) {
 	    addBookshelfMenuItem = new JMenuItem("Add Bookshelf");
+	    addBookshelfMenuItem.setMnemonic(KeyEvent.VK_S);
+	    addBookshelfMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_S, ActionEvent.ALT_MASK));
+
+
 	    addBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -231,7 +244,7 @@ public class Root extends JFrame {
     private JMenu getJMenu() {
 	if (jMenu == null) {
 	    jMenu = new JMenu("Start");
-
+	    jMenu.setMnemonic(KeyEvent.VK_T);
 	    jMenu.add(quit());
 
 	}
@@ -246,6 +259,7 @@ public class Root extends JFrame {
     private JMenu getJMenu1() {
 	if (jMenu1 == null) {
 	    jMenu1 = new JMenu("Library");
+	    jMenu1.setMnemonic(KeyEvent.VK_I);
 	    jMenu1.add(connectTo());
 	    jMenu1.add(getAddBookshelfMenuItem());
 	    jMenu1.add(getAddBookMenuItem());
@@ -370,6 +384,9 @@ public class Root extends JFrame {
     private JMenuItem quit() {
 	if (quitMenuItem == null) {
 	    quitMenuItem = new JMenuItem("Quit");
+	    quitMenuItem.setMnemonic(KeyEvent.VK_Q);
+	    quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_Q, ActionEvent.ALT_MASK));
 	    quitMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
