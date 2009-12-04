@@ -255,6 +255,7 @@ public class Result extends JPanel {
 	this.setBounds(new Rectangle(0, 0, 1000, 200));
 	this.add(getTitle(), BorderLayout.NORTH);
 	this.add(getContent(), BorderLayout.CENTER);
+	Content.setVisible(false);
 	try {
 	    UIManager
 		    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
@@ -299,6 +300,14 @@ public class Result extends JPanel {
     private JToggleButton getJToggleButton() {
 	if (jToggleButton == null) {
 	    jToggleButton = new JToggleButton("Details");
+	    jToggleButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent event) {
+			
+			Content.setVisible(!Content.isVisible());
+
+			draw();
+		    }
+		});
 	}
 	return jToggleButton;
     }
