@@ -20,7 +20,6 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 import controller.Controller;
 import data.Book;
 import data.Bookshelf;
-import java.awt.Dimension;
 
 public class AddBook extends JDialog {
 
@@ -38,14 +37,6 @@ public class AddBook extends JDialog {
     private Book book = null;
     private SearchResults results = null;
     private TreeView tree = null;
-
-    public Bookshelf getShelf() {
-	return shelf;
-    }
-
-    public Book getBook() {
-	return book;
-    }
 
     /**
      * @param owner
@@ -71,14 +62,52 @@ public class AddBook extends JDialog {
 	initialize();
     }
 
+    public Book getBook() {
+	return book;
+    }
+
     /**
-     * This method initializes this
+     * This method initializes jButton
      * 
-     * @return void
+     * @return javax.swing.JButton
      */
-    private void initialize() {
-	this.setSize(270, 132);
-	this.setContentPane(getJContentPane());
+    private JButton getJButton() {
+	if (commit == null) {
+	    commit = new JButton("Commit");
+	    commit.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    book = control.addBook(jTextField.getText(), jTextField1
+			    .getText());
+
+		    results.setResults(control.focus);
+
+		    setVisible(false);
+
+		}
+	    });
+	}
+
+	return commit;
+    }
+
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getJButton2() {
+	if (cancel == null) {
+	    cancel = new JButton("Cancel");
+	    cancel.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    setVisible(false);
+
+		}
+	    });
+	}
+	return cancel;
     }
 
     /**
@@ -167,48 +196,18 @@ public class AddBook extends JDialog {
 	return jTextField1;
     }
 
-    /**
-     * This method initializes jButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getJButton() {
-	if (commit == null) {
-	    commit = new JButton("Commit");
-	    commit.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    book = control.addBook(jTextField.getText(), jTextField1
-			    .getText());
-
-		    results.setResults(control.focus);
-
-		    setVisible(false);
-
-		}
-	    });
-	}
-
-	return commit;
+    public Bookshelf getShelf() {
+	return shelf;
     }
 
     /**
-     * This method initializes jButton
+     * This method initializes this
      * 
-     * @return javax.swing.JButton
+     * @return void
      */
-    private JButton getJButton2() {
-	if (cancel == null) {
-	    cancel = new JButton("Cancel");
-	    cancel.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    setVisible(false);
-
-		}
-	    });
-	}
-	return cancel;
+    private void initialize() {
+	this.setSize(270, 132);
+	this.setContentPane(getJContentPane());
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"

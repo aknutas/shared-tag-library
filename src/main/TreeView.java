@@ -39,12 +39,6 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	initialize();
     }
 
-    protected void draw() {
-
-	((DefaultTreeModel) tree.getModel()).reload();
-	this.repaint();
-    }
-
     public void addChild(Bookshelf shelf) {
 
 	if (shelf != null) {
@@ -52,17 +46,10 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	}
     }
 
-    public void refresh() {
+    protected void draw() {
 
-	top.removeAllChildren();
-
-	Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
-
-	while (bookshelves.hasNext()) {
-	    top.add(new TreeNode(bookshelves.next()));
-	}
-
-	draw();
+	((DefaultTreeModel) tree.getModel()).reload();
+	this.repaint();
     }
 
     /**
@@ -105,6 +92,19 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	setVisible(true);
 
+    }
+
+    public void refresh() {
+
+	top.removeAllChildren();
+
+	Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
+
+	while (bookshelves.hasNext()) {
+	    top.add(new TreeNode(bookshelves.next()));
+	}
+
+	draw();
     }
 
     @Override

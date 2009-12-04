@@ -3,7 +3,6 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GraphicsEnvironment;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;

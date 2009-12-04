@@ -28,6 +28,11 @@ public class TreeNode extends DefaultMutableTreeNode {
 	return shelf;
     }
 
+    @Override
+    public TreeNode getUserObject() {
+	return this;
+    }
+
     public void setName(String name) {
 	this.name = name;
     }
@@ -39,10 +44,5 @@ public class TreeNode extends DefaultMutableTreeNode {
     @Override
     public String toString() {
 	return "[ " + name + " ]";
-    }
-
-    @Override
-    public TreeNode getUserObject() {
-	return this;
     }
 }

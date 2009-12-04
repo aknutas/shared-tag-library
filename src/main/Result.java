@@ -13,9 +13,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -41,20 +39,65 @@ public class Result extends JPanel {
     private JPanel Content = null;
     private Book book = null;
 
-    public Book getBook() {
-	return book;
-    }
-
     private JTextField tagContent = null;
 
     GridBagConstraints tagContentConstraints;
+
     GridBagConstraints tagTitleConstraints;
     GridBagConstraints tagConstraints;
     GridBagConstraints tags;  //  @jve:decl-index=0:
-
     private SearchResults results;
+
     private Result self;
     private JToggleButton jToggleButton = null;
+    /**
+     * @param b
+     */
+    public Result(Book b, SearchResults c) {
+	super();
+	self = this;
+	results = c;
+	book = b;
+	initialize();
+    }
+
+    private void addTag(String s) {
+
+	if (Content != null && !s.isEmpty()) {
+
+	    JLabel value = new JLabel(s);
+	    value.setFont(new Font("Sans", Font.BOLD, 14));
+
+	    tags.gridy = tags.gridy + tagOffset;
+
+	    Content.add(value, tags);
+	    revalidate();
+	}
+    }
+
+    /**
+     * This method initializes send
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton deleteResult() {
+
+	if (delete == null) {
+	    delete = new JButton();
+	    delete.setText("Delete");
+	    delete.setName("Delete");
+	    delete.setAlignmentY(CENTER_ALIGNMENT);
+	    delete.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    if (book != null) {
+			results.removeResult(self);
+		    }
+		}
+	    });
+	}
+	return delete;
+    }
 
     /**
      * 
@@ -66,15 +109,8 @@ public class Result extends JPanel {
 	super.repaint();
     }
 
-    /**
-     * @param b
-     */
-    public Result(Book b, SearchResults c) {
-	super();
-	self = this;
-	results = c;
-	book = b;
-	initialize();
+    public Book getBook() {
+	return book;
     }
 
     /**
@@ -154,42 +190,51 @@ public class Result extends JPanel {
 	return Content;
     }
 
-    private void addTag(String s) {
-
-	if (Content != null && !s.isEmpty()) {
-
-	    JLabel value = new JLabel(s);
-	    value.setFont(new Font("Sans", Font.BOLD, 14));
-
-	    tags.gridy = tags.gridy + tagOffset;
-
-	    Content.add(value, tags);
-	    revalidate();
+    /**
+     * This method initializes tagContent
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getJTextField() {
+	if (tagContent == null) {
+	    tagContent = new JTextField(15);
 	}
+
+	tagContent.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent event) {
+
+		if (book != null) {
+
+		    book.tag(tagContent.getText());
+		    addTag(tagContent.getText());
+		    tagContent.setText("");
+		}
+
+		draw();
+	    }
+	});
+
+	return tagContent;
     }
 
     /**
-     * This method initializes send
+     * This method initializes jToggleButton
      * 
-     * @return javax.swing.JButton
+     * @return javax.swing.JToggleButton
      */
-    private JButton deleteResult() {
+    private JToggleButton getJToggleButton() {
+	if (jToggleButton == null) {
+	    jToggleButton = new JToggleButton("Details");
+	    jToggleButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent event) {
+			
+			Content.setVisible(!Content.isVisible());
 
-	if (delete == null) {
-	    delete = new JButton();
-	    delete.setText("Delete");
-	    delete.setName("Delete");
-	    delete.setAlignmentY(CENTER_ALIGNMENT);
-	    delete.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    if (book != null) {
-			results.removeResult(self);
+			revalidate();//draw();
 		    }
-		}
-	    });
+		});
 	}
-	return delete;
+	return jToggleButton;
     }
 
     /**
@@ -262,53 +307,6 @@ public class Result extends JPanel {
 	}
 
 	draw();
-    }
-
-    /**
-     * This method initializes tagContent
-     * 
-     * @return javax.swing.JTextField
-     */
-    private JTextField getJTextField() {
-	if (tagContent == null) {
-	    tagContent = new JTextField(15);
-	}
-
-	tagContent.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent event) {
-
-		if (book != null) {
-
-		    book.tag(tagContent.getText());
-		    addTag(tagContent.getText());
-		    tagContent.setText("");
-		}
-
-		draw();
-	    }
-	});
-
-	return tagContent;
-    }
-
-    /**
-     * This method initializes jToggleButton
-     * 
-     * @return javax.swing.JToggleButton
-     */
-    private JToggleButton getJToggleButton() {
-	if (jToggleButton == null) {
-	    jToggleButton = new JToggleButton("Details");
-	    jToggleButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent event) {
-			
-			Content.setVisible(!Content.isVisible());
-
-			revalidate();//draw();
-		    }
-		});
-	}
-	return jToggleButton;
     }
 
 }

@@ -47,29 +47,6 @@ public class SearchResults extends JScrollPane {
 	return result;
     }
 
-    protected void setResults(Bookshelf shelf) {
-	if (shelf != null) {
-	    bookshelf = shelf;
-	    removeResults();
-
-	    Iterator<Book> result = bookshelf.iterator();
-	    System.out.println("hasnext:" + result.hasNext());
-	    int count = 0;
-	    while (result.hasNext() && count < 20) {
-		Book b = result.next();
-		System.out.println("TITLE: " + b.getProperty("title"));
-		results.add(new Result(b, this));
-		count++;
-	    }
-
-	    addResults();
-	}
-    }
-
-    public void resetResults() {
-	setResults(bookshelf);
-    }
-
     private void addResults() {
 
 	for (Result r : results) {
@@ -124,6 +101,29 @@ public class SearchResults extends JScrollPane {
 	    panel.remove(r);
 	}
 	results.clear();
+    }
+
+    public void resetResults() {
+	setResults(bookshelf);
+    }
+
+    protected void setResults(Bookshelf shelf) {
+	if (shelf != null) {
+	    bookshelf = shelf;
+	    removeResults();
+
+	    Iterator<Book> result = bookshelf.iterator();
+	    System.out.println("hasnext:" + result.hasNext());
+	    int count = 0;
+	    while (result.hasNext() && count < 20) {
+		Book b = result.next();
+		System.out.println("TITLE: " + b.getProperty("title"));
+		results.add(new Result(b, this));
+		count++;
+	    }
+
+	    addResults();
+	}
     }
 
 } // @jve:decl-index=0:visual-constraint="266,31"
