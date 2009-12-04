@@ -32,7 +32,7 @@ import data.Book;
 public class Result extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final int tagOffset = 5;
+    private static final int tagOffset = 1;
     private JPanel Title = null;
     private JButton delete = null;
     private JLabel title = null;
@@ -68,7 +68,13 @@ public class Result extends JPanel {
 	    JLabel value = new JLabel(s);
 	    value.setFont(new Font("Sans", Font.BOLD, 14));
 
-	    tags.gridy = tags.gridy + tagOffset;
+	    if (tags.gridx < 10) {
+		    tags.gridx = tags.gridx + tagOffset;
+		} else {
+		    tags.gridx = 1;
+		    tags.gridy++;
+		}
+	    //tags.gridx = tags.gridx + tagOffset;
 
 	    Content.add(value, tags);
 	    revalidate();
@@ -126,6 +132,7 @@ public class Result extends JPanel {
 	    tagContentConstraints.gridy = 0;
 	    tagContentConstraints.weightx = 1;
 	    tagContentConstraints.weighty = 0;
+	    tagContentConstraints.gridwidth = 10;
 	    tagContentConstraints.insets = new Insets(5, 5, 5, 5);
 	    tagContentConstraints.anchor = GridBagConstraints.WEST;
 	    tagContentConstraints.fill = GridBagConstraints.NONE;
@@ -139,8 +146,8 @@ public class Result extends JPanel {
 	    tagConstraints.weighty = 1;
 	    
 	    tags = new GridBagConstraints();
-	    tags.gridx = 1;
-	    tags.gridy = 0;
+	    tags.gridx = 0;
+	    tags.gridy = 1;
 	    tags.weighty = 1;
 	    tags.insets = new Insets(5, 5, 5, 5);
 	    tags.anchor = GridBagConstraints.NORTHWEST;
@@ -179,7 +186,12 @@ public class Result extends JPanel {
 		JLabel value = new JLabel(e.getKey());
 		value.setFont(new Font("Sans", Font.BOLD, 14));
 
-		tags.gridy = tags.gridy + tagOffset;
+		if (tags.gridx < 10) {
+		    tags.gridx = tags.gridx + tagOffset;
+		} else {
+		    tags.gridx = 1;
+		    tags.gridy++;
+		}
 
 		Content.add(value, tags);
 	    }
@@ -265,15 +277,13 @@ public class Result extends JPanel {
 	    name.weightx = 1;
 	    name.insets = new Insets(5, 5, 5, 5);
 	    name.anchor = GridBagConstraints.CENTER;
-
 	    name.fill = GridBagConstraints.NONE;
 
 	    title = new JLabel("Title?");
 	    title.setFont(new Font("Sans", Font.BOLD, 14));
 
 	    if (book != null) {
-		title.setText("  Book: " + book.getProperty("title")
-			+ "   |   By: " + book.getProperty("author"));
+		title.setText(book.getProperty("author") + "'s " + book.getProperty("title"));
 	    }
 
 	    Title = new JPanel();

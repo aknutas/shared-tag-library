@@ -276,7 +276,6 @@ public class Root extends JFrame {
 	if (jToolBar == null) {
 	    jToolBar = new JToolBar();
 	    jToolBar.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-
 	    searchLabel = new Label("Search: ", Label.LEFT);
 	    jToolBar.add(searchLabel);
 	    jToolBar.add(getTextField());
@@ -305,7 +304,7 @@ public class Root extends JFrame {
     private TextField getTextField() {
 	if (searchField == null) {
 	    searchField = new TextField();
-	    searchField.setPreferredSize(new Dimension(800, 20));
+	    searchField.setPreferredSize(new Dimension(300, 20));
 	    searchField.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -357,6 +356,7 @@ public class Root extends JFrame {
 	    e.printStackTrace();
 	}
 	this.setSize(800, 800);
+	this.setMinimumSize(new Dimension(650,400));
 	this.setJMenuBar(getJJMenuBar());
 	this.setContentPane(getJContentPane());
 	this.setTitle("Book Butler");
