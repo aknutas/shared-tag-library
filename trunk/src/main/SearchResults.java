@@ -21,14 +21,14 @@ import data.Bookshelf;
 
 public class SearchResults extends JScrollPane {
 
-    private static final long serialVersionUID = 1L;
-
     public static JPanel panel = new JPanel();
 
+    private static final long serialVersionUID = 1L;
+
     private Bookshelf bookshelf; // @jve:decl-index=0:
-    List<Result> results;
     Controller control = null;
     GridBagConstraints gbc;
+    List<Result> results;
 
     /**
      * This is the default constructor

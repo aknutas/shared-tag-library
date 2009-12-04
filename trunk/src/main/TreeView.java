@@ -21,12 +21,12 @@ import data.Bookshelf;
 public class TreeView extends JPanel implements TreeSelectionListener {
 
     private static final long serialVersionUID = 1L;
-    private DefaultMutableTreeNode top = new DefaultMutableTreeNode("Libraries");
-    private JTree tree = new JTree(top);
-    JScrollPane treeView = new JScrollPane(tree);
-
     private Controller control = null;
     private SearchResults results = null;
+    private DefaultMutableTreeNode top = new DefaultMutableTreeNode("Libraries");
+
+    private JTree tree = new JTree(top);
+    JScrollPane treeView = new JScrollPane(tree);
 
     /**
      * @param l

@@ -24,15 +24,15 @@ import java.awt.Dimension;
 public class AddBookshelf extends JDialog {
 
     private static final long serialVersionUID = 1L;
+    private JButton cancel = null;
+    private JButton commit = null;
+    private Controller control = null;
     private JPanel jContentPane = null;
     private JLabel jLabel1 = null;
-    private JTextField jTextField = null;
-    private JButton commit = null;
-    private JButton cancel = null;
 
-    private Controller control = null;
-    private Bookshelf shelf = null;
+    private JTextField jTextField = null;
     private SearchResults results = null;
+    private Bookshelf shelf = null;
     private TreeView tree = null;
 
     /**

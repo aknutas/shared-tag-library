@@ -25,18 +25,18 @@ import java.awt.Dimension;
 public class AddBook extends JDialog {
 
     private static final long serialVersionUID = 1L;
+    private Book book = null;
+    private JButton cancel = null;
+    private JButton commit = null;
+    private Controller control = null;
     private JPanel jContentPane = null;
     private JLabel jLabel = null;
     private JLabel jLabel1 = null;
+
     private JTextField jTextField = null;
     private JTextField jTextField1 = null;
-    private JButton commit = null;
-    private JButton cancel = null;
-
-    private Controller control = null;
-    private Bookshelf shelf = null;
-    private Book book = null;
     private SearchResults results = null;
+    private Bookshelf shelf = null;
     private TreeView tree = null;
 
     /**
