@@ -3,6 +3,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GraphicsEnvironment;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -356,7 +357,7 @@ public class Root extends JFrame {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	this.setSize(1000, 800);
+	this.setSize(800, 800);
 	this.setJMenuBar(getJJMenuBar());
 	this.setContentPane(getJContentPane());
 	this.setTitle("Book Butler");

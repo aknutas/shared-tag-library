@@ -96,7 +96,7 @@ public class SearchResults extends JScrollPane {
 	gbc = new GridBagConstraints();
 	gbc.gridy = 0;
 	gbc.weightx = 1; // 1: Fill, 0: Center
-	gbc.weighty = 1;
+	gbc.weighty = 0;
 	gbc.anchor = GridBagConstraints.NORTHWEST;
 	gbc.fill = GridBagConstraints.HORIZONTAL;
 	gbc.insets = new Insets(5, 5, 5, 5);
