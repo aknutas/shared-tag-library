@@ -36,24 +36,24 @@ public class Result extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private static final int tagOffset = 1;
-    private JPanel Title = null;
-    private JButton delete = null;
-    private JLabel title = null;
-    private JPanel Content = null;
     private Book book = null;
-
-    private JTextField tagContent = null;
-
-    GridBagConstraints tagContentConstraints;
-
-    GridBagConstraints tagTitleConstraints;
-    GridBagConstraints tagConstraints;
-    GridBagConstraints tags; // @jve:decl-index=0:
+    private JPanel Content = null;
+    private JButton delete = null;
+    private JToggleButton jToggleButton = null;
     private SearchResults results;
+
     private Boolean selected = false;
 
     private Result self;
-    private JToggleButton jToggleButton = null;
+
+    GridBagConstraints tagConstraints;
+    private JTextField tagContent = null;
+    GridBagConstraints tagContentConstraints;
+    GridBagConstraints tags; // @jve:decl-index=0:
+    GridBagConstraints tagTitleConstraints;
+
+    private JLabel title = null;
+    private JPanel Title = null;
 
     /**
      * @param b
@@ -310,19 +310,6 @@ public class Result extends JPanel {
 	return Title;
     }
 
-    public Boolean isSelected() {
-	return selected;
-    }
-
-    private void toggleSelected() {
-
-	selected = !selected;
-	if (selected)
-	    this.setBorder(BorderFactory.createLineBorder(Color.red));
-	else
-	    this.setBorder(BorderFactory.createLineBorder(Color.black));
-    }
-
     /**
      * This method initializes this
      * 
@@ -343,6 +330,19 @@ public class Result extends JPanel {
 	}
 
 	draw();
+    }
+
+    public Boolean isSelected() {
+	return selected;
+    }
+
+    private void toggleSelected() {
+
+	selected = !selected;
+	if (selected)
+	    this.setBorder(BorderFactory.createLineBorder(Color.red));
+	else
+	    this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
 }

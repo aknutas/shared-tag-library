@@ -25,15 +25,15 @@ import data.RemoteObjectException;
 public class ConnectTo extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    private JPanel jContentPane = null;
     private JTextField addressField = null;
-    private JLabel jLabel = null;
-    private JButton connectButton = null;
     private JButton cancelButton = null;
+    private JButton connectButton = null;
     private Controller control = null;
-    private TreeView tree = null;
     private JTextField ipAlias = null;
+    private JPanel jContentPane = null;
+    private JLabel jLabel = null;
     private JLabel jLabel1 = null;
+    private TreeView tree = null;
 
     /**
      * @param owner

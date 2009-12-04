@@ -81,30 +81,34 @@ public class Root extends JFrame {
 
     private JMenuItem addBookshelfMenuItem = null;
 
+    private JMenu bookMenu = null;
+
+    private JMenu bookshelfMenu = null;
+
     private JMenuItem connectToMenuItem = null;
+
+    private JPanel content = null;
 
     private Controller control = null;
 
-    private JPanel jContentPane = null;
-
     private JMenuBar jJMenuBar = null;
 
-    private JMenu jMenu = null;
-
-    private JMenu jMenu1 = null;
-
     private JSplitPane jSplitPane = null;
-    private JToolBar jToolBar = null;
+
+    private JMenu libraryMenu = null;
+
     private javax.swing.Timer msgTimer;
     private MsgTrigger msgTrigger;
     private JMenuItem quitMenuItem = null;
     private JMenuItem removeSelectedMenuItem = null;
-
     private TextField searchField = null;
     private Label searchLabel = null;
 
     private SearchResults searchResults = null;
+    private JToolBar searchToolbar = null;
+
     private Bookshelf shelf = null;
+    private JMenu startMenu = null;
     private TreeView treeView = null;
 
     /**
@@ -136,7 +140,7 @@ public class Root extends JFrame {
 
 		    ConnectTo dialog = new ConnectTo(thisClass, control,
 			    treeView);
-		    dialog.setLocationRelativeTo(jContentPane);
+		    dialog.setLocationRelativeTo(content);
 		    dialog.setVisible(true);
 
 		    draw();
@@ -171,7 +175,7 @@ public class Root extends JFrame {
 
 		    addBookDialog = new AddBook(thisClass, control, shelf,
 			    searchResults, treeView);
-		    addBookDialog.setLocationRelativeTo(jContentPane);
+		    addBookDialog.setLocationRelativeTo(content);
 		    addBookDialog.setVisible(true);
 
 		    draw();
@@ -198,7 +202,7 @@ public class Root extends JFrame {
 
 		    addBookshelfDialog = new AddBookshelf(thisClass, control,
 			    searchResults, treeView);
-		    addBookshelfDialog.setLocationRelativeTo(jContentPane);
+		    addBookshelfDialog.setLocationRelativeTo(content);
 		    addBookshelfDialog.setVisible(true);
 
 		    draw();
@@ -209,18 +213,54 @@ public class Root extends JFrame {
     }
 
     /**
-     * This method initializes jContentPane
+     * This method initializes bookMenu
+     * 
+     * @return javax.swing.JMenu
+     */
+    private JMenu getBookMenu() {
+	if (bookMenu == null) {
+	    bookMenu = new JMenu("Book");
+	    bookMenu.setMnemonic(KeyEvent.VK_K);
+	    // Remove Book
+	    // Change Title/Author
+	    // Add Tag
+	    // Clear Tags
+	}
+	return bookMenu;
+    }
+
+    /**
+     * This method initializes bookshelfMenu
+     * 
+     * @return javax.swing.JMenu
+     */
+    private JMenu getBookshelfMenu() {
+	if (bookshelfMenu == null) {
+	    bookshelfMenu = new JMenu("Bookshelf");
+	    bookshelfMenu.setMnemonic(KeyEvent.VK_O);
+
+	    bookshelfMenu.add(getAddBookMenuItem());
+	    bookshelfMenu.add(getRemoveSelectedMenuItem());
+	    // Change Name
+	    // Export Selected
+	    // Clear Bookshelf
+	}
+	return bookshelfMenu;
+    }
+
+    /**
+     * This method initializes content
      * 
      * @return javax.swing.JPanel
      */
-    private JPanel getJContentPane() {
-	if (jContentPane == null) {
-	    jContentPane = new JPanel();
-	    jContentPane.setLayout(new BorderLayout());
-	    jContentPane.add(getJToolBar(), BorderLayout.SOUTH);
-	    jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
+    private JPanel getContent() {
+	if (content == null) {
+	    content = new JPanel();
+	    content.setLayout(new BorderLayout());
+	    content.add(getSearchToolbar(), BorderLayout.SOUTH);
+	    content.add(getJSplitPane(), BorderLayout.CENTER);
 	}
-	return jContentPane;
+	return content;
     }
 
     /**
@@ -231,42 +271,12 @@ public class Root extends JFrame {
     private JMenuBar getJJMenuBar() {
 	if (jJMenuBar == null) {
 	    jJMenuBar = new JMenuBar();
-	    jJMenuBar.add(getJMenu());
-	    jJMenuBar.add(getJMenu1());
+	    jJMenuBar.add(getStartMenu());
+	    jJMenuBar.add(getLibraryMenu());
+	    jJMenuBar.add(getBookshelfMenu());
+	    jJMenuBar.add(getBookMenu());
 	}
 	return jJMenuBar;
-    }
-
-    /**
-     * This method initializes jMenu
-     * 
-     * @return javax.swing.JMenu
-     */
-    private JMenu getJMenu() {
-	if (jMenu == null) {
-	    jMenu = new JMenu("Start");
-	    jMenu.setMnemonic(KeyEvent.VK_T);
-	    jMenu.add(quit());
-
-	}
-	return jMenu;
-    }
-
-    /**
-     * This method initializes jMenu1
-     * 
-     * @return javax.swing.JMenu
-     */
-    private JMenu getJMenu1() {
-	if (jMenu1 == null) {
-	    jMenu1 = new JMenu("Library");
-	    jMenu1.setMnemonic(KeyEvent.VK_I);
-	    jMenu1.add(connectTo());
-	    jMenu1.add(getAddBookshelfMenuItem());
-	    jMenu1.add(getAddBookMenuItem());
-	    jMenu1.add(getRemoveSelectedMenuItem());
-	}
-	return jMenu1;
     }
 
     /**
@@ -284,20 +294,18 @@ public class Root extends JFrame {
     }
 
     /**
-     * This method initializes jToolBar
+     * This method initializes libraryMenu
      * 
-     * @return javax.swing.JToolBar
+     * @return javax.swing.JMenu
      */
-    private JToolBar getJToolBar() {
-	if (jToolBar == null) {
-	    jToolBar = new JToolBar();
-	    jToolBar.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-	    searchLabel = new Label("Search: ", Label.LEFT);
-	    jToolBar.add(searchLabel);
-	    jToolBar.add(getTextField());
+    private JMenu getLibraryMenu() {
+	if (libraryMenu == null) {
+	    libraryMenu = new JMenu("Library");
+	    libraryMenu.setMnemonic(KeyEvent.VK_I);
+	    libraryMenu.add(getAddBookshelfMenuItem());
+	    // Remove Bookshelf
 	}
-
-	return jToolBar;
+	return libraryMenu;
     }
 
     /**
@@ -332,6 +340,42 @@ public class Root extends JFrame {
 	    searchResults = new SearchResults(control);
 	}
 	return searchResults;
+    }
+
+    /**
+     * This method initializes searchToolbar
+     * 
+     * @return javax.swing.JToolBar
+     */
+    private JToolBar getSearchToolbar() {
+	if (searchToolbar == null) {
+	    searchToolbar = new JToolBar();
+	    searchToolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+	    searchLabel = new Label("Search: ", Label.LEFT);
+	    searchToolbar.add(searchLabel);
+	    searchToolbar.add(getTextField());
+	}
+
+	return searchToolbar;
+    }
+
+    /**
+     * This method initializes startMenu
+     * 
+     * @return javax.swing.JMenu
+     */
+    private JMenu getStartMenu() {
+	if (startMenu == null) {
+	    startMenu = new JMenu("Start");
+	    startMenu.setMnemonic(KeyEvent.VK_T);
+
+	    // Help (F1)
+	    startMenu.add(connectTo());
+	    // Disconnect From
+	    startMenu.add(quit());
+
+	}
+	return startMenu;
     }
 
     /**
@@ -396,7 +440,7 @@ public class Root extends JFrame {
 	this.setSize(800, 800);
 	this.setMinimumSize(new Dimension(650, 400));
 	this.setJMenuBar(getJJMenuBar());
-	this.setContentPane(getJContentPane());
+	this.setContentPane(getContent());
 	this.setTitle("Book Butler");
     }
 
