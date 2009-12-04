@@ -50,7 +50,7 @@ public class Result extends JPanel {
     GridBagConstraints tagContentConstraints;
     GridBagConstraints tagTitleConstraints;
     GridBagConstraints tagConstraints;
-    GridBagConstraints tagsConstraints;
+    GridBagConstraints tags;  //  @jve:decl-index=0:
 
     private SearchResults results;
     private Result self;
@@ -88,36 +88,33 @@ public class Result extends JPanel {
 	    tagContentConstraints = new GridBagConstraints();
 	    tagContentConstraints.gridx = 1;
 	    tagContentConstraints.gridy = 0;
-	    tagContentConstraints.weightx = 0;
-	    tagContentConstraints.weighty = 1;
+	    tagContentConstraints.weightx = 1;
+	    tagContentConstraints.weighty = 0;
 	    tagContentConstraints.insets = new Insets(5, 5, 5, 5);
-	    tagContentConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+	    tagContentConstraints.anchor = GridBagConstraints.WEST;
 	    tagContentConstraints.fill = GridBagConstraints.NONE;
 
 	    tagConstraints = new GridBagConstraints();
-	    tagConstraints.gridx = 2;
-	    tagConstraints.gridy = 0;
-	    tagConstraints.weightx = 1;
+	    tagConstraints.gridx = 0;
+	    tagConstraints.gridy = 1;
 	    tagConstraints.insets = new Insets(8, 5, 5, 5);
-	    tagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+	    tagConstraints.anchor = GridBagConstraints.NORTHWEST;
 	    tagConstraints.fill = GridBagConstraints.NONE;
 	    tagConstraints.weighty = 1;
-
-	    tagsConstraints = new GridBagConstraints();
-	    tagsConstraints.gridx = 2;
-	    tagsConstraints.gridy = 1;
-	    tagsConstraints.weightx = 1;
-	    tagsConstraints.insets = new Insets(8, 5, 5, 5);
-	    tagsConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-	    tagsConstraints.fill = GridBagConstraints.VERTICAL;
-	    tagsConstraints.weighty = 2;
+	    
+	    tags = new GridBagConstraints();
+	    tags.gridx = 1;
+	    tags.gridy = 0;
+	    tags.weighty = 1;
+	    tags.insets = new Insets(5, 5, 5, 5);
+	    tags.anchor = GridBagConstraints.NORTHWEST;
+	    tags.fill = GridBagConstraints.NONE;
 
 	    tagTitleConstraints = new GridBagConstraints();
 	    tagTitleConstraints.insets = new Insets(8, 5, 5, 5);
 	    tagTitleConstraints.gridy = 0;
 	    tagTitleConstraints.gridx = 0;
-	    tagTitleConstraints.weighty = 1;
-	    tagTitleConstraints.anchor = GridBagConstraints.PAGE_START;
+	    tagTitleConstraints.anchor = GridBagConstraints.WEST;
 	    tagTitleConstraints.fill = GridBagConstraints.NONE;
 
 	    Content = new JPanel();
@@ -126,11 +123,11 @@ public class Result extends JPanel {
 	    JLabel addTag = new JLabel("Add Tag: ");
 	    addTag.setFont(new Font("Sans", Font.PLAIN, 14));
 
-	    JLabel tags = new JLabel("Tags: ");
-	    tags.setFont(new Font("Sans", Font.PLAIN, 14));
+	    JLabel tagLabel = new JLabel("Tags: ");
+	    tagLabel.setFont(new Font("Sans", Font.PLAIN, 14));
 
 	    Content.add(addTag, tagTitleConstraints);
-	    Content.add(tags, tagConstraints);
+	    Content.add(tagLabel, tagConstraints);
 	    Content.add(getJTextField(), tagContentConstraints);
 	    this.setBorder(BorderFactory.createLineBorder(Color.black));
 
@@ -146,9 +143,9 @@ public class Result extends JPanel {
 		JLabel value = new JLabel(e.getKey());
 		value.setFont(new Font("Sans", Font.BOLD, 14));
 
-		tagsConstraints.gridy = tagsConstraints.gridy + tagOffset;
+		tags.gridy = tags.gridy + tagOffset;
 
-		Content.add(value, tagsConstraints);
+		Content.add(value, tags);
 	    }
 
 	    draw();
@@ -164,9 +161,10 @@ public class Result extends JPanel {
 	    JLabel value = new JLabel(s);
 	    value.setFont(new Font("Sans", Font.BOLD, 14));
 
-	    tagConstraints.gridy = tagConstraints.gridy + tagOffset;
+	    tags.gridy = tags.gridy + tagOffset;
 
-	    Content.add(value, tagConstraints);
+	    Content.add(value, tags);
+	    revalidate();
 	}
     }
 
@@ -283,6 +281,7 @@ public class Result extends JPanel {
 
 		    book.tag(tagContent.getText());
 		    addTag(tagContent.getText());
+		    tagContent.setText("");
 		}
 
 		draw();
@@ -305,7 +304,7 @@ public class Result extends JPanel {
 			
 			Content.setVisible(!Content.isVisible());
 
-			draw();
+			revalidate();//draw();
 		    }
 		});
 	}
