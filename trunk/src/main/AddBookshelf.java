@@ -19,7 +19,6 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
-import java.awt.Dimension;
 
 public class AddBookshelf extends JDialog {
 
@@ -49,13 +48,49 @@ public class AddBookshelf extends JDialog {
     }
 
     /**
-     * This method initializes this
+     * This method initializes jButton
      * 
-     * @return void
+     * @return javax.swing.JButton
      */
-    private void initialize() {
-	this.setSize(234, 129);
-	this.setContentPane(getJContentPane());
+    private JButton getJButton() {
+	if (commit == null) {
+	    commit = new JButton("Commit");
+	    commit.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    shelf = control.addBookshelf(jTextField.getText());
+
+		    if (shelf != null) {
+			results.setResults(shelf);
+			tree.addChild(shelf);
+			tree.draw();
+		    }
+
+		    setVisible(false);
+
+		}
+	    });
+	}
+	return commit;
+    }
+
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getJButton2() {
+	if (cancel == null) {
+	    cancel = new JButton("Cancel");
+	    cancel.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    setVisible(false);
+
+		}
+	    });
+	}
+	return cancel;
     }
 
     /**
@@ -117,54 +152,18 @@ public class AddBookshelf extends JDialog {
 	return jTextField;
     }
 
-    /**
-     * This method initializes jButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getJButton() {
-	if (commit == null) {
-	    commit = new JButton("Commit");
-	    commit.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    shelf = control.addBookshelf(jTextField.getText());
-
-		    if (shelf != null) {
-			results.setResults(shelf);
-			tree.addChild(shelf);
-			tree.draw();
-		    }
-
-		    setVisible(false);
-
-		}
-	    });
-	}
-	return commit;
-    }
-
     public Bookshelf getShelf() {
 	return shelf;
     }
 
     /**
-     * This method initializes jButton
+     * This method initializes this
      * 
-     * @return javax.swing.JButton
+     * @return void
      */
-    private JButton getJButton2() {
-	if (cancel == null) {
-	    cancel = new JButton("Cancel");
-	    cancel.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    setVisible(false);
-
-		}
-	    });
-	}
-	return cancel;
+    private void initialize() {
+	this.setSize(234, 129);
+	this.setContentPane(getJContentPane());
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"

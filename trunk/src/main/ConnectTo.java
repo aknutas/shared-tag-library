@@ -21,7 +21,6 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.RemoteObjectException;
-import java.awt.Dimension;
 
 public class ConnectTo extends JDialog {
 
@@ -48,14 +47,85 @@ public class ConnectTo extends JDialog {
     }
 
     /**
-     * This method initializes this
+     * This method initializes ipAlias
      * 
-     * @return void
+     * @return javax.swing.JTextField
      */
-    private void initialize() {
-	this.setSize(284, 138);
-	this.setContentPane(getJContentPane());
-	this.setTitle("Connect To Server");
+    private JTextField address() {
+	if (addressField == null) {
+	    addressField = new JTextField(14);
+	}
+	return addressField;
+    }
+
+    /**
+     * This method initializes ipAlias
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField alias() {
+	if (ipAlias == null) {
+	    ipAlias = new JTextField(14);
+	}
+	return ipAlias;
+    }
+
+    /**
+     * This method initializes jButton1
+     * 
+     * @return javax.swing.JButton
+     * 
+     */
+    private JButton cancel() {
+	if (cancelButton == null) {
+	    cancelButton = new JButton("Cancel");
+	    cancelButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    setVisible(false);
+
+		}
+	    });
+	}
+	return cancelButton;
+    }
+
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton connect() {
+	if (connectButton == null) {
+	    connectButton = new JButton("Connect");
+	    connectButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    try {
+			control.addConnection(addressField.getText(), ipAlias
+				.getText());
+			tree.refresh();
+		    } catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    } catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    } catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    } catch (RemoteObjectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    setVisible(false);
+		}
+	    });
+	}
+	return connectButton;
     }
 
     /**
@@ -121,85 +191,14 @@ public class ConnectTo extends JDialog {
     }
 
     /**
-     * This method initializes ipAlias
+     * This method initializes this
      * 
-     * @return javax.swing.JTextField
+     * @return void
      */
-    private JTextField address() {
-	if (addressField == null) {
-	    addressField = new JTextField(14);
-	}
-	return addressField;
-    }
-
-    /**
-     * This method initializes jButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton connect() {
-	if (connectButton == null) {
-	    connectButton = new JButton("Connect");
-	    connectButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    try {
-			control.addConnection(addressField.getText(), ipAlias
-				.getText());
-			tree.refresh();
-		    } catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (RemoteObjectException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-		    setVisible(false);
-		}
-	    });
-	}
-	return connectButton;
-    }
-
-    /**
-     * This method initializes jButton1
-     * 
-     * @return javax.swing.JButton
-     * 
-     */
-    private JButton cancel() {
-	if (cancelButton == null) {
-	    cancelButton = new JButton("Cancel");
-	    cancelButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    setVisible(false);
-
-		}
-	    });
-	}
-	return cancelButton;
-    }
-
-    /**
-     * This method initializes ipAlias
-     * 
-     * @return javax.swing.JTextField
-     */
-    private JTextField alias() {
-	if (ipAlias == null) {
-	    ipAlias = new JTextField(14);
-	}
-	return ipAlias;
+    private void initialize() {
+	this.setSize(284, 138);
+	this.setContentPane(getJContentPane());
+	this.setTitle("Connect To Server");
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"
