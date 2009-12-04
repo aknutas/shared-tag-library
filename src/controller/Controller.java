@@ -441,19 +441,6 @@ public class Controller {
 	return null;
     }
 
-    /**
-     * Initialize a bookshelf with dummy data entries
-     * 
-     * @return the removed bookshelf (null if error)
-     */
-    public Bookshelf initializeDummyData() {
-	return null;
-    }
-
-    /*
-     * If you need any methods add a quick stub and description and ill get to
-     * it this is just an early version more to follow
-     */
 
     /**
      * Returns a butlerweights if something has been stored, or a null
@@ -469,142 +456,65 @@ public class Controller {
 	// TODO Storing several butlers and then retrieving the one you want
 	return butlerList.get(0);
     }
-
-    public Bookshelf search(String str) {
-	if (str == null)
-	    return null;
-	Bookshelf result = new VirtualBookshelf("Search of " + str);
-	BookQuery bq = new BookQuery();
-	bq.match(str);
-	Iterator<Bookshelf> iter = myLib.iterator();
-	Bookshelf bs;
-	while (iter.hasNext()) {
-	    bs = iter.next();
-	    Iterator<Book> bsiter = bs.iterator();
-	    Book book = null;
-	    while (bsiter.hasNext()) {
-		book = bsiter.next();
-		if (bq.compareTo(book) == 0) {
-		    result.insert(book);
-		}
-	    }
-
-	}
-	return result;
-    }
-
-    public Bookshelf search(String str, Bookshelf bookshelf) {
-	if (str == null)
-	    return null;
-	Bookshelf result = new VirtualBookshelf("Search of " + str);
-	BookQuery bq = new BookQuery();
-	bq.match(str);
-	Iterator<Book> bsiter = bookshelf.iterator();
-	Book book = null;
-	while (bsiter.hasNext()) {
-	    book = bsiter.next();
-	    if (bq.compareTo(book) == 0) {
-		result.insert(book);
-	    }
-	}
-
-	return result;
-    }
-
     /**
-     * a method for use in multi term specific area searching
+     * A search match any criteria with a single string on your local library
+     * @param str
+     * @return
+     */
+    public Bookshelf search(String str) {
+	return ControllerSearch.search(str, myLib);
+    }
+    
+    /**
+     *  A search match any criteria with a single string on a bookshelf
+     * @param str
+     * @param bookshelf
+     * @return
+     */
+    public Bookshelf search(String str, Bookshelf bookshelf) {
+	return search(str,bookshelf);
+    }
+    
+    /**
+     * A search match any criteria with a single string a library
+     * @param str
+     * @param aLib
+     * @return
+     */
+    public Bookshelf search(String str,Library aLib) {
+	return ControllerSearch.search(str, aLib);
+    }
+    public Bookshelf search(String str,Collection<Bookshelf> bookshelves) {
+	return ControllerSearch.search(str, bookshelves);
+    }
+    
+    /**
+     * a method for use in multi term specific area searching ( field to search, searching within)
      * 
      * @param list
      * @return
      */
     public Bookshelf search(Map<String, Vector<String>> list) {
-	if (list == null)
-	    return null;
-	Bookshelf result = new VirtualBookshelf("Search Result shelf");
-	BookQuery bq = new BookQuery();
-	Iterator<Entry<String, Vector<String>>> iter = list.entrySet()
-		.iterator();
-
-	while (iter.hasNext()) {
-	    Entry<String, Vector<String>> enter = iter.next();
-	    Vector<String> v = enter.getValue();
-	    for (int i = 0; i < v.size(); i++) {
-		if (enter.getKey().equalsIgnoreCase("tag")) {
-		    if (v.elementAt(i).indexOf("-") == 0)
-			bq.matchTag(v.elementAt(i).substring(1), true);
-		    else
-			bq.matchTag(v.elementAt(i), false);
-
-		}
-		if (v.elementAt(i).indexOf("-") == 0)
-		    bq.matchProperty(enter.getKey(), v.elementAt(i)
-			    .substring(1), true);
-		else
-		    bq.matchProperty(enter.getKey(), v.elementAt(i), false);
-
-	    }
-	}
-	Iterator<Bookshelf> libiter = myLib.iterator();
-	Bookshelf bs;
-	while (iter.hasNext()) {
-	    bs = libiter.next();
-	    Iterator<Book> bsiter = bs.iterator();
-	    Book book = null;
-	    while (bsiter.hasNext()) {
-		book = bsiter.next();
-		if (bq.compareTo(book) == 0) {
-		    result.insert(book);
-		}
-	    }
-
-	}
-	return result;
+	return search(list,myLib);
     }
-
+    
+    public Bookshelf search(Map<String, Vector<String>> list, Library aLib) {
+	return search(list,aLib);
+    }
+    
     /**
      * a method for use in multi term specific area searching
      * 
      * @param list
      * @return
      */
-    public Bookshelf search(Map<String, Vector<String>> list,
-	    Bookshelf bookshelf) {
-	if (list == null)
-	    return null;
-	Bookshelf result = new VirtualBookshelf("Search Result shelf");
-	BookQuery bq = new BookQuery();
-	Iterator<Entry<String, Vector<String>>> iter = list.entrySet()
-		.iterator();
-	while (iter.hasNext()) {
-	    Entry<String, Vector<String>> enter = iter.next();
-	    Vector<String> v = enter.getValue();
-	    for (int i = 0; i < v.size(); i++) {
-		if (enter.getKey().equalsIgnoreCase("tag")) {
-		    if (v.elementAt(i).indexOf("-") == 0)
-			bq.matchTag(v.elementAt(i).substring(1), true);
-		    else
-			bq.matchTag(v.elementAt(i), false);
-
-		}
-		if (v.elementAt(i).indexOf("-") == 0)
-		    bq.matchProperty(enter.getKey(), v.elementAt(i)
-			    .substring(1), true);
-		else
-		    bq.matchProperty(enter.getKey(), v.elementAt(i), false);
-
-	    }
-	}
-
-	Iterator<Book> bsiter = bookshelf.iterator();
-	Book book = null;
-	while (bsiter.hasNext()) {
-	    book = bsiter.next();
-	    if (bq.compareTo(book) == 0) {
-		result.insert(book);
-	    }
-	}
-	return result;
+    public Bookshelf search(Map<String, Vector<String>> list, Bookshelf bookshelf) {
+	return search(list,bookshelf);
     }
+    
+    public Bookshelf search(Map<String, Vector<String>> list, Collection<Bookshelf> bookshelves) {
+	return search(list,bookshelves);
+    }   
 
     public void addConnection(String host) throws IllegalArgumentException,
 	    NullPointerException, RemoteObjectException, UnknownHostException, IOException {
