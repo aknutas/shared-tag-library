@@ -21,6 +21,7 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.RemoteObjectException;
+import java.awt.Dimension;
 
 public class ConnectTo extends JDialog {
 
@@ -32,6 +33,8 @@ public class ConnectTo extends JDialog {
     private JButton cancelButton = null;
     private Controller control = null;
     private TreeView tree = null;
+    private JTextField ipAlias = null;
+    private JLabel jLabel1 = null;
 
     /**
      * @param owner
@@ -50,7 +53,7 @@ public class ConnectTo extends JDialog {
      * @return void
      */
     private void initialize() {
-	this.setSize(300, 150);
+	this.setSize(284, 138);
 	this.setContentPane(getJContentPane());
 	this.setTitle("Connect To Server");
     }
@@ -70,38 +73,61 @@ public class ConnectTo extends JDialog {
 			.println("Cannot set new Theme for Java Look and Feel.");
 	    }
 
+	    GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+	    gridBagConstraints21.gridx = 0;
+	    gridBagConstraints21.gridy = 0;
+	    gridBagConstraints21.anchor = GridBagConstraints.EAST;
+	    gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+	    jLabel1 = new JLabel();
+	    jLabel1.setText("Alias: ");
+
 	    GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-	    gridBagConstraints4.gridx = 1;
+	    gridBagConstraints4.gridx = 2;
 	    gridBagConstraints4.gridy = 2;
+	    gridBagConstraints4.weighty = 1;
+	    gridBagConstraints4.anchor = GridBagConstraints.PAGE_START;
 	    gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 	    gridBagConstraints3.gridx = 1;
-	    gridBagConstraints3.gridy = 1;
+	    gridBagConstraints3.gridy = 2;
+	    gridBagConstraints3.anchor = GridBagConstraints.PAGE_START;
 	    gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 	    gridBagConstraints2.gridx = 0;
-	    gridBagConstraints2.gridy = 0;
+	    gridBagConstraints2.gridy = 1;
 	    gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+	    gridBagConstraints2.anchor = GridBagConstraints.EAST;
 	    jLabel = new JLabel();
 	    jLabel.setText("IP Address: ");
+	    GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+	    gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+	    gridBagConstraints1.gridy = 0;
+	    gridBagConstraints1.weighty = 1.0;
+	    gridBagConstraints1.gridwidth = 2;
+	    gridBagConstraints1.gridx = 1;
+	    gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints = new GridBagConstraints();
-	    gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-	    gridBagConstraints.gridy = 0;
-	    gridBagConstraints.weightx = 1.0;
+	    gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+	    gridBagConstraints.gridy = 1;
+	    gridBagConstraints.weighty = 1.0;
+	    gridBagConstraints.gridwidth = 2;
 	    gridBagConstraints.gridx = 1;
 	    gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 	    jContentPane = new JPanel();
 	    jContentPane.setLayout(new GridBagLayout());
+
+	    jContentPane.add(alias(), gridBagConstraints1);
 	    jContentPane.add(address(), gridBagConstraints);
 	    jContentPane.add(jLabel, gridBagConstraints2);
 	    jContentPane.add(connect(), gridBagConstraints3);
 	    jContentPane.add(cancel(), gridBagConstraints4);
+	    jContentPane.add(jLabel1, gridBagConstraints21);
 	}
 	return jContentPane;
     }
 
     /**
-     * This method initializes jTextField
+     * This method initializes ipAlias
      * 
      * @return javax.swing.JTextField
      */
@@ -124,7 +150,8 @@ public class ConnectTo extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			control.addConnection(addressField.getText());
+			control.addConnection(addressField.getText(), ipAlias
+				.getText());
 			tree.refresh();
 		    } catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -169,4 +196,16 @@ public class ConnectTo extends JDialog {
 	return cancelButton;
     }
 
-}
+    /**
+     * This method initializes ipAlias
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField alias() {
+	if (ipAlias == null) {
+	    ipAlias = new JTextField(14);
+	}
+	return ipAlias;
+    }
+
+} // @jve:decl-index=0:visual-constraint="10,10"
