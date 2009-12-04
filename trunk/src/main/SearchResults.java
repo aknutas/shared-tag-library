@@ -25,7 +25,7 @@ public class SearchResults extends JScrollPane {
 
     public static JPanel panel = new JPanel();
 
-    private Bookshelf bookshelf;
+    private Bookshelf bookshelf;  //  @jve:decl-index=0:
     List<Result> results;
     Controller control = null;
     GridBagConstraints gbc;
