@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -136,6 +138,7 @@ public class UnTag extends JDialog {
 		System.out
 			.println("Cannot set new Theme for Java Look and Feel.");
 	    }
+
 	}
 	return jContentPane;
     }
@@ -148,6 +151,17 @@ public class UnTag extends JDialog {
     private JTextField getJTextField() {
 	if (jTextField == null) {
 	    jTextField = new JTextField(14);
+
+	    jTextField.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			commit.doClick();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+			cancel.doClick();
+		    }
+		}
+	    });
 	}
 	return jTextField;
     }

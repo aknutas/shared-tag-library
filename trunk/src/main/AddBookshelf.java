@@ -4,8 +4,11 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -171,6 +174,16 @@ public class AddBookshelf extends JDialog {
     private JTextField getJTextField() {
 	if (jTextField == null) {
 	    jTextField = new JTextField(14);
+	    jTextField.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			commit.doClick();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+			cancel.doClick();
+		    }
+		}
+	    });
 	}
 	return jTextField;
     }

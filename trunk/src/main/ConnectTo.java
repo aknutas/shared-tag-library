@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -54,6 +56,17 @@ public class ConnectTo extends JDialog {
     private JTextField address() {
 	if (addressField == null) {
 	    addressField = new JTextField(14);
+
+	    addressField.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			connectButton.doClick();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+			cancelButton.doClick();
+		    }
+		}
+	    });
 	}
 	return addressField;
     }
