@@ -16,14 +16,12 @@ public abstract class ControllerSearch {
 
     public static Collection<Bookshelf> searchAlllibs(String str,Collection<Library> allLibs) {
 	Iterator<Library> iter = allLibs.iterator();
-	Collection<Bookshelf> shelves;
+	Collection<Bookshelf> shelves = new Vector<Bookshelf>();
 	
 	while(iter.hasNext()){
-	   search(str,iter.next());
+	   shelves.add(search(str,iter.next()));
 	}
-	
-	
-	return null;
+	return shelves;
     }
     
     
@@ -31,7 +29,8 @@ public abstract class ControllerSearch {
     public static Bookshelf search(String str, Library aLib) {
 	if (str == null)
 	    return null;
-	Bookshelf result = new VirtualBookshelf(aLib.getProperty("Name") +  ":Search on " + str);
+	//Bookshelf result = new VirtualBookshelf(aLib.getProperty("Name") +  ":Search on " + str);
+	Bookshelf result = new VirtualBookshelf("NAME WOULD GO HERE FIX REMOTE LIB PROPERTIES:Search on " + str);
 	BookQuery bq = new BookQuery();
 	bq.match(str);
 	Iterator<Bookshelf> iter = aLib.iterator();
@@ -87,7 +86,15 @@ public abstract class ControllerSearch {
 	}
 	return result;
     }
-
+    public static Collection<Bookshelf> searchAlllibs(Map<String, Vector<String>> list,Collection<Library> allLibs) {
+	Iterator<Library> iter = allLibs.iterator();
+	Collection<Bookshelf> shelves = new Vector<Bookshelf>();
+	
+	while(iter.hasNext()){
+	   shelves.add(search(list,iter.next()));
+	}
+	return shelves;
+    }
     /**
      * a method for use in multi term specific area searching
      * 
