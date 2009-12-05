@@ -120,6 +120,11 @@ public final class VirtualBookshelf implements Bookshelf {
 
 		return this.bookshelf.remove(book);
 	}
+	
+	public boolean removeAll() {
+		this.bookshelf.clear();
+		return true;
+	}
 
 	public boolean contains(Book book) throws NullPointerException {
 		if(null == book)
