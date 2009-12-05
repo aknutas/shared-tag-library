@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,6 +27,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
+import data.Book;
 import data.Bookshelf;
 import data.RemoteObjectException;
 
@@ -51,6 +53,36 @@ public class Root extends JFrame {
 
     private static final long serialVersionUID = 1L;
     static Root thisClass = null;
+
+    /**
+     * This method initializes jMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem renameBookMenuItem() {
+	if (renameBookDialogMenuItem == null) {
+	    renameBookDialogMenuItem = new JMenuItem("Edit Book");
+	    renameBookDialogMenuItem.setMnemonic(KeyEvent.VK_I);
+	    renameBookDialogMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+	    renameBookDialogMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    ArrayList<Book> result = searchResults.getSelected();
+		    if (result.size() > 0) {
+			
+			RenameBook dialog = new RenameBook(thisClass, searchResults, result
+				.get(0));
+			dialog.setLocationRelativeTo(content);
+			dialog.setVisible(true);
+			
+			draw();
+		    }
+		}
+	    });
+	}
+	return renameBookDialogMenuItem;
+    }
 
     /**
      * @param args
@@ -122,6 +154,7 @@ public class Root extends JFrame {
     private Bookshelf shelf = null;
     private JMenu startMenu = null;
     private TreeView treeView = null;
+    private JMenuItem renameBookDialogMenuItem = null;
 
     /**
      * This is the default constructor
@@ -261,7 +294,7 @@ public class Root extends JFrame {
 	if (bookMenu == null) {
 	    bookMenu = new JMenu("Book");
 	    bookMenu.setMnemonic(KeyEvent.VK_K);
-	    // Change Title/Author
+	    bookMenu.add(renameBookMenuItem());
 	    // Add Tag
 	    // Clear Tags
 	}
