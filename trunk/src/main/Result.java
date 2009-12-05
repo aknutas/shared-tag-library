@@ -231,10 +231,11 @@ public class Result extends JPanel {
 			    break;
 			}
 		    }
-		    
+
 		    book.tag(tagContent.getText());
-		    if (!duplicate) addTag(tagContent.getText());
-		    
+		    if (!duplicate)
+			addTag(tagContent.getText());
+
 		    tagContent.setText("");
 		}
 

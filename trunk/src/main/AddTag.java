@@ -57,9 +57,9 @@ public class AddTag extends JDialog {
 	    commit = new JButton("Commit");
 	    commit.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
-		    
+
 		    if (books.size() > 0) {
-			
+
 			for (Book b : books) {
 			    b.tag(jTextField.getText());
 			}
