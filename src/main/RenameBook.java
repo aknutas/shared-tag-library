@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -168,6 +170,17 @@ public class RenameBook extends JDialog {
 	if (jTextField == null) {
 	    jTextField = new JTextField(14);
 	    jTextField.setText(book.getProperty("title"));
+
+	    jTextField.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			commit.doClick();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+			cancel.doClick();
+		    }
+		}
+	    });
 	}
 	return jTextField;
     }
@@ -181,6 +194,17 @@ public class RenameBook extends JDialog {
 	if (jTextField1 == null) {
 	    jTextField1 = new JTextField(14);
 	    jTextField1.setText(book.getProperty("author"));
+
+	    jTextField.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			commit.doClick();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+			cancel.doClick();
+		    }
+		}
+	    });
 	}
 	return jTextField1;
     }

@@ -7,6 +7,7 @@ import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -63,6 +64,7 @@ public class Help extends JDialog {
 	if (jList == null) {
 	    jList = new JList(topics);
 	    jList.setSelectedIndex(focus);
+	    jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 	    ListSelectionListener listSelectionListener = new ListSelectionListener() {
 		public void valueChanged(ListSelectionEvent listSelectionEvent) {

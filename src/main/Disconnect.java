@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Set;
@@ -60,6 +62,17 @@ public class Disconnect extends JDialog {
 	    } else {
 		ipAlias = new JComboBox((String[]) control.getConnections()
 			.toArray(new String[0]));
+
+		ipAlias.addKeyListener(new KeyAdapter() {
+		    public void keyPressed(KeyEvent e) {
+			int key = e.getKeyCode();
+			if (key == KeyEvent.VK_ENTER) {
+			    disconnectButton.doClick();
+			} else if (key == KeyEvent.VK_ESCAPE) {
+			    cancelButton.doClick();
+			}
+		    }
+		});
 	    }
 	}
 	return ipAlias;

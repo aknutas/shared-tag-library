@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -174,6 +176,17 @@ public class RenameBookshelf extends JDialog {
     private JTextField getJTextField1() {
 	if (jTextField1 == null) {
 	    jTextField1 = new JTextField(14);
+
+	    jTextField1.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			commit.doClick();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+			cancel.doClick();
+		    }
+		}
+	    });
 	}
 	return jTextField1;
     }
