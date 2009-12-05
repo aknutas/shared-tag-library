@@ -165,6 +165,7 @@ public class AddBookshelf extends JDialog {
     private void initialize() {
 	this.setSize(265, 154);
 	this.setContentPane(getJContentPane());
+	this.setTitle("Add Bookshelf");
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"

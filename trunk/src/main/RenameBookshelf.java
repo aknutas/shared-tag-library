@@ -189,6 +189,7 @@ public class RenameBookshelf extends JDialog {
     private void initialize() {
 	this.setSize(308, 158);
 	this.setContentPane(getJContentPane());
+	this.setTitle("Rename Bookshelf");
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"
