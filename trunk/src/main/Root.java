@@ -386,8 +386,6 @@ public class Root extends JFrame {
 			Bookshelf shelf = searchResults.getBookshelf();
 			if (shelf != null) {
 
-			    System.out.println("Removing... "
-				    + shelf.getProperty("name"));
 			    control.removeBookshelf(shelf);
 			    searchResults.setResults(null);
 			    treeView.refresh();
