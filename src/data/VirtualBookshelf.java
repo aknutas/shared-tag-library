@@ -122,7 +122,9 @@ public final class VirtualBookshelf implements Bookshelf {
 	}
 	
 	public boolean removeAll() {
+		this.shelves.clear();
 		this.bookshelf.clear();
+		
 		return true;
 	}
 
