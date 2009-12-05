@@ -19,11 +19,12 @@ import network.messages.Message;
 public class ControlImpl implements Control, ConnectionCallBack {
 
     private HashMap<Integer, CommThread> threadCollection;
+    private HashMap<Integer, Set<ClientResponder>> connectionObjects;
     private long id;
     private int conncounter;
-    Random rd;
-    ServerResponder messageReceiver;
-    ConnectionListener cl;
+    private Random rd;
+    private ServerResponder messageReceiver;
+    private ConnectionListener cl;
 
     /**
      * Private default constructor prevents object creation without proper
@@ -32,6 +33,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     private ControlImpl() {
 	rd = new Random();
 	id = rd.nextLong();
+	connectionObjects = new HashMap<Integer, Set<ClientResponder>>();
 	threadCollection = new HashMap<Integer, CommThread>();
 	conncounter = 0;
 	cl = new ConnectionListener(this);
@@ -201,6 +203,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	CommThread ct = new ServerThread(id, socket, messageReceiver);
 	ct.start();
 	threadCollection.put(conncounter, ct);
+	connectionObjects.put(conncounter, new HashSet<ClientResponder>());
 	// Debug
 	System.out.println("Controller here. Started listening to connection "
 		+ conncounter + " from "
@@ -222,5 +225,26 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    i.next().end();
 	    i.remove();
 	}
+    }
+    
+    /**
+     * The method is used to register objects that need to be notified when the
+     * connection this specific ID gets shut down.
+     * 
+     * @param connId
+     *            The connection id.
+     * @param connUser
+     *            The object to be registered for listening.
+     * @return Returns the connection id. Or 0 in case of failure.
+     */
+    public synchronized int registerShutDownListener(int connId,
+	    ClientResponder connUser) {
+	try {
+	    Set<ClientResponder> notifyset = connectionObjects.get(connId);
+	    notifyset.add(connUser);
+	} catch (Exception e) {
+	    connId = 0;
+	}
+	return connId;
     }
 }
