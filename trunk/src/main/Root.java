@@ -55,36 +55,6 @@ public class Root extends JFrame {
     static Root thisClass = null;
 
     /**
-     * This method initializes jMenuItem
-     * 
-     * @return javax.swing.JMenuItem
-     */
-    private JMenuItem renameBookMenuItem() {
-	if (renameBookDialogMenuItem == null) {
-	    renameBookDialogMenuItem = new JMenuItem("Edit Book");
-	    renameBookDialogMenuItem.setMnemonic(KeyEvent.VK_I);
-	    renameBookDialogMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		    KeyEvent.VK_I, ActionEvent.CTRL_MASK));
-	    renameBookDialogMenuItem.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    ArrayList<Book> result = searchResults.getSelected();
-		    if (result.size() > 0) {
-			
-			RenameBook dialog = new RenameBook(thisClass, searchResults, result
-				.get(0));
-			dialog.setLocationRelativeTo(content);
-			dialog.setVisible(true);
-			
-			draw();
-		    }
-		}
-	    });
-	}
-	return renameBookDialogMenuItem;
-    }
-
-    /**
      * @param args
      */
     public static void main(String[] args) {
@@ -142,7 +112,9 @@ public class Root extends JFrame {
     private javax.swing.Timer msgTimer;
 
     private MsgTrigger msgTrigger;
+
     private JMenuItem quitMenuItem = null;
+    private JMenuItem renameBookDialogMenuItem = null;
     private RenameBookshelf renameBookshelfDialog = null;
     private JMenuItem renameBookshelfMenuItem = null;
     private TextField searchField = null;
@@ -154,7 +126,6 @@ public class Root extends JFrame {
     private Bookshelf shelf = null;
     private JMenu startMenu = null;
     private TreeView treeView = null;
-    private JMenuItem renameBookDialogMenuItem = null;
 
     /**
      * This is the default constructor
@@ -653,6 +624,36 @@ public class Root extends JFrame {
 
 	}
 	return quitMenuItem;
+    }
+
+    /**
+     * This method initializes jMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem renameBookMenuItem() {
+	if (renameBookDialogMenuItem == null) {
+	    renameBookDialogMenuItem = new JMenuItem("Edit Book");
+	    renameBookDialogMenuItem.setMnemonic(KeyEvent.VK_I);
+	    renameBookDialogMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+	    renameBookDialogMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    ArrayList<Book> result = searchResults.getSelected();
+		    if (result.size() > 0) {
+
+			RenameBook dialog = new RenameBook(thisClass,
+				searchResults, result.get(0));
+			dialog.setLocationRelativeTo(content);
+			dialog.setVisible(true);
+
+			draw();
+		    }
+		}
+	    });
+	}
+	return renameBookDialogMenuItem;
     }
 
 }
