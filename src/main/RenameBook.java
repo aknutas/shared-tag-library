@@ -31,10 +31,10 @@ public class RenameBook extends JDialog {
     private JPanel jContentPane = null;
     private JLabel jLabel = null;
     private JLabel jLabel1 = null;
-    private SearchResults searchResults = null;
-
     private JTextField jTextField = null;
+
     private JTextField jTextField1 = null;
+    private SearchResults searchResults = null;
 
     /**
      * @param owner
