@@ -1,6 +1,9 @@
 package database;
 
 import javax.jdo.*;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -26,9 +29,16 @@ public class AccessImpl implements Access {
     public void shutdown() {
 	pm.close();
 	pmf.close();
+	try {
+	    DriverManager.getConnection("jdbc:derby:;shutdown=true");
+	} catch (SQLException e) {
+	    // Error code 50000 means proper shutdown. That's a good exception,
+	    // mmm'kay?
+	    if (e.getErrorCode() != 50000)
+		e.printStackTrace();
+	}
 	pm = null;
 	pmf = null;
-	instance = null;
     }
 
     /**
