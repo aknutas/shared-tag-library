@@ -66,7 +66,7 @@ public class Controller {
 
     public Map<Integer, VirtualLibrary> importedLibs;
 
-    public String libID = "ID";
+    public String libID = "Name";
 
     public PersistentLibrary myLib;
     /**
@@ -101,6 +101,7 @@ public class Controller {
 	myLib = new PersistentLibrary(qb);
 	nextID = 1;
 	cntrl = new ControlImpl(new LibraryResponder(myLib));
+	setLibName(myLib ,"kabob");
 	ProgramProperties props = ProgramProperties.getInstance();
 	modifiedBs = new Vector<Bookshelf>();
 	setupconnections(props);
@@ -108,6 +109,13 @@ public class Controller {
 	// Registering shutdown hooks
 	addShutdownHooks();
     }
+    
+    public void setLibName(Library lib, String name){
+	if(lib!=null && name!=null)
+	lib.setProperty(libID, name);
+    }
+    
+    
 
     /**
      * Add a book to the library
@@ -563,9 +571,13 @@ public class Controller {
     public synchronized Collection<String> retrieveRemoteLibraryNames() {
 	return connectionAlias.values();
     }
+    
+    
+    public synchronized Map<Integer, VirtualLibrary> retrieveImportedLibsNames() {
+	return importedLibs;
+    }
 
-
-
+    
     /**
      * a method for use in multi term specific area searching ( field to search,
      * searching within)
@@ -576,7 +588,26 @@ public class Controller {
     public synchronized Bookshelf search(Map<String, Vector<String>> list) {
 	return search(list, myLib);
     }
-
+    public synchronized Collection<Bookshelf> searchAll(Map<String, Vector<String>> list) {
+	Collection<Entry<Integer,VirtualLibrary>> temp = importedLibs.entrySet();
+	Iterator<Entry<Integer, VirtualLibrary>> iter = temp.iterator();
+	Vector<Library> libs = new Vector<Library>();
+	while(iter.hasNext()){
+	    libs.add(iter.next().getValue());
+	}
+	libs.add(myLib);
+	return ControllerSearch.searchAlllibs(list, libs);
+    }
+    public synchronized Collection<Bookshelf> searchAll(String str) {
+	Collection<Entry<Integer,VirtualLibrary>> temp = importedLibs.entrySet();
+	Iterator<Entry<Integer, VirtualLibrary>> iter = temp.iterator();
+	Vector<Library> libs = new Vector<Library>();
+	while(iter.hasNext()){
+	    libs.add(iter.next().getValue());
+	}
+	libs.add(myLib);
+	return ControllerSearch.searchAlllibs(str, libs);
+    }
     /**
      * a method for use in multi term specific area searching
      * 
@@ -585,16 +616,16 @@ public class Controller {
      */
     public synchronized Bookshelf search(Map<String, Vector<String>> list,
 	    Bookshelf bookshelf) {
-	return search(list, bookshelf);
+	return ControllerSearch.search(list, bookshelf);
     }
 
     public synchronized Bookshelf search(Map<String, Vector<String>> list,
 	    Collection<Bookshelf> bookshelves) {
-	return search(list, bookshelves);
+	return ControllerSearch.search(list, bookshelves);
     }
 
     public synchronized Bookshelf search(Map<String, Vector<String>> list, Library aLib) {
-	return search(list, aLib);
+	return ControllerSearch.search(list, aLib);
     }
 
     /**
@@ -615,7 +646,7 @@ public class Controller {
      * @return
      */
     public synchronized Bookshelf search(String str, Bookshelf bookshelf) {
-	return search(str, bookshelf);
+	return ControllerSearch.search(str, bookshelf);
     }
 
     public synchronized Bookshelf search(String str, Collection<Bookshelf> bookshelves) {
