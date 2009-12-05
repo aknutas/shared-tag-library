@@ -83,6 +83,8 @@ public class Root extends JFrame {
 
     private JMenuItem addBookshelfMenuItem = null;
 
+    private JMenuItem addTagDialogMenuItem = null;
+
     private JMenu bookMenu = null;
 
     private JMenu bookshelfMenu = null;
@@ -114,6 +116,8 @@ public class Root extends JFrame {
     private MsgTrigger msgTrigger;
 
     private JMenuItem quitMenuItem = null;
+
+    private JMenuItem removeTagDialogMenuItem = null;
     private JMenuItem renameBookDialogMenuItem = null;
     private RenameBookshelf renameBookshelfDialog = null;
     private JMenuItem renameBookshelfMenuItem = null;
@@ -126,7 +130,6 @@ public class Root extends JFrame {
     private Bookshelf shelf = null;
     private JMenu startMenu = null;
     private TreeView treeView = null;
-
     /**
      * This is the default constructor
      */
@@ -138,6 +141,36 @@ public class Root extends JFrame {
 	msgTimer.setInitialDelay(2000);
 	msgTimer.start();
 	initialize();
+    }
+
+    /**
+     * This method initializes jMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem addTagMenuItem() {
+	if (addTagDialogMenuItem == null) {
+	    addTagDialogMenuItem = new JMenuItem("Add Tag");
+	    addTagDialogMenuItem.setMnemonic(KeyEvent.VK_A);
+	    addTagDialogMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+	    addTagDialogMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    ArrayList<Book> books = searchResults.getSelected();
+		    if (books.size() > 0) {
+
+			AddTag dialog = new AddTag(thisClass, searchResults,
+				books);
+			dialog.setLocationRelativeTo(content);
+			dialog.setVisible(true);
+
+			draw();
+		    }
+		}
+	    });
+	}
+	return addTagDialogMenuItem;
     }
 
     /**
@@ -266,8 +299,9 @@ public class Root extends JFrame {
 	    bookMenu = new JMenu("Book");
 	    bookMenu.setMnemonic(KeyEvent.VK_K);
 	    bookMenu.add(renameBookMenuItem());
-	    // Add Tag
-	    // Clear Tags
+	    bookMenu.addSeparator();
+	    bookMenu.add(addTagMenuItem());
+	    bookMenu.add(getRemoveTagDialogMenuItem());
 	}
 	return bookMenu;
     }
@@ -457,6 +491,36 @@ public class Root extends JFrame {
 	    libraryMenu.add(getDeleteBookshelfMenuItem());
 	}
 	return libraryMenu;
+    }
+
+    /**
+     * This method initializes removeTagDialogMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getRemoveTagDialogMenuItem() {
+	if (removeTagDialogMenuItem == null) {
+	    removeTagDialogMenuItem = new JMenuItem("Un-Tag");
+	    removeTagDialogMenuItem.setMnemonic(KeyEvent.VK_M);
+	    removeTagDialogMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+	    removeTagDialogMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    ArrayList<Book> books = searchResults.getSelected();
+		    if (books.size() > 0) {
+
+			UnTag dialog = new UnTag(thisClass,
+				searchResults, books);
+			dialog.setLocationRelativeTo(content);
+			dialog.setVisible(true);
+
+			draw();
+		    }
+		}
+	    });
+	}
+	return removeTagDialogMenuItem;
     }
 
     /**
