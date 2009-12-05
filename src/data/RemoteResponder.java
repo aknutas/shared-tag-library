@@ -61,5 +61,15 @@ public abstract class RemoteResponder implements ServerResponder {
 		
 		return response;
 	}
+	
+	@Override
+	public void onDisconnect(int connection) {
+		
+	}
+	
+	@Override
+	public void onLoop(int connection) {
+		
+	}
 
 }
