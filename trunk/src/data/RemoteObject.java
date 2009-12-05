@@ -66,13 +66,13 @@ public abstract class RemoteObject implements ClientResponder {
 		}
 
 		@Override
-		public void onDisconnect() {
+		public void onDisconnect(int connection) throws IllegalArgumentException {
 			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void onLoop() {
+		public void onLoop(int connection) throws IllegalArgumentException {
 			// TODO Auto-generated method stub
 			
 		}
@@ -205,12 +205,12 @@ public abstract class RemoteObject implements ClientResponder {
 	}
 	
 	@Override
-	public void onDisconnect() {
+	public void onDisconnect(int connection) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void onLoop() {
+	public void onLoop(int connection) throws IllegalArgumentException {
 		// TODO Auto-generated method stub	
 	}
 	
