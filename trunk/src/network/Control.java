@@ -82,5 +82,17 @@ public interface Control {
      * connection listening, and starts to disconnect threads.
      */
     public void shutDown();
+    
+    /**
+     * The method is used to register objects that need to be notified when the
+     * connection this specific ID gets shut down.
+     * 
+     * @param connId
+     *            The connection id.
+     * @param connUser
+     *            The object to be registered for listening.
+     * @return Returns the connection id. Or 0 in case of failure.
+     */
+    public int registerShutDownListener(int connId, ClientResponder connUser);
 
 }
