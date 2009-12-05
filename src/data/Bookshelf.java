@@ -31,8 +31,16 @@ public interface Bookshelf extends Properties, Iterable<Book> {
 	public boolean remove(Book book) throws NullPointerException;
 	
 	/**
-	 * Determines whether the bookshelf contains the given book.
+	 * Removes all books from the Bookshelf, if the Bookshelf does not
+	 * contain any books then this method does nothing.
 	 * 
+	 * @return a boolean determining whether the Bookshelf was cleared
+	 */
+	public boolean removeAll();
+	
+	/**
+	 * Determines whether the bookshelf contains the given book.
+	 * 	 * @param
 	 * @param book the book to check for
 	 * 
 	 * @return true if the the bookshelf has the book, otherwise false

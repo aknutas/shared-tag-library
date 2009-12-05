@@ -262,5 +262,9 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public boolean removeAll() {
+		return false;
+	}
 
 }
