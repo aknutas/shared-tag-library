@@ -229,7 +229,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     
     /**
      * The method is used to register objects that need to be notified when the
-     * connection this specific ID gets shut down.
+     * connection this specific ID gets shut down or stuff happens.
      * 
      * @param connId
      *            The connection id.
@@ -237,7 +237,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
      *            The object to be registered for listening.
      * @return Returns the connection id. Or 0 in case of failure.
      */
-    public synchronized int registerShutDownListener(int connId,
+    public synchronized int registerAnomalyListener(int connId,
 	    ClientResponder connUser) {
 	try {
 	    Set<ClientResponder> notifyset = connectionObjects.get(connId);

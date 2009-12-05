@@ -93,6 +93,6 @@ public interface Control {
      *            The object to be registered for listening.
      * @return Returns the connection id. Or 0 in case of failure.
      */
-    public int registerShutDownListener(int connId, ClientResponder connUser);
+    public int registerAnomalyListener(int connId, ClientResponder connUser);
 
 }
