@@ -262,7 +262,15 @@ public class Controller {
 
 		// Closing off network connections
 		cntrl.shutDown();
-
+		
+		Iterator<Bookshelf> iter = myLib.iterator();
+		Bookshelf bs;
+		while(iter.hasNext()){
+		    bs = iter.next();
+		    if(bs instanceof VirtualBookshelf)
+		    myLib.saveBookshelf((VirtualBookshelf)bs);
+		}
+		
 		// These commands absolutely need to run last, and in this order
 		ProgramProperties pp = ProgramProperties.getInstance();
 		pp.setProperty("controller::connections", connectionAlias);
