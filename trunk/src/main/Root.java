@@ -697,6 +697,12 @@ public class Root extends JFrame {
     private void initialize() {
 	try {
 	    control = new Controller();
+
+	    this.setSize(800, 800);
+	    this.setMinimumSize(new Dimension(650, 400));
+	    this.setJMenuBar(getJJMenuBar());
+	    this.setContentPane(getContent());
+	    this.setTitle("Book Butler");
 	} catch (UnknownHostException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -713,12 +719,6 @@ public class Root extends JFrame {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-
-	this.setSize(800, 800);
-	this.setMinimumSize(new Dimension(650, 400));
-	this.setJMenuBar(getJJMenuBar());
-	this.setContentPane(getContent());
-	this.setTitle("Book Butler");
     }
 
     /**
