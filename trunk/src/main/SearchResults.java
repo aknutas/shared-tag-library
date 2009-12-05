@@ -26,14 +26,10 @@ public class SearchResults extends JScrollPane {
     private static final long serialVersionUID = 1L;
 
     private Bookshelf bookshelf = null; // @jve:decl-index=0:
-    public Bookshelf getBookshelf() {
-        return bookshelf;
-    }
-
     Controller control = null;
+
     GridBagConstraints gbc = null;
     List<Result> results = null;
-
     /**
      * This is the default constructor
      */
@@ -61,6 +57,10 @@ public class SearchResults extends JScrollPane {
 
 	validate();
 	this.repaint();
+    }
+
+    public Bookshelf getBookshelf() {
+        return bookshelf;
     }
 
     /**

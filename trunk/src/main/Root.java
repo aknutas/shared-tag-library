@@ -53,68 +53,6 @@ public class Root extends JFrame {
     static Root thisClass = null;
 
     /**
-     * This method initializes deleteBookshelfMenuItem
-     * 
-     * @return javax.swing.JMenuItem
-     */
-    private JMenuItem getDeleteBookshelfMenuItem() {
-	if (deleteBookshelfMenuItem == null) {
-	    deleteBookshelfMenuItem = new JMenuItem("Delete Bookshelf");
-	    deleteBookshelfMenuItem.setMnemonic(KeyEvent.VK_E);
-	    deleteBookshelfMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		    KeyEvent.VK_E, ActionEvent.ALT_MASK));
-
-	    deleteBookshelfMenuItem.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    if (searchResults != null) {
-			Bookshelf shelf = searchResults.getBookshelf();
-			if (shelf != null) {
-
-			    System.out.println("Removing... "
-				    + shelf.getProperty("name"));
-			    control.removeBookshelf(shelf);
-			    searchResults.setResults(null);
-			    treeView.refresh();
-			    draw();
-			}
-		    }
-		}
-	    });
-	}
-	return deleteBookshelfMenuItem;
-    }
-
-    /**
-     * This method initializes renameBookshelfMenuItem
-     * 
-     * @return javax.swing.JMenuItem
-     */
-    private JMenuItem getRenameBookshelfMenuItem() {
-	if (renameBookshelfMenuItem == null) {
-	    renameBookshelfMenuItem = new JMenuItem("Rename Bookshelf");
-	    renameBookshelfMenuItem.setMnemonic(KeyEvent.VK_N);
-	    renameBookshelfMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		    KeyEvent.VK_N, ActionEvent.ALT_MASK));
-	    renameBookshelfMenuItem.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    shelf = searchResults.getBookshelf();
-		    if (shelf != null) {
-			renameBookshelfDialog = new RenameBookshelf(thisClass,
-				control, shelf, treeView);
-			renameBookshelfDialog.setLocationRelativeTo(content);
-			renameBookshelfDialog.setVisible(true);
-
-			draw();
-		    }
-		}
-	    });
-	}
-	return renameBookshelfMenuItem;
-    }
-
-    /**
      * @param args
      */
     public static void main(String[] args) {
@@ -141,8 +79,6 @@ public class Root extends JFrame {
 
     private AddBookshelf addBookshelfDialog = null;
 
-    private RenameBookshelf renameBookshelfDialog = null;
-
     private JMenuItem addBookshelfMenuItem = null;
 
     private JMenu bookMenu = null;
@@ -155,6 +91,10 @@ public class Root extends JFrame {
 
     private Controller control = null;
 
+    private JMenuItem deleteBookshelfMenuItem = null;
+
+    private JMenuItem deleteSelectedBooksMenuItem = null;
+
     private JMenuBar jJMenuBar = null;
 
     private JSplitPane jSplitPane = null;
@@ -162,9 +102,11 @@ public class Root extends JFrame {
     private JMenu libraryMenu = null;
 
     private javax.swing.Timer msgTimer;
+
     private MsgTrigger msgTrigger;
     private JMenuItem quitMenuItem = null;
-    private JMenuItem deleteSelectedBooksMenuItem = null;
+    private RenameBookshelf renameBookshelfDialog = null;
+    private JMenuItem renameBookshelfMenuItem = null;
     private TextField searchField = null;
     private Label searchLabel = null;
 
@@ -174,9 +116,6 @@ public class Root extends JFrame {
     private Bookshelf shelf = null;
     private JMenu startMenu = null;
     private TreeView treeView = null;
-    private JMenuItem deleteBookshelfMenuItem = null;
-    private JMenuItem renameBookshelfMenuItem = null;
-
     /**
      * This is the default constructor
      */
@@ -189,7 +128,6 @@ public class Root extends JFrame {
 	msgTimer.start();
 	initialize();
     }
-
     /**
      * This method initializes connectToMenuItem
      * 
@@ -331,6 +269,61 @@ public class Root extends JFrame {
     }
 
     /**
+     * This method initializes deleteBookshelfMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getDeleteBookshelfMenuItem() {
+	if (deleteBookshelfMenuItem == null) {
+	    deleteBookshelfMenuItem = new JMenuItem("Delete Bookshelf");
+	    deleteBookshelfMenuItem.setMnemonic(KeyEvent.VK_E);
+	    deleteBookshelfMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_E, ActionEvent.ALT_MASK));
+
+	    deleteBookshelfMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    if (searchResults != null) {
+			Bookshelf shelf = searchResults.getBookshelf();
+			if (shelf != null) {
+
+			    System.out.println("Removing... "
+				    + shelf.getProperty("name"));
+			    control.removeBookshelf(shelf);
+			    searchResults.setResults(null);
+			    treeView.refresh();
+			    draw();
+			}
+		    }
+		}
+	    });
+	}
+	return deleteBookshelfMenuItem;
+    }
+
+    /**
+     * This method initializes deleteSelectedBooksMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getDeleteSelectedBooksMenuItem() {
+	if (deleteSelectedBooksMenuItem == null) {
+	    deleteSelectedBooksMenuItem = new JMenuItem("Delete Selected Books");
+	    deleteSelectedBooksMenuItem.setMnemonic(KeyEvent.VK_D);
+	    deleteSelectedBooksMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_D, ActionEvent.ALT_MASK));
+	    deleteSelectedBooksMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    searchResults.removeSelected();
+		    draw();
+		}
+	    });
+	}
+	return deleteSelectedBooksMenuItem;
+    }
+
+    /**
      * This method initializes jJMenuBar
      * 
      * @return javax.swing.JMenuBar
@@ -377,25 +370,32 @@ public class Root extends JFrame {
     }
 
     /**
-     * This method initializes deleteSelectedBooksMenuItem
+     * This method initializes renameBookshelfMenuItem
      * 
      * @return javax.swing.JMenuItem
      */
-    private JMenuItem getDeleteSelectedBooksMenuItem() {
-	if (deleteSelectedBooksMenuItem == null) {
-	    deleteSelectedBooksMenuItem = new JMenuItem("Delete Selected Books");
-	    deleteSelectedBooksMenuItem.setMnemonic(KeyEvent.VK_D);
-	    deleteSelectedBooksMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		    KeyEvent.VK_D, ActionEvent.ALT_MASK));
-	    deleteSelectedBooksMenuItem.addActionListener(new ActionListener() {
+    private JMenuItem getRenameBookshelfMenuItem() {
+	if (renameBookshelfMenuItem == null) {
+	    renameBookshelfMenuItem = new JMenuItem("Rename Bookshelf");
+	    renameBookshelfMenuItem.setMnemonic(KeyEvent.VK_N);
+	    renameBookshelfMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_N, ActionEvent.ALT_MASK));
+	    renameBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
-		    searchResults.removeSelected();
-		    draw();
+		    shelf = searchResults.getBookshelf();
+		    if (shelf != null) {
+			renameBookshelfDialog = new RenameBookshelf(thisClass,
+				control, shelf, treeView);
+			renameBookshelfDialog.setLocationRelativeTo(content);
+			renameBookshelfDialog.setVisible(true);
+
+			draw();
+		    }
 		}
 	    });
 	}
-	return deleteSelectedBooksMenuItem;
+	return renameBookshelfMenuItem;
     }
 
     /**
