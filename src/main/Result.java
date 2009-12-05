@@ -188,7 +188,8 @@ public class Result extends JPanel {
 
 		Entry<String, Integer> e = properties.next();
 
-		JLabel value = new JLabel(e.getKey());
+		int weight = e.getValue();
+		JLabel value = new JLabel(e.getKey() + "( " + weight + " )");
 		value.setFont(new Font("Sans", Font.BOLD, 14));
 
 		if (tags.gridx < 10) {
@@ -222,8 +223,18 @@ public class Result extends JPanel {
 
 		if (book != null) {
 
+		    Boolean duplicate = false;
+		    Iterator<Entry<String, Integer>> b = book.enumerateTags();
+		    while (b.hasNext()) {
+			if (b.next().getKey().compareTo(tagContent.getText()) == 0) {
+			    duplicate = true;
+			    break;
+			}
+		    }
+		    
 		    book.tag(tagContent.getText());
-		    addTag(tagContent.getText());
+		    if (!duplicate) addTag(tagContent.getText());
+		    
 		    tagContent.setText("");
 		}
 
