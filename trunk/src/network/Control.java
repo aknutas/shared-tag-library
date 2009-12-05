@@ -1,6 +1,7 @@
 package network;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public interface Control {
      * @throws IOException
      * @throws UnknownHostException
      */
-    public int connect(String address) throws UnknownHostException, IOException;
+    public int connect(String address) throws UnknownHostException, ConnectException, IOException;
 
     /**
      * A command to disconnect a certain client or server connection.
