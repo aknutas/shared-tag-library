@@ -209,6 +209,7 @@ public class AddBook extends JDialog {
     private void initialize() {
 	this.setSize(308, 158);
 	this.setContentPane(getJContentPane());
+	this.setTitle("Add Book");
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"
