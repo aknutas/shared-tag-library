@@ -23,6 +23,7 @@ public class VirtualLibrary implements Library {
 	 */
 	public VirtualLibrary() {
 		this.shelves = new LinkedList<Bookshelf>();
+		properties = new HashMap<String,String>();
 	}
 	
 	/**
