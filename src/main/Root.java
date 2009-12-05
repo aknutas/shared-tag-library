@@ -303,8 +303,8 @@ public class Root extends JFrame {
 	    clearBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    shelf = searchResults.getBookshelf();
 		    if (shelf != null) {
-			shelf.removeAll();
 			searchResults.setResults(shelf);
 			draw();
 		    }
