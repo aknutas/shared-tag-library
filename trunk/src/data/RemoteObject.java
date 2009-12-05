@@ -64,6 +64,18 @@ public abstract class RemoteObject implements ClientResponder {
 			this.message = (RemoteMessage)message;
 			this.lock.release();
 		}
+
+		@Override
+		public void onDisconnect() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onLoop() {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	
@@ -190,6 +202,16 @@ public abstract class RemoteObject implements ClientResponder {
 		
 		if(RemoteMessage.MSG_PING == ((RemoteMessage)message).getMessageType())
 			return;
+	}
+	
+	@Override
+	public void onDisconnect() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onLoop() {
+		// TODO Auto-generated method stub	
 	}
 	
 }

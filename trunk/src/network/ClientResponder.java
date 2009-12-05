@@ -22,4 +22,26 @@ public interface ClientResponder {
 	 */
 	public void onMessage(Message message) throws NullPointerException, IllegalArgumentException;
 	
+	/**
+	 * This method is used to notify a client that the connection has
+	 * been closed.
+	 * 
+	 * @param connection the connection id
+	 * 
+	 * @throws IllegalArgumentException if the connection given does
+	 *         not match the connection id of this object
+	 */
+	public void onDisconnect(int connection) throws IllegalArgumentException;
+	
+	/**
+	 * This method is used to notify a client that the connection has
+	 * a loop.
+	 * 
+	 * @param connection the connection id
+	 * 
+	 * @throws IllegalArgumentException if the connection given does
+	 *         not match the connection id of this object
+	 */
+	public void onLoop(int connection) throws IllegalArgumentException;
+	
 }
