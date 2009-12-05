@@ -42,13 +42,14 @@ public class RenameBookshelf extends JDialog {
      * @param owner
      * @param treeView
      */
-    public RenameBookshelf(Frame owner, Controller ctl, Bookshelf b, TreeView treeView) {
+    public RenameBookshelf(Frame owner, Controller ctl, Bookshelf b,
+	    TreeView treeView) {
 	super(owner);
 
 	control = ctl;
 
 	tree = treeView;
-	
+
 	if (ctl.focus != null) {
 	    shelf = b;
 	} else {
@@ -57,6 +58,7 @@ public class RenameBookshelf extends JDialog {
 
 	initialize();
     }
+
     /**
      * This method initializes jButton
      * 
@@ -68,9 +70,8 @@ public class RenameBookshelf extends JDialog {
 	    commit.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
-		    shelf.setProperty("name", jTextField1
-			    .getText());
-		    
+		    shelf.setProperty("name", jTextField1.getText());
+
 		    tree.refresh();
 
 		    setVisible(false);
