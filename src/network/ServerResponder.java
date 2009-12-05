@@ -26,4 +26,20 @@ public interface ServerResponder {
 	 */
 	public Message onMessage(Message message);
 	
+	/**
+	 * This method is called when a client disconnects from the
+	 * server.
+	 * 
+	 * @param connection the connection id that disconnected
+	 */
+	public void onDisconnect(int connection);
+
+	/**
+	 * This method is called when a loop is detected in the network
+	 * path.
+	 * 
+	 * @param connection the connection id where the loop occurs
+	 */
+	public void onLoop(int connection);
+	
 }
