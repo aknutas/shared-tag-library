@@ -160,12 +160,12 @@ public class Controller {
      * 
      * @return the added book (null if error)
      */
-    public Book addBook(String name, String title)
+    public Book addBook(String title, String author)
 	    throws IllegalArgumentException {
-	if (name == null || title == null
+	if (title == null || author == null
 		|| !(focus instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
-	Book book = addBook(focus, new VirtualBook(name, title));
+	Book book = addBook(focus, new VirtualBook(title, author));
 	myLib.saveBookshelf((VirtualBookshelf) focus);
 	return book;
     }
