@@ -40,7 +40,7 @@ public class Controller {
      * Contains bookshelves currently being displayed by the gui or being used
      * by the search program
      */
-    public Map<Integer, Bookshelf> checkedOutBs;
+    public Vector<Bookshelf> modifiedBs;
     /**
      * the network controller
      */
@@ -61,9 +61,9 @@ public class Controller {
     public Bookshelf focus;
 
     /**
-     * the checkedOutBs id of the currently focused Bookshelf
+     * the modifiedBs id of the currently focused Bookshelf
      */
-    public Integer focusID;
+
     public Map<Integer, VirtualLibrary> importedLibs;
 
     public String libID = "ID";
@@ -102,7 +102,7 @@ public class Controller {
 	nextID = 1;
 	cntrl = new ControlImpl(new LibraryResponder(myLib));
 	ProgramProperties props = ProgramProperties.getInstance();
-	checkedOutBs = new HashMap<Integer, Bookshelf>();
+	modifiedBs = new Vector<Bookshelf>();
 	setupconnections(props);
 
 	// Registering shutdown hooks
@@ -114,7 +114,7 @@ public class Controller {
      * 
      * @return the added book (null if error)
      */
-    public Book addBook(Book book) throws IllegalArgumentException {
+    public synchronized Book addBook(Book book) throws IllegalArgumentException {
 	if (book == null || !(focus instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
 	focus.insert(book);
@@ -127,30 +127,11 @@ public class Controller {
      * 
      * @return the added book (null if error)
      */
-    public Book addBook(Bookshelf bookshelf, Book book) {
+    public synchronized Book addBook(Bookshelf bookshelf, Book book) {
 	if (book == null || !(bookshelf instanceof VirtualBookshelf))
 	    return null;
 	bookshelf.insert(book);
-	myLib.saveBookshelf((VirtualBookshelf) bookshelf);
-	return book;
-    }
-
-    /**
-     * Add a book to the library
-     * 
-     * @param bookshelf
-     *            the target bookshelf
-     * @param name
-     * @param title
-     * @return the added book
-     * @throws IllegalArgumentException
-     */
-    public Book addBook(Bookshelf bookshelf, String name, String title)
-	    throws IllegalArgumentException {
-	if (name == null || title == null
-		|| !(bookshelf instanceof VirtualBookshelf))
-	    throw new IllegalArgumentException();
-	Book book = addBook(bookshelf, new VirtualBook(name, title));
+	setFocus(bookshelf);
 	myLib.saveBookshelf((VirtualBookshelf) bookshelf);
 	return book;
     }
@@ -160,12 +141,9 @@ public class Controller {
      * 
      * @return the added book (null if error)
      */
-    public Book addBook(String title, String author)
+    public synchronized Book addBook(String title, String author)
 	    throws IllegalArgumentException {
-	if (title == null || author == null
-		|| !(focus instanceof VirtualBookshelf))
-	    throw new IllegalArgumentException();
-	Book book = addBook(focus, new VirtualBook(title, author));
+	Book book = addBook(new VirtualBook(title, author));
 	myLib.saveBookshelf((VirtualBookshelf) focus);
 	return book;
     }
@@ -175,7 +153,7 @@ public class Controller {
      * 
      * @return the added bookshelf (null if error)
      */
-    public Bookshelf addBookshelf(Book book) throws IllegalArgumentException {
+    public synchronized Bookshelf addBookshelf(Book book) throws IllegalArgumentException {
 	if (book == null)
 	    throw new IllegalArgumentException();
 	Integer tmp = nextID;
@@ -183,9 +161,7 @@ public class Controller {
 		+ book.getProperty("Name"));
 	addBook(bs, book);
 	myLib.saveBookshelf(bs);
-	checkedOutBs.put(tmp, bs);
-	nextID++;
-	setFocus(bs, tmp);
+	setFocus(bs);
 	return bs;
     }
 
@@ -194,20 +170,16 @@ public class Controller {
      * 
      * @return the added bookshelf (null if error)
      */
-    public Bookshelf addBookshelf(String name) throws IllegalArgumentException {
+    public synchronized Bookshelf addBookshelf(String name) throws IllegalArgumentException {
 	if (name == null)
 	    throw new IllegalArgumentException();
-
-	Integer tmp = nextID;
 	VirtualBookshelf bs = new VirtualBookshelf(name);
 	myLib.saveBookshelf(bs);
-	checkedOutBs.put(tmp, bs);
-	setFocus(bs, tmp);
-	nextID++;
+	setFocus(bs);
 	return bs;
     }
 
-    public void addConnection(String host) throws IllegalArgumentException,
+    public synchronized void addConnection(String host) throws IllegalArgumentException,
 	    NullPointerException, RemoteObjectException, UnknownHostException,
 	    IOException {
 	if (host != null) {
@@ -241,7 +213,7 @@ public class Controller {
 	}
     }
 
-    public void addConnection(String host, String alias)
+    public synchronized void addConnection(String host, String alias)
 	    throws UnknownHostException, IOException, ConnectException,
 	    IllegalArgumentException, NullPointerException,
 	    RemoteObjectException {
@@ -263,13 +235,7 @@ public class Controller {
 		// Closing off network connections
 		cntrl.shutDown();
 		
-		Iterator<Bookshelf> iter = myLib.iterator();
-		Bookshelf bs;
-		while(iter.hasNext()){
-		    bs = iter.next();
-		    if(bs instanceof VirtualBookshelf)
-		    myLib.saveBookshelf((VirtualBookshelf)bs);
-		}
+		saveAll();
 		
 		// These commands absolutely need to run last, and in this order
 		ProgramProperties pp = ProgramProperties.getInstance();
@@ -281,8 +247,21 @@ public class Controller {
 	});
 
     }
-
-    public void breakConnection(String host) {
+    
+    
+    public synchronized void saveAll(){
+	
+	Iterator<Bookshelf> iter = modifiedBs.iterator();
+	Bookshelf bs;
+	while(iter.hasNext()){
+	    bs = iter.next();
+	    if(bs instanceof VirtualBookshelf)
+	    myLib.saveBookshelf((VirtualBookshelf)bs);
+	}
+    }
+    
+    
+    public synchronized void breakConnection(String host) {
 	if (!connectionIds.keySet().contains(host)) {
 	    throw new IllegalArgumentException();
 	}
@@ -295,35 +274,20 @@ public class Controller {
 
     }
 
-    /**
-     * Used for accessing a bookshelf that have been retrieved.
-     * 
-     * @param key
-     *            the unique key handed to the module for retrieving the BS
-     * @return the bookshelf if the key is valid
-     * @throws IllegalArgumentException
-     *             if the key is not in the map
-     */
-    public Bookshelf getBs(Integer key) throws IllegalArgumentException {
-	if (!checkedOutBs.containsKey(key)) {
-	    throw new IllegalArgumentException();
-	} else
-	    return checkedOutBs.get(key);
-    }
 
-    public Set<String> getConnections() {
+    public synchronized Set<String> getConnections() {
 	return (connectionIds == null) ? null : connectionIds.keySet();
     }
 
-    public Set<String> getConnectionsAlias() {
+    public synchronized Set<String> getConnectionsAlias() {
 	return (connectionAlias == null) ? null : connectionAlias.keySet();
     }
 
-    public Map<String, String> getConnectionsAliasPairs() {
+    public synchronized Map<String, String> getConnectionsAliasPairs() {
 	return connectionAlias;
     }
 
-    public void importABookshelves(Library local, Library remote, String select) {
+    public synchronized void importABookshelves(Library local, Library remote, String select) {
 	if (local == null || remote == null) {
 	    throw new IllegalArgumentException();
 	}
@@ -333,7 +297,7 @@ public class Controller {
 	local.addBookshelf(bs);
     }
 
-    public void importAllBookshelves(Library local, Library remote) {
+    public synchronized void importAllBookshelves(Library local, Library remote) {
 	if (local == null || remote == null) {
 	    throw new IllegalArgumentException();
 	}
@@ -348,7 +312,7 @@ public class Controller {
 	}
     }
 
-    public void importSelectBookshelves(Library local, Library remote,
+    public synchronized void importSelectBookshelves(Library local, Library remote,
 	    Collection<String> select) {
 	if (local == null || remote == null) {
 	    throw new IllegalArgumentException();
@@ -443,7 +407,7 @@ public class Controller {
 	}
     }
 
-    public void reconnect(String host) throws UnknownHostException,
+    public synchronized void reconnect(String host) throws UnknownHostException,
 	    IOException, IllegalArgumentException, NullPointerException,
 	    RemoteObjectException {
 
@@ -469,26 +433,14 @@ public class Controller {
 
     }
 
-    public void removeAllBookshelves(Library local, Library remote) {
-	if (local == null || remote == null) {
-	    throw new IllegalArgumentException();
-	}
-
-	Iterator<Bookshelf> iter = remote.iterator();
-	Bookshelf bs;
-	while (iter.hasNext()) {
-	    bs = iter.next();
-	    local.removeBookshelf(bs);
-	}
-    }
 
     /**
      * Remove a book from the library
      * 
      * @return the removed book (null if error)
      */
-    public Book removeBook(Book book) throws IllegalArgumentException {
-	if (!focus.contains(book) || !(focus instanceof VirtualBookshelf))
+    public synchronized Book removeBook(Book book) throws IllegalArgumentException {
+	if (!focus.contains(book))
 	    throw new IllegalArgumentException();
 	focus.remove(book);
 	myLib.saveBookshelf((VirtualBookshelf) focus);
@@ -500,14 +452,21 @@ public class Controller {
      * 
      * @return the removed book (null if error)
      */
-    public Book removeBook(Bookshelf bookshelf, Book book)
+    public synchronized Book removeBook(Bookshelf bookshelf, Book book)
 	    throws IllegalArgumentException {
-	if (!bookshelf.contains(book)
-		|| !(bookshelf instanceof VirtualBookshelf))
-	    throw new IllegalArgumentException();
-	bookshelf.remove(book);
-	myLib.saveBookshelf((VirtualBookshelf) bookshelf);
-	return book;
+	setFocus(bookshelf);
+	return removeBook(book);
+   }
+
+    /**
+     * Remove a book from the library
+     * 
+     * @return the removed book (null if error)
+     */
+    public synchronized Book removeBook(Bookshelf bookshelf, String name)
+	    throws IllegalArgumentException {
+	setFocus(bookshelf);
+	return removeBook(name);
     }
 
     /**
@@ -515,30 +474,8 @@ public class Controller {
      * 
      * @return the removed book (null if error)
      */
-    public Book removeBook(Bookshelf bookshelf, String name)
-	    throws IllegalArgumentException {
-	if (name == null || !(bookshelf instanceof VirtualBookshelf))
-	    throw new IllegalArgumentException();
-	Iterator<Book> iter = bookshelf.iterator();
-	Book book = null;
-	while (iter.hasNext()) {
-	    book = iter.next();
-	    if (book.getProperty("Name") == name) {
-		removeBook(bookshelf, book);
-		break;
-	    }
-	}
-	myLib.saveBookshelf((VirtualBookshelf) bookshelf);
-	return book;
-    }
-
-    /**
-     * Remove a book from the library
-     * 
-     * @return the removed book (null if error)
-     */
-    public Book removeBook(String name) throws IllegalArgumentException {
-	if (name == null || !(focus instanceof VirtualBookshelf))
+    public synchronized Book removeBook(String name) throws IllegalArgumentException {
+	if (name == null)
 	    throw new IllegalArgumentException();
 	Iterator<Book> iter = focus.iterator();
 	Book book = null;
@@ -558,41 +495,33 @@ public class Controller {
      * 
      * @return the removed bookshelf (null if error)
      */
-    public Bookshelf removeBookshelf(Bookshelf bookshelf) {
-	return myLib.removeBookshelf(bookshelf) ? bookshelf : null;
+    public synchronized Bookshelf removeBookshelf(Bookshelf bookshelf) {
+	setFocus(bookshelf);
+	return removeBookshelf();
     }
-
-    /**
-     * Remove a bookshelf from the library
-     * 
-     * @return the removed bookshelf (null if error)
-     */
-    public Bookshelf removeBookshelf(Bookshelf bookshelf, String name) {
-	if (bookshelf == null)
-	    return removeBookshelf(name);
-	else
-	    return removeBookshelf(bookshelf);
-    }
-
     /**
      * Remove a bookshelf from the library not currently implemented
      * 
      * @return the removed bookshelf (null if error)
      */
-    public Bookshelf removeBookshelf(String name) {
-	if (name == null)
-	    return null;
-
+    public synchronized Bookshelf removeBookshelf() {
+	if(focus!=null){
+	Bookshelf bs = focus;
+	modifiedBs.remove(focus);
+	if(!myLib.deleteBookshelf((VirtualBookshelf) focus))
+	    throw new IllegalArgumentException();
+	focus= null;
+	return bs;
+	}
 	return null;
     }
-
     /**
      * Returns a butlerweights if something has been stored, or a null
      * otherwise.
      * 
      * @return a stored Butler
      */
-    public ButlerWeights retrieveButlerWeights() {
+    public synchronized ButlerWeights retrieveButlerWeights() {
 	List<ButlerWeights> butlerList = qb.getButlerWeights();
 	if (butlerList.size() == 0)
 	    return null;
@@ -606,7 +535,7 @@ public class Controller {
      * 
      * @return the iterator
      */
-    public Iterator<Bookshelf> retrieveLibrary() {
+    public synchronized Iterator<Bookshelf> retrieveLibrary() {
 	return myLib.iterator();
     }
 
@@ -615,7 +544,7 @@ public class Controller {
      * 
      * @return the vector of names
      */
-    public Vector<String> retrieveMyBookshelfNames() {
+    public synchronized Vector<String> retrieveMyBookshelfNames() {
 	Iterator<Bookshelf> iter = myLib.iterator();
 	Vector<String> names = new Vector<String>();
 	Bookshelf bs;
@@ -631,32 +560,11 @@ public class Controller {
      * 
      * @return the iterator
      */
-    public Collection<String> retrieveRemoteLibraryNames() {
+    public synchronized Collection<String> retrieveRemoteLibraryNames() {
 	return connectionAlias.values();
     }
 
-    /**
-     * request a bookshelf from the library based on a string name
-     * 
-     * @param loc
-     * @return the key to reference the the object with the get command
-     */
-    public Integer retrieveShelf(String loc) throws IllegalArgumentException {
-	if (loc == null)
-	    throw new IllegalArgumentException();
-	Integer num = nextID;
-	Iterator<Bookshelf> iter = myLib.iterator();
-	Bookshelf bs;
-	while (iter.hasNext()) {
-	    bs = iter.next();
-	    if (bs.getProperty("Name") == loc) {
-		checkedOutBs.put(num, bs);
-		break;
-	    }
-	}
-	nextID++;
-	return num;
-    }
+
 
     /**
      * a method for use in multi term specific area searching ( field to search,
@@ -665,7 +573,7 @@ public class Controller {
      * @param list
      * @return
      */
-    public Bookshelf search(Map<String, Vector<String>> list) {
+    public synchronized Bookshelf search(Map<String, Vector<String>> list) {
 	return search(list, myLib);
     }
 
@@ -675,17 +583,17 @@ public class Controller {
      * @param list
      * @return
      */
-    public Bookshelf search(Map<String, Vector<String>> list,
+    public synchronized Bookshelf search(Map<String, Vector<String>> list,
 	    Bookshelf bookshelf) {
 	return search(list, bookshelf);
     }
 
-    public Bookshelf search(Map<String, Vector<String>> list,
+    public synchronized Bookshelf search(Map<String, Vector<String>> list,
 	    Collection<Bookshelf> bookshelves) {
 	return search(list, bookshelves);
     }
 
-    public Bookshelf search(Map<String, Vector<String>> list, Library aLib) {
+    public synchronized Bookshelf search(Map<String, Vector<String>> list, Library aLib) {
 	return search(list, aLib);
     }
 
@@ -695,7 +603,7 @@ public class Controller {
      * @param str
      * @return
      */
-    public Bookshelf search(String str) {
+    public synchronized Bookshelf search(String str) {
 	return ControllerSearch.search(str, myLib);
     }
 
@@ -706,11 +614,11 @@ public class Controller {
      * @param bookshelf
      * @return
      */
-    public Bookshelf search(String str, Bookshelf bookshelf) {
+    public synchronized Bookshelf search(String str, Bookshelf bookshelf) {
 	return search(str, bookshelf);
     }
 
-    public Bookshelf search(String str, Collection<Bookshelf> bookshelves) {
+    public synchronized Bookshelf search(String str, Collection<Bookshelf> bookshelves) {
 	return ControllerSearch.search(str, bookshelves);
     }
 
@@ -721,11 +629,11 @@ public class Controller {
      * @param aLib
      * @return
      */
-    public Bookshelf search(String str, Library aLib) {
+    public synchronized Bookshelf search(String str, Library aLib) {
 	return ControllerSearch.search(str, aLib);
     }
 
-    public String setConnectionAlias(String name, String newalias) {
+    public synchronized String setConnectionAlias(String name, String newalias) {
 	if (!connectionAlias.containsKey(name))
 	    throw new IllegalArgumentException();
 	String temp = connectionAlias.put(name, newalias);
@@ -736,7 +644,7 @@ public class Controller {
 
     /**
      * Sets the focus of the controller to a single bookshelf for use in methods
-     * instead of a bookshelf paramater
+     * instead of a bookshelf paramater MUST BE A VIRTUAL BOOKSHELF
      * 
      * @param bookshelf
      *            the bookshelf in question
@@ -745,14 +653,18 @@ public class Controller {
      * @throws IllegalArgumentException
      *             the paramaters may not be invalid or null
      */
-    public void setFocus(Bookshelf bookshelf, Integer id)
+    public synchronized void setFocus(Bookshelf bookshelf)
 	    throws IllegalArgumentException {
-	if (bookshelf == null || id == null || id < 0)
+	int id = 0;
+	if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
+	if(!modifiedBs.contains(bookshelf)){
+	    id=nextID;
+	    modifiedBs.add(bookshelf);
+	    nextID++;
+	}
 	focus = bookshelf;
-	focusID = id;
     }
-
     /**
      * Method for reinitializing or setting up a set of connections if no stored
      * connections it creates an empty set
@@ -766,7 +678,7 @@ public class Controller {
      * @throws RemoteObjectException
      */
     @SuppressWarnings("unchecked")
-    public void setupconnections(ProgramProperties props)
+    public synchronized void setupconnections(ProgramProperties props)
 	    throws UnknownHostException, IllegalArgumentException,
 	    NullPointerException, ConnectException, IOException,
 	    RemoteObjectException {

@@ -13,11 +13,25 @@ import data.Library;
 import data.VirtualBookshelf;
 
 public abstract class ControllerSearch {
+
+    public static Collection<Bookshelf> searchAlllibs(String str,Collection<Library> allLibs) {
+	Iterator<Library> iter = allLibs.iterator();
+	Collection<Bookshelf> shelves;
+	
+	while(iter.hasNext()){
+	   search(str,iter.next());
+	}
+	
+	
+	return null;
+    }
+    
+    
     
     public static Bookshelf search(String str, Library aLib) {
 	if (str == null)
 	    return null;
-	Bookshelf result = new VirtualBookshelf("Search of " + str);
+	Bookshelf result = new VirtualBookshelf(aLib.getProperty("Name") +  ":Search on " + str);
 	BookQuery bq = new BookQuery();
 	bq.match(str);
 	Iterator<Bookshelf> iter = aLib.iterator();

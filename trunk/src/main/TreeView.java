@@ -112,7 +112,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	try {
 	    Bookshelf node = ((TreeNode) tree.getLastSelectedPathComponent())
 		    .getUserObject().getShelf();
-	    control.setFocus(node, 0);
+	    control.setFocus(node);
 	    results.setResults(node);
 	    draw();
 	} catch (ClassCastException e1) {
