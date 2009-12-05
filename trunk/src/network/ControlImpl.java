@@ -88,12 +88,27 @@ public class ControlImpl implements Control, ConnectionCallBack {
      *            The connection ID to be disconnected.
      */
     public synchronized boolean disconnect(int connection) {
+	// Telling the connection thread to end, and removing it from
+	// threadcollecion
 	try {
 	    threadCollection.get(connection).end();
 	    threadCollection.remove(connection);
 	} catch (Exception e) {
 	    return false;
 	}
+	// Notifying registered objects that they have been disconnected, and
+	// then removing the set from the notify collection
+	try {
+	    Set<ClientResponder> notifyset = connectionObjects.get(connection);
+	    Iterator<ClientResponder> i = notifyset.iterator();
+	    while (i.hasNext()) {
+		i.next().onDisconnect(connection);
+	    }
+	    connectionObjects.remove(connection);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+
 	return true;
     }
 
