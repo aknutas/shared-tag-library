@@ -75,6 +75,8 @@ public class Root extends JFrame {
 	});
     }
 
+    private JMenuItem aboutMenuItem = null;
+
     private AddBook addBookDialog = null;
 
     private JMenuItem addBookMenuItem = null;
@@ -105,6 +107,8 @@ public class Root extends JFrame {
 
     private JMenuItem exportSelectedBooksMenuItem = null;
 
+    private JMenuItem helpMenuItem = null;
+
     private JMenuBar jJMenuBar = null;
 
     private JSplitPane jSplitPane = null;
@@ -130,6 +134,7 @@ public class Root extends JFrame {
     private Bookshelf shelf = null;
     private JMenu startMenu = null;
     private TreeView treeView = null;
+
     /**
      * This is the default constructor
      */
@@ -237,6 +242,31 @@ public class Root extends JFrame {
     }
 
     /**
+     * This method initializes aboutMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getAboutMenuItem() {
+
+	if (aboutMenuItem == null) {
+	    aboutMenuItem = new JMenuItem("About", KeyEvent.VK_A);
+	    aboutMenuItem.setAccelerator(KeyStroke.getKeyStroke("F2"));
+	    aboutMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    Help help = new Help(thisClass, true);
+		    help.setLocationRelativeTo(content);
+		    help.setVisible(true);
+
+		    draw();
+		}
+	    });
+	}
+
+	return aboutMenuItem;
+    }
+
+    /**
      * This method initializes addBookMenuItem
      * 
      * @return javax.swing.JMenuItem
@@ -318,6 +348,7 @@ public class Root extends JFrame {
 
 	    bookshelfMenu.add(getAddBookMenuItem());
 	    bookshelfMenu.add(exportSelectedMenuItem());
+	    bookshelfMenu.addSeparator();
 	    bookshelfMenu.add(getClearBookshelfMenuItem());
 	    bookshelfMenu.add(getDeleteSelectedBooksMenuItem());
 	    bookshelfMenu.addSeparator();
@@ -447,6 +478,29 @@ public class Root extends JFrame {
     }
 
     /**
+     * This method initializes helpMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getHelpMenuItem() {
+	if (helpMenuItem == null) {
+	    helpMenuItem = new JMenuItem("Help", KeyEvent.VK_H);
+	    helpMenuItem.setAccelerator(KeyStroke.getKeyStroke("F1"));
+	    helpMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    Help help = new Help(thisClass);
+		    help.setLocationRelativeTo(content);
+		    help.setVisible(true);
+
+		    draw();
+		}
+	    });
+	}
+	return helpMenuItem;
+    }
+
+    /**
      * This method initializes jJMenuBar
      * 
      * @return javax.swing.JMenuBar
@@ -499,17 +553,17 @@ public class Root extends JFrame {
     private JMenuItem getRemoveTagDialogMenuItem() {
 	if (removeTagDialogMenuItem == null) {
 	    removeTagDialogMenuItem = new JMenuItem("Un-Tag");
-	    removeTagDialogMenuItem.setMnemonic(KeyEvent.VK_M);
+	    removeTagDialogMenuItem.setMnemonic(KeyEvent.VK_U);
 	    removeTagDialogMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		    KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+		    KeyEvent.VK_U, ActionEvent.CTRL_MASK));
 	    removeTagDialogMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
 		    ArrayList<Book> books = searchResults.getSelected();
 		    if (books.size() > 0) {
 
-			UnTag dialog = new UnTag(thisClass,
-				searchResults, books);
+			UnTag dialog = new UnTag(thisClass, searchResults,
+				books);
 			dialog.setLocationRelativeTo(content);
 			dialog.setVisible(true);
 
@@ -592,8 +646,10 @@ public class Root extends JFrame {
 	    startMenu.add(connectTo());
 	    startMenu.add(getDisconnectMenuItem());
 	    startMenu.addSeparator();
+	    startMenu.add(getHelpMenuItem());
+	    startMenu.add(getAboutMenuItem());
+	    startMenu.addSeparator();
 	    startMenu.add(quit());
-
 	}
 	return startMenu;
     }
