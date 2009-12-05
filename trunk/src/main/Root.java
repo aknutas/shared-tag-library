@@ -95,6 +95,8 @@ public class Root extends JFrame {
 
     private JMenuItem deleteSelectedBooksMenuItem = null;
 
+    private JMenuItem disconnectMenuItem = null;
+
     private JMenuBar jJMenuBar = null;
 
     private JSplitPane jSplitPane = null;
@@ -128,6 +130,7 @@ public class Root extends JFrame {
 	msgTimer.start();
 	initialize();
     }
+
     /**
      * This method initializes connectToMenuItem
      * 
@@ -136,9 +139,9 @@ public class Root extends JFrame {
     private JMenuItem connectTo() {
 	if (connectToMenuItem == null) {
 	    connectToMenuItem = new JMenuItem("Connect To...");
-	    connectToMenuItem.setMnemonic(KeyEvent.VK_C);
+	    connectToMenuItem.setMnemonic(KeyEvent.VK_T);
 	    connectToMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-		    KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		    KeyEvent.VK_T, ActionEvent.ALT_MASK));
 	    connectToMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
@@ -244,11 +247,11 @@ public class Root extends JFrame {
 	    bookshelfMenu.setMnemonic(KeyEvent.VK_O);
 
 	    bookshelfMenu.add(getAddBookMenuItem());
-	    bookshelfMenu.add(getDeleteSelectedBooksMenuItem());
-	    // Change Name
-	    bookshelfMenu.add(getRenameBookshelfMenuItem());
 	    // Export Selected
 	    // Clear Bookshelf
+	    bookshelfMenu.add(getDeleteSelectedBooksMenuItem());
+	    bookshelfMenu.addSeparator();
+	    bookshelfMenu.add(getRenameBookshelfMenuItem());	    
 	}
 	return bookshelfMenu;
     }
@@ -324,6 +327,32 @@ public class Root extends JFrame {
     }
 
     /**
+     * This method initializes disconnectMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem getDisconnectMenuItem() {
+	if (disconnectMenuItem == null) {
+	    disconnectMenuItem = new JMenuItem("Disconnect From...");
+	    disconnectMenuItem.setMnemonic(KeyEvent.VK_F);
+	    disconnectMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		    KeyEvent.VK_F, ActionEvent.ALT_MASK));
+	    disconnectMenuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    Disconnect dialog = new Disconnect(thisClass, control,
+			    treeView);
+		    dialog.setLocationRelativeTo(content);
+		    dialog.setVisible(true);
+
+		    draw();
+		}
+	    });
+	}
+	return disconnectMenuItem;
+    }
+
+    /**
      * This method initializes jJMenuBar
      * 
      * @return javax.swing.JMenuBar
@@ -363,7 +392,6 @@ public class Root extends JFrame {
 	    libraryMenu = new JMenu("Library");
 	    libraryMenu.setMnemonic(KeyEvent.VK_I);
 	    libraryMenu.add(getAddBookshelfMenuItem());
-	    // Remove Bookshelf
 	    libraryMenu.add(getDeleteBookshelfMenuItem());
 	}
 	return libraryMenu;
@@ -437,9 +465,9 @@ public class Root extends JFrame {
 	    startMenu = new JMenu("Start");
 	    startMenu.setMnemonic(KeyEvent.VK_T);
 
-	    // Help (F1)
 	    startMenu.add(connectTo());
-	    // Disconnect From
+	    startMenu.add(getDisconnectMenuItem());
+	    startMenu.addSeparator();
 	    startMenu.add(quit());
 
 	}
@@ -505,6 +533,8 @@ public class Root extends JFrame {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	
+	
 	this.setSize(800, 800);
 	this.setMinimumSize(new Dimension(650, 400));
 	this.setJMenuBar(getJJMenuBar());
