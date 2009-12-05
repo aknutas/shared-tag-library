@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,6 +31,7 @@ public class SearchResults extends JScrollPane {
 
     GridBagConstraints gbc = null;
     List<Result> results = null;
+
     /**
      * This is the default constructor
      */
@@ -60,7 +62,19 @@ public class SearchResults extends JScrollPane {
     }
 
     public Bookshelf getBookshelf() {
-        return bookshelf;
+	return bookshelf;
+    }
+
+    protected ArrayList<Book> getSelected() {
+	ArrayList<Book> books = new ArrayList<Book>();
+
+	for (Result r : results) {
+	    if (r.isSelected()) {
+		books.add(r.getBook());
+	    }
+	}
+
+	return books;
     }
 
     /**

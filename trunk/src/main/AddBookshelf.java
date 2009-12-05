@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,18 +19,19 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
+import data.Book;
 import data.Bookshelf;
-import java.awt.Dimension;
 
 public class AddBookshelf extends JDialog {
 
     private static final long serialVersionUID = 1L;
+    private ArrayList<Book> books = null;
     private JButton cancel = null;
     private JButton commit = null;
     private Controller control = null;
     private JPanel jContentPane = null;
-    private JLabel jLabel1 = null;
 
+    private JLabel jLabel1 = null;
     private JTextField jTextField = null;
     private SearchResults results = null;
     private Bookshelf shelf = null;
@@ -49,6 +51,20 @@ public class AddBookshelf extends JDialog {
     }
 
     /**
+     * @param owner
+     * @param treeView
+     */
+    public AddBookshelf(Frame owner, Controller ctl, SearchResults r,
+	    TreeView treeView, ArrayList<Book> b) {
+	super(owner);
+	control = ctl;
+	results = r;
+	tree = treeView;
+	books = b;
+	initialize();
+    }
+
+    /**
      * This method initializes jButton
      * 
      * @return javax.swing.JButton
@@ -62,6 +78,10 @@ public class AddBookshelf extends JDialog {
 		    shelf = control.addBookshelf(jTextField.getText());
 
 		    if (shelf != null) {
+
+			for (Book b : books) {
+			    shelf.insert(b);
+			}
 			results.setResults(shelf);
 			tree.addChild(shelf);
 			tree.draw();

@@ -27,12 +27,12 @@ import java.awt.Dimension;
 public class Disconnect extends JDialog {
 
     private static final long serialVersionUID = 1L;
+    private JLabel availableConnections = null;
     private JButton cancelButton = null;
-    private JButton disconnectButton = null;
     private Controller control = null;
+    private JButton disconnectButton = null;
     private JComboBox ipAlias = null;
     private JPanel jContentPane = null;
-    private JLabel availableConnections = null;
     private TreeView tree = null;
 
     /**
@@ -57,9 +57,9 @@ public class Disconnect extends JDialog {
 	    if (control.getConnections() == null) {
 		ipAlias = new JComboBox();
 		ipAlias.setEnabled(false);
-	    }
-	    else {
-		ipAlias = new JComboBox((String[])control.getConnections().toArray(new String [0]));
+	    } else {
+		ipAlias = new JComboBox((String[]) control.getConnections()
+			.toArray(new String[0]));
 	    }
 	}
 	return ipAlias;
@@ -97,7 +97,8 @@ public class Disconnect extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			control.breakConnection((String)ipAlias.getSelectedItem());
+			control.breakConnection((String) ipAlias
+				.getSelectedItem());
 			tree.refresh();
 		    } catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -105,7 +106,7 @@ public class Disconnect extends JDialog {
 		    } catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		    } 
+		    }
 		    setVisible(false);
 		}
 	    });
