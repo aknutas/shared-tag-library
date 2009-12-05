@@ -304,11 +304,11 @@ public class Controller {
     }
 
     public Set<String> getConnections() {
-	return connectionIds.keySet();
+	return (connectionIds == null) ? null : connectionIds.keySet();
     }
 
     public Set<String> getConnectionsAlias() {
-	return connectionAlias.keySet();
+	return (connectionAlias == null) ? null : connectionAlias.keySet();
     }
 
     public Map<String, String> getConnectionsAliasPairs() {
