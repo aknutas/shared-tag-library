@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -21,47 +20,37 @@ import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 import controller.Controller;
 import data.Book;
 import data.Bookshelf;
+import java.awt.Dimension;
 
-public class AddBookshelf extends JDialog {
+public class RenameBook extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    private ArrayList<Book> books = null;
+    private Book book = null;
     private JButton cancel = null;
     private JButton commit = null;
-    private Controller control = null;
     private JPanel jContentPane = null;
-
+    private JLabel jLabel = null;
     private JLabel jLabel1 = null;
+    private SearchResults searchResults = null;
+
     private JTextField jTextField = null;
-    private SearchResults results = null;
-    private Bookshelf shelf = null;
-    private TreeView tree = null;
+    private JTextField jTextField1 = null;
 
     /**
      * @param owner
      * @param treeView
      */
-    public AddBookshelf(Frame owner, Controller ctl, SearchResults r,
-	    TreeView treeView) {
+    public RenameBook(Frame owner, SearchResults s, Book c) {
 	super(owner);
-	control = ctl;
-	results = r;
-	tree = treeView;
+
+	book = c;
+	searchResults = s;
+
 	initialize();
     }
 
-    /**
-     * @param owner
-     * @param treeView
-     */
-    public AddBookshelf(Frame owner, Controller ctl, SearchResults r,
-	    TreeView treeView, ArrayList<Book> b) {
-	super(owner);
-	control = ctl;
-	results = r;
-	tree = treeView;
-	books = b;
-	initialize();
+    public Book getBook() {
+	return book;
     }
 
     /**
@@ -75,25 +64,17 @@ public class AddBookshelf extends JDialog {
 	    commit.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
-		    shelf = control.addBookshelf(jTextField.getText());
+		    book.setProperty("title", jTextField.getText());
+		    book.setProperty("author", jTextField1.getText());
 
-		    if (shelf != null) {
-
-			if (books != null) {
-			    for (Book b : books) {
-				shelf.insert(b);
-			    }
-			}
-			results.setResults(shelf);
-			tree.addChild(shelf);
-			tree.draw();
-		    }
+		    searchResults.resetResults();
 
 		    setVisible(false);
 
 		}
 	    });
 	}
+
 	return commit;
     }
 
@@ -126,12 +107,18 @@ public class AddBookshelf extends JDialog {
 
 	    GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 	    gridBagConstraints5.gridx = 2;
-	    gridBagConstraints5.gridy = 1;
+	    gridBagConstraints5.gridy = 2;
 	    gridBagConstraints5.insets = new Insets(10, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 	    gridBagConstraints4.gridx = 1;
-	    gridBagConstraints4.gridy = 1;
+	    gridBagConstraints4.gridy = 2;
 	    gridBagConstraints4.insets = new Insets(10, 2, 2, 2);
+	    GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+	    gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+	    gridBagConstraints3.gridy = 1;
+	    gridBagConstraints3.gridwidth = 2;
+	    gridBagConstraints3.gridx = 1;
+	    gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 	    gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
 	    gridBagConstraints2.gridy = 0;
@@ -140,15 +127,24 @@ public class AddBookshelf extends JDialog {
 	    gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
 	    GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 	    gridBagConstraints1.gridx = 0;
-	    gridBagConstraints1.gridy = 0;
+	    gridBagConstraints1.gridy = 1;
 	    gridBagConstraints1.anchor = GridBagConstraints.EAST;
 	    gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
 	    jLabel1 = new JLabel();
-	    jLabel1.setText("Name: ");
+	    jLabel1.setText("Book Author: ");
+	    GridBagConstraints gridBagConstraints = new GridBagConstraints();
+	    gridBagConstraints.gridx = 0;
+	    gridBagConstraints.gridy = 0;
+	    gridBagConstraints.anchor = GridBagConstraints.EAST;
+	    gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+	    jLabel = new JLabel();
+	    jLabel.setText("Book Title: ");
 	    jContentPane = new JPanel();
 	    jContentPane.setLayout(new GridBagLayout());
+	    jContentPane.add(jLabel, gridBagConstraints);
 	    jContentPane.add(jLabel1, gridBagConstraints1);
 	    jContentPane.add(getJTextField(), gridBagConstraints2);
+	    jContentPane.add(getJTextField1(), gridBagConstraints3);
 	    jContentPane.add(getJButton(), gridBagConstraints4);
 	    jContentPane.add(getJButton2(), gridBagConstraints5);
 
@@ -171,12 +167,22 @@ public class AddBookshelf extends JDialog {
     private JTextField getJTextField() {
 	if (jTextField == null) {
 	    jTextField = new JTextField(14);
+	    jTextField.setText(book.getProperty("title"));
 	}
 	return jTextField;
     }
 
-    public Bookshelf getShelf() {
-	return shelf;
+    /**
+     * This method initializes jTextField1
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getJTextField1() {
+	if (jTextField1 == null) {
+	    jTextField1 = new JTextField(14);
+	    jTextField1.setText(book.getProperty("author"));
+	}
+	return jTextField1;
     }
 
     /**
@@ -185,9 +191,9 @@ public class AddBookshelf extends JDialog {
      * @return void
      */
     private void initialize() {
-	this.setSize(265, 154);
+	this.setSize(308, 158);
 	this.setContentPane(getJContentPane());
-	this.setTitle("Add Bookshelf");
+	this.setTitle("Edit Book");
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"
