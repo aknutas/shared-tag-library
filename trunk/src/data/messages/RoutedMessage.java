@@ -6,7 +6,7 @@ package data.messages;
  * 
  * @author Andrew Alm
  */
-public class RoutedMessage extends TrackedMessage {
+public class RoutedMessage extends RemoteMessage {
 
 	private static final long serialVersionUID = -5611699267122408137L;
 	

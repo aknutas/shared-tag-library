@@ -15,7 +15,7 @@ import network.messages.*;
 public abstract class RemoteResponder implements ServerResponder {
 
 	/**
-	 * This method is fired when a RemoteMessage is received that the
+	 * This methoonLoppd is fired when a RemoteMessage is received that the
 	 * RemoteResponder does not handle (not ping). This method should
 	 * return a RemoteMessage object to send back to the client.
 	 * 

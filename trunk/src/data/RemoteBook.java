@@ -95,6 +95,10 @@ public class RemoteBook extends RemoteObject implements Book {
 			return null;
 		}
 	}
+	
+	public int getTagCount() {
+		return 0;
+	}
 
 	
 	@Override
