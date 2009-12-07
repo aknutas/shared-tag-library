@@ -161,6 +161,10 @@ public class VirtualBook implements Book, Serializable {
 		
 		return oldValue;
 	}
+	
+	public int getTagCount() {
+		return this.tags.size();
+	}
 
 	/**
 	 * Returns an iterator containing the key-value pairs of all the properties

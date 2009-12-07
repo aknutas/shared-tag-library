@@ -50,6 +50,14 @@ public interface Book extends Properties {
 	public int weight(String tag) throws NullPointerException;
 
 	/**
+	 * Get the number of tags that are associated with this Book
+	 * object.
+	 * 
+	 * @return the number of tags
+	 */
+	public int getTagCount();
+	
+	/**
 	 * Returns an iterator of all tags on a book and their associated
 	 * weights.
 	 * 
