@@ -167,5 +167,11 @@ public class TestNetworkControl extends TestNetwork implements Control {
 	    // TODO Auto-generated method stub
 	    
 	}
+
+	@Override
+	public int registerAnomalyListener(int connId, ClientResponder connUser) {
+	    // TODO Auto-generated method stub
+	    return 0;
+	}
 	
 }
