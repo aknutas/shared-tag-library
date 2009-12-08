@@ -35,8 +35,6 @@ import org.encog.persist.Persistor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//TODO: Add Persistance.
-
 /**
  * This class implements a mathematical matrix. Matrix math is very important to
  * neural network processing. Many of the neural network classes make use of the
