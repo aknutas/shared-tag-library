@@ -6,18 +6,12 @@ import java.util.*;
 
 public abstract class LibraryOperations {
 	
-	static int numTags = 0;
-	static int numProps = 0;
-	static int numBooks = 0;
-
 	public static Iterator<Map.Entry<String, Integer>> getTags(Library lib){
 		
 		//System.out.println("getTags(lib)");
 		
 		Bookshelf masterShelf = lib.getMasterShelf();
 		
-		numTags = 0;
-		numBooks = 0;
 		//System.out.println("master has " + masterShelf.size() + " books.");
 		
 		Iterator<Book> master = masterShelf.iterator();
@@ -26,12 +20,10 @@ public abstract class LibraryOperations {
 		//System.out.println("master.hasNext(): " + master.hasNext());
 		
 		while (master.hasNext()){
-			++numBooks;
 			//System.out.println("Master has next.");
 			Book current = master.next();
 			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
 			while (tags.hasNext()){
-				++numTags;
 				Map.Entry<String,Integer> tag = tags.next();
 				if (allTags.containsKey(tag.getKey())) {
 					Integer old = allTags.remove(tag.getKey());
@@ -51,8 +43,6 @@ public abstract class LibraryOperations {
 	
 	public static Iterator<Map.Entry<String, String>> getProperties(Library lib){
 
-		numProps = 0;
-		numBooks = 0;
 		Bookshelf masterShelf = lib.getMasterShelf();
 		
 		//System.out.println("master has " + masterShelf.size() + " books.");
@@ -61,12 +51,10 @@ public abstract class LibraryOperations {
 		Map<String, String> allProperties = new HashMap<String, String>();
 		
 		while (master.hasNext()){
-			++numBooks;
 			//System.out.println("Master has next.");
 			Book current = master.next();
 			Iterator<Map.Entry<String, String>> props = current.enumerateProperties();
 			while (props.hasNext()){
-				++numProps;
 				Map.Entry<String, String> prop = props.next();
 				allProperties.put(prop.getKey(),prop.getValue());
 
@@ -78,12 +66,53 @@ public abstract class LibraryOperations {
 		return allProperties.entrySet().iterator();
 		
 	}
+
+	/**
+	 * Returns the number of books in the given VirtualLibrary.
+	 * @return see description
+	 */
+	public static int countBooks(VirtualLibrary lib){
+		
+		Bookshelf shelf = lib.getMasterShelf();
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext()){
+			++num;
+			books.next();
+		}
+		
+		return num;
+	}
+
+	/**
+	 * Returns the number of tags in the given VirtualLibrary.
+	 * @return see description
+	 */
+	public static int countTags(VirtualLibrary lib){
+
+		Bookshelf shelf = lib.getMasterShelf();
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext())
+			num += BookOperations.countTags(books.next());
+		
+		return num;
+	}
 	
-	public static int getNumTags() {return numTags;}
-	
-	public static int getNumProps() {return numProps;}
-	
-	public static int getNumBooks() {return numBooks;}
+	/**
+	 * Returns the number of properties in the given VirtualLibrary.
+	 * @return see description
+	 */
+	public static int countProperties(VirtualLibrary lib){
+
+		Bookshelf shelf = lib.getMasterShelf();
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext())
+			num += BookOperations.countProperties(books.next());
+		
+		return num;
+	}
 	
 	public static void main(String []args){
 		

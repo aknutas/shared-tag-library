@@ -203,19 +203,94 @@ public abstract class BookshelfOperations{
 	}
 
 	/**
-	 * Returns the number of books in the last shelf that was operated on.
+	 * Returns the number of books in the given VirtualBookshelf.
 	 * @return see description
 	 */
-	public static int getNumBooks(){
-		return numBooks;
+	public static int countBooks(VirtualBookshelf shelf){
+		
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext()){
+			++num;
+			books.next();
+		}
+		
+		return num;
 	}
 
 	/**
-	 * Returns the number of tags in the last shelf that was operated on.
+	 * Returns the number of tags in the given shelf.
 	 * @return see description
 	 */
-	public static int getNumTags(){
-		return numTags;
+	public static int countTags(VirtualBookshelf shelf){
+		
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext())
+			num += BookOperations.countTags(books.next());
+		
+		return num;
+	}
+	
+	/**
+	 * Returns the number of properties in the given collection of shelfs
+	 * @return see description
+	 */
+	public static int countProperties(VirtualBookshelf shelf){
+		
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext())
+			num += BookOperations.countProperties(books.next());
+		
+		return num;
+	}
+
+	/**
+	 * Returns the number of books in the given collection of shelfs.
+	 * @return see description
+	 */
+	public static int countBooks(Collection<Bookshelf> shelfs){
+		
+		Bookshelf shelf = union(shelfs);
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext()){
+			++num;
+			books.next();
+		}
+		
+		return num;
+	}
+
+	/**
+	 * Returns the number of tags in the given collection of shelfs.
+	 * @return see description
+	 */
+	public static int countTags(Collection<Bookshelf> shelfs){
+		
+		Bookshelf shelf = union(shelfs);
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext())
+			num += BookOperations.countTags(books.next());
+		
+		return num;
+	}
+	
+	/**
+	 * Returns the number of properties in the given collection of shelfs
+	 * @return see description
+	 */
+	public static int countProperties(Collection<Bookshelf> shelfs){
+		
+		Bookshelf shelf = union(shelfs);
+		Iterator<Book> books = shelf.iterator();
+		int num = 0;
+		while (books.hasNext())
+			num += BookOperations.countProperties(books.next());
+		
+		return num;
 	}
 
 	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Collection<Bookshelf> shelfs){
