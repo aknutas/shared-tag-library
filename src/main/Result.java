@@ -2,16 +2,15 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -35,7 +34,6 @@ import data.Book;
 public class Result extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final int tagOffset = 1;
     private Book book = null;
     private JPanel Content = null;
     private JButton delete = null;
@@ -44,14 +42,15 @@ public class Result extends JPanel {
 
     private Boolean selected = false;
 
-    private Result self;
+    private Result self = null;
 
-    GridBagConstraints tagConstraints;
+    private JPanel tagArea = null;
+    GridBagConstraints tagConstraints = null;
     private JTextField tagContent = null;
-    GridBagConstraints tagContentConstraints;
-    GridBagConstraints tags; // @jve:decl-index=0:
-    GridBagConstraints tagTitleConstraints;
+    GridBagConstraints tagContentConstraints = null;
+    GridBagConstraints tags = null;
 
+    GridBagConstraints tagTitleConstraints = null;
     private JLabel title = null;
     private JPanel Title = null;
 
@@ -73,16 +72,8 @@ public class Result extends JPanel {
 	    JLabel value = new JLabel(s);
 	    value.setFont(new Font("Sans", Font.BOLD, 14));
 
-	    if (tags.gridx < 10) {
-		tags.gridx = tags.gridx + tagOffset;
-	    } else {
-		tags.gridx = 1;
-		tags.gridy++;
-	    }
-	    // tags.gridx = tags.gridx + tagOffset;
-
-	    Content.add(value, tags);
-	    revalidate();
+	    tagArea.add(value);
+	    tagArea.revalidate();
 	}
     }
 
@@ -140,7 +131,7 @@ public class Result extends JPanel {
 	    tagContentConstraints.gridwidth = 10;
 	    tagContentConstraints.insets = new Insets(5, 5, 5, 5);
 	    tagContentConstraints.anchor = GridBagConstraints.WEST;
-	    tagContentConstraints.fill = GridBagConstraints.NONE;
+	    tagContentConstraints.fill = GridBagConstraints.HORIZONTAL;
 
 	    tagConstraints = new GridBagConstraints();
 	    tagConstraints.gridx = 0;
@@ -151,7 +142,7 @@ public class Result extends JPanel {
 	    tagConstraints.weighty = 1;
 
 	    tags = new GridBagConstraints();
-	    tags.gridx = 0;
+	    tags.gridx = 1;
 	    tags.gridy = 1;
 	    tags.weighty = 1;
 	    tags.insets = new Insets(5, 5, 5, 5);
@@ -174,6 +165,9 @@ public class Result extends JPanel {
 	    JLabel tagLabel = new JLabel("Tags: ");
 	    tagLabel.setFont(new Font("Sans", Font.PLAIN, 14));
 
+	    tagArea = new JPanel();
+	    Content.add(tagArea, tags);
+
 	    Content.add(addTag, tagTitleConstraints);
 	    Content.add(tagLabel, tagConstraints);
 	    Content.add(getJTextField(), tagContentConstraints);
@@ -183,28 +177,21 @@ public class Result extends JPanel {
 
 	if (book != null) {
 
+	    int count = 0;
 	    Iterator<Entry<String, Integer>> properties = book.enumerateTags();
-	    while (properties.hasNext()) {
-
+	    while (properties.hasNext() && count < 20) {
+		count++;
 		Entry<String, Integer> e = properties.next();
 
 		int weight = e.getValue();
 		JLabel value = new JLabel(e.getKey() + "( " + weight + " )");
 		value.setFont(new Font("Sans", Font.BOLD, 14));
 
-		if (tags.gridx < 10) {
-		    tags.gridx = tags.gridx + tagOffset;
-		} else {
-		    tags.gridx = 1;
-		    tags.gridy++;
-		}
-
-		Content.add(value, tags);
+		tagArea.add(value);
 	    }
 
 	    draw();
 	}
-
 	return Content;
     }
 
@@ -257,6 +244,12 @@ public class Result extends JPanel {
 	    jToggleButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    if (!Content.isVisible()) {
+
+			tagArea.setPreferredSize(new Dimension(
+				Title.getWidth() - 150, 300));
+			tagArea.revalidate();
+		    }
 		    Content.setVisible(!Content.isVisible());
 
 		    revalidate();// draw();
@@ -307,6 +300,7 @@ public class Result extends JPanel {
 	    Title = new JPanel();
 
 	    Title.addMouseListener(new MouseAdapter() {
+		@Override
 		public void mouseClicked(MouseEvent event) {
 		    toggleSelected();
 		}
@@ -329,8 +323,6 @@ public class Result extends JPanel {
      */
     private void initialize() {
 	this.setLayout(new BorderLayout());
-	this.setSize(1000, 200);
-	this.setBounds(new Rectangle(0, 0, 1000, 200));
 	this.add(getTitle(), BorderLayout.NORTH);
 	this.add(getContent(), BorderLayout.CENTER);
 	Content.setVisible(false);
