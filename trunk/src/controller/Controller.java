@@ -105,7 +105,7 @@ public class Controller {
 	remoteLibs = new HashMap<Integer, RemoteLibrary>();
 	importedLibs = new HashMap<Integer, VirtualLibrary>();
 
-	//setupconnections(props);
+	setupconnections(props);
 
 	// Registering shutdown hooks
 	addShutdownHooks();
@@ -272,6 +272,7 @@ public class Controller {
 	    throw new IllegalArgumentException();
 	}
 	Integer tmp = connectionIds.get(host);
+	System.out.println(tmp + " " + host);
 	cntrl.disconnect(tmp);
 	connectionIds.remove(host);
 	connectionAlias.remove(host);
@@ -712,7 +713,7 @@ public class Controller {
      * @throws IOException
      * @throws RemoteObjectException
      */
-    @SuppressWarnings("unchecked")
+  //  @SuppressWarnings("unchecked")
     public synchronized void setupconnections(ProgramProperties props)
 	    throws UnknownHostException, IllegalArgumentException,
 	    NullPointerException, ConnectException, IOException,
@@ -725,7 +726,7 @@ public class Controller {
 	    remoteLibs = new HashMap<Integer, RemoteLibrary>();
 	    importedLibs = new HashMap<Integer, VirtualLibrary>();
 	}
-	else if (!(o instanceof HashMap<?, ?>)) {
+	else if ((o instanceof HashMap<?, ?>)) {
 	    recconectFlag = true;
 	    connectionIds = new HashMap<String, Integer>();
 	    remoteLibs = new HashMap<Integer, RemoteLibrary>();
@@ -737,10 +738,10 @@ public class Controller {
 	    Entry<String, String> e;
 	    while (iter.hasNext()) {
 		e = iter.next();
+		System.out.println(e.getKey());
 		reconnect(e.getKey());
 	    }
 	}
-
     }
 
     public void testconnection(Integer target, String message) {
