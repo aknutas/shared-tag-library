@@ -16,6 +16,17 @@ import java.net.SocketTimeoutException;
 
 public class CommunicationImpl implements Communication {
 
+    /**
+     * Tries to get a message from given socket, but with 10ms timeout. After
+     * that timeout it returns null, otherwise an object that is received.
+     * 
+     * @param _socket
+     *            Socket to be used
+     * @return Object that is received, null if timeout happened (or a deformed 
+     *         message)
+     * @throws IOException
+     *             When there is problems with the connection
+     */
     public synchronized Object Receive(Socket _socket) throws IOException {
 	try {
 	    _socket.setSoTimeout(Definitions.SO_TIMEOUT);
@@ -43,6 +54,17 @@ public class CommunicationImpl implements Communication {
 	}
     }
 
+    /**
+     * Sends the given data into the socket that's given as a parameter.
+     * 
+     * @param _socket
+     *            Socket to be used
+     * @param _data
+     *            Data to be sent
+     * @throws IOException
+     *             When there is problem with the send or the socket
+     *             communication
+     */
     public synchronized void Send(Socket _socket, Object _data)
 	    throws IOException {
 

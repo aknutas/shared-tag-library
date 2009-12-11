@@ -11,7 +11,8 @@ import java.util.Map.Entry;
 import network.messages.Message;
 
 /**
- * Class ControlImpl
+ * Class ControlImpl This class allows for control and polling of the networking
+ * threads.
  * 
  * @author Antti Knutas
  * 
@@ -65,7 +66,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
     public synchronized int connect(String address)
 	    throws UnknownHostException, IOException, ConnectException {
 	// Debug
-//	System.out.println("Controller here. Starting to connect.");
+	// System.out.println("Controller here. Starting to connect.");
 	InetSocketAddress caddress = new InetSocketAddress(address,
 		Definitions.PORT);
 	Socket s = new Socket();
@@ -75,8 +76,8 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	threadCollection.put(conncounter, ct);
 	conncounter++;
 	// Debug
-//	System.out.println("Controller here. Connected to " + address
-//		+ " with thread " + (conncounter - 1));
+	// System.out.println("Controller here. Connected to " + address
+	// + " with thread " + (conncounter - 1));
 	return (conncounter - 1);
     }
 
@@ -220,9 +221,11 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	threadCollection.put(conncounter, ct);
 	connectionObjects.put(conncounter, new HashSet<ClientResponder>());
 	// Debug
-/*	System.out.println("Controller here. Started listening to connection "
-		+ conncounter + " from "
-		+ socket.getInetAddress().getHostName().toString()); */
+	/*
+	 * System.out.println("Controller here. Started listening to connection "
+	 * + conncounter + " from " +
+	 * socket.getInetAddress().getHostName().toString());
+	 */
 	conncounter++;
     }
 
@@ -241,7 +244,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	    i.remove();
 	}
     }
-    
+
     /**
      * The method is used to register objects that need to be notified when the
      * connection this specific ID gets shut down or stuff happens.
