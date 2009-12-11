@@ -1,4 +1,4 @@
-package data;
+package butler;
 
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -6,54 +6,48 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 /**
- * An implementation of Set<IDPair>. Custom behaviors
- * oulined below.
+ * An implementation of a Set of IDPair.
  * 
- * @author Steve Purol
+ * @author sjpurol
  *
  */
 public class IDPairSet implements Set<IDPair> {
 
 	TreeSet<IDPair> set;
-	
+
 	/**
 	 * Creates a new instance of an IDPairSet.
 	 */
 	public IDPairSet(){
 		set = new TreeSet<IDPair>();
 	}
-	
+
 	@Override
 	/**
-	 * This method adds an IDPair to the set. If the IDPair already
-	 * exists in the set, the existing IDPair's value is added to the
-	 * new value and stored in the existing IDPair and the method returns
-	 * false.
+	 * This method adds an IDPair to the set.
 	 * 
 	 *  @returns true if unique item added. false if item already exists.
 	 */
 	public boolean add(IDPair e) {
-		
+
 		try {
 			for (IDPair i : set)
-				if (i.getKey() == e.getKey()) {
-					i.setValue(i.getValue() + e.getValue());
+				if (i.getKey() == e.getKey())
 					return false;
-				}
-			
+
 			return set.add(e);
 		}
 		catch (ConcurrentModificationException ex) {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * If needed.
 	 */
 	public boolean addAll(Collection<? extends IDPair> c) {return set.addAll(c);}
 
-	
+
 	@Override
 	/**
 	 * If needed.
@@ -64,32 +58,36 @@ public class IDPairSet implements Set<IDPair> {
 	 * Returns true if the set contains an IDPair
 	 * with a key matching name.
 	 * @param name Key to match
-	 * @return see description
 	 */
 	public boolean contains(String name) {
 
 		for (IDPair i : set)
 			if (i.getKey() == name)
 				return true;
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Returns an IDPair matching key name.
 	 * @param name the key to match
-	 * @return see description
 	 */
 	public IDPair get(String name) {
-		
-		for (IDPair i : set)
-			if (i.getKey().equalsIgnoreCase(name))
-				return i;
+
+		if (contains(name))
+			for (IDPair i : set)
+				if (i.getKey().equalsIgnoreCase(name))
+					return i;
+
 		return null;
 	}
-	
+
+	/**
+	 * Returns the num-th IDPair.
+	 * @param num the index of the IDPair
+	 */
 	public IDPair get(Integer num){
-		
+
 		for (IDPair i : set)
 			if (i.getValue().equals(num))
 				return i;
@@ -119,7 +117,7 @@ public class IDPairSet implements Set<IDPair> {
 	 * if needed.
 	 */
 	public boolean remove(Object o) {
-		
+
 		try {
 			set.remove(o);
 			return true;
