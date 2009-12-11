@@ -64,6 +64,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	while (bookshelves.hasNext()) {
 
 	    TreeNode lib = new TreeNode(bookshelves.next());
+	    
+	    // This loads an initial book into memory (Speed Optimization)
+	    if (lib.getShelf().iterator().hasNext()) lib.getShelf().iterator().next();
 
 	    top.add(lib);
 	}
