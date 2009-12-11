@@ -1,5 +1,10 @@
 package data;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import data.messages.*;
 
 public class BookResponder extends RoutedResponder {
@@ -22,6 +27,8 @@ public class BookResponder extends RoutedResponder {
 			throw new IllegalArgumentException("illegal message type");
 		
 		switch(message.getMessageType()) {
+		case BookMessage.MSG_INITIALIZE:
+			return this.handleInitializeMessage((BookMessage)message);
 		case BookMessage.MSG_TAG:
 			return this.handleTagMessage((BookMessage)message);
 		case BookMessage.MSG_UNTAG:
@@ -153,6 +160,45 @@ public class BookResponder extends RoutedResponder {
 		BookMessage response = new BookMessage(BookMessage.MSG_PROPERTY_ITERATOR, this.getID());
 		response.queueParameter((new PropertyIteratorResponder(this.book.enumerateProperties())).getID());
 		return response;
+	}
+	
+	private BookMessage handleInitializeMessage(BookMessage message) throws NullPointerException, IllegalArgumentException {
+		if(null == message)
+			throw new NullPointerException("message cannot be null");
+		
+		if(BookMessage.MSG_INITIALIZE != message.getMessageType())
+			throw new IllegalArgumentException("illegal message type");
+		
+		/* create maps */
+		HashMap<String, Integer> tags = new HashMap<String, Integer>();
+		HashMap<String, String> properties = new HashMap<String, String>();
+		
+		/* initialize tags and properties map */
+		if(book instanceof VirtualBook) {
+			tags = (HashMap<String, Integer>)((VirtualBook)book).tags;
+			properties = (HashMap<String, String>)((VirtualBook)book).properties;
+		} else { /* slow fail safe fallback */
+			Iterator<Entry<String, Integer>> tagIter = book.enumerateTags();
+			while(tagIter.hasNext()) {
+				Entry<String, Integer> tag = tagIter.next();
+				
+				tags.put(tag.getKey(), tag.getValue());
+			}
+			
+			Iterator<Entry<String, Integer>> propertyIterator = book.enumerateTags();
+			while(propertyIterator.hasNext()) {
+				Entry<String, Integer> property = propertyIterator.next();
+				
+				tags.put(property.getKey(), property.getValue());
+			}
+		}
+		
+		/* create response */
+		message = new BookMessage(BookMessage.MSG_INITIALIZE, message.getID());
+		message.queueParameter(tags);
+		message.queueParameter(properties);
+		
+		return message;
 	}
 	
 	@Override

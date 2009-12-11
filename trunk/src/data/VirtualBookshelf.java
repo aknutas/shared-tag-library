@@ -232,10 +232,10 @@ public final class VirtualBookshelf implements Bookshelf {
 	}
 
 	/**
-	 * Computes the subset of books contained in a Bookshelf that match part of
-	 * the given book.
+	 * Computes the subset of books contained in a Bookshelf that
+	 * match the book comparable given.
 	 * 
-	 * @param book the model book.
+	 * @param comparable the object to use to compare books
 	 * 
 	 * @throws NullPointerException if the book given is null.
 	 */

@@ -23,7 +23,7 @@ public class VirtualLibrary implements Library {
 	 */
 	public VirtualLibrary() {
 		this.shelves = new LinkedList<Bookshelf>();
-		properties = new HashMap<String,String>();
+		this.properties = new HashMap<String, String>();
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class VirtualLibrary implements Library {
 
 	@Override
 	public String setProperty(String name, String value) {
-		if(null == name)
+		if(null == name || null == value)
 			throw new NullPointerException("name cannot be null");
 		
 		return this.properties.put(name, value);
