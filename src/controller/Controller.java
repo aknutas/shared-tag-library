@@ -60,19 +60,14 @@ public class Controller {
      */
     public Bookshelf focus;
 
-    /**
-     * the modifiedBs id of the currently focused Bookshelf
-     */
 
-    public Map<Integer, VirtualLibrary> importedLibs;
+
+    public HashMap<Integer, VirtualLibrary> importedLibs;
 
     public String libID = "Name";
 
     public PersistentLibrary myLib;
-    /**
-     * the next sequential id for storage
-     */
-    public Integer nextID;
+
     /**
      * the united querybuilder for the program
      */
@@ -99,12 +94,18 @@ public class Controller {
 	// load in library
 	qb = new QueryBuilderImpl();
 	myLib = new PersistentLibrary(qb);
-	nextID = 1;
+
 	cntrl = new ControlImpl(new LibraryResponder(myLib));
 	setLibName(myLib ,"kabob");
 	ProgramProperties props = ProgramProperties.getInstance();
 	modifiedBs = new Vector<Bookshelf>();
-	setupconnections(props);
+	recconectFlag = false;
+	connectionIds = new HashMap<String, Integer>();
+	connectionAlias = new HashMap<String, String>();
+	remoteLibs = new HashMap<Integer, RemoteLibrary>();
+	importedLibs = new HashMap<Integer, VirtualLibrary>();
+
+	//setupconnections(props);
 
 	// Registering shutdown hooks
 	addShutdownHooks();
@@ -164,7 +165,6 @@ public class Controller {
     public synchronized Bookshelf addBookshelf(Book book) throws IllegalArgumentException {
 	if (book == null)
 	    throw new IllegalArgumentException();
-	Integer tmp = nextID;
 	VirtualBookshelf bs = new VirtualBookshelf("From book "
 		+ book.getProperty("Name"));
 	addBook(bs, book);
@@ -203,9 +203,7 @@ public class Controller {
 		// testconnection(temp, "Are you still there?");
 		RemoteLibrary rl = new RemoteLibrary(temp, cntrl);
 		VirtualLibrary vl = new VirtualLibrary();
-		rl.setProperty(libID, host);
 		vl.setProperty(libID, host);
-		rl.setProperty(connectionID, host);
 		vl.setProperty(connectionID, host);
 		remoteLibs.put(temp, rl);
 		importedLibs.put(temp, vl);
@@ -664,13 +662,22 @@ public class Controller {
 	return ControllerSearch.search(str, aLib);
     }
 
-    public synchronized String setConnectionAlias(String name, String newalias) {
-	if (!connectionAlias.containsKey(name))
+    public synchronized void setConnectionAlias(String oldAlias, String newalias) {
+	if (!connectionAlias.containsValue(oldAlias))
 	    throw new IllegalArgumentException();
-	String temp = connectionAlias.put(name, newalias);
-	importedLibs.get(name).setProperty(libID, newalias);
-	remoteLibs.get(name).setProperty(libID, newalias);
-	return temp;
+	Iterator<Entry<String, String>> iter = connectionAlias.entrySet().iterator();
+	String host = null;
+	while(iter.hasNext()){
+		Entry<String, String> ent = iter.next();
+		if(ent.getValue().equals(oldAlias)){
+			host=ent.getKey();
+			connectionAlias.put(ent.getKey(), newalias);
+		}
+	}
+	if(host!=null){
+		int i = connectionIds.get(host);
+		importedLibs.get(i).setProperty(libID, newalias);		
+	}
     }
 
     /**
@@ -686,13 +693,10 @@ public class Controller {
      */
     public synchronized void setFocus(Bookshelf bookshelf)
 	    throws IllegalArgumentException {
-	int id = 0;
 	if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
 	    throw new IllegalArgumentException();
 	if(!modifiedBs.contains(bookshelf)){
-	    id=nextID;
 	    modifiedBs.add(bookshelf);
-	    nextID++;
 	}
 	focus = bookshelf;
     }
@@ -720,7 +724,8 @@ public class Controller {
 	    connectionAlias = new HashMap<String, String>();
 	    remoteLibs = new HashMap<Integer, RemoteLibrary>();
 	    importedLibs = new HashMap<Integer, VirtualLibrary>();
-	} else if (!(o instanceof HashMap<?, ?>)) {
+	}
+	else if (!(o instanceof HashMap<?, ?>)) {
 	    recconectFlag = true;
 	    connectionIds = new HashMap<String, Integer>();
 	    remoteLibs = new HashMap<Integer, RemoteLibrary>();
@@ -736,28 +741,6 @@ public class Controller {
 	    }
 	}
 
-    }
-
-    /**
-     * a test method
-     */
-    public void setuptestController() {
-	ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
-	try {
-	    sg.processLineByLine();
-	} catch (Exception e) {
-	    System.err.println("error in s processline Dic " + e);
-	}
-	sg.generateLibrary(10, 5);
-	sg.p = new Parser("src\\scripts\\books.txt");
-
-	try {
-	    sg.p.processLineByLine();
-	} catch (Exception e) {
-	    System.err.println("error in s processline books " + e);
-	}
-
-	myLib = sg.p.lib;
     }
 
     public void testconnection(Integer target, String message) {
