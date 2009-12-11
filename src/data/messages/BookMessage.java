@@ -11,6 +11,7 @@ public class BookMessage extends RoutedMessage {
 	public static final int MSG_GET = 6;
 	public static final int MSG_SET = 7;
 	public static final int MSG_PROPERTY_ITERATOR = 8;
+	public static final int MSG_INITIALIZE = 9;
 	
 	public BookMessage(int messageType, int id) {
 		super(messageType, id);

@@ -16,8 +16,8 @@ public class VirtualBook implements Book, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Map<String, Integer> tags;
-	private Map<String, String> properties;
+	protected Map<String, Integer> tags;
+	protected Map<String, String> properties;
 
 	/**
 	 * Creates a new VirtualBook with the given author and title.
@@ -38,6 +38,11 @@ public class VirtualBook implements Book, Serializable {
 		
 		this.setProperty("title", title);
 		this.setProperty("author", author);
+	}
+	
+	protected VirtualBook(Map<String, Integer> tags, Map<String, String> properties) {
+		this.tags = tags;
+		this.properties = properties;
 	}
 
 	/**
@@ -174,31 +179,6 @@ public class VirtualBook implements Book, Serializable {
 	 */
 	public Iterator<Entry<String, String>> enumerateProperties() {
 		return this.properties.entrySet().iterator();
-	}
-
-	/* unit tests */
-	public static void main(String []args) {
-		Book b = new VirtualBook("Elements", "Euclid");
-
-		assert 1 == b.tag("foo");
-		assert 1 == b.weight("foo");
-
-		assert -1 == b.untag("bar");
-		assert -1 == b.weight("bar");
-
-		for(int i = 0; i < 50; ++i)
-			b.tag("foobar");
-
-		assert 50 == b.weight("foobar");
-
-		for(int i = 0; i < 25; ++i)
-			b.untag("foobar");
-
-		assert 25 == b.weight("foobar");
-		
-		assert b.getProperty("title").equals("Elements");
-		assert b.getProperty("author").equals("Euclid");
-
 	}
 
 }

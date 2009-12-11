@@ -9,26 +9,65 @@ import network.Control;
 public class RemoteBook extends RemoteObject implements Book {
 
 	private final int id;
+	private Map<String, Integer> tags;
+	private Map<String, String> properties;
 	
 	public RemoteBook(int connection, Control network, int id) throws NullPointerException, RemoteObjectException {
 		super(connection, network, 5000);
 		
+		this.tags = new HashMap<String, Integer>();
+		this.properties = new HashMap<String, String>();
 		this.id = id;
+		
+		this.getBookInfo();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void getBookInfo() throws RemoteObjectException {
+		RemoteMessage message = new BookMessage(BookMessage.MSG_INITIALIZE, this.id);
+		message = this.send((RemoteMessage)message, 5000);
+		
+		if(!(message instanceof BookMessage))
+			throw new RemoteObjectException();
+		
+		Map<String, Integer> tags = (Map<String, Integer>)message.dequeParameter();
+		Map<String, String> properties = (Map<String, String>)message.dequeParameter();
+		
+		if(null == tags || null == properties)
+			throw new RemoteObjectException();
+		
+		this.tags = tags;
+		this.properties = properties;
 	}
 	
 	@Override
 	public int tag(String tag) throws NullPointerException {
-		return this.weightMessage(BookMessage.MSG_TAG, tag);
+		if(null == tag)
+			throw new NullPointerException("tag cannot be null");
+			
+		int weight = this.weightMessage(BookMessage.MSG_TAG, tag);
+		this.tags.put(tag, weight);		
+		
+		return weight;
 	}
 
 	@Override
 	public int untag(String tag) throws NullPointerException {
-		return this.weightMessage(BookMessage.MSG_UNTAG, tag);
+		if(null == tag)
+			throw new NullPointerException("tag cannot be null");
+		
+		int weight = this.weightMessage(BookMessage.MSG_UNTAG, tag);
+		this.tags.put(tag, weight);
+		
+		return weight;
 	}
 
 	@Override
 	public int weight(String tag) throws NullPointerException {
-		return this.weightMessage(BookMessage.MSG_WEIGHT, tag);
+		if(null == tag)
+			throw new NullPointerException("tag cannot be null");
+		
+		return this.tags.get(tag);
 	}
 	
 	/**
@@ -73,59 +112,29 @@ public class RemoteBook extends RemoteObject implements Book {
 	
 	@Override
 	public Iterator<Entry<String, Integer>> enumerateTags() {
-		try {
-			BookMessage message = new BookMessage(BookMessage.MSG_TAG_ITERATOR, this.id);
-			RemoteMessage response = this.send(message, 5000);
-			if(null == response)
-				return null;
-			
-			if(!(response instanceof BookMessage))
-				return null;
-			
-			if(BookMessage.MSG_TAG_ITERATOR != response.getMessageType())
-				return null;
-			
-			Integer id = response.dequeParameter();
-			if(null == id)
-				return null;
-			
-			return new RemoteTagIterator(this.network, this.connection, id.intValue());
-		}
-		catch(RemoteObjectException ex) {
-			return null;
-		}
+		return this.tags.entrySet().iterator();
 	}
 	
 	public int getTagCount() {
-		return 0;
+		return this.tags.size();
 	}
 
 	
 	@Override
 	public String getProperty(String name) throws NullPointerException {
 		if(null == name)
-			throw new NullPointerException("name cannot be null");
-		
-		/* send message */
-		BookMessage message = new BookMessage(BookMessage.MSG_GET, this.id);
-		message.queueParameter(name);
-		RemoteMessage response = this.send(message, 5000);
-		if(null == response)
-			return null;
-		
-		if(!(response instanceof BookMessage))
-			return null;
-		
-		if(BookMessage.MSG_GET != response.getMessageType())
-			return null;
-		
-		return response.dequeParameter();
+			throw new NullPointerException("tag cannot be null");
+			
+		return this.properties.get(name);
 	}
 
 	@Override
 	public String setProperty(String name, String value) throws NullPointerException {
 		if((null == name) || (null == value))
 			throw new NullPointerException("name or value cannot be null");
+		
+		/* update local */
+		this.properties.put(name, value);
 		
 		/* send message */
 		BookMessage message = new BookMessage(BookMessage.MSG_SET, this.id);
@@ -141,31 +150,12 @@ public class RemoteBook extends RemoteObject implements Book {
 		if(BookMessage.MSG_SET != response.getMessageType())
 			return null;
 		
+		/* this is the most up-to-date previous value */
 		return response.dequeParameter();
 	}
 	
 	@Override
 	public Iterator<Entry<String, String>> enumerateProperties() {
-		try {
-			BookMessage message = new BookMessage(BookMessage.MSG_PROPERTY_ITERATOR, this.id);
-			RemoteMessage response = this.send(message, 5000);
-			if(null == response)
-				return null;
-			
-			if(!(response instanceof BookMessage))
-				return null;
-			
-			if(BookMessage.MSG_PROPERTY_ITERATOR != response.getMessageType())
-				return null;
-			
-			Integer id = response.dequeParameter();
-			if(null == id)
-				return null;
-			
-			return new RemotePropertyIterator(this.network, this.connection, id.intValue());
-		}
-		catch(RemoteObjectException ex) {
-			return null;
-		}
+		return this.properties.entrySet().iterator();
 	}	
 }
