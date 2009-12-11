@@ -39,8 +39,6 @@ public class QueryBuilderImplTest {
     public void tearDown() throws Exception {
 	qb.shelfRemove(shelf);
 	qb = null;
-	Access access = AccessImpl.getInstance();
-	access.shutdown();
     }
 
     @Test
