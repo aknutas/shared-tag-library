@@ -53,7 +53,7 @@ public class AddBook extends JDialog {
 
 	tree = treeView;
 
-	if (ctl.focus == null) {
+	if (searchResults.getBookshelf() == null) {
 	    shelf = control.addBookshelf("New Bookshelf");
 	    tree.refresh();
 	} else {
@@ -83,7 +83,7 @@ public class AddBook extends JDialog {
 		    book = control.addBook(jTextField.getText(), jTextField1
 			    .getText());
 
-		    results.setResults(control.focus);
+		    results.resetResults();
 
 		    setVisible(false);
 

@@ -52,7 +52,7 @@ public class RenameBookshelf extends JDialog {
 
 	tree = treeView;
 
-	if (ctl.focus != null) {
+	if (b != null) {
 	    shelf = b;
 	} else {
 	    setVisible(false);
