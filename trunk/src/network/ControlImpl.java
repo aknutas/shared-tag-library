@@ -74,6 +74,7 @@ public class ControlImpl implements Control, ConnectionCallBack {
 	ClientThread ct = new ClientThread(id, s, messageReceiver);
 	ct.start();
 	threadCollection.put(conncounter, ct);
+	connectionObjects.put(conncounter, new HashSet<ClientResponder>());
 	conncounter++;
 	// Debug
 	// System.out.println("Controller here. Connected to " + address
