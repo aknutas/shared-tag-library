@@ -7,7 +7,13 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Class AccessImpl
+ * Interface Access The singleton object that both manages and queues access for
+ * the database.
+ * 
+ * It is synchronized for relatively safe multithreading.
+ * 
+ * Instance of this is protected with AccessImpl, use AccessImpl.getInstance()
+ * to access.
  * 
  * @author Antti Knutas
  * 

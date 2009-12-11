@@ -12,7 +12,8 @@ import network.messages.ReplyMessage;
 import network.Definitions;
 
 /**
- * Class ClientThread A Thread for connecting to other program instances.
+ * ClientThread class contains the logic for handling outgoing connections to
+ * other instances. As per name, it also runs as a thread.
  * 
  * @author Antti Knutas
  * 
@@ -53,8 +54,9 @@ public class ClientThread extends CommThread {
 	    if (obj != null) {
 		// Debug
 		/*
-		System.out.println("ServerThread Got: "
-			+ obj.getClass().getName()); */
+		 * System.out.println("ServerThread Got: " +
+		 * obj.getClass().getName());
+		 */
 		if (obj instanceof data.messages.RemoteMessage) {
 		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();

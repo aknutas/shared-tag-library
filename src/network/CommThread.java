@@ -7,8 +7,8 @@ import java.util.*;
 import network.messages.Message;
 
 /**
- * Class CommThread This class provides common functionality for each of the
- * communication thread classes.
+ * CommThread class acts as a superclass which provides common functionality for
+ * each of the communication thread classes.
  * 
  * @Author Antti Knutas
  */

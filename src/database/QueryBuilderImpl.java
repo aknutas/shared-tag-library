@@ -115,7 +115,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
     /**
      * Checks if the database has a stored butlerweights object, and returns a list with them.
      * 
-     * @return int
+     * @return List<ButlerWeights> List of butlerweights objects.
      */
     @SuppressWarnings("unchecked")
     public List<ButlerWeights> getButlerWeights() {
@@ -132,7 +132,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
      * Stores a butlerweights object into the database.
      *  
      * @param butler The butler to be stored.
-     * @return int
+     * @return int Storing success status.
      */
     public int storeButler(ButlerWeights butler) {
 	Access db = AccessImpl.getInstance();
@@ -142,8 +142,8 @@ public final class QueryBuilderImpl implements QueryBuilder {
     }
 
     /**
-     * Stores ProgramProperties
-     * @return int Storing status.
+     * Stores the ProgramProperties object
+     * @return int Storing success status.
      */
     @SuppressWarnings("unchecked")
     public ProgramProperties getProperties() {
@@ -161,7 +161,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
 
     /**
      * Gets the stored ProgramProperties from the database.
-     * @return ProgramProperties
+     * @return ProgramProperties ProgramProperties object.
      */
     public int storeProperties(ProgramProperties properties) {
 	Access db = AccessImpl.getInstance();

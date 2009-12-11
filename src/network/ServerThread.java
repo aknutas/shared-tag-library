@@ -9,7 +9,7 @@ import data.messages.RemoteMessage;
 import network.messages.*;
 
 /**
- * Class ServerThread A class for listening to connections.
+ * Class ServerThread A class for listening to connections. It runs as a thread.
  * 
  * @author Antti Knutas
  * 
@@ -51,8 +51,9 @@ public class ServerThread extends CommThread {
 	    if (obj != null) {
 		// Debug
 		/*
-		System.out.println("ServerThread Got: "
-			+ obj.getClass().getName()); */
+		 * System.out.println("ServerThread Got: " +
+		 * obj.getClass().getName());
+		 */
 		if (obj instanceof data.messages.RemoteMessage) {
 		    tempdm = (data.messages.RemoteMessage) obj;
 		    tempcompid = tempdm.getComID();
