@@ -185,11 +185,11 @@ public class BookResponder extends RoutedResponder {
 				tags.put(tag.getKey(), tag.getValue());
 			}
 			
-			Iterator<Entry<String, Integer>> propertyIterator = book.enumerateTags();
+			Iterator<Entry<String, String>> propertyIterator = book.enumerateProperties();
 			while(propertyIterator.hasNext()) {
-				Entry<String, Integer> property = propertyIterator.next();
+				Entry<String, String> property = propertyIterator.next();
 				
-				tags.put(property.getKey(), property.getValue());
+				properties.put(property.getKey(), property.getValue());
 			}
 		}
 		
