@@ -1,0 +1,2 @@
+Here you can connect to other program instances in order to display and query their books. You can have connections to several programs at the same time.
+You can type in the connection address either in IP (numerical) or DNS address format. Example: 127.0.0.1 or example.com .
