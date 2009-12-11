@@ -1,48 +1,33 @@
 package butler;
 
-import java.util.Collection;
+import java.util.Map;
+
 import data.Book;
-import data.VirtualBookshelf;
 
-public interface Butler extends Comparable<Book>{
-
-	/**
-	 * Initializes brain from basis
-	 * @param basis books to return 1.0
-	 * @throws IllegalArgumentException
-	 */
-	public void initialize(Collection<VirtualBookshelf> basis) throws IllegalArgumentException;
+/**
+ * The Butler abstract class contains the bare essentials of any Butler.
+ * 
+ * @author sjpurol
+ *
+ */
+public abstract class Butler implements Comparable<Book>{
 
 	/**
-	 * Sets the weights within brain to those found in the input
-	 * ButlerWeights object.
-	 * @param weights the existing weights to copy.
+	 * used to store meta-data.
 	 */
-	public void setMatrixes(ButlerWeights weights);
+	protected Map<String, String> properties;
 
-	public ButlerWeights getWeights();
-
+	/**
+	 * Determines the correct bookshelf for the given book.
+	 */
 	@Override
+	public abstract int compareTo(Book b);
+	
 	/**
-	 * Checks an input book against the trained network.
-	 * Returns 1 for a match, -1 for a non-match, and 0 for unsure.
+	 * Returns the value of the given key. If the key does not exist in the map, returns null.
+	 * @param string the key to find.
 	 */
-	public int compareTo(Book b);
-
-	/**
-	 * Exactly the same as compareTo(Book) except that it returns
-	 * the value returned by the network.
-	 * 
-	 * Note: The value of the boolean does not matter.
-	 * It is only there to distinguish between the two
-	 * compareTo methods. 
-	 * 
-	 * @param b Book to examine
-	 * @param bool 
-	 * @return
-	 */
-	public double[] compareTo(Book b, boolean bool);
-
+	public String getProperty(String string) {return properties.get(string);}
 }
 
 
