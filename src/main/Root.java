@@ -9,14 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -30,12 +30,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
+import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
 
 import controller.Controller;
 import data.Book;
 import data.Bookshelf;
-import data.RemoteObjectException;
 
 /**
  * @author patrick
@@ -61,66 +60,23 @@ public class Root extends JFrame {
     static Root thisClass = null;
 
     /**
-     * This method initializes jComboBox
-     * 
-     * @return javax.swing.JComboBox
-     */
-    private JComboBox searchFilter() {
-	if (searchFilterComboBox == null) {
-	    searchFilterComboBox = new JComboBox();
-	    resetSearchOptions();
-	}
-	return searchFilterComboBox;
-    }
-    
-    public void resetSearchOptions() {
-	if (searchFilterComboBox != null && control != null) {
-	    searchFilterComboBox.setModel(new DefaultComboBoxModel(control
-			.searchOptions().toArray(new String[0])));
-		searchFilterComboBox.setSelectedIndex(0);
-	}
-    }
-
-    /**
-     * This method initializes searchButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getSearchButton() {
-	if (searchButton == null) {
-	    searchButton = new JButton("Search");
-
-	    searchButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    shelf = control.searchOn((String) searchFilterComboBox
-			    .getSelectedItem(), searchField.getText());
-		    searchResults.setResults(shelf);
-
-		    draw();
-		}
-	    });
-	}
-	return searchButton;
-    }
-
-    /**
      * @param args
      */
     public static void main(String[] args) {
 
 	SwingUtilities.invokeLater(new Runnable() {
 	    public void run() {
-		thisClass = new Root();
-		thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		thisClass.setVisible(true);
 		try {
 		    UIManager
-			    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
+			    .setLookAndFeel(new SubstanceOfficeSilver2007LookAndFeel());
 		} catch (UnsupportedLookAndFeelException ex) {
 		    System.out
 			    .println("Cannot set new Theme for Java Look and Feel.");
 		}
+		thisClass = new Root();
+		thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		thisClass.setVisible(true);
+
 	    }
 	});
     }
@@ -155,9 +111,13 @@ public class Root extends JFrame {
 
     private JMenuItem disconnectMenuItem = null;
 
+    private JMenuItem exportLibrary = null;
+
     private JMenuItem exportSelectedBooksMenuItem = null;
 
     private JMenuItem helpMenuItem = null;
+
+    private JMenuItem importLibrary = null;
 
     private JMenuBar jJMenuBar = null;
 
@@ -172,22 +132,24 @@ public class Root extends JFrame {
     private JMenuItem quitMenuItem = null;
 
     private JMenuItem removeTagDialogMenuItem = null;
+
     private JMenuItem renameBookDialogMenuItem = null;
+
     private RenameBookshelf renameBookshelfDialog = null;
+
     private JMenuItem renameBookshelfMenuItem = null;
+    private JButton searchButton = null;
     private TextField searchField = null;
-    private Label searchLabel = null;
-
+    private JComboBox searchFilterComboBox = null;
+    private JLabel searchLabel = null;
     private SearchResults searchResults = null;
-    private JToolBar searchToolbar = null;
 
+    private JToolBar searchToolbar = null;
     private Bookshelf shelf = null;
+
     private JMenu startMenu = null;
     private TreeView treeView = null;
-    private JComboBox searchFilterComboBox = null;
     private JLabel withinLabel = null;
-    private JButton searchButton = null;
-
     /**
      * This is the default constructor
      */
@@ -200,7 +162,6 @@ public class Root extends JFrame {
 	msgTimer.start();
 	initialize();
     }
-
     /**
      * This method initializes jMenuItem
      * 
@@ -230,7 +191,6 @@ public class Root extends JFrame {
 	}
 	return addTagDialogMenuItem;
     }
-
     /**
      * This method initializes connectToMenuItem
      * 
@@ -256,7 +216,6 @@ public class Root extends JFrame {
 	}
 	return connectToMenuItem;
     }
-
     /**
      * 
      */
@@ -264,6 +223,38 @@ public class Root extends JFrame {
 	treeView.draw();
 	validate();
 	repaint();
+    }
+    /**
+     * This method initializes jMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem exportLibraryMenuItem() {
+	if (exportLibrary == null) {
+	    exportLibrary = new JMenuItem("Export Library...", KeyEvent.VK_E);
+	    exportLibrary.setAccelerator(KeyStroke.getKeyStroke("F5"));
+	    exportLibrary.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    JFileChooser export = new JFileChooser();
+		    int result = export.showOpenDialog(thisClass);
+
+		    if (result == JFileChooser.APPROVE_OPTION) {
+		    
+			File curFile = export.getSelectedFile();
+			try {
+			    curFile.createNewFile();
+			    
+			 // InOutParser
+			} catch (IOException e) {
+			    // TODO Auto-generated catch block
+			    e.printStackTrace();
+			}
+		    }
+		}
+	    });
+	}
+	return exportLibrary;
     }
 
     /**
@@ -561,7 +552,13 @@ public class Root extends JFrame {
     private JMenuBar getJJMenuBar() {
 	if (jJMenuBar == null) {
 	    jJMenuBar = new JMenuBar();
-	    jJMenuBar.add(getStartMenu());
+/*	    try {
+		UIManager.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
+	    } catch (UnsupportedLookAndFeelException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+*/	    jJMenuBar.add(getStartMenu());
 	    jJMenuBar.add(getLibraryMenu());
 	    jJMenuBar.add(getBookshelfMenu());
 	    jJMenuBar.add(getBookMenu());
@@ -594,6 +591,9 @@ public class Root extends JFrame {
 	    libraryMenu.setMnemonic(KeyEvent.VK_I);
 	    libraryMenu.add(getAddBookshelfMenuItem());
 	    libraryMenu.add(getDeleteBookshelfMenuItem());
+	    libraryMenu.addSeparator();
+	    libraryMenu.add(exportLibraryMenuItem());
+	    libraryMenu.add(importLibraryMenuItem());
 	}
 	return libraryMenu;
     }
@@ -658,6 +658,30 @@ public class Root extends JFrame {
     }
 
     /**
+     * This method initializes searchButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getSearchButton() {
+	if (searchButton == null) {
+	    searchButton = new JButton("Go...");
+	    searchButton.setBorderPainted(true);
+
+	    searchButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    shelf = control.searchOn((String) searchFilterComboBox
+			    .getSelectedItem(), searchField.getText());
+		    searchResults.setResults(shelf);
+
+		    draw();
+		}
+	    });
+	}
+	return searchButton;
+    }
+
+    /**
      * This method initializes searchResults
      * 
      * @return main.SearchResults
@@ -680,7 +704,7 @@ public class Root extends JFrame {
 	    withinLabel.setText("in:");
 	    searchToolbar = new JToolBar();
 	    searchToolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
-	    searchLabel = new Label("Search: ", Label.LEFT);
+	    searchLabel = new JLabel("Search: ", Label.LEFT);
 	    searchToolbar.add(searchLabel);
 	    searchToolbar.add(getTextField());
 	    searchToolbar.add(withinLabel);
@@ -747,6 +771,32 @@ public class Root extends JFrame {
     }
 
     /**
+     * This method initializes jMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem importLibraryMenuItem() {
+	if (importLibrary == null) {
+	    importLibrary = new JMenuItem("Import Library...", KeyEvent.VK_I);
+	    importLibrary.setAccelerator(KeyStroke.getKeyStroke("F6"));
+	    importLibrary.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+		    JFileChooser export = new JFileChooser();
+		    int result = export.showOpenDialog(thisClass);
+
+		    if (result == JFileChooser.APPROVE_OPTION) {
+		    
+			File curFile = export.getSelectedFile();
+			System.out.println(curFile.getName());
+			 // InOutParser
+		    }
+		}
+	    });
+	}
+	return importLibrary;
+    }
+
+    /**
      * This method initializes this
      * 
      * @return void
@@ -760,6 +810,7 @@ public class Root extends JFrame {
 	    this.setJMenuBar(getJJMenuBar());
 	    this.setContentPane(getContent());
 	    this.setTitle("Book Butler");
+
 	} catch (IllegalArgumentException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
@@ -820,6 +871,27 @@ public class Root extends JFrame {
 	    });
 	}
 	return renameBookDialogMenuItem;
+    }
+
+    public void resetSearchOptions() {
+	if (searchFilterComboBox != null && control != null) {
+	    searchFilterComboBox.setModel(new DefaultComboBoxModel(control
+		    .searchOptions().toArray(new String[0])));
+	    searchFilterComboBox.setSelectedIndex(0);
+	}
+    }
+
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox searchFilter() {
+	if (searchFilterComboBox == null) {
+	    searchFilterComboBox = new JComboBox();
+	    resetSearchOptions();
+	}
+	return searchFilterComboBox;
     }
 
 }

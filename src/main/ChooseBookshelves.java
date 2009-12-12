@@ -5,8 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,26 +13,21 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Library;
-import data.RemoteObjectException;
 
 public class ChooseBookshelves extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    private JPanel jContentPane = null;
     private JList bookshelfList = null;
     private JButton cancelButton = null;
+    private Controller control = null;
     private JButton importButton = null;
 
-    private TreeView treeView = null;
-    private Controller control = null;
+    private JPanel jContentPane = null;
     private Library library = null;
+    private TreeView treeView = null;
 
     /**
      * @param owner
@@ -51,55 +44,6 @@ public class ChooseBookshelves extends JDialog {
 	} else {
 	    setVisible(false);
 	}
-    }
-
-    /**
-     * This method initializes this
-     * 
-     * @return void
-     */
-    private void initialize() {
-	this.setSize(380, 271);
-	this.setTitle("Import Bookshelves");
-	this.setContentPane(getJContentPane());
-    }
-
-    /**
-     * This method initializes jContentPane
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getJContentPane() {
-	if (jContentPane == null) {
-	    try {
-		UIManager
-			.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	    } catch (UnsupportedLookAndFeelException ex) {
-		System.out
-			.println("Cannot set new Theme for Java Look and Feel.");
-	    }
-	    GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-	    gridBagConstraints2.gridx = 0;
-	    gridBagConstraints2.gridy = 1;
-	    gridBagConstraints2.weightx = 1.0;
-	    GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-	    gridBagConstraints1.gridx = 1;
-	    gridBagConstraints1.gridy = 1;
-	    gridBagConstraints1.weightx = 1.0;
-	    GridBagConstraints gridBagConstraints = new GridBagConstraints();
-	    gridBagConstraints.fill = GridBagConstraints.BOTH;
-	    gridBagConstraints.gridy = 0;
-	    gridBagConstraints.weightx = 1.0;
-	    gridBagConstraints.gridwidth = 2;
-	    gridBagConstraints.weighty = 1.0;
-	    gridBagConstraints.gridx = 0;
-	    jContentPane = new JPanel();
-	    jContentPane.setLayout(new GridBagLayout());
-	    jContentPane.add(getBookshelfList(), gridBagConstraints);
-	    jContentPane.add(getCancelButton(), gridBagConstraints1);
-	    jContentPane.add(getImportButton(), gridBagConstraints2);
-	}
-	return jContentPane;
     }
 
     /**
@@ -159,6 +103,48 @@ public class ChooseBookshelves extends JDialog {
 	    });
 	}
 	return importButton;
+    }
+
+    /**
+     * This method initializes jContentPane
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getJContentPane() {
+	if (jContentPane == null) {
+	    GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+	    gridBagConstraints2.gridx = 0;
+	    gridBagConstraints2.gridy = 1;
+	    gridBagConstraints2.weightx = 1.0;
+	    GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+	    gridBagConstraints1.gridx = 1;
+	    gridBagConstraints1.gridy = 1;
+	    gridBagConstraints1.weightx = 1.0;
+	    GridBagConstraints gridBagConstraints = new GridBagConstraints();
+	    gridBagConstraints.fill = GridBagConstraints.BOTH;
+	    gridBagConstraints.gridy = 0;
+	    gridBagConstraints.weightx = 1.0;
+	    gridBagConstraints.gridwidth = 2;
+	    gridBagConstraints.weighty = 1.0;
+	    gridBagConstraints.gridx = 0;
+	    jContentPane = new JPanel();
+	    jContentPane.setLayout(new GridBagLayout());
+	    jContentPane.add(getBookshelfList(), gridBagConstraints);
+	    jContentPane.add(getCancelButton(), gridBagConstraints1);
+	    jContentPane.add(getImportButton(), gridBagConstraints2);
+	}
+	return jContentPane;
+    }
+
+    /**
+     * This method initializes this
+     * 
+     * @return void
+     */
+    private void initialize() {
+	this.setSize(380, 271);
+	this.setTitle("Import Bookshelves");
+	this.setContentPane(getJContentPane());
     }
 
 } // @jve:decl-index=0:visual-constraint="298,9"

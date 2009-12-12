@@ -16,10 +16,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 
@@ -29,14 +25,14 @@ public class ConnectTo extends JDialog {
     private JTextField addressField = null;
     private JButton cancelButton = null;
     private JButton connectButton = null;
+    private JComboBox connectionList = null;
     private Controller control = null;
     private JTextField ipAlias = null;
     private JPanel jContentPane = null;
     private JLabel jLabel = null;
     private JLabel jLabel1 = null;
-    private TreeView tree = null;
     private JLabel jLabel2 = null;
-    private JComboBox connectionList = null;
+    private TreeView tree = null;
 
     /**
      * @param owner
@@ -128,7 +124,7 @@ public class ConnectTo extends JDialog {
 			//ChooseBookshelves dialog = new ChooseBookshelves(thisClass, control,
 			//	    treeView, /*lib*/);
 			 //   dialog.setVisible(true);
-			// tree.refresh();
+			tree.refresh();
 		    } catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,20 +140,32 @@ public class ConnectTo extends JDialog {
     }
 
     /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getConnectionList() {
+	if (connectionList == null) {
+	    connectionList = new JComboBox(new DefaultComboBoxModel(control
+		    .getConnections().toArray(new String[0])));
+	    connectionList.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    ipAlias.setText("");
+		    addressField.setText("");
+		}
+	    });
+	}
+	return connectionList;
+    }
+
+    /**
      * This method initializes jContentPane
      * 
      * @return javax.swing.JPanel
      */
     private JPanel getJContentPane() {
 	if (jContentPane == null) {
-	    try {
-		UIManager
-			.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	    } catch (UnsupportedLookAndFeelException ex) {
-		System.out
-			.println("Cannot set new Theme for Java Look and Feel.");
-	    }
-
 	    GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 	    gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
 	    gridBagConstraints41.gridy = 0;
@@ -227,30 +235,9 @@ public class ConnectTo extends JDialog {
      * @return void
      */
     private void initialize() {
-	this.setSize(359, 146);
+	this.setSize(381, 173);
 	this.setContentPane(getJContentPane());
 	this.setTitle("Connect To Server");
-    }
-
-    /**
-     * This method initializes jComboBox
-     * 
-     * @return javax.swing.JComboBox
-     */
-    private JComboBox getConnectionList() {
-	if (connectionList == null) {
-	    connectionList = new JComboBox(new DefaultComboBoxModel(control
-		    .getConnections().toArray(new String[0])));
-	    connectionList.setSelectedIndex(0);
-	    connectionList.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    ipAlias.setText("");
-		    addressField.setText("");
-		}
-	    });
-	}
-	return connectionList;
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"

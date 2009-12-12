@@ -8,23 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
-import data.RemoteObjectException;
-import java.awt.Dimension;
 
 public class Disconnect extends JDialog {
 
@@ -134,14 +125,6 @@ public class Disconnect extends JDialog {
      */
     private JPanel getJContentPane() {
 	if (jContentPane == null) {
-	    try {
-		UIManager
-			.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	    } catch (UnsupportedLookAndFeelException ex) {
-		System.out
-			.println("Cannot set new Theme for Java Look and Feel.");
-	    }
-
 	    GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 	    gridBagConstraints21.gridx = 0;
 	    gridBagConstraints21.gridy = 0;
