@@ -65,6 +65,15 @@ public class ConnectionMetadata implements Serializable {
 	public String getAlias() {
 		return this.alias;
 	}
+	/**
+	 * Gets the library stored in this ConnectionMetadata
+	 * instance.
+	 * 
+	 * @return the library or null if not connected
+	 */
+	public Library getLib() {
+		return this.library;
+	}
 	
 	/**
 	 * Determines whether this ConnectionMetadata object has an open

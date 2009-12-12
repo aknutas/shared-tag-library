@@ -30,7 +30,7 @@ public abstract class ControllerSearch {
 	if (str == null)
 	    return null;
 	//Bookshelf result = new VirtualBookshelf(aLib.getProperty("Name") +  ":Search on " + str);
-	Bookshelf result = new VirtualBookshelf("NAME WOULD GO HERE FIX REMOTE LIB PROPERTIES:Search on " + str);
+	Bookshelf result = new VirtualBookshelf("Search on " + str);
 	BookQuery bq = new BookQuery();
 	bq.match(str);
 	Iterator<Bookshelf> iter = aLib.iterator();
