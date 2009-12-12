@@ -117,6 +117,7 @@ public class ConnectTo extends JDialog {
 		    try {
 			control.addConnection(addressField.getText(), ipAlias
 				.getText());
+			control.connect(ipAlias.getText());
 			tree.refresh();
 		    }catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
