@@ -6,14 +6,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Bookshelf;
@@ -48,7 +44,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
     protected void draw() {
 
-	((DefaultTreeModel) tree.getModel()).reload();
+//	((DefaultTreeModel) tree.getModel()).reload();
 	this.repaint();
     }
 
@@ -83,22 +79,16 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	this.setSize(400, 637);
 	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	this.add(getScrollPane());
+	tree.setRootVisible(false);
 	tree.setModel(new DefaultTreeModel(top));
 	tree.addTreeSelectionListener(this);
-
-	try {
-	    UIManager
-		    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	} catch (UnsupportedLookAndFeelException ex) {
-	    System.out.println("Cannot set new Theme for Java Look and Feel.");
-	}
-
 	setVisible(true);
 
     }
 
     public void refresh() {
 
+//	tree.setModel(new DefaultTreeModel(top));
 	top.removeAllChildren();
 
 	Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
@@ -106,7 +96,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	while (bookshelves.hasNext()) {
 	    top.add(new TreeNode(bookshelves.next()));
 	}
-
+	
+	((DefaultTreeModel) tree.getModel()).reload();
 	draw();
     }
 

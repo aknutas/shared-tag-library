@@ -14,15 +14,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
-import data.Book;
 import data.Bookshelf;
-import java.awt.Dimension;
 
 public class RenameBookshelf extends JDialog {
 
@@ -156,14 +150,6 @@ public class RenameBookshelf extends JDialog {
 	    jContentPane.add(getJTextField1(), gridBagConstraints3);
 	    jContentPane.add(getJButton(), gridBagConstraints4);
 	    jContentPane.add(getJButton2(), gridBagConstraints5);
-
-	    try {
-		UIManager
-			.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	    } catch (UnsupportedLookAndFeelException ex) {
-		System.out
-			.println("Cannot set new Theme for Java Look and Feel.");
-	    }
 	}
 	return jContentPane;
     }

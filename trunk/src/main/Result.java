@@ -20,10 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import data.Book;
 
@@ -326,13 +322,6 @@ public class Result extends JPanel {
 	this.add(getTitle(), BorderLayout.NORTH);
 	this.add(getContent(), BorderLayout.CENTER);
 	Content.setVisible(false);
-	try {
-	    UIManager
-		    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	} catch (UnsupportedLookAndFeelException ex) {
-	    System.out.println("Cannot set new Theme for Java Look and Feel.");
-	}
-
 	draw();
     }
 

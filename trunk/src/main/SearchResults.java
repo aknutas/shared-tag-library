@@ -1,21 +1,15 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import controller.Controller;
 import data.Book;
@@ -96,14 +90,7 @@ public class SearchResults extends JScrollPane {
 	gbc.anchor = GridBagConstraints.NORTHWEST;
 	gbc.fill = GridBagConstraints.HORIZONTAL;
 	gbc.insets = new Insets(5, 5, 5, 5);
-
-	try {
-	    UIManager
-		    .setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	} catch (UnsupportedLookAndFeelException ex) {
-	    System.out.println("Cannot set new Theme for Java Look and Feel.");
-	}
-    }
+}
 
     protected Result removeResult(Result result) {
 
