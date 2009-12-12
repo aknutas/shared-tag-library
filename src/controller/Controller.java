@@ -186,14 +186,12 @@ public class Controller {
      * @param hostname
      */
     public synchronized void addConnection(String alias, String hostname) {
-	if (!connections.isEmpty()) {
 	    for (int i = 0; i < connections.size(); i++) {
 		if (connections.get(i).getAlias().equals(alias)) {
 		    throw new IllegalArgumentException();
 		}
 	    }
 	    connections.add(new ConnectionMetadata(alias, hostname));
-	}
     }
     /**
      * remove the connection name alias
