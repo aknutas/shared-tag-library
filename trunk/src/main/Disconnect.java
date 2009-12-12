@@ -110,7 +110,7 @@ public class Disconnect extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			control.breakConnection((String) ipAlias
+			control.removeConnection((String) ipAlias
 				.getSelectedItem());
 			tree.refresh();
 		    } catch (IllegalArgumentException e) {

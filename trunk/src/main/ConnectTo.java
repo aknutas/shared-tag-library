@@ -118,19 +118,10 @@ public class ConnectTo extends JDialog {
 			control.addConnection(addressField.getText(), ipAlias
 				.getText());
 			tree.refresh();
-		    } catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (IOException e) {
+		    }catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    } catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    } catch (RemoteObjectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
