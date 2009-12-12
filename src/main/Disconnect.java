@@ -60,7 +60,7 @@ public class Disconnect extends JDialog {
 		ipAlias = new JComboBox();
 		ipAlias.setEnabled(false);
 	    } else {
-		ipAlias = new JComboBox((String[]) control.getConnections()
+		ipAlias = new JComboBox(control.getConnections()
 			.toArray(new String[0]));
 
 		ipAlias.addKeyListener(new KeyAdapter() {
@@ -110,7 +110,7 @@ public class Disconnect extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			control.removeConnection((String) ipAlias
+			control.disconnect((String) ipAlias
 				.getSelectedItem());
 			tree.refresh();
 		    } catch (IllegalArgumentException e) {
