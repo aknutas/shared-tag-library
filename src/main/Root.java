@@ -7,12 +7,18 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -53,6 +59,50 @@ public class Root extends JFrame {
 
     private static final long serialVersionUID = 1L;
     static Root thisClass = null;
+
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox searchFilter() {
+	if (searchFilterComboBox == null) {
+	    searchFilterComboBox = new JComboBox();
+	    resetSearchOptions();
+	}
+	return searchFilterComboBox;
+    }
+    
+    public void resetSearchOptions() {
+	if (searchFilterComboBox != null && control != null) {
+	    searchFilterComboBox.setModel(new DefaultComboBoxModel(control
+			.searchOptions().toArray(new String[0])));
+		searchFilterComboBox.setSelectedIndex(0);
+	}
+    }
+
+    /**
+     * This method initializes searchButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getSearchButton() {
+	if (searchButton == null) {
+	    searchButton = new JButton("Search");
+
+	    searchButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    shelf = control.searchOn((String) searchFilterComboBox
+			    .getSelectedItem(), searchField.getText());
+		    searchResults.setResults(shelf);
+
+		    draw();
+		}
+	    });
+	}
+	return searchButton;
+    }
 
     /**
      * @param args
@@ -134,6 +184,9 @@ public class Root extends JFrame {
     private Bookshelf shelf = null;
     private JMenu startMenu = null;
     private TreeView treeView = null;
+    private JComboBox searchFilterComboBox = null;
+    private JLabel withinLabel = null;
+    private JButton searchButton = null;
 
     /**
      * This is the default constructor
@@ -623,11 +676,16 @@ public class Root extends JFrame {
      */
     private JToolBar getSearchToolbar() {
 	if (searchToolbar == null) {
+	    withinLabel = new JLabel();
+	    withinLabel.setText("in:");
 	    searchToolbar = new JToolBar();
-	    searchToolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+	    searchToolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 	    searchLabel = new Label("Search: ", Label.LEFT);
 	    searchToolbar.add(searchLabel);
 	    searchToolbar.add(getTextField());
+	    searchToolbar.add(withinLabel);
+	    searchToolbar.add(searchFilter());
+	    searchToolbar.add(getSearchButton());
 	}
 
 	return searchToolbar;
@@ -663,13 +721,12 @@ public class Root extends JFrame {
 	if (searchField == null) {
 	    searchField = new TextField();
 	    searchField.setPreferredSize(new Dimension(300, 20));
-	    searchField.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event) {
-
-		    shelf = control.search(searchField.getText());
-		    searchResults.setResults(shelf);
-
-		    draw();
+	    searchField.addKeyListener(new KeyAdapter() {
+		public void keyPressed(KeyEvent e) {
+		    int key = e.getKeyCode();
+		    if (key == KeyEvent.VK_ENTER) {
+			searchButton.doClick();
+		    }
 		}
 	    });
 	}
@@ -703,19 +760,10 @@ public class Root extends JFrame {
 	    this.setJMenuBar(getJJMenuBar());
 	    this.setContentPane(getContent());
 	    this.setTitle("Book Butler");
-	} catch (UnknownHostException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
 	} catch (IllegalArgumentException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	} catch (NullPointerException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (RemoteObjectException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
