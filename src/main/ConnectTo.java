@@ -112,18 +112,19 @@ public class ConnectTo extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			if (addressField.getText().equals("")){
-			    control.connect((String)connectionList.getSelectedItem());
+			if (addressField.getText().equals("")) {
+			    control.connect((String) connectionList
+				    .getSelectedItem());
+			} else {
+			    control.addConnection(addressField.getText(),
+				    ipAlias.getText());
+			    control.connect(ipAlias.getText());
 			}
-			else {
-			    control.addConnection(addressField.getText(), ipAlias
-				.getText());
-				control.connect(ipAlias.getText());
-			}
-			
-			//ChooseBookshelves dialog = new ChooseBookshelves(thisClass, control,
-			//	    treeView, /*lib*/);
-			 //   dialog.setVisible(true);
+
+			// ChooseBookshelves dialog = new
+			// ChooseBookshelves(thisClass, control,
+			// treeView, /*lib*/);
+			// dialog.setVisible(true);
 			tree.refresh();
 		    } catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

@@ -95,9 +95,9 @@ public class ChooseBookshelves extends JDialog {
 	    importButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
-		 //   bookshelfList.getS
-		//	control.importSelectBookshelves(local, remote, select)
-			treeView.refresh();
+		    // bookshelfList.getS
+		    // control.importSelectBookshelves(local, remote, select)
+		    treeView.refresh();
 		    setVisible(false);
 		}
 	    });

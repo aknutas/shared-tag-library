@@ -44,7 +44,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
     protected void draw() {
 
-//	((DefaultTreeModel) tree.getModel()).reload();
+	// ((DefaultTreeModel) tree.getModel()).reload();
 	this.repaint();
     }
 
@@ -60,9 +60,10 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	while (bookshelves.hasNext()) {
 
 	    TreeNode lib = new TreeNode(bookshelves.next());
-	    
+
 	    // This loads an initial book into memory (Speed Optimization)
-	    if (lib.getShelf().iterator().hasNext()) lib.getShelf().iterator().next();
+	    if (lib.getShelf().iterator().hasNext())
+		lib.getShelf().iterator().next();
 
 	    top.add(lib);
 	}
@@ -88,7 +89,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
     public void refresh() {
 
-//	tree.setModel(new DefaultTreeModel(top));
+	// tree.setModel(new DefaultTreeModel(top));
 	top.removeAllChildren();
 
 	Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
@@ -96,7 +97,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	while (bookshelves.hasNext()) {
 	    top.add(new TreeNode(bookshelves.next()));
 	}
-	
+
 	((DefaultTreeModel) tree.getModel()).reload();
 	draw();
     }

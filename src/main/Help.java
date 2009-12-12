@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 
 import javax.swing.JDialog;
@@ -15,7 +16,8 @@ public class Help extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private String[] content = {
-	    "Hello, I am trying to figure this stuff out...", "TSP Group 1" };
+	    "Hello, I am trying to figure this stuff out...",
+	    "Michigan Technological University 2009\n\nTeam Software Projects: Team One\n\tAndrew Alm\n\tRobert Amundson\n\tAntti Knutas\n\tSteven Purol\n\tPatrick Ranspach" };
     private int focus = 0;
     private JPanel jContentPane = null;
     private JList jList = null;
@@ -97,7 +99,8 @@ public class Help extends JDialog {
      * @return void
      */
     private void initialize() {
-	this.setSize(424, 318);
+	this.setSize(420, 320);
+	this.setMinimumSize(new Dimension(400, 300));
 	this.setContentPane(getJContentPane());
 	this.setTitle("Help - About");
     }
