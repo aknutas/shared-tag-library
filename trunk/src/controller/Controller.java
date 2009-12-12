@@ -82,7 +82,7 @@ public class Controller {
 	myLib = new PersistentLibrary(qb);
 
 	cntrl = new ControlImpl(new LibraryResponder(myLib));
-	setLibName(myLib, "My Library");
+	myLib.setProperty("name", "My Library");
 	modifiedBs = new Vector<Bookshelf>();
 	ProgramProperties props = ProgramProperties.getInstance();
 	connections = (Vector<ConnectionMetadata>) props.getProperty("controller::connections");
@@ -92,10 +92,7 @@ public class Controller {
 	addShutdownHooks();
     }
 
-    public void setLibName(Library lib, String name) {
-	if (lib != null && name != null)
-	    lib.setProperty("name", name);
-    }
+
 
     /**
      * Add a book to the library
@@ -167,6 +164,22 @@ public class Controller {
 	setFocus(bs);
 	return bs;
     }
+    /**
+     * returns the Alias for all connections
+     * @return
+     */
+    public synchronized Vector<String> getConnections() {
+	Vector<String> cons = null;
+	if (!connections.isEmpty()) {
+	    cons = new Vector<String>();
+	    for (int i = 0; i < connections.size(); i++) {
+		cons.add(connections.get(i).getAlias());
+	    }
+	}
+	return cons;
+    } 
+    
+    
     /**
      * adds a connection object 
      * @param alias
@@ -516,25 +529,23 @@ public class Controller {
 	}
 	return vec;
     }
-    public synchronized Collection<Bookshelf> searchOn(String target,String searchTerms) {
-	Vector<Bookshelf> temp = new Vector<Bookshelf>();
+    public synchronized Bookshelf searchOn(String target,String searchTerms) {
+
 	if(target.equals("ALL"))
 	    return searchAll(searchTerms);
 	if(target.equals("My Library")){
-	    temp.add(search(searchTerms,myLib));
-	    return temp;
+	    return search(searchTerms,myLib);
 	}
 	for(int i = 0; i < connections.size();i++){
 	    if(target.equals(connections.get(i).getAlias())){
-		temp.add(search(searchTerms,connections.get(i).getLib()));
-		    return temp;
+		    return search(searchTerms,connections.get(i).getLib());
 	    }
 	}
 	return null;
     }    
     
     
-     public synchronized Collection<Bookshelf> searchAll(String str) {
+     public synchronized Bookshelf searchAll(String str) {
 
      Vector<Library> libs = new Vector<Library>();
 	for(int i = 0; i < connections.size();i++){
@@ -542,7 +553,7 @@ public class Controller {
 		libs.add(connections.get(i).getLib());
 	}
      libs.add(myLib);
-     return ControllerSearch.searchAlllibs(str, libs);
+     return ControllerSearch.searchAlllibsFlat(str, libs);
      }
 
     /**

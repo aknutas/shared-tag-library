@@ -23,7 +23,15 @@ public abstract class ControllerSearch {
 	}
 	return shelves;
     }
-    
+    public static Bookshelf searchAlllibsFlat(String str,Collection<Library> allLibs) {
+	Iterator<Library> iter = allLibs.iterator();
+	VirtualBookshelf vb = new VirtualBookshelf();
+	while(iter.hasNext()){
+	   vb.union(search(str,iter.next()));
+	}
+	return vb;
+    }
+       
     
     
     public static Bookshelf search(String str, Library aLib) {
@@ -95,6 +103,7 @@ public abstract class ControllerSearch {
 	}
 	return shelves;
     }
+    
     /**
      * a method for use in multi term specific area searching
      * 
