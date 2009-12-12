@@ -90,7 +90,7 @@ public class SearchResults extends JScrollPane {
 	gbc.anchor = GridBagConstraints.NORTHWEST;
 	gbc.fill = GridBagConstraints.HORIZONTAL;
 	gbc.insets = new Insets(5, 5, 5, 5);
-}
+    }
 
     protected Result removeResult(Result result) {
 

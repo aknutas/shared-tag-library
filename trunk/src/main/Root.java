@@ -3,8 +3,6 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Label;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,9 +22,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -139,17 +139,19 @@ public class Root extends JFrame {
 
     private JMenuItem renameBookshelfMenuItem = null;
     private JButton searchButton = null;
-    private TextField searchField = null;
+    private JTextField searchField = null;
     private JComboBox searchFilterComboBox = null;
-    private JLabel searchLabel = null;
     private SearchResults searchResults = null;
 
     private JToolBar searchToolbar = null;
     private Bookshelf shelf = null;
 
     private JMenu startMenu = null;
+    private JLabel status = null;
+    JToolBar statusBar = null;
     private TreeView treeView = null;
     private JLabel withinLabel = null;
+
     /**
      * This is the default constructor
      */
@@ -162,6 +164,7 @@ public class Root extends JFrame {
 	msgTimer.start();
 	initialize();
     }
+
     /**
      * This method initializes jMenuItem
      * 
@@ -183,6 +186,7 @@ public class Root extends JFrame {
 				books);
 			dialog.setLocationRelativeTo(content);
 			dialog.setVisible(true);
+			setStatus("Adding tags...");
 
 			draw();
 		    }
@@ -191,6 +195,7 @@ public class Root extends JFrame {
 	}
 	return addTagDialogMenuItem;
     }
+
     /**
      * This method initializes connectToMenuItem
      * 
@@ -209,6 +214,7 @@ public class Root extends JFrame {
 			    treeView);
 		    dialog.setLocationRelativeTo(content);
 		    dialog.setVisible(true);
+		    setStatus("Connecting...");
 
 		    draw();
 		}
@@ -216,6 +222,7 @@ public class Root extends JFrame {
 	}
 	return connectToMenuItem;
     }
+
     /**
      * 
      */
@@ -224,6 +231,7 @@ public class Root extends JFrame {
 	validate();
 	repaint();
     }
+
     /**
      * This method initializes jMenuItem
      * 
@@ -240,12 +248,13 @@ public class Root extends JFrame {
 		    int result = export.showOpenDialog(thisClass);
 
 		    if (result == JFileChooser.APPROVE_OPTION) {
-		    
+
+			setStatus("Exporting library...");
 			File curFile = export.getSelectedFile();
 			try {
 			    curFile.createNewFile();
-			    
-			 // InOutParser
+
+			    // InOutParser
 			} catch (IOException e) {
 			    // TODO Auto-generated catch block
 			    e.printStackTrace();
@@ -277,6 +286,7 @@ public class Root extends JFrame {
 				    .getSelected());
 		    addBookshelfDialog.setLocationRelativeTo(content);
 		    addBookshelfDialog.setVisible(true);
+		    setStatus("Exporting books...");
 
 		    draw();
 		}
@@ -328,6 +338,7 @@ public class Root extends JFrame {
 			    searchResults, treeView);
 		    addBookDialog.setLocationRelativeTo(content);
 		    addBookDialog.setVisible(true);
+		    setStatus("Adding a book...");
 
 		    draw();
 		}
@@ -351,6 +362,7 @@ public class Root extends JFrame {
 	    addBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Adding a bookshelf...");
 		    addBookshelfDialog = new AddBookshelf(thisClass, control,
 			    searchResults, treeView);
 		    addBookshelfDialog.setLocationRelativeTo(content);
@@ -416,6 +428,7 @@ public class Root extends JFrame {
 	    clearBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Clearing bookshelf...");
 		    shelf = searchResults.getBookshelf();
 		    if (shelf != null) {
 			searchResults.setResults(shelf);
@@ -436,8 +449,9 @@ public class Root extends JFrame {
 	if (content == null) {
 	    content = new JPanel();
 	    content.setLayout(new BorderLayout());
-	    content.add(getSearchToolbar(), BorderLayout.SOUTH);
+	    content.add(getSearchToolbar(), BorderLayout.NORTH);
 	    content.add(getJSplitPane(), BorderLayout.CENTER);
+	    content.add(getStatusBar(), BorderLayout.SOUTH);
 	}
 	return content;
     }
@@ -461,6 +475,7 @@ public class Root extends JFrame {
 			Bookshelf shelf = searchResults.getBookshelf();
 			if (shelf != null) {
 
+			    setStatus("Deleting a bookshelf...");
 			    control.removeBookshelf(shelf);
 			    searchResults.setResults(null);
 			    treeView.refresh();
@@ -487,6 +502,7 @@ public class Root extends JFrame {
 	    deleteSelectedBooksMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Removing books...");
 		    searchResults.removeSelected();
 		    draw();
 		}
@@ -513,6 +529,7 @@ public class Root extends JFrame {
 			    treeView);
 		    dialog.setLocationRelativeTo(content);
 		    dialog.setVisible(true);
+		    setStatus("Disconnecting...");
 
 		    draw();
 		}
@@ -552,13 +569,7 @@ public class Root extends JFrame {
     private JMenuBar getJJMenuBar() {
 	if (jJMenuBar == null) {
 	    jJMenuBar = new JMenuBar();
-/*	    try {
-		UIManager.setLookAndFeel(new SubstanceBusinessBlackSteelLookAndFeel());
-	    } catch (UnsupportedLookAndFeelException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-*/	    jJMenuBar.add(getStartMenu());
+	    jJMenuBar.add(getStartMenu());
 	    jJMenuBar.add(getLibraryMenu());
 	    jJMenuBar.add(getBookshelfMenu());
 	    jJMenuBar.add(getBookMenu());
@@ -612,6 +623,7 @@ public class Root extends JFrame {
 	    removeTagDialogMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Removing tags...");
 		    ArrayList<Book> books = searchResults.getSelected();
 		    if (books.size() > 0) {
 
@@ -642,6 +654,7 @@ public class Root extends JFrame {
 	    renameBookshelfMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Renaming a bookshelf...");
 		    shelf = searchResults.getBookshelf();
 		    if (shelf != null) {
 			renameBookshelfDialog = new RenameBookshelf(thisClass,
@@ -664,12 +677,13 @@ public class Root extends JFrame {
      */
     private JButton getSearchButton() {
 	if (searchButton == null) {
-	    searchButton = new JButton("Go...");
+	    searchButton = new JButton("Search...");
 	    searchButton.setBorderPainted(true);
 
 	    searchButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Searching...");
 		    shelf = control.searchOn((String) searchFilterComboBox
 			    .getSelectedItem(), searchField.getText());
 		    searchResults.setResults(shelf);
@@ -701,11 +715,10 @@ public class Root extends JFrame {
     private JToolBar getSearchToolbar() {
 	if (searchToolbar == null) {
 	    withinLabel = new JLabel();
-	    withinLabel.setText("in:");
+	    withinLabel.setText(" in: ");
 	    searchToolbar = new JToolBar();
-	    searchToolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
-	    searchLabel = new JLabel("Search: ", Label.LEFT);
-	    searchToolbar.add(searchLabel);
+	    searchToolbar.setFloatable(false);
+	    searchToolbar.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 	    searchToolbar.add(getTextField());
 	    searchToolbar.add(withinLabel);
 	    searchToolbar.add(searchFilter());
@@ -736,15 +749,30 @@ public class Root extends JFrame {
 	return startMenu;
     }
 
+    public JToolBar getStatusBar() {
+	if (statusBar == null) {
+
+	    statusBar = new JToolBar();
+	    statusBar.setFloatable(false);
+	    statusBar.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+	    status = new JLabel();
+	    status.setText("Idle");
+
+	    statusBar.add(new JLabel("Status: "));
+	    statusBar.add(status);
+	}
+	return statusBar;
+    }
+
     /**
      * This method initializes searchField
      * 
      * @return java.awt.TextField
      */
-    private TextField getTextField() {
+    private JTextField getTextField() {
 	if (searchField == null) {
-	    searchField = new TextField();
-	    searchField.setPreferredSize(new Dimension(300, 20));
+	    searchField = new JTextField();
+	    searchField.setColumns(30);
 	    searchField.addKeyListener(new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
 		    int key = e.getKeyCode();
@@ -785,10 +813,12 @@ public class Root extends JFrame {
 		    int result = export.showOpenDialog(thisClass);
 
 		    if (result == JFileChooser.APPROVE_OPTION) {
-		    
+
 			File curFile = export.getSelectedFile();
+			setStatus("Importing a library...");
 			System.out.println(curFile.getName());
-			 // InOutParser
+			// InOutParser
+
 		    }
 		}
 	    });
@@ -834,6 +864,7 @@ public class Root extends JFrame {
 	    quitMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    setStatus("Quitting...");
 		    dispose();
 		    System.exit(0);
 		}
@@ -864,7 +895,7 @@ public class Root extends JFrame {
 				searchResults, result.get(0));
 			dialog.setLocationRelativeTo(content);
 			dialog.setVisible(true);
-
+			setStatus("Renaming a book...");
 			draw();
 		    }
 		}
@@ -892,6 +923,22 @@ public class Root extends JFrame {
 	    resetSearchOptions();
 	}
 	return searchFilterComboBox;
+    }
+
+    public void setStatus(String s) {
+
+	// Clear status after...
+	ActionListener clearText = new ActionListener() {
+	    public void actionPerformed(ActionEvent event) {
+
+		status.setText("Idle");
+	    }
+	};
+	Timer time = new javax.swing.Timer(5000, clearText);
+	time.setInitialDelay(5000);
+	time.start();
+	time.setRepeats(false);
+	status.setText(s);
     }
 
 }
