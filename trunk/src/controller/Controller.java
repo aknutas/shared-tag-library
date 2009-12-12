@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
@@ -17,6 +18,7 @@ import network.ControlImpl;
 import network.Definitions;
 import network.messages.ChatMessage;
 import network.messages.Message;
+import scripts.InOutParser;
 import scripts.Parser;
 import scripts.ScriptGenerator;
 import butler.ButlerWeights;
@@ -85,14 +87,13 @@ public class Controller {
 	myLib.setProperty("name", "My Library");
 	modifiedBs = new Vector<Bookshelf>();
 	ProgramProperties props = ProgramProperties.getInstance();
-	connections = (Vector<ConnectionMetadata>) props.getProperty("controller::connections");
-	if(connections==null)
-		connections = new Vector<ConnectionMetadata>();
+	connections = (Vector<ConnectionMetadata>) props
+		.getProperty("controller::connections");
+	if (connections == null)
+	    connections = new Vector<ConnectionMetadata>();
 	// Registering shutdown hooks
 	addShutdownHooks();
     }
-
-
 
     /**
      * Add a book to the library
@@ -155,6 +156,21 @@ public class Controller {
      * 
      * @return the added bookshelf (null if error)
      */
+    public synchronized Bookshelf addBookshelf(Bookshelf bookshelf)
+	    throws IllegalArgumentException {
+	if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
+	    throw new IllegalArgumentException();
+
+	myLib.saveBookshelf((VirtualBookshelf) bookshelf);
+	setFocus(bookshelf);
+	return bookshelf;
+    }
+
+    /**
+     * Add a bookshelf to the library
+     * 
+     * @return the added bookshelf (null if error)
+     */
     public synchronized Bookshelf addBookshelf(String name)
 	    throws IllegalArgumentException {
 	if (name == null)
@@ -164,37 +180,40 @@ public class Controller {
 	setFocus(bs);
 	return bs;
     }
+
     /**
      * returns the Alias for all connections
+     * 
      * @return
      */
     public synchronized Vector<String> getConnections() {
-	Vector<String> cons = null;
+	Vector<String> cons = new Vector<String>();
 	if (!connections.isEmpty()) {
-	    cons = new Vector<String>();
 	    for (int i = 0; i < connections.size(); i++) {
 		cons.add(connections.get(i).getAlias());
 	    }
 	}
 	return cons;
-    } 
-    
-    
+    }
+
     /**
-     * adds a connection object 
+     * adds a connection object
+     * 
      * @param alias
      * @param hostname
      */
     public synchronized void addConnection(String alias, String hostname) {
-	    for (int i = 0; i < connections.size(); i++) {
-		if (connections.get(i).getAlias().equals(alias)) {
-		    throw new IllegalArgumentException();
-		}
+	for (int i = 0; i < connections.size(); i++) {
+	    if (connections.get(i).getAlias().equals(alias)) {
+		throw new IllegalArgumentException();
 	    }
-	    connections.add(new ConnectionMetadata(alias, hostname));
+	}
+	connections.add(new ConnectionMetadata(alias, hostname));
     }
+
     /**
      * remove the connection name alias
+     * 
      * @param alias
      */
     public synchronized void removeConnection(String alias) {
@@ -208,53 +227,76 @@ public class Controller {
 	    }
 	}
     }
+
     /**
      * connect on the alias
-     * @throws IllegalArgumentException if already connected 
+     * 
+     * @throws IllegalArgumentException
+     *             if already connected
      * @param alias
      */
-    public synchronized void connect(String alias) throws  IllegalArgumentException{
+    public synchronized void connect(String alias)
+	    throws IllegalArgumentException {
 	if (connections.isEmpty()) {
 	    throw new IllegalArgumentException();
 	}
-	for (int id=0;id < connections.size(); id++) {
+	for (int id = 0; id < connections.size(); id++) {
 	    if (connections.get(id).getAlias().equals(alias))
-		if(connections.get(id).isConnected())
+		if (connections.get(id).isConnected())
 		    throw new IllegalArgumentException();
-		connections.get(id).connect(cntrl);
+	    connections.get(id).connect(cntrl);
 	}
     }
+
     /**
      * disconnect on the alias
-     * @throws IllegalArgumentException if not connected 
+     * 
+     * @throws IllegalArgumentException
+     *             if not connected
      * @param alias
      */
     public synchronized void disconnect(String alias) {
 	if (connections.isEmpty()) {
 	    throw new IllegalArgumentException();
 	}
-	for (int id=0;id < connections.size(); id++) {
+	for (int id = 0; id < connections.size(); id++) {
 	    if (connections.get(id).getAlias().equals(alias))
-		if(!connections.get(id).isConnected())
+		if (!connections.get(id).isConnected())
 		    throw new IllegalArgumentException();
-		connections.get(id).disconnect(cntrl);
+	    connections.get(id).disconnect(cntrl);
 	}
-    } 
-/**
- * returns the library at hte alias
- * @param alias
- * @return returns null if not connected
- */
+    }
+
+    /**
+     * returns the library at the alias
+     * 
+     * @param alias
+     * @return returns null if not connected
+     */
     public synchronized Library getLibrary(String alias) {
 	if (connections.isEmpty()) {
 	    throw new IllegalArgumentException();
 	}
-	for (int id=0;id < connections.size(); id++) {
+	for (int id = 0; id < connections.size(); id++) {
 	    if (connections.get(id).getAlias().equals(alias))
 		return connections.get(id).getLib();
 	}
 	return null;
     }
+
+    public synchronized Iterator<String> allBookshelves(String alias) {
+	if (connections.isEmpty()) {
+	    throw new IllegalArgumentException();
+	}
+
+	for (int id = 0; id < connections.size(); id++) {
+	    if (connections.get(id).getAlias().equals(alias)) {
+		return connections.get(id).getBookshelfNames();
+	    }
+	}
+	return null;
+    }
+
     /**
      * This method registers shutdown hook in the runtime system. The hook is
      * basically a thread that gets executed moments before the program
@@ -517,42 +559,41 @@ public class Controller {
 	return myLib.iterator();
     }
 
-    
     public synchronized Vector<String> searchOptions() {
 	Vector<String> vec = new Vector<String>();
 	vec.add("ALL");
 	vec.add("My Library");
-	for(int i = 0; i < connections.size();i++){
+	for (int i = 0; i < connections.size(); i++) {
 	    vec.add(connections.get(i).getAlias());
 	}
 	return vec;
     }
-    public synchronized Bookshelf searchOn(String target,String searchTerms) {
 
-	if(target.equals("ALL"))
+    public synchronized Bookshelf searchOn(String target, String searchTerms) {
+
+	if (target.equals("ALL"))
 	    return searchAll(searchTerms);
-	if(target.equals("My Library")){
-	    return search(searchTerms,myLib);
+	if (target.equals("My Library")) {
+	    return search(searchTerms, myLib);
 	}
-	for(int i = 0; i < connections.size();i++){
-	    if(target.equals(connections.get(i).getAlias())){
-		    return search(searchTerms,connections.get(i).getLib());
+	for (int i = 0; i < connections.size(); i++) {
+	    if (target.equals(connections.get(i).getAlias())) {
+		return search(searchTerms, connections.get(i).getLib());
 	    }
 	}
 	return null;
-    }    
-    
-    
-     public synchronized Bookshelf searchAll(String str) {
+    }
 
-     Vector<Library> libs = new Vector<Library>();
-	for(int i = 0; i < connections.size();i++){
-	    if(connections.get(i).isConnected())
+    public synchronized Bookshelf searchAll(String str) {
+
+	Vector<Library> libs = new Vector<Library>();
+	for (int i = 0; i < connections.size(); i++) {
+	    if (connections.get(i).isConnected())
 		libs.add(connections.get(i).getLib());
 	}
-     libs.add(myLib);
-     return ControllerSearch.searchAlllibsFlat(str, libs);
-     }
+	libs.add(myLib);
+	return ControllerSearch.searchAlllibsFlat(str, libs);
+    }
 
     /**
      * A search match any criteria with a single string a library
@@ -589,4 +630,36 @@ public class Controller {
     public void testconnection(Integer target, String message) {
 	cntrl.sendMsg(target, new ChatMessage(message));
     }
+
+    /**
+     * writes the library to an file
+     * 
+     * @param fileName
+     */
+    public synchronized void writeOut(String fileName) {
+	InOutParser inOut = new InOutParser(null, fileName);
+	inOut.writeOutLibrary(myLib);
+    }
+
+    /**
+     * reads in a file and adds its shelves to the library
+     * 
+     * @param fileName
+     */
+    public synchronized void readInLibrary(String fileName) {
+	InOutParser inOut = new InOutParser(fileName, null);
+	try {
+	    inOut.processLineByLine();
+	} catch (FileNotFoundException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	Library lib = inOut.getParsedLib();
+	Iterator<Bookshelf> iter = lib.iterator();
+	while (iter.hasNext()) {
+	    System.out.println("loop");
+	    addBookshelf(iter.next());
+	}
+    }
+
 }

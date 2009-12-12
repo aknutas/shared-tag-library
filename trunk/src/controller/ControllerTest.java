@@ -1,18 +1,18 @@
-//package controller;
-//
-//import static org.junit.Assert.*;
-//
-//import java.io.IOException;
-//import java.net.UnknownHostException;
-//import java.util.Iterator;
-//import java.util.Vector;
-//
-//import org.junit.Test;
-//
-//import data.*;
-//
-//public class ControllerTest {
-//
+package controller;
+
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.junit.Test;
+
+import data.*;
+
+public class ControllerTest {
+
 //    @Test
 //    public void testController() {
 //	Controller cont;
@@ -394,5 +394,14 @@
 //    public void testSetuptestController() {
 //	fail("Not yet implemented");
 //    }
-//
-//}
+  @Test
+  public void testreadInLibrary() {
+      Controller cont = new Controller();
+      cont.readInLibrary("output.txt");
+  }
+//  @Test
+//  public void testwriteOut() {
+//      Controller cont = new Controller();
+//      cont.writeOut("testwriteout");
+//  } 
+}
