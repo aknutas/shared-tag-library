@@ -1,10 +1,14 @@
 package controller;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 
 import network.Control;
+import data.Bookshelf;
 import data.Library;
 import data.RemoteLibrary;
+import data.VirtualLibrary;
 
 /**
  * The ConnectionMetadta class implements the Serializable interface.
@@ -26,7 +30,7 @@ public class ConnectionMetadata implements Serializable {
 	private transient boolean connected = false;
 	private transient int connection = 0;
 	private transient Library library = null;
-	
+	private transient Library selectedShelves = null;
 	/**
 	 * Creates a new ConnectionMetadata instance with the given
 	 * alias and hostname
@@ -72,7 +76,7 @@ public class ConnectionMetadata implements Serializable {
 	 * @return the library or null if not connected
 	 */
 	public Library getLib() {
-		return this.library;
+		return (this.selectedShelves!=null)? this.selectedShelves : this.library;
 	}
 	
 	/**
@@ -133,5 +137,14 @@ public class ConnectionMetadata implements Serializable {
 		
 		return this.connected;
 	}
-	
+	public Iterator<String> getBookshelfNames(){
+	    return this.library.getBookshelfNames();
+	}
+	public void selectShelves(Collection<String> shelves){
+	    this.selectedShelves = new VirtualLibrary();
+	    Iterator<Bookshelf> iter = this.library.getBookshelf(shelves);
+	    while(iter.hasNext()){
+		this.selectedShelves.addBookshelf(iter.next());
+	    }
+	}
 }
