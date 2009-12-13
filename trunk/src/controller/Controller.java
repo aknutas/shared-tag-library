@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -661,5 +662,34 @@ public class Controller {
 	    addBookshelf(iter.next());
 	}
     }
+    /**
+     * writes the library to an file
+     * 
+     * @param fileName
+     */
+    public synchronized void writeOut(File file) {
+	InOutParser inOut = new InOutParser(null, file);
+	inOut.writeOutLibrary(myLib);
+    }
 
+    /**
+     * reads in a file and adds its shelves to the library
+     * 
+     * @param fileName
+     */
+    public synchronized void readInLibrary(File file) {
+	InOutParser inOut = new InOutParser(file, null);
+	try {
+	    inOut.processLineByLine();
+	} catch (FileNotFoundException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	Library lib = inOut.getParsedLib();
+	Iterator<Bookshelf> iter = lib.iterator();
+	while (iter.hasNext()) {
+	    System.out.println("loop");
+	    addBookshelf(iter.next());
+	}
+    }
 }
