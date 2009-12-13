@@ -253,7 +253,7 @@ public class Root extends JFrame {
 			File curFile = export.getSelectedFile();
 			try {
 			    curFile.createNewFile();
-
+			    control.writeOut(curFile);
 			    // InOutParser
 			} catch (IOException e) {
 			    // TODO Auto-generated catch block
@@ -817,7 +817,7 @@ public class Root extends JFrame {
 			File curFile = export.getSelectedFile();
 			setStatus("Importing a library...");
 			System.out.println(curFile.getName());
-			// InOutParser
+			control.readInLibrary(curFile);
 
 		    }
 		}
