@@ -1,12 +1,17 @@
 package controller;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jdo.annotations.PersistenceCapable;
 
 import scripts.DefaultProperties;
-
 import database.QueryBuilder;
 import database.QueryBuilderImpl;
 
@@ -20,21 +25,13 @@ import database.QueryBuilderImpl;
  * 
  * Below is a list of properties the program stores (please add):
  * 
- * 	1. butler package
- * 	2. controller package
- * 		controller::connections  the map of connection names to alias
- * 	3. data package
- * 		data::timeout		the default timeout of a remote object
- *		data::iter_block	the fetch block size for remote iterators
- *	4. database package
- *	5. main package
- *	6. operations package
- *	7. scripts package
- *	8. global
- *	9. network package
- *		network::timeout	Connection timeout
- *		network::so_timeout	Timeout when transferring data
- *		network::port		Listening port
+ * 1. butler package 2. controller package controller::connections the map of
+ * connection names to alias 3. data package data::timeout the default timeout
+ * of a remote object data::iter_block the fetch block size for remote iterators
+ * 4. database package 5. main package 6. operations package 7. scripts package
+ * 8. global 9. network package network::timeout Connection timeout
+ * network::so_timeout Timeout when transferring data network::port Listening
+ * port
  * 
  * @author Andrew Alm
  */

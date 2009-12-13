@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Dimension;
 import java.util.Iterator;
 
 import javax.swing.BoxLayout;
@@ -78,6 +79,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
      */
     private void initialize() {
 	this.setSize(400, 637);
+	this.setMinimumSize(new Dimension(150, 200));
 	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	this.add(getScrollPane());
 	tree.setRootVisible(false);
