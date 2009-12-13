@@ -1,9 +1,5 @@
 package data.messages;
 
-import java.io.*;
-import network.messages.*;
-import java.util.*;
-
 /**
  * The LibraryMessage extends Message and is used to send messages between
  * two Libraries.
@@ -17,6 +13,9 @@ public class LibraryMessage extends TrackedMessage {
 	/* message types */
 	public static final int MSG_MASTER = 2;
 	public static final int MSG_ITERATOR = 3;
+	public static final int MSG_BOOKSHELF = 4;
+	public static final int MSG_BOOKSHELVES = 5;
+	public static final int MSG_BOOKSHELF_NAMES = 6;
 	
 	/**
 	 * Creates a new LibraryMessage with the given messageType. The messageType

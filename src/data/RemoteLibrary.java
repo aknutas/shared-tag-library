@@ -30,9 +30,7 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	}
 		
 	/**
-	 * Gets the maste {
-		
-	}r Bookshelf of this RemoteLibrary object, or
+	 * Gets the master Bookshelf of this RemoteLibrary object, or
 	 * returns null on error.
 	 * 
 	 * @return the Bookshelf object, or null on error
@@ -121,21 +119,64 @@ public class RemoteLibrary extends RemoteObject implements Library {
 
 	@Override
 	public Bookshelf getBookshelf(String name) throws NullPointerException {
-		// TODO Auto-generated method stub
-		return null;
+		if(null == name)
+			throw new NullPointerException("name cannot be null");
+		
+		try {
+			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF);
+			message = this.send(message, 5000);
+		
+			if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELF != message.getMessageType())
+				return null;
+		
+			int bookshelfID = message.dequeParameter();
+			return new RemoteBookshelf(this.network, this.connection, bookshelfID);
+		} catch(Exception ex) {
+			return null;
+		}
 	}
 
 	@Override
-	public Iterator<Bookshelf> getBookshelf(Collection<String> names)
-			throws NullPointerException {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterator<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
+		if(null == names)
+			throw new NullPointerException("names cannot be null");
+		
+		try {
+			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELVES);
+			message = this.send(message);
+			
+			if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELVES != message.getMessageType())
+				return null;
+			
+			int iteratorID = message.dequeParameter();
+			return new RemoteBookshelfIterator(this.network, this.connection, iteratorID);
+		} catch(Exception ex) {
+			return null;
+		}
 	}
 
 	@Override
 	public Iterator<String> getBookshelfNames() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF_NAMES);
+			message = this.send(message);
+			
+			if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELF_NAMES != message.getMessageType())
+				return null;
+			
+			/* create collection of strings (names) from iterator */
+			Collection<String> names = new LinkedList<String>();
+			String name = message.dequeParameter();
+			
+			while(name != null) {
+				names.add(name);
+				name = message.dequeParameter();
+			}
+			
+			return names.iterator();
+		} catch(Exception ex) {
+			return null;
+		}
 	}
 
 	

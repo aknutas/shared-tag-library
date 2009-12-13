@@ -62,6 +62,12 @@ public class LibraryResponder extends RemoteResponder {
 			return this.handleMasterRequest((LibraryMessage)message);
 		case LibraryMessage.MSG_ITERATOR:
 			return this.handleIteratorRequest((LibraryMessage)message);
+		case LibraryMessage.MSG_BOOKSHELF:
+			return this.handleBookshelfMessage((LibraryMessage)message);
+		case LibraryMessage.MSG_BOOKSHELVES:
+			return this.handleBookshelvesMessage((LibraryMessage)message);
+		case LibraryMessage.MSG_BOOKSHELF_NAMES:
+			return this.handleBookshelfMessage((LibraryMessage)message);
 		default:
 			RemoteMessage errorMessage = new LibraryMessage(LibraryMessage.MSG_ERROR);
 			errorMessage.queueParameter("illegal message type");
@@ -118,17 +124,79 @@ public class LibraryResponder extends RemoteResponder {
 	 *         not MSG_ITERATOR
 	 */
 	private LibraryMessage handleIteratorRequest(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
-		LibraryMessage response = new LibraryMessage(LibraryMessage.MSG_ITERATOR);
-		
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
 		
 		if(LibraryMessage.MSG_ITERATOR != message.getMessageType())
 			throw new IllegalArgumentException("illegal message type");
 		
+		message = new LibraryMessage(LibraryMessage.MSG_ITERATOR);
 		BookshelfIteratorResponder responder = new BookshelfIteratorResponder(this.library.iterator());
-		response.queueParameter(responder.getID());
-		return response;
+		message.queueParameter(responder.getID());
+		return message;
 	}
 
+	private LibraryMessage handleBookshelfMessage(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
+		if(null == message)
+			throw new NullPointerException("message cannot be null");
+		
+		if(LibraryMessage.MSG_BOOKSHELF != message.getMessageType())
+			throw new IllegalArgumentException("illegal message type");
+		
+		String name = message.dequeParameter();
+		if(null == name)
+			return new LibraryMessage(LibraryMessage.MSG_ERROR);
+		
+		/* find shelf */
+		message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF);
+		for(Bookshelf shelf : this.library) {
+			if(!shelf.getProperty("name").equals(name))
+				continue;
+			
+			message.queueParameter((new BookshelfResponder(shelf)).getID());
+			return message;
+		}
+		
+		return new LibraryMessage(LibraryMessage.MSG_ERROR);
+	}
+	
+	private LibraryMessage handleBookshelvesMessage(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
+		if(null == message)
+			throw new NullPointerException("message cannot be null");
+		
+		if(LibraryMessage.MSG_BOOKSHELVES != message.getMessageType())
+			throw new IllegalArgumentException("illegal message type");
+		
+		/* put requested shelves into temporary library */
+		String name = message.dequeParameter();
+		Library library = new VirtualLibrary();
+		
+		while(null != name) {
+			for(Bookshelf shelf : this.library) {
+				if(!shelf.getProperty("title").equals(name))
+					continue;
+				
+				library.addBookshelf(shelf);
+			}
+		}
+		
+		return (new LibraryResponder(library)).handleIteratorRequest(new LibraryMessage(LibraryMessage.MSG_ITERATOR));
+	}
+
+	private LibraryMessage handleBookshelfNames(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
+		if(null == message)
+			throw new NullPointerException("message cannot be null");
+		
+		if(LibraryMessage.MSG_BOOKSHELF_NAMES != message.getMessageType())
+			throw new IllegalArgumentException("illegal message type");
+		
+		/* add shelf names to message parameter queue */
+		message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF_NAMES);
+		
+		for(Bookshelf shelf : this.library)
+			message.queueParameter(shelf.getProperty("title"));
+		
+		return message;
+	}
+	
 }
