@@ -33,6 +33,7 @@ public class ConnectTo extends JDialog {
     private JLabel jLabel1 = null;
     private JLabel jLabel2 = null;
     private TreeView tree = null;
+    private Root root = null;
 
     /**
      * @param owner
@@ -40,6 +41,7 @@ public class ConnectTo extends JDialog {
      */
     public ConnectTo(Frame owner, Controller ctl, TreeView treeView) {
 	super(owner);
+	root = (Root) owner;
 	tree = treeView;
 	control = ctl;
 	initialize();
@@ -127,11 +129,9 @@ public class ConnectTo extends JDialog {
 			// dialog.setVisible(true);
 			tree.refresh();
 		    } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			root.setStatus("Error Connecting");
 		    } catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			root.setStatus("Error Connecting");
 		    }
 		    setVisible(false);
 		}

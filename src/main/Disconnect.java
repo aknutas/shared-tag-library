@@ -27,6 +27,7 @@ public class Disconnect extends JDialog {
     private JComboBox ipAlias = null;
     private JPanel jContentPane = null;
     private TreeView tree = null;
+    private Root root = null;
 
     /**
      * @param owner
@@ -34,6 +35,7 @@ public class Disconnect extends JDialog {
      */
     public Disconnect(Frame owner, Controller ctl, TreeView treeView) {
 	super(owner);
+	root = (Root) owner;
 	tree = treeView;
 	control = ctl;
 	initialize();
@@ -104,11 +106,9 @@ public class Disconnect extends JDialog {
 			control.disconnect((String) ipAlias.getSelectedItem());
 			tree.refresh();
 		    } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			root.setStatus("Error Disconnecting");
 		    } catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			root.setStatus("Error Disconnecting");
 		    }
 		    setVisible(false);
 		}

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -245,6 +246,7 @@ public class Root extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 
 		    JFileChooser export = new JFileChooser();
+		    export.setName("Export to...");
 		    int result = export.showOpenDialog(thisClass);
 
 		    if (result == JFileChooser.APPROVE_OPTION) {
@@ -254,10 +256,8 @@ public class Root extends JFrame {
 			try {
 			    curFile.createNewFile();
 			    control.writeOut(curFile);
-			    // InOutParser
 			} catch (IOException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
+			    setStatus("Error Exporting Library");
 			}
 		    }
 		}
@@ -809,15 +809,20 @@ public class Root extends JFrame {
 	    importLibrary.setAccelerator(KeyStroke.getKeyStroke("F6"));
 	    importLibrary.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
-		    JFileChooser export = new JFileChooser();
-		    int result = export.showOpenDialog(thisClass);
+		    JFileChooser importDialog = new JFileChooser();
+		    importDialog.setName("Import File");
+		    int result = importDialog.showOpenDialog(thisClass);
 
 		    if (result == JFileChooser.APPROVE_OPTION) {
 
-			File curFile = export.getSelectedFile();
+			File curFile = importDialog.getSelectedFile();
 			setStatus("Importing a library...");
-			System.out.println(curFile.getName());
-			control.readInLibrary(curFile);
+			try {
+			    control.readInLibrary(curFile);
+			} catch (FileNotFoundException e) {
+			    setStatus("Error Importing Library");
+			}
+			treeView.refresh();
 
 		    }
 		}

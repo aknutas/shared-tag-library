@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -79,6 +80,7 @@ public class SearchResults extends JScrollPane {
      */
     private void initialize() {
 	GridBagLayout layout = new GridBagLayout();
+	this.setMinimumSize(new Dimension(400, 300));
 	panel.setLayout(layout);
 	panel.setBackground(Color.WHITE);
 	results = new ArrayList<Result>();

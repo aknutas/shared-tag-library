@@ -3,10 +3,7 @@ package controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.UnknownHostException;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,19 +17,15 @@ import network.Definitions;
 import network.messages.ChatMessage;
 import network.messages.Message;
 import scripts.InOutParser;
-import scripts.Parser;
-import scripts.ScriptGenerator;
 import butler.ButlerWeights;
 import data.Book;
 import data.Bookshelf;
 import data.Library;
 import data.LibraryResponder;
 import data.PersistentLibrary;
-import data.RemoteLibrary;
 import data.RemoteObjectException;
 import data.VirtualBook;
 import data.VirtualBookshelf;
-import data.VirtualLibrary;
 import database.Access;
 import database.AccessImpl;
 import database.QueryBuilder;
@@ -652,7 +645,6 @@ public class Controller {
 	try {
 	    inOut.processLineByLine();
 	} catch (FileNotFoundException e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	Library lib = inOut.getParsedLib();
@@ -662,14 +654,19 @@ public class Controller {
 	    addBookshelf(iter.next());
 	}
     }
+
     /**
      * writes the library to an file
      * 
      * @param fileName
      */
-    public synchronized void writeOut(File file) {
+    public synchronized void writeOut(File file) throws FileNotFoundException {
 	InOutParser inOut = new InOutParser(null, file);
-	inOut.writeOutLibrary(myLib);
+	if (inOut != null) {
+	    inOut.writeOutLibrary(myLib);
+	} else {
+	    throw new FileNotFoundException();
+	}
     }
 
     /**
@@ -677,19 +674,22 @@ public class Controller {
      * 
      * @param fileName
      */
-    public synchronized void readInLibrary(File file) {
+    public synchronized void readInLibrary(File file)
+	    throws FileNotFoundException {
 	InOutParser inOut = new InOutParser(file, null);
 	try {
 	    inOut.processLineByLine();
 	} catch (FileNotFoundException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    throw e;
 	}
 	Library lib = inOut.getParsedLib();
-	Iterator<Bookshelf> iter = lib.iterator();
-	while (iter.hasNext()) {
-	    System.out.println("loop");
-	    addBookshelf(iter.next());
+	if (lib != null) {
+	    Iterator<Bookshelf> iter = lib.iterator();
+	    while (iter.hasNext()) {
+		addBookshelf(iter.next());
+	    }
+	} else {
+	    throw new FileNotFoundException();
 	}
     }
 }
