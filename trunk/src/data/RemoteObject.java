@@ -77,7 +77,7 @@ public abstract class RemoteObject implements ClientResponder {
 			
 		}
 		
-	}
+	} 
 	
 	/**
 	 * Creates a new RemoteObject from the given connection and
@@ -133,7 +133,7 @@ public abstract class RemoteObject implements ClientResponder {
 	 * contains, returning the response message. This method will 
 	 * block until there is a response.
 	 * 
-	 * @param message the message to send
+	 * @param message the message to send 
 	 * 
 	 * @return the response message
 	 * 
