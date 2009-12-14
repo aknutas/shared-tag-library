@@ -61,8 +61,8 @@ public class Controller {
 	public Vector<ConnectionMetadata> connections;
 
 	/**
-	 * The default controller constructor
-	 * all things that need to be initialized on startup should be here
+	 * The default controller constructor all things that need to be initialized
+	 * on startup should be here
 	 */
 	@SuppressWarnings("unchecked")
 	public Controller() {
@@ -84,7 +84,10 @@ public class Controller {
 
 	/**
 	 * Add a book to the library
+	 * 
 	 * @return the added book (null if error)
+	 * @throws IllegalArgumentException
+	 *             if the focus shelf is not mutable or book is null
 	 */
 	public synchronized Book addBook(Book book) throws IllegalArgumentException {
 		if (book == null || !(focus instanceof VirtualBookshelf))
@@ -96,6 +99,7 @@ public class Controller {
 
 	/**
 	 * Add a book to the library
+	 * 
 	 * @return the added book (null if error)
 	 */
 	private synchronized Book addBook(Bookshelf bookshelf, Book book) {
@@ -109,8 +113,11 @@ public class Controller {
 
 	/**
 	 * Add a book to the focused shelf in the library
-	 * @param title the title of the book
-	 * @param author the author of the book
+	 * 
+	 * @param title
+	 *            the title of the book
+	 * @param author
+	 *            the author of the book
 	 * @return the added book (null if error)
 	 */
 	public synchronized Book addBook(String title, String author)
@@ -183,7 +190,7 @@ public class Controller {
 	}
 
 	/**
-	 * adds a connection object
+	 * adds a connection named alias
 	 * 
 	 * @param alias
 	 * @param hostname
@@ -198,7 +205,7 @@ public class Controller {
 	}
 
 	/**
-	 * remove the connection name alias
+	 * remove the connection named alias
 	 * 
 	 * @param alias
 	 */
@@ -215,7 +222,7 @@ public class Controller {
 	}
 
 	/**
-	 * connect on the alias
+	 * connects the named alias
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if already connected
@@ -235,7 +242,7 @@ public class Controller {
 	}
 
 	/**
-	 * disconnect on the alias
+	 * disconnect the named alias
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if not connected
@@ -254,7 +261,7 @@ public class Controller {
 	}
 
 	/**
-	 * returns the library at the alias consisting of the imported shelves 
+	 * returns the library at the alias consisting of the imported shelves
 	 * 
 	 * @param alias
 	 * @return returns null if not connected
@@ -264,15 +271,16 @@ public class Controller {
 			throw new IllegalArgumentException();
 		}
 		for (int id = 0; id < connections.size(); id++) {
-			if (connections.get(id).getAlias().equals(alias)){
-				return connections.get(id).getImportedLibrary();	
+			if (connections.get(id).getAlias().equals(alias)) {
+				return connections.get(id).getImportedLibrary();
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets the available shelves from a remote library
+	 * 
 	 * @param alias
 	 * @return returns null if not connected else an iterator of all shelf names
 	 */
@@ -286,24 +294,28 @@ public class Controller {
 		}
 		return null;
 	}
+
 	/**
 	 * Sets the selected shelves to a subset of the avaiable shelves
 	 * 
 	 * @param alias
-	 * @return returns null if not connected else the library of selected shelves
+	 * @return returns null if not connected else the library of selected
+	 *         shelves
 	 */
-	public synchronized Library setShelveSelection(String alias,Collection<String> shelves) {
+	public synchronized Library setShelveSelection(String alias,
+			Collection<String> shelves) {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 		for (int id = 0; id < connections.size(); id++) {
 			ConnectionMetadata conn = connections.get(id);
 			if (conn.getAlias().equals(alias))
-				return importSelectBookshelves(conn.getImportedLibrary(),conn.getLibrary(),shelves);
+				return importSelectBookshelves(conn.getImportedLibrary(), conn
+						.getLibrary(), shelves);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method registers shutdown hook in the runtime system. The hook is
 	 * basically a thread that gets executed moments before the program
@@ -331,6 +343,9 @@ public class Controller {
 
 	}
 
+	/**
+	 * saves all modified bookshelves into the persistant library
+	 */
 	public synchronized void saveAll() {
 
 		Iterator<Bookshelf> iter = modifiedBs.iterator();
@@ -342,6 +357,12 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * Adds all shelves from the remote library to the local library
+	 * 
+	 * @param local
+	 * @param remote
+	 */
 	public synchronized void importAllBookshelves(Library local, Library remote) {
 		if (local == null || remote == null) {
 			throw new IllegalArgumentException();
@@ -355,7 +376,17 @@ public class Controller {
 			local.addBookshelf(bs);
 		}
 	}
-	public synchronized Library importSelectBookshelves(Library local, Library remote,Collection<String> selection) {
+
+	/**
+	 * Adds the selected shelves from the remote library to the local library
+	 * 
+	 * @param local
+	 * @param remote
+	 * @param selection
+	 * @return
+	 */
+	public synchronized Library importSelectBookshelves(Library local,
+			Library remote, Collection<String> selection) {
 		if (local == null || remote == null || selection == null) {
 			throw new IllegalArgumentException();
 		}
@@ -369,6 +400,7 @@ public class Controller {
 		}
 		return local;
 	}
+
 	/**
 	 * This method is responsible for handling and responding to incoming
 	 * messages and status changes.
@@ -446,27 +478,6 @@ public class Controller {
 				}
 			}
 		}
-	}
-
-	public synchronized void reconnect(Vector<String> aliases)
-			throws UnknownHostException, IOException, IllegalArgumentException,
-			NullPointerException, RemoteObjectException {
-
-		if (connections == null || aliases == null) {
-			throw new NullPointerException();
-		}
-		for (int i = 0; i < aliases.size(); i++) {
-			reconnect(aliases.get(i));
-		}
-	}
-
-	public synchronized void reconnect(String alias)
-			throws UnknownHostException, IOException, IllegalArgumentException,
-			NullPointerException, RemoteObjectException {
-		if (connections == null || alias == null) {
-			throw new NullPointerException();
-		}
-
 	}
 
 	/**
@@ -578,6 +589,11 @@ public class Controller {
 		return myLib.iterator();
 	}
 
+	/**
+	 * Returns the different libraries to search over
+	 * 
+	 * @return a list of libraries including local and local
+	 */
 	public synchronized Vector<String> searchOptions() {
 		Vector<String> vec = new Vector<String>();
 		vec.add("ALL");
@@ -588,6 +604,14 @@ public class Controller {
 		return vec;
 	}
 
+	/**
+	 * Search for the search terms on the target as selected from
+	 * searchOptions()
+	 * 
+	 * @param target
+	 * @param searchTerms
+	 * @return
+	 */
 	public synchronized Bookshelf searchOn(String target, String searchTerms) {
 
 		if (target.equals("ALL"))
@@ -603,6 +627,11 @@ public class Controller {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
 	public synchronized Bookshelf searchAll(String str) {
 
 		Vector<Library> libs = new Vector<Library>();
@@ -615,7 +644,7 @@ public class Controller {
 	}
 
 	/**
-	 * A search match any criteria with a single string a library
+	 * A search matching any criteria with a single string on a library
 	 * 
 	 * @param str
 	 * @param aLib
@@ -646,6 +675,12 @@ public class Controller {
 		focus = bookshelf;
 	}
 
+	/**
+	 * a connection test method
+	 * 
+	 * @param target
+	 * @param message
+	 */
 	public void testconnection(Integer target, String message) {
 		cntrl.sendMsg(target, new ChatMessage(message));
 	}
