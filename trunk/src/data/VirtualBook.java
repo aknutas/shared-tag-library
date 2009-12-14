@@ -193,7 +193,14 @@ public class VirtualBook implements Book, Serializable {
 		if(!(object instanceof Book))
 			return false;
 		
-		//Book book = (Book)object;
+		Book book = (Book)object;
+		for(Entry<String, String> property : book.enumerateProperties()) {
+			if(!this.properties.containsKey(property.getKey()))
+				return false;
+			
+			if(!property.getValue().equals(this.properties.get(property.getKey())))
+				return false;
+		}
 		
 		return true;
 	}

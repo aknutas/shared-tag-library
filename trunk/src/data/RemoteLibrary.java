@@ -9,8 +9,6 @@ import network.Control;
 import data.messages.LibraryMessage;
 import data.messages.RemoteMessage;
 
-
-
 /**
  * The RemoteLibrary class implements the Library interface and is used to
  * represent a remote library connection on the client side.
@@ -86,37 +84,18 @@ public class RemoteLibrary extends RemoteObject implements Library {
 		}
 	}
 
-	/**
-	 * Operation not permitted.
-	 */
-	@Override
-	public boolean addBookshelf(Bookshelf shelf) throws NullPointerException {
-		return false;
-	}
 	
-	/**
-	 * Operation not permitted.
-	 */
-	@Override
-	public boolean removeBookshelf(Bookshelf shelf) throws NullPointerException {
-		return false;
-	}
 	
 	@Override
 	public String getProperty(String name) throws NullPointerException {
-		// TODO Auto-generate method stub
+		// TODO: implement (copy some code)
 		return null;
 	}
 
-	@Override
-	public String setProperty(String name, String value) throws NullPointerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
 	public Iterable<Entry<String, String>> enumerateProperties() {
-		// TODO Auto-generated method stub
+		// TODO: implement (copy some code)
 		return null;
 	}
 
@@ -140,22 +119,34 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	}
 
 	@Override
-	public Iterator<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
+	public Iterable<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
 		if(null == names)
 			throw new NullPointerException("names cannot be null");
 		
-		try {
-			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELVES);
-			message = this.send(message);
-			
-			if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELVES != message.getMessageType())
-				return null;
-			
-			int iteratorID = message.dequeParameter();
-			return new RemoteBookshelfIterator(this.network, this.connection, iteratorID);
-		} catch(Exception ex) {
+		RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELVES);
+		message = this.send(message);
+		
+		if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELVES != message.getMessageType())
 			return null;
-		}
+		
+		Integer id = message.dequeParameter();
+		if(null == id)
+			return null;
+		
+		/* create Iterable object to return (delayed execution) */
+		final Control network = this.network;
+		final int connection = this.connection;
+		final int iteratorID = id;			
+		
+		return new Iterable<Bookshelf>() {
+			public Iterator<Bookshelf> iterator() {
+				try {
+					return new RemoteBookshelfIterator(network, connection, iteratorID);
+				} catch(RemoteObjectException ex) {
+					return null;
+				}
+			}
+		};
 	}
 
 	@Override
@@ -178,10 +169,31 @@ public class RemoteLibrary extends RemoteObject implements Library {
 			
 			return names;
 		} catch(Exception ex) {
-			ex.printStackTrace();
 			return null;
 		}
 	}
 
+	/**
+	 * Operation not permitted.
+	 */
+	@Override
+	public boolean addBookshelf(Bookshelf shelf) throws NullPointerException {
+		return false;
+	}
+	
+	/**
+	 * Operation not permitted.
+	 */
+	@Override
+	public boolean removeBookshelf(Bookshelf shelf) throws NullPointerException {
+		return false;
+	}
+	
+	/**
+	 * Operation not permitted.
+	 */
+	public String setProperty(String name, String value) throws NullPointerException {
+		return null;
+	}
 	
 }
