@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import junit.framework.Assert;
@@ -83,7 +85,7 @@ public class RemoteObjectTest {
 		shelf.insert(new VirtualBook("Macbeth", "Shakesphere"));
 		shelf.insert(new VirtualBook("Catcher in the Rye", "Salinger"));
 		shelf.insert(new VirtualBook("Crime and Punishment", "Dostoyevsky"));
-		library2.addBookshelf(shelf);
+		library1.addBookshelf(shelf);
 		
 		/* add library connections to test network */
 		((TestNetwork)network).addLibrary("library1", library1);
@@ -136,10 +138,17 @@ public class RemoteObjectTest {
 		
 		/* test getBookshelfNames */
 		for(String shelfName : remoteLibrary.getBookshelfNames())
-			System.out.println(shelfName);
+			Assert.assertNotNull(this.library1.getBookshelf(shelfName));
 		
 		/* test of getBookshelf */
 		for(Bookshelf shelf : remoteLibrary)
+			Assert.assertNotNull(this.library1.getBookshelf(shelf.getProperty("name")));
+		
+		Collection<String> shelfList = new LinkedList<String>();
+		shelfList.add("mathematics");
+		shelfList.add("programming");
+		
+		for(Bookshelf shelf : remoteLibrary.getBookshelf(shelfList))
 			Assert.assertNotNull(this.library1.getBookshelf(shelf.getProperty("name")));
 		
 		/* test of getMasterBookshelf */
@@ -153,10 +162,8 @@ public class RemoteObjectTest {
 				}
 			}
 			
-			System.out.println(found);
 			Assert.assertTrue(found);
 		}
-			
 		
 		this.printNetworkStatistics();
 	}

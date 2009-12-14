@@ -35,7 +35,7 @@ public interface Library extends Properties, Iterable<Bookshelf> {
 	 * 
 	 * @return and iterator of strings
 	 */
-	public Collection<String> getBookshelfNames();
+	public Iterable<String> getBookshelfNames();
 	
 	/**
 	 * Gets the bookshelf of the given name from the library. If the
@@ -62,7 +62,7 @@ public interface Library extends Properties, Iterable<Bookshelf> {
 	 * @throws NullPointerException if the names collection given isremoteLibrary1.getBookshelf("programming");
 	 *         null
 	 */
-	public Iterator<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException;
+	public Iterable<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException;
 	
 	/**
 	 * Gets the master shelf, a union of every bookshelf.

@@ -123,16 +123,16 @@ public class VirtualLibrary implements Library {
 	}
 
 	@Override
-	public Iterator<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
-		Library library = new VirtualLibrary();
+	public Collection<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
+		Collection<Bookshelf> shelves = new LinkedList<Bookshelf>();
 		
 		/* could also be done with a subset.. */
 		for(Bookshelf shelf : this) {
 			if(names.contains(shelf.getProperty("name")))
-				library.addBookshelf(shelf);
+				shelves.add(shelf);
 		}
 		
-		return library.iterator();
+		return shelves;
 	}
 
 	@Override

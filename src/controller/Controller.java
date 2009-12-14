@@ -276,7 +276,7 @@ public class Controller {
 	 * @param alias
 	 * @return returns null if not connected else an iterator of all shelf names
 	 */
-	public synchronized Collection<String> getShelveSelection(String alias) {
+	public synchronized Iterable<String> getShelveSelection(String alias) {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
@@ -359,7 +359,7 @@ public class Controller {
 		if (local == null || remote == null || selection == null) {
 			throw new IllegalArgumentException();
 		}
-		Iterator<Bookshelf> iter = remote.getBookshelf(selection);
+		Iterator<Bookshelf> iter = remote.getBookshelf(selection).iterator();
 		if (iter == null)
 			throw new IllegalArgumentException();
 		Bookshelf bs;

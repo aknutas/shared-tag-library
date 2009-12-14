@@ -179,7 +179,10 @@ public class LibraryResponder extends RemoteResponder {
 			}
 		}
 		
-		return (new LibraryResponder(library)).handleIteratorRequest(new LibraryMessage(LibraryMessage.MSG_ITERATOR));
+		
+		message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELVES);
+		message.queueParameter((Integer)(new LibraryResponder(library).handleIteratorRequest(new LibraryMessage(LibraryMessage.MSG_ITERATOR))).dequeParameter());
+		return message;
 	}
 
 	private LibraryMessage handleBookshelfNames(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
@@ -193,7 +196,7 @@ public class LibraryResponder extends RemoteResponder {
 		message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF_NAMES);
 		
 		for(Bookshelf shelf : this.library)
-			message.queueParameter(shelf.getProperty("title"));
+			message.queueParameter(shelf.getProperty("name"));
 		
 		return message;
 	}

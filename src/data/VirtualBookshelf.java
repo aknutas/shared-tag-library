@@ -146,7 +146,12 @@ public final class VirtualBookshelf implements Bookshelf {
 		if(null == book)
 			throw new NullPointerException("book cannot be null");
 		
-		return this.bookshelf.contains(book);
+		for(Book check : this) {
+			if(check.equals(book))
+				return true;
+		}
+		
+		return false;
 	}
 	
 	/**
