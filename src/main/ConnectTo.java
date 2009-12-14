@@ -125,11 +125,11 @@ public class ConnectTo extends JDialog {
 			    control.connect(ipAlias.getText());
 			}
 
-			if (control.getLibrary(ipAlias.getText()) != null) {
+			if (control.getImportedLibrary(ipAlias.getText()) != null) {
 
 			    ChooseBookshelves dialog = new ChooseBookshelves(
 				    root, control, tree, control
-					    .getLibrary(ipAlias.getText()));
+					    .getImportedLibrary(ipAlias.getText()));
 			    dialog.setVisible(true);
 			    
 			    tree.refresh();
