@@ -4,8 +4,16 @@ import data.*;
 
 import java.util.*;
 
+/**
+ * An abstract class containing methods to get information about Libraries.
+ * @author sjpurol
+ *
+ */
 public abstract class LibraryOperations {
 	
+	/**
+	 * Returns an iterator over all of the tags on all of the books on all of the shelfs in the given library. 
+	 */
 	public static Iterator<Map.Entry<String, Integer>> getTags(Library lib){
 		
 		//System.out.println("getTags(lib)");
@@ -41,6 +49,9 @@ public abstract class LibraryOperations {
 		return allTags.entrySet().iterator();
 	}
 	
+	/**
+	 * Returns an iterator over all of the properties on all of the books on all of the shelfs in the given library.
+	 */
 	public static Iterator<Map.Entry<String, String>> getProperties(Library lib){
 
 		Bookshelf masterShelf = lib.getMasterShelf();

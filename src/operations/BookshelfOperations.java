@@ -4,6 +4,11 @@ import data.*;
 
 import java.util.*;
 
+/**
+ * An abstract class containing methods to interact with collections of bookshelfs.
+ * @author sjpurol
+ *
+ */
 public abstract class BookshelfOperations{
 
 	private static int numBooks;
@@ -93,10 +98,7 @@ public abstract class BookshelfOperations{
 	 * @param shelf
 	 * @return
 	 */
-	private static boolean isVirtual(Bookshelf shelf){
-
-		return shelf instanceof VirtualBookshelf;
-	}
+	public static boolean isVirtual(Bookshelf shelf){return shelf instanceof VirtualBookshelf;}
 
 	/**
 	 * Returns an iterator of all of the tags on the given bookshelf. (not sorted)
@@ -280,18 +282,7 @@ public abstract class BookshelfOperations{
 	 * Returns the number of books in the given collection of shelfs.
 	 * @return see description
 	 */
-	public static int countBooks(Collection<Bookshelf> shelfs){
-		
-		Bookshelf shelf = union(shelfs);
-		Iterator<Book> books = shelf.iterator();
-		int num = 0;
-		while (books.hasNext()){
-			++num;
-			books.next();
-		}
-		
-		return num;
-	}
+	public static int countBooks(Collection<Bookshelf> shelfs){return countBooks((VirtualBookshelf) union(shelfs));}
 
 	/**
 	 * Returns the number of tags in the given collection of shelfs.
@@ -323,6 +314,11 @@ public abstract class BookshelfOperations{
 		return num;
 	}
 
+	/**
+	 * Returns an iterator over the tags in the given collection of shelfs.
+	 * @param shelfs
+	 * @return
+	 */
 	public static Iterator<Map.Entry<String, Integer>> enumerateTags(Collection<Bookshelf> shelfs){
 
 		Bookshelf newShelf = union(shelfs);

@@ -5,19 +5,19 @@ import data.*;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Contains 
+ * @author sjpurol
+ *
+ */
 public abstract class BookOperations {
 	
-	public Iterator<Map.Entry<String, Double>> normalizeTags(VirtualBook b) {
-		
-		return null;
-	}
-
 	/**
 	 * if needed
 	 * @param book
 	 * @return
 	 */
-	private static boolean isVirtual(Book book){
+	public static boolean isVirtual(Book book){
 
 		return book instanceof VirtualBook;
 	}
