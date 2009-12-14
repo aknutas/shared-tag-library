@@ -7,13 +7,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import operations.BookshelfOperations;
+
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.ContextLayer;
-import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.networks.training.Strategy;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.competitive.CompetitiveTraining;
@@ -23,6 +23,7 @@ import org.encog.neural.pattern.SOMPattern;
 import org.encog.util.math.rbf.GaussianFunction;
 
 import data.Book;
+import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 
@@ -35,337 +36,10 @@ import data.VirtualBookshelf;
  */
 public class VirtualLibraryButler extends LibraryButler {
 
-	private boolean initialized;
-
 	/**
-	 * Default constructor. Initializes this with a new BasicNetwork brain.
-	 * The LibraryButler will not function properly until the
-	 * initialize method is called.
+	 * Test method.
+	 * @param args
 	 */
-	public VirtualLibraryButler(String name){
-		properties = new HashMap<String, String>();
-		properties.put("name", name);
-		brain = new BasicNetwork();
-		initialized = false;
-	}
-
-	/**
-	 * Creates this with an existing ButlerWeights object
-	 * @param weights the existing ButlerWeights object.
-	 */
-	public VirtualLibraryButler(ButlerWeights weights){
-		brain = new BasicNetwork();
-		setMatrixes(weights);
-		initialized = true;
-	}
-
-	@Override
-	/**
-	 * Checks an input book against the trained network.
-	 * Returns the index of the shelf that best matches.
-	 * If no shelf matches, returns -1. If the network has
-	 * not been initialized, returns -2.
-	 * 
-	 * @param b The book to check.
-	 */
-	public int compareTo(Book b) {
-		
-		if (!initialized)
-			return -2;
-		
-		double[] inputValues = readyBook(b);
-		
-		NeuralData book = new BasicNeuralData(inputValues);
-		final NeuralData output = brain.compute(book);
-
-		double best = Double.MIN_VALUE; 
-
-		for (int i = 0; i < numShelfs; ++i)
-			best = Math.max(best, output.getData(i));
-
-		int index = -1;
-		for (int i = 0; i < numShelfs; ++i)
-			if (best == output.getData(i))
-				index = i;
-				
-		System.out.println(b.getProperty("title") + ": " + identifyShelf(index) + "(" + index + ")");
-		
-		initialized = true;
-
-		return index;
-	}
-
-	/**
-	 * Very similar to compareTo(Book). Used to
-	 * identify the order of the output vector.
-	 * 
-	 * @param b Book to examine
-	 * @param bool 
-	 * @return the index of the proper output value from brain
-	 */
-	private int compareTo(FlatShelf b){
-
-		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
-		//Iterator<Map.Entry<String, String>> properties = b.enumerateProperties();
-
-		//InputPairSet inputPairs = new InputPairSet();	// neuron # -> weight
-
-		double[] inputValues = new double[numTags];
-
-		while (tags.hasNext()){
-			Map.Entry<String, Integer> tag = tags.next();
-			//System.out.println("tags: " + tag.getKey() + " : " + tag.getValue());
-			IDPair current = idPairs.get(tag.getKey());
-			if (current == null){
-				//current = idPairs.get(OTHER);
-				//inputValues[current.getValue()] += tag.getValue();
-			}
-			else
-				inputValues[current.getValue()] = tag.getValue();
-
-			//inputPairs.add(new InputPair(current.getValue(), (double)tag.getValue()));
-
-		}
-
-		NeuralData book = new BasicNeuralData(inputValues);
-		final NeuralData output = brain.compute(book);
-
-		double best = Double.MIN_VALUE; 
-
-		for (int i = 0; i < numShelfs; ++i)
-			best = Math.max(best, output.getData(i));
-
-		int index = -1;
-		for (int i = 0; i < numShelfs; ++i)
-			if (best == output.getData(i))
-				index = i;
-		
-		
-
-		return index;
-	}
-
-	/**
-	 * Sets the weights within brain to those found in the input
-	 * ButlerWeights object.
-	 * @param weights the existing weights to copy.
-	 */
-	public void setMatrixes(ButlerWeights weights){
-
-		numTags = weights.getNumTags();
-
-		brain.addLayer(new ContextLayer(numTags));
-		brain.addLayer(new ContextLayer(1));
-
-		brain.getStructure().finalizeStructure();
-
-		Iterator<Synapse> synapses = brain.getStructure().getSynapses().iterator();
-		synapses.next().setMatrix(weights.getWeights());
-		
-		currentWeights = weights;
-	}
-
-	/**
-	 * Returns the current ButlerWeights object.
-	 */
-	public ButlerWeights getWeights() {return currentWeights;}
-	
-	/**
-	 * Returns the map of flatShelfs that this Butler was trained on.
-	 */
-	public Map<Integer, FlatShelf> getShelfs() {return flatShelfs;}
-
-	/**
-	 * Initializes brain from basis
-	 * @param basis A collection of VirtualBookshelfs
-	 * @throws IllegalArgumentException
-	 */
-	public void initialize(Collection<VirtualBookshelf> basis) throws IllegalArgumentException {
-
-		idPairs = new IDPairSet();	//tag | property -> neuron #
-
-		if (null == basis)
-			throw new IllegalArgumentException("input cannot be null.");
-
-		Iterator<VirtualBookshelf> shelfs = basis.iterator();
-
-		numShelfs = basis.size();
-
-		flatShelfs = new HashMap<Integer, FlatShelf>();
-
-		//System.out.println("numShelfs: " + String.valueOf(numShelfs));
-
-		int maxTagMag = 0;
-
-		int i = 0;
-		int j = 0;
-
-		while (shelfs.hasNext()) {
-
-			VirtualBookshelf current = shelfs.next();
-
-			Iterator<Book> books = current.enumerate();
-
-			while (books.hasNext()) {
-				Book book = books.next();
-				Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags(); 
-
-				while (tags.hasNext()) {
-
-					Map.Entry<String, Integer> tag = tags.next();
-
-					maxTagMag = Math.max(maxTagMag, tag.getValue());
-
-					if (!idPairs.contains(tag.getKey())) {
-						idPairs.add(new IDPair(tag.getKey(), i));
-						++i;
-					}
-				}
-			}
-
-		}
-
-		idPairs.add(new IDPair(OTHER, i));
-
-		numTags = i+1;
-
-		double[][] inputValues = new double[numShelfs][numTags];
-
-		shelfs = basis.iterator();
-		i = 0;
-
-		while (shelfs.hasNext()) {
-			VirtualBookshelf current = shelfs.next();
-			Iterator<Book> books = current.enumerate();
-
-			while (books.hasNext()) {
-				Book book = books.next();
-
-				Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags();
-
-				while (tags.hasNext()) {
-					Map.Entry<String, Integer> tag = tags.next();
-					int index = idPairs.get(tag.getKey()).getValue();
-
-					if (index > numTags) {
-						System.out.println("ERROR: INDEX OUT OF BOUNDS!");
-						System.out.println("name: " + tag.getKey() + " index: " + index);
-						System.out.println("numTags: " + numTags);
-
-					}
-					else if (index == numTags) {
-						//System.out.println("__OTHER__ detected!");
-						inputValues[i][index] += ( (double)tag.getValue() / (double) maxTagMag );
-					}
-					else {
-						inputValues[i][index] = ( (double)tag.getValue() / (double) maxTagMag );
-
-						//System.out.println("Tag #" + String.valueOf(index) + " " + tag.getKey() + ": had a weight of " + String.valueOf(tag.getValue()));
-						//System.out.println("It now has a weight of " + String.valueOf(inputValues[i][index]));
-					}
-				}
-			}
-			++i;
-		}
-
-		String output[] = {"",""};
-
-		int countTags = 0;
-		int countShelfs = 0;
-
-		for (int k = 0; k < numShelfs; ++k) {
-
-			++countShelfs;
-			for (int m = 0; m < numTags; ++m) {
-				output[j] += " " + String.valueOf(inputValues[j][k]);
-				++countTags;
-			}
-		}
-
-		//int realTagNum = countTags / countShelfs;
-		//System.out.println("There were " + realTagNum + " tags counted on " + countShelfs + " shelfs.");
-		//System.out.println("XXXXXXXXXXXXXXXXXXXXXXXX");
-		//for (int k = 0; k < countShelfs; ++k)
-		//	System.out.println(output[k]);
-		//System.out.println("XXXXXXXXXXXXXXXXXXXXXXXX");
-
-		SOMPattern pattern = new SOMPattern();
-		pattern.setInputNeurons(numTags);
-		pattern.setOutputNeurons(numShelfs);
-
-		brain = pattern.generate();
-
-		//brain.addLayer(new ContextLayer(numTags));
-		//brain.addLayer(new ContextLayer(numShelfs));
-		//brain.setLogic(new SOMLogic());
-
-		//brain.getStructure().finalizeStructure();
-
-		NeuralDataSet data = new BasicNeuralDataSet(inputValues, null);
-
-		//final Train train = new CompetitiveTraining(brain, 0.7, data, new NeighborhoodBubble(2));
-		final Train train = new CompetitiveTraining(brain, 0.7, data, new NeighborhoodGaussian(new GaussianFunction(0.0, 5.0, 2.0)));
-		//Strategy stopTrainStrat = new StopTrainingStrategy();
-		Strategy smartLearn = new SmartLearningRate();
-		
-		smartLearn.init(train);
-		//stopTrainStrat.init(train);
-		train.addStrategy(smartLearn);
-		//train.addStrategy(stopTrainStrat);
-
-		int epoch = 1;
-
-		// training loop
-		do {
-			train.iteration();
-			//System.out.println("Epoch #" + epoch + " Error:" + train.getError()); // + " MovingAvg:" + movingAvg);
-			//lastError = train.getError();
-			//movingAvg = (movingAvg*(double)(epoch-1) + lastError*1.001)/(double)epoch;
-			//if (((lastError - movingAvg) < 0.01) && lastError > 0.01){
-			//	train.setError(lastError * 5.0);
-			//	System.out.println("LOCAL MINIMA FOUND!");
-			//}
-			epoch++;
-		} while(train.getError() > 0.01);
-
-		currentWeights = new ButlerWeights(brain.getStructure().getSynapses().get(0).getMatrix(), numTags, flatShelfs, idPairs);
-		initialized = true;
-		
-		for (VirtualBookshelf s : basis) {
-			FlatShelf fs = new FlatShelf(s);
-			flatShelfs.put(compareTo(fs), fs);
-		}
-
-		//System.out.println("Number of Synapses: " + brain.getStructure().getSynapses().size());
-
-		//Iterator<Synapse> currentWeights = brain.getStructure().getSynapses().iterator();
-		//Matrix input = currentWeights.next().getMatrix();
-		//this.currentWeights = new ButlerWeights(input, numTags);
-
-		// test the neural network
-		//System.out.println("Neural Network Results:");
-		//String tagNames = "";
-		//for(int k = 0; k < idPairs.size()-1; ++k){
-		//	tagNames += idPairs.get(k).getKey() + ", ";
-		//}
-		//System.out.println(tagNames);
-
-		/*for( NeuralDataPair pair : data ) {
-			final NeuralData output = brain.compute(pair.getInput());
-			String values = String.valueOf(pair.getInput().getData(0));
-			for (int k = 1; k < pair.getInput().size(); ++k){
-				values += ", " + pair.getInput().getData(k); 
-			}
-
-			System.out.println(values + " actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
-
-		}*/
-
-		//System.out.println("numTags: " + numTags);
-	}
-	
-	public boolean isInitialized() {return initialized;}
-
 	public static void main(String[] args){
 		//ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
 		//sg.generateLibrary(20, 5);
@@ -511,7 +185,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				"stephen king it","supernatural","suspense","thriller",
 				"urban fantasy","wordy","childrens books"};
 
-		int[] itWeights = {84,73,26,21,18,13,10,10,9,8,4,3,3,2,2,2,2,2,
+		int[] itWeights = {24,73,26,21,18,13,10,10,9,8,4,3,3,2,2,2,2,2,
 				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 				1,1,1,1,1,1,1,1,1,1,1,1, -100};
 
@@ -560,7 +234,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				"one of my favorite king stories","shelf","smart horror",
 				"vampire books","vamps","writer", "childrens book"};
 
-		int[] salemWeights = {84,74,47,13,12,9,7,3,3,3,3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-523};
+		int[] salemWeights = {84,29,47,13,12,9,7,3,3,3,3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-523};
 
 		for (int i = 0; i < salemTags.length; ++i){
 			int num = salemWeights[i];
@@ -580,17 +254,17 @@ public class VirtualLibraryButler extends LibraryButler {
 				"books read anne rice","bradpitt","coolmovies",
 				"extremely good stuff","fiction book","france",
 				"historical dimensions and perspectives","historical fiction",
-				"humor","interview","k s michaels","louisiana","love it",
+				"humor","interview","louisiana","love it",
 				"macabre","modern gothic tale","mona","mystery","neworleans",
 				"nice book","not free sf reader","novel","paperback",
 				"poetic","read","rue royale","sanctuary of darkness",
 				"scary stories","series","silverbullet","southern discomfort",
 				"spouse","stake","summerreading","trips and journeys",
 				"uncompromising","vampire book","vampire novel","women",
-				"women writers", "childrens book"};
-		int[] interviewWeights = {134,67,36,18,10,9,7,5,5,4,3,3,3,3,2,2,2,
-				2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-59};
+				"women writers"};
+		int[] interviewWeights = {134,67,36,18,10,191,7,5,5,4,3,3,3,3,2,2,2,
+				2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
 		for (int i = 0; i < interviewTags.length; ++i){
 			int num = interviewWeights[i];
@@ -602,6 +276,8 @@ public class VirtualLibraryButler extends LibraryButler {
 		}
 
 		VirtualLibraryButler buddy = new VirtualLibraryButler("buddy");
+		VirtualLibraryButler wadsworth = new VirtualLibraryButler("wadsworth");
+
 		//VirtualFlatShelf flatBS = new VirtualFlatShelf(bs);
 		//System.out.println("created flatBS");
 		//List<VirtualFlatShelf> flatShelfs = new ArrayList<VirtualFlatShelf>();
@@ -619,12 +295,14 @@ public class VirtualLibraryButler extends LibraryButler {
 		//flatShelfs.add(flatHorror);
 
 		//buddy.initialize(flatShelfs);
-		Set<VirtualBookshelf> allShelfs = new HashSet<VirtualBookshelf>();
+		Set<Bookshelf> allShelfs = new HashSet<Bookshelf>();
 		allShelfs.add(horror);
 		allShelfs.add(bs);
 
+		Bookshelf bigShelf = horror.union(bs);
+
 		buddy.initialize(allShelfs);
-		
+
 		System.out.println(buddy.getProperty("name") + " results:\n");
 
 		buddy.compareTo(catBack);
@@ -632,16 +310,471 @@ public class VirtualLibraryButler extends LibraryButler {
 		buddy.compareTo(interview);
 		buddy.compareTo(cat);
 		buddy.compareTo(fish);
+
+		for (int n = 2; n < 5; ++n) {
+			wadsworth.initialize(bigShelf, n);
+			System.out.println(wadsworth.getProperty("name") + " results (" + n + " shelfs):\n");
+			wadsworth.compareTo(catBack);
+			wadsworth.compareTo(salem);
+			wadsworth.compareTo(interview);
+			wadsworth.compareTo(cat);
+			wadsworth.compareTo(fish);
+		}
+	}
+
+	private boolean initialized;
+
+	/**
+	 * Creates this with an existing ButlerWeights object
+	 * @param weights the existing ButlerWeights object.
+	 */
+	public VirtualLibraryButler(ButlerWeights weights){
+		setMatrixes(weights);
+		initialized = true;
+	}
+
+	/**
+	 * Default constructor. Initializes this with a new BasicNetwork brain.
+	 * The LibraryButler will not function properly until one of the
+	 * initialize methods are called.
+	 */
+	public VirtualLibraryButler(String name){
+		properties = new HashMap<String, String>();
+		properties.put("name", name);
+		brain = new BasicNetwork();
+		initialized = false;
+	}
+
+	@Override
+	/**
+	 * Checks an input book against the trained network.
+	 * Returns the index of the shelf that best matches.
+	 * If no shelf matches, returns -1. If the network has
+	 * not been initialized, returns -2.
+	 * 
+	 * @param b The book to check.
+	 */
+	public int compareTo(Book b) {
+
+		if (!initialized)
+			return -2;
+
+		double[] inputValues = readyBook(b);
+
+		NeuralData book = new BasicNeuralData(inputValues);
+		final NeuralData output = brain.compute(book);
+
+		double best = Double.MIN_VALUE; 
+
+		for (int i = 0; i < numShelfs; ++i)
+			best = Math.max(best, output.getData(i));
+
+		int index = -1;
+		for (int i = 0; i < numShelfs; ++i)
+			if (best == output.getData(i))
+				index = i;
+
+		//System.out.println(b.getProperty("title") + ": " + identifyShelf(index) + "(" + index + ")");
+		System.out.println(b.getProperty("title") + ": " + identifyShelf(index));
+
+		initialized = true;
+
+		return index;
+	}
+
+	/**
+	 * Very similar to compareTo(Book). Used to
+	 * identify the order of the output vector.
+	 * 
+	 * @param b Book to examine
+	 * @param bool 
+	 * @return the index of the proper output value from brain
+	 */
+	private int compareTo(FlatShelf b){
+
+		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
+		//Iterator<Map.Entry<String, String>> properties = b.enumerateProperties();
+
+		//InputPairSet inputPairs = new InputPairSet();	// neuron # -> weight
+
+		double[] inputValues = new double[numTags];
+
+		while (tags.hasNext()){
+			Map.Entry<String, Integer> tag = tags.next();
+			//System.out.println("tags: " + tag.getKey() + " : " + tag.getValue());
+			IDPair current = idPairs.get(tag.getKey());
+			if (current == null){
+				//current = idPairs.get(OTHER);
+				//inputValues[current.getValue()] += tag.getValue();
+			}
+			else
+				inputValues[current.getValue()] = tag.getValue();
+
+			//inputPairs.add(new InputPair(current.getValue(), (double)tag.getValue()));
+
+		}
+
+		NeuralData book = new BasicNeuralData(inputValues);
+		final NeuralData output = brain.compute(book);
+
+		double best = Double.MIN_VALUE; 
+
+		for (int i = 0; i < numShelfs; ++i)
+			best = Math.max(best, output.getData(i));
+
+		int index = -1;
+		for (int i = 0; i < numShelfs; ++i)
+			if (best == output.getData(i))
+				index = i;
+
+
+
+		return index;
+	}
+
+	/**
+	 * Takes a collection of bookshelfs and returns a collection of flatshelfs
+	 * @param books the bookshelfs to flatten
+	 */
+	private Collection<FlatShelf> flattenAll(Collection<Bookshelf> books) {
+		Set<FlatShelf> flatShelfs = new HashSet<FlatShelf>();
 		
-		RemoteLibraryButler otherBuddy = new RemoteLibraryButler(buddy.getWeights(), "Remote" + buddy.getProperty("name"));
+		for (Bookshelf b : books)
+			flatShelfs.add(new FlatShelf(b));
+		
+		return flatShelfs;
+	}
 
-		System.out.println("\n\n" + otherBuddy.getProperty("name") + " results:\n");
-		otherBuddy.compareTo(catBack);
-		otherBuddy.compareTo(salem);
-		otherBuddy.compareTo(interview);
-		otherBuddy.compareTo(cat);
-		otherBuddy.compareTo(fish);
+	/**
+	 * Generates the proper type of BasicNetwork for use within a Butler.
+	 * @return
+	 */
+	private BasicNetwork generateBrain(int numTags, int numShelfs) {
+		SOMPattern pattern = new SOMPattern();
+		pattern.setInputNeurons(numTags);
+		pattern.setOutputNeurons(numShelfs);
 
+		return pattern.generate();
+	}
+
+	@Override
+	public String getProperty(String name) {return properties.get(name);}
+
+	/**
+	 * Returns the map of flatShelfs that this Butler was trained on.
+	 */
+	public Map<Integer, FlatShelf> getShelfs() {return flatShelfs;}
+
+	/**
+	 * Returns the current ButlerWeights object.
+	 */
+	public ButlerWeights getWeights() {return currentWeights;}
+	
+	/**
+	 * Creates the IDPairSet that identifies which tag goes to which input neuron.
+	 * @param basis the bookshelf that contains the books which contain the tags to be ID'ed.
+	 */
+	private IDPairSet identifyInputs(Bookshelf basis) {
+
+		IDPairSet idPairs = new IDPairSet();
+
+		maxTagMag = 0;
+
+		int i = 0;
+
+		Iterator<Book> books = basis.iterator();
+
+		while (books.hasNext()) {
+			Book book = books.next();
+			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags(); 
+
+			while (tags.hasNext()) {
+
+				Map.Entry<String, Integer> tag = tags.next();
+
+				maxTagMag = Math.max(maxTagMag, Math.abs(tag.getValue()));
+
+				if (!idPairs.contains(tag.getKey())) {
+					idPairs.add(new IDPair(tag.getKey(), i));
+					++i;
+				}
+			}
+		}
+		idPairs.add(new IDPair(OTHER, i));
+
+		numTags = i+1;
+
+		return idPairs;
+	}
+
+	/**
+	 * Initializes this from an unsorted (or sorted) basis bookshelf
+	 * sorting the books into numShelfs or fewer bookshelfs.
+	 * 
+	 * @param basis the bookshelf to learn
+	 * @param numShelfs the maximum number of shelfs
+	 * @return the collection of all bookshelfs generated.
+	 */
+	public Collection<Bookshelf> initialize(Bookshelf basis, int numShelfs) throws IllegalArgumentException{
+		if (null == basis)
+			throw new IllegalArgumentException("input cannot be null.");
+
+		idPairs = identifyInputs(basis);	//tag | property -> neuron #
+		int numBooks = basis.size();
+		this.numShelfs = numShelfs;
+		double[][] inputValues = new double[numBooks][numTags];
+
+		brain = generateBrain(numTags, numShelfs);
+
+		int i = 0;
+
+		//parse through the properties and tags of each book and normalize the weights.
+		for (Book book : basis) {
+			
+			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags();
+
+			while (tags.hasNext()) {
+				Map.Entry<String, Integer> tag = tags.next();
+				int index = idPairs.get(tag.getKey()).getValue();
+
+				if (index > numTags) {
+					System.out.println("ERROR: INDEX OUT OF BOUNDS!");
+					System.out.println("name: " + tag.getKey() + " index: " + index);
+					System.out.println("numTags: " + numTags);
+
+				}
+				else if (index == numTags) {
+					//System.out.println("__OTHER__ detected!");
+					inputValues[i][index] += ( (double)tag.getValue() / (double) maxTagMag );
+				}
+				else {
+					inputValues[i][index] = ( (double)tag.getValue() / (double) maxTagMag );
+				}
+			}
+			++i;
+		}
+
+		NeuralDataSet data = new BasicNeuralDataSet(inputValues, null);
+
+		train(data);
+
+		//Export current butler to ButlerWeights.
+		currentWeights = new ButlerWeights(brain.getStructure().getSynapses().get(0).getMatrix(), numTags, flatShelfs, idPairs);
+		initialized = true;
+
+		Map<Integer, Bookshelf> newShelfs = new HashMap<Integer, Bookshelf>();
+		for (int j = 0; j < numShelfs; ++j)
+			newShelfs.put(j, new VirtualBookshelf());
+
+		for (Book book : basis) {
+			
+			double[] outputValues = brain.compute(new BasicNeuralData(readyBook(book))).getData();
+			boolean foundBest = false;
+			double best = Double.MIN_VALUE;
+			int j = 0;
+			for (; j < outputValues.length; ++j)
+				best = Math.max(best, outputValues[j]);
+			
+			--j; // off by one.
+			for (; !foundBest;) {
+				if (outputValues[j] == best) {
+					newShelfs.get(j).insert(book);
+					foundBest = true;
+				}
+				else
+					--j;
+			}
+
+		}
+		
+		Map<Integer, Bookshelf> cleanShelfs = new HashMap<Integer, Bookshelf>();
+		int j = 0;
+		for (Bookshelf b: newShelfs.values()) {
+			//System.out.println("(clean up) shelf size: " + b.size());
+		
+			if (!b.empty()) {
+				cleanShelfs.put(j, b);
+				++j;
+			}
+		}
+		
+		//System.out.println("numShelfs input: " + numShelfs);
+		//System.out.println("actual numShelfs: " + cleanShelfs.size());
+		
+		if (cleanShelfs.size() < numShelfs) {
+			//System.out.println("retraining needed. " + numShelfs + " becomes " + cleanShelfs.size());
+			return initialize(basis, cleanShelfs.size());	//retrain with the proper size.
+		}
+
+		Collection<FlatShelf> randomFlatShelfs = flattenAll(cleanShelfs.values());
+		flatShelfs = new HashMap<Integer, FlatShelf>();
+		
+		//System.out.println("naming and sorting flatshelfs");
+		
+		for (FlatShelf fs : randomFlatShelfs) {
+			
+			String heaviestTagName = "";
+			int heaviestTagWeight = Integer.MIN_VALUE;
+			int k = compareTo(fs);
+			
+			Iterator<Map.Entry<String,Integer>> fsTags = fs.enumerateTags();
+			
+			while (fsTags.hasNext()) {
+				
+				Map.Entry<String, Integer> tag = fsTags.next();
+				heaviestTagWeight = Math.max(heaviestTagWeight, tag.getValue());
+				
+				if (heaviestTagWeight == tag.getValue())
+					heaviestTagName = tag.getKey();
+				
+			}
+			cleanShelfs.get(k).setProperty("name", heaviestTagName);
+			
+			//System.out.println(heaviestTagName + " is shelf #" + k);
+			
+			flatShelfs.put(k, new FlatShelf(cleanShelfs.get(k)));
+			
+			//System.out.println(flatShelfs.get(k).getProperty("name"));
+			
+		}
+		
+		//System.out.println("cleanShelfs size: " + cleanShelfs.size());
+
+		return cleanShelfs.values();
+	}
+
+	/**
+	 * Initializes the network with an example collection of bookshelfs.
+	 * 
+	 * @param basis A collection of VirtualBookshelfs
+	 * @throws IllegalArgumentException
+	 */
+	public void initialize(Collection<Bookshelf> basis) throws IllegalArgumentException {
+
+		if (null == basis)
+			throw new IllegalArgumentException("input cannot be null.");
+
+		Iterator<Bookshelf> shelfs = basis.iterator();
+
+		Bookshelf masterShelf = BookshelfOperations.union(basis);
+
+		idPairs = identifyInputs(masterShelf);	//tag | property -> neuron #
+		this.numShelfs = basis.size();
+		int numBooks = masterShelf.size();
+
+		int i = 0;
+		double[][] inputValues = new double[numBooks][numTags];
+
+		while (shelfs.hasNext()) {
+
+			Bookshelf shelf = shelfs.next();
+			Iterator<Book> books = shelf.iterator();
+
+			//System.out.println("numShelfs: " + String.valueOf(numShelfs));
+
+
+			while (books.hasNext()) {
+
+				Book book = books.next();
+				Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags();
+
+				while (tags.hasNext()) {
+
+					Map.Entry<String, Integer> tag = tags.next();
+					int index = idPairs.get(tag.getKey()).getValue();
+
+					if (index > numTags) {
+						System.out.println("ERROR: INDEX OUT OF BOUNDS!");
+						System.out.println("name: " + tag.getKey() + " index: " + index);
+						System.out.println("numTags: " + numTags);
+
+					}
+					else if (index == numTags) {
+						//System.out.println("__OTHER__ detected!");
+						inputValues[i][index] += ( (double)tag.getValue() / (double) maxTagMag );
+					}
+					else {
+						inputValues[i][index] = ( (double)tag.getValue() / (double) maxTagMag );
+					}
+				}
+				++i;
+			}
+		}
+
+		NeuralDataSet data = new BasicNeuralDataSet(inputValues, null);
+
+		brain = generateBrain(numTags, numShelfs);
+		train(data);
+
+		flatShelfs = new HashMap<Integer, FlatShelf>();
+
+		for (Bookshelf s : basis) {
+			FlatShelf fs = new FlatShelf(s);
+			flatShelfs.put(compareTo(fs), fs);
+		}
+
+		currentWeights = new ButlerWeights(brain.getStructure().getSynapses().get(0).getMatrix(), numTags, flatShelfs, idPairs);
+		initialized = true;
+	}
+
+	/**
+	 * Returns true if initialized.
+	 */
+	public boolean isInitialized() {return initialized;}
+
+	/**
+	 * Sets the weights within brain to those found in the input
+	 * ButlerWeights object.
+	 * @param weights the existing weights to copy.
+	 */
+	public void setMatrixes(ButlerWeights weights){
+
+		numTags = weights.getNumTags();
+		flatShelfs = weights.getShelfs();
+		numShelfs = flatShelfs.size();
+		brain = generateBrain(numTags, numShelfs);
+
+		brain.getStructure().getSynapses().get(0).setMatrix(weights.getWeights());
+
+		currentWeights = weights;
+
+		initialized = true;
+	}
+
+	/**
+	 * Trains the network with the specified NeuralDataSet.
+	 * @param input
+	 */
+	private void train(NeuralDataSet input){
+
+		final Train train = new CompetitiveTraining(brain, 0.7, input, new NeighborhoodGaussian(new GaussianFunction(0.0, 5.0, 1.5)));
+		Strategy smartLearn = new SmartLearningRate();
+		
+		smartLearn.init(train);
+		train.addStrategy(smartLearn);
+
+		int epoch = 0;
+		int errorSize = 250;
+
+		double[] lastErrors = new double[errorSize];
+
+		// training loop
+		do {
+			train.iteration();
+			//System.out.println("Epoch #" + epoch + " Error:" + train.getError()); // + " MovingAvg:" + movingAvg);
+			lastErrors[epoch % errorSize] = train.getError();
+
+			double avg = 0;
+			for (int i = 0; (i < epoch) && (i < errorSize); ++i)
+				avg = (avg * i + lastErrors[i]) / (i+1);
+
+			if (Math.abs(avg - train.getError()) < 0.01)
+				train.setError(0.001);
+
+			epoch++;
+		} while(train.getError() > 0.01);
+
+		//System.out.println("training complete.");
 	}
 
 }

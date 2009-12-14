@@ -2,9 +2,10 @@ package butler;
 
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
+
 /**
  * An implementation of a Set of IDPair.
  * 
@@ -13,21 +14,21 @@ import java.util.TreeSet;
  */
 public class IDPairSet implements Set<IDPair> {
 
-	TreeSet<IDPair> set;
+	HashSet<IDPair> set;
 
 	/**
 	 * Creates a new instance of an IDPairSet.
 	 */
 	public IDPairSet(){
-		set = new TreeSet<IDPair>();
+		set = new HashSet<IDPair>();
 	}
 
-	@Override
 	/**
 	 * This method adds an IDPair to the set.
 	 * 
 	 *  @returns true if unique item added. false if item already exists.
 	 */
+	@Override
 	public boolean add(IDPair e) {
 
 		try {
@@ -48,10 +49,10 @@ public class IDPairSet implements Set<IDPair> {
 	public boolean addAll(Collection<? extends IDPair> c) {return set.addAll(c);}
 
 
-	@Override
 	/**
 	 * If needed.
 	 */
+	@Override
 	public void clear() {set.clear();}
 
 	/**
@@ -94,28 +95,28 @@ public class IDPairSet implements Set<IDPair> {
 		return null;
 	}
 
-	@Override
 	/**
 	 * if needed
 	 */
+	@Override
 	public boolean containsAll(Collection<?> c) {return set.containsAll(c);}
 
-	@Override
 	/**
 	 * Returns true if set is empty.
 	 */
+	@Override
 	public boolean isEmpty() {return set.isEmpty();}
 
-	@Override
 	/**
 	 * Returns an iterator over the set.
 	 */
+	@Override
 	public Iterator<IDPair> iterator() {return set.iterator();}
 
-	@Override
 	/**
 	 * if needed.
 	 */
+	@Override
 	public boolean remove(Object o) {
 
 		try {
@@ -128,39 +129,40 @@ public class IDPairSet implements Set<IDPair> {
 		}
 	}
 
-	@Override
 	/**
 	 * if needed.
 	 */
+	@Override
 	public boolean removeAll(Collection<?> c) {return set.removeAll(c);}
 
-	@Override
 	/**
 	 * if needed.
 	 */
+	@Override
 	public boolean retainAll(Collection<?> c) {return set.retainAll(c);}
 
-	@Override
 	/**
 	 * Returns the number of IDPairs in the set.
 	 */
+	@Override
 	public int size() {return set.size();}
 
-	@Override
 	/**
 	 * if needed.
 	 */
+	@Override
 	public Object[] toArray() {return set.toArray();}
 
-	@Override
 	/**
 	 * if needed.
 	 */
+	@Override
 	public <T> T[] toArray(T[] a) {return set.toArray(a);}
-	@Override
+
 	/**
 	 * if needed.
 	 */
+	@Override
 	public boolean contains(Object o) {return set.contains(o);}
 
 }
