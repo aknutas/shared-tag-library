@@ -10,10 +10,11 @@ import data.Book;
 import data.Bookshelf;
 
 /**
- * The FlatShelf class unexpectedly implements Book. A FlatShelf can be thought of as
- * taking all of the books on a VirtualBookshelf and combining the tag information together.
- * Flattening a shelf is a one-way operation. It it not possible to convert from a FlatShelf
- * back to a Bookshelf. Also, flattening a shelf loses all information about individual books.
+ * The FlatShelf class unexpectedly implements Book. A FlatShelf is obtained bytaking all of
+ * the books on a VirtualBookshelf and combining the tag information together. Flattening a shelf
+ * is a one-way operation. It it not possible to convert from a FlatShelf back to a Bookshelf.
+ * Also, flattening a shelf loses all information about individual books.
+ * 
  * @author sjpurol
  *
  */
@@ -60,6 +61,9 @@ public final class FlatShelf implements Book {
 			properties.put(prop.getKey(), prop.getValue());
 	}
 	
+	/**
+	 * Returns the weight associated with the given tag.
+	 */
 	public int getWeight(String tag) {return tags.get(tag);}
 
 	@Override

@@ -1,71 +1,86 @@
 package butler;
 
-import java.util.HashMap;
-
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.pattern.SOMPattern;
-
+import network.Control;
 import data.Book;
+import data.RemoteObject;
+import data.RemoteObjectException;
+import data.messages.RemoteMessage;
 
-public class RemoteLibraryButler extends LibraryButler {
+/**
+ * The RemoteLibraryButler class is an extension of RemoteObject and an 
+ * implementation of LibraryButlerInterface. It retrieves a ButlerWeights
+ * object from the remote server and creates a new VirtualLibraryButler
+ * from the ButlerWeights
+ * 
+ * @author sjpurol
+ *
+ */
+public class RemoteLibraryButler extends RemoteObject implements LibraryButlerInterface {
 	
-	public RemoteLibraryButler(ButlerWeights weights, String name) {
-
-		properties = new HashMap<String, String>();
-		properties.put("name", name);
-		currentWeights = weights;
-		numTags = weights.getNumTags();
-		flatShelfs = weights.getShelfs();
-		numShelfs = flatShelfs.size();
-		idPairs = weights.getIDPairs();
+	final int id;
+	VirtualLibraryButler butler;
+	
+	/**
+	 * Creates a new RemoteLibraryButler object.
+	 * 
+	 * @param connection the connection ID
+	 * @param network the network controller
+	 * @param timeout the timeout in ms
+	 * @param id the ID of this
+	 * @throws NullPointerException
+	 * @throws RemoteObjectException
+	 */
+	public RemoteLibraryButler(int connection, Control network, long timeout, int id) throws NullPointerException, RemoteObjectException {
+		super(connection, network, timeout);
+		this.id = id;
 		
-		// initialize the brain with a random set of weights.
-		SOMPattern pattern = new SOMPattern();
-		pattern.setInputNeurons(numTags);
-		pattern.setOutputNeurons(numShelfs);
-		brain = pattern.generate();
+		RemoteMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.id);
+		RemoteMessage response = this.send(message, timeout);
 		
-		// import weights from ButlerWeights object to brain.
-		brain.getStructure().getSynapses().iterator().next().setMatrix(currentWeights.getWeights());
-		brain.getStructure().finalizeStructure();
+		ButlerWeights weights = (ButlerWeights)response.dequeParameter();
+		butler = new VirtualLibraryButler(weights);
+		
 	}
-	
-	double[] assemble(Book b) {
+
+	/**
+	 * Creates a new RemoteLibraryButler object.
+	 * 
+	 * @param connection the connection ID
+	 * @param network the network controller
+	 * @param id the ID of this
+	 * @throws NullPointerException
+	 * @throws RemoteObjectException
+	 */
+	public RemoteLibraryButler(int connection, Control network, int id) throws NullPointerException, RemoteObjectException {
+		super(connection, network);
+		this.id = id;
 		
-		double[] inputValues = readyBook(b);
-		NeuralData book = new BasicNeuralData(inputValues);
-		return brain.compute(book).getData();
+		RemoteMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.id);
+		RemoteMessage response = this.send(message);
+
+		ButlerWeights weights = (ButlerWeights)response.dequeParameter();
+		butler = new VirtualLibraryButler(weights);
 	}
 
 	@Override
-	/**
-	 * Checks an input book against the trained network.
-	 * Returns the index of the shelf that best matches.
-	 * If no shelf matches, returns -1.
-	 * 
-	 * @param b The book to check.
-	 */
-	public int compareTo(Book b) {
-		
-		double[] inputValues = readyBook(b);
+	public int compareTo(Book b) {return butler.compareTo(b);}
 
-		NeuralData book = new BasicNeuralData(inputValues);
-		final NeuralData output = brain.compute(book);
+	@Override
+	public double[] assemble(Book b) {return butler.assemble(b);}
 
-		double best = Double.MIN_VALUE;
+	@Override
+	public int countShelfs() {return butler.countShelfs();}
 
-		for (int i = 0; i < numShelfs; ++i)
-			best = Math.max(best, output.getData(i));
+	@Override
+	public String identifyShelf(int index) {return butler.identifyShelf(index);}
 
-		int index = -1;
-		for (int i = 0; i < numShelfs; ++i)
-			if (best == output.getData(i))
-				index = i;
-				
-		System.out.println(b.getProperty("title") + ": " + identifyShelf(index) + "(" + index + ")");
+	@Override
+	public double[] readyBook(Book b) {return butler.readyBook(b);}
 
-		return index;
-	}
+	@Override
+	public String getProperty(String name) {return butler.getProperty(name);}
+
+	@Override
+	public ButlerWeights getWeights() {return butler.getWeights();}
 
 }

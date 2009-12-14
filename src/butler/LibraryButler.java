@@ -10,24 +10,26 @@ import org.encog.neural.networks.BasicNetwork;
 import data.Book;
 
 /**
- * The LibraryButler abstract class is an extension of Butler. It contains a Self-Organizing
+ * The LibraryButler abstract class is an implementation of LibraryButlerInterface. It contains a Self-Organizing
  * Map that is trained with a Collection of VirtualBookshelfs to classify books into these shelfs.
  * @author sjpurol
  *
  */
-public abstract class LibraryButler extends Butler {
+public abstract class LibraryButler implements LibraryButlerInterface {
 
 	protected BasicNetwork brain;
-	
 	protected int numShelfs;
 	protected int numTags;
-	
+	protected int maxTagMag;
 	protected final static String OTHER = "__OTHER__";
-	
 	protected ButlerWeights currentWeights;
-
 	protected Map<Integer, FlatShelf> flatShelfs;
-	
+
+	/**
+	 * used to store meta-data.
+	 */
+	protected Map<String, String> properties;
+
 	/**
 	 * Contains pairs of Strings and Integers mapping each tag to a specific input neuron.
 	 */
@@ -40,7 +42,7 @@ public abstract class LibraryButler extends Butler {
 	 * @param b the book to ready
 	 * @return See description
 	 */
-	double[] readyBook(Book b) {
+	public double[] readyBook(Book b) {
 
 		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
 		double[] inputValues = new double[this.numTags];
@@ -51,10 +53,12 @@ public abstract class LibraryButler extends Butler {
 			IDPair current = idPairs.get(tag.getKey());
 			if (current == null) {
 				current = idPairs.get(OTHER);
-				inputValues[current.getValue()] += tag.getValue();
+				inputValues[current.getValue()] += ( (double)tag.getValue() );/// maxTagMag);
+				//inputValues[current.getValue()] += ( (double)tag.getValue() / maxTagMag);
 			}
 			else
-				inputValues[current.getValue()] = tag.getValue();
+				inputValues[current.getValue()] = ( (double)tag.getValue() );/// maxTagMag);
+			//inputValues[current.getValue()] = ( (double)tag.getValue() / maxTagMag);
 		}
 		return inputValues;
 	}
@@ -64,7 +68,7 @@ public abstract class LibraryButler extends Butler {
 	 * the brain and returns the raw output vector.
 	 * @param b the book to examine
 	 */
-	double[] assemble(Book b) {
+	public double[] assemble(Book b) {
 		
 		double[] inputValues = readyBook(b);
 		NeuralData book = new BasicNeuralData(inputValues);
@@ -83,6 +87,11 @@ public abstract class LibraryButler extends Butler {
 	/**
 	 * Returns the number of shelfs this LibraryButler has learned.
 	 */
-	int countShelfs() {return numShelfs;}
+	public int countShelfs() {return numShelfs;}
+	
+	/**
+	 * Returns the magnitude (absolute value) of the largest tag.
+	 */
+	public int getMaxTagMag() {return maxTagMag;}
 
 }

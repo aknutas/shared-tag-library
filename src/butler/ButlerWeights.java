@@ -1,6 +1,8 @@
 package butler;
 
 import org.encog.matrix.Matrix;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -15,8 +17,9 @@ import javax.jdo.annotations.PersistenceCapable;
  *
  */
 @PersistenceCapable(detachable="true")
-public class ButlerWeights {
+public class ButlerWeights implements Serializable{
 
+	private static final long serialVersionUID = 783143047034007363L;
 	private Matrix inputs;
 	private Long timestamp;
 	private final int numTags;
