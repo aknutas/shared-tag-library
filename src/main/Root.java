@@ -139,13 +139,15 @@ public class Root extends JFrame {
     private RenameBookshelf renameBookshelfDialog = null;
 
     private JMenuItem renameBookshelfMenuItem = null;
+
     private JButton searchButton = null;
     private JTextField searchField = null;
     private JComboBox searchFilterComboBox = null;
     private SearchResults searchResults = null;
-
     private JToolBar searchToolbar = null;
+
     private Bookshelf shelf = null;
+    private JMenuItem sortBookshelf = null;
 
     private JMenu startMenu = null;
     private JLabel status = null;
@@ -402,13 +404,15 @@ public class Root extends JFrame {
 	    bookshelfMenu = new JMenu("Bookshelf");
 	    bookshelfMenu.setMnemonic(KeyEvent.VK_O);
 
-	    bookshelfMenu.add(getAddBookMenuItem());
-	    bookshelfMenu.add(exportSelectedMenuItem());
-	    bookshelfMenu.addSeparator();
-	    bookshelfMenu.add(getClearBookshelfMenuItem());
-	    bookshelfMenu.add(getDeleteSelectedBooksMenuItem());
-	    bookshelfMenu.addSeparator();
 	    bookshelfMenu.add(getRenameBookshelfMenuItem());
+	    bookshelfMenu.addSeparator();
+	    bookshelfMenu.add(getAddBookMenuItem());
+	    bookshelfMenu.add(getDeleteSelectedBooksMenuItem());
+	    bookshelfMenu.add(getClearBookshelfMenuItem());
+	    bookshelfMenu.addSeparator();
+	    bookshelfMenu.add(exportSelectedMenuItem());
+	    bookshelfMenu.add(sortBookshelfMenuItem());
+
 	}
 	return bookshelfMenu;
     }
@@ -431,6 +435,8 @@ public class Root extends JFrame {
 		    setStatus("Clearing bookshelf...");
 		    shelf = searchResults.getBookshelf();
 		    if (shelf != null) {
+
+			shelf.removeAll();
 			searchResults.setResults(shelf);
 			draw();
 		    }
@@ -942,6 +948,37 @@ public class Root extends JFrame {
 	time.start();
 	time.setRepeats(false);
 	status.setText(s);
+    }
+
+    /**
+     * This method initializes jMenuItem
+     * 
+     * @return javax.swing.JMenuItem
+     */
+    private JMenuItem sortBookshelfMenuItem() {
+	if (sortBookshelf == null) {
+	    sortBookshelf = new JMenuItem("Sort Bookshelf");
+	    sortBookshelf.setMnemonic(KeyEvent.VK_S);
+	    sortBookshelf.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+		    ActionEvent.CTRL_MASK));
+	    sortBookshelf.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+
+		    Bookshelf oldShelf = searchResults.getBookshelf();
+		    if (oldShelf != null) {
+
+			// TODO Implement butler sorting in Controller
+			// Set<Bookshelf> newShelves =
+			// control.sortBookshelf(oldShelf, 10);
+			// for (int x = 0; x < newShelves.size(); x++) {
+			// control.addBookshelf(newShelves.get(x));
+			// }
+			treeView.refresh();
+		    }
+		}
+	    });
+	}
+	return sortBookshelf;
     }
 
 }

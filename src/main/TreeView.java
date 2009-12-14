@@ -40,12 +40,13 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
 	if (shelf != null) {
 	    top.add(new TreeNode(shelf));
+	    tree.setModel(new DefaultTreeModel(top));
 	}
     }
 
     protected void draw() {
 
-	// ((DefaultTreeModel) tree.getModel()).reload();
+	//((DefaultTreeModel) tree.getModel()).reload();
 	this.repaint();
     }
 

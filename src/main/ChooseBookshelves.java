@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class ChooseBookshelves extends JDialog {
 
     private JPanel jContentPane = null;
     private Library library = null;
+    private Root root = null;
     private TreeView treeView = null;
 
     /**
@@ -34,6 +36,8 @@ public class ChooseBookshelves extends JDialog {
      */
     public ChooseBookshelves(Frame owner, Controller c, TreeView t, Library l) {
 	super(owner);
+
+	root = (Root) owner;
 
 	if (l != null) {
 	    control = c;
@@ -55,7 +59,8 @@ public class ChooseBookshelves extends JDialog {
 	if (bookshelfList == null) {
 
 	    List<String> names = new ArrayList<String>();
-	    Iterator<String> bookshelves = library.getBookshelfNames().iterator();
+	    Iterator<String> bookshelves = library.getBookshelfNames()
+		    .iterator();
 	    while (bookshelves.hasNext()) {
 		names.add(bookshelves.next());
 	    }
@@ -95,10 +100,28 @@ public class ChooseBookshelves extends JDialog {
 	    importButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
-		    // TODO Import (String[])bookshelfList.getSelectedValues() bookshelves into local library
-		    // control.importSelectBookshelves(local, remote, select)
-		    
-		    treeView.refresh();
+		    try {
+			Object[] shelves = bookshelfList.getSelectedValues();
+			if (shelves.length > 0) {
+
+			    Collection<String> imported = new ArrayList<String>();
+			    for (int x = 0; x < shelves.length; x++) {
+				imported.add((String) shelves[x]);
+			    }
+			    control.importSelectBookshelves(control.myLib,
+				    library, imported);
+			} else {
+			    control
+				    .importAllBookshelves(control.myLib,
+					    library);
+			}
+
+			treeView.refresh();
+
+		    } catch (IllegalArgumentException e) {
+			root.setStatus("Error Importing Bookshelves");
+		    }
+
 		    setVisible(false);
 		}
 	    });

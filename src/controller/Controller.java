@@ -363,7 +363,7 @@ public class Controller {
 	 * @param local
 	 * @param remote
 	 */
-	public synchronized void importAllBookshelves(Library local, Library remote) {
+	public synchronized void importAllBookshelves(Library local, Library remote) throws IllegalArgumentException{
 		if (local == null || remote == null) {
 			throw new IllegalArgumentException();
 		}
@@ -386,7 +386,7 @@ public class Controller {
 	 * @return
 	 */
 	public synchronized Library importSelectBookshelves(Library local,
-			Library remote, Collection<String> selection) {
+			Library remote, Collection<String> selection) throws IllegalArgumentException {
 		if (local == null || remote == null || selection == null) {
 			throw new IllegalArgumentException();
 		}
