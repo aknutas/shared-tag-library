@@ -1,8 +1,9 @@
 package data;
 
-import data.messages.*;
-import network.*;
-import network.messages.*;
+import network.ServerResponder;
+import network.messages.Message;
+import data.messages.RemoteMessage;
+import data.messages.TrackedMessage;
 
 /**
  * The RemoteResponder implements the ServerResponder and is used as the base

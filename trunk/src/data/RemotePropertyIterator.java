@@ -1,8 +1,9 @@
 package data;
 
-import data.messages.IteratorMessage;
+import java.util.Map.Entry;
+
 import network.Control;
-import java.util.Map.*;
+import data.messages.IteratorMessage;
 
 public class RemotePropertyIterator extends RemoteIterator<Entry<String, String>> {
 

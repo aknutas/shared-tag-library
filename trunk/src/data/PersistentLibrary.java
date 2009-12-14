@@ -1,9 +1,10 @@
 package data;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import controller.ProgramProperties;
-import database.*;
-import java.util.*;
-import java.util.Map.*;
+import database.QueryBuilder;
 
 /**
  * The PersistentLibrary class extends the VirtualLibrary class and is used to

@@ -1,10 +1,14 @@
 package data;
 
-import java.util.*;
-import java.util.Map.*;
-import data.messages.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import network.Control;
+import data.messages.BookMessage;
+import data.messages.RemoteMessage;
 
 public class RemoteBook extends RemoteObject implements Book {
 

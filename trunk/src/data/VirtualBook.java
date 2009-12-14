@@ -1,9 +1,13 @@
 package data;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
-import javax.jdo.annotations.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.jdo.annotations.PersistenceCapable;
 
 /**
  * The VirtualBook class implements the Book interface and represents a Book
@@ -189,7 +193,7 @@ public class VirtualBook implements Book, Serializable {
 		if(!(object instanceof Book))
 			return false;
 		
-		Book book = (Book)object;
+		//Book book = (Book)object;
 		
 		return true;
 	}

@@ -1,8 +1,14 @@
 package data;
 
-import java.util.*;
-import java.util.Map.*;
-import javax.jdo.annotations.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import javax.jdo.annotations.PersistenceCapable;
 
 /**
  * The VirtualBookshelf class implements the Bookshelf interface and is used

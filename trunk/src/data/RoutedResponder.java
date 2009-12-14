@@ -3,7 +3,7 @@ package data;
 import java.util.HashMap;
 import java.util.Map;
 
-import data.messages.*;
+import data.messages.RoutedMessage;
 
 /**
  * The RemoteRouter class extends the RemoteResponder and implements a static

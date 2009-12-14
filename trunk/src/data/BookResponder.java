@@ -2,10 +2,12 @@ package data;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
-import data.messages.*;
+import data.messages.BookMessage;
+import data.messages.BookshelfMessage;
+import data.messages.RemoteMessage;
+import data.messages.RoutedMessage;
 
 public class BookResponder extends RoutedResponder {
 

@@ -1,7 +1,7 @@
 package data;
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
+import java.util.Iterator;
 
 import data.messages.RemoteMessage;
 

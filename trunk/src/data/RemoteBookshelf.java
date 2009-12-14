@@ -1,10 +1,11 @@
 package data;
 
-import java.util.*;
-import java.util.Map.*;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
-import data.messages.*;
-import network.*;
+import network.Control;
+import data.messages.BookshelfMessage;
+import data.messages.RemoteMessage;
 
 /**
  * A RemoteBookshelf extends the RemoteObject class and implements the

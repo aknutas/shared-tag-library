@@ -1,9 +1,13 @@
 package data;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 
-import data.messages.*;
-import network.*;
+import network.Control;
+import data.messages.IteratorMessage;
+import data.messages.RemoteMessage;
 
 /**
  * The RemoteIterator class extends RemoteObject and is used to allow iterators

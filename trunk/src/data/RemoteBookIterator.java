@@ -1,7 +1,7 @@
 package data;
 
-import data.messages.IteratorMessage;
 import network.Control;
+import data.messages.IteratorMessage;
 
 public class RemoteBookIterator extends RemoteIterator<Book> {
 
