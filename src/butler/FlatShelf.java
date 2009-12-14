@@ -6,14 +6,26 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import data.Book;
-import data.VirtualBookshelf;
+import data.Bookshelf;
 
+/**
+ * The FlatShelf class unexpectedly implements Book. A FlatShelf can be thought of as
+ * taking all of the books on a VirtualBookshelf and combining the tag information together.
+ * Flattening a shelf is a one-way operation. It it not possible to convert from a FlatShelf
+ * back to a Bookshelf. Also, flattening a shelf loses all information about individual books.
+ * @author sjpurol
+ *
+ */
 public final class FlatShelf implements Book {
 
 	Map<String, Integer> tags;
 	Map<String, String> properties;
 
-	public FlatShelf(VirtualBookshelf shelf) {
+	/**
+	 * Creates a new FlatShelf from the given VirtualBookshelf
+	 * @param shelf
+	 */
+	public FlatShelf(Bookshelf shelf) {
 
 		tags = new HashMap<String, Integer>();
 		properties = new HashMap<String, String>();
@@ -51,6 +63,8 @@ public final class FlatShelf implements Book {
 		}
 
 	}
+	
+	public int getWeight(String tag) {return tags.get(tag);}
 
 	@Override
 	public Iterator<Entry<String, String>> enumerateProperties() {return properties.entrySet().iterator();}
