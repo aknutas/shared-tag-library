@@ -94,6 +94,14 @@ public class HeadButler implements Butler {
 	public boolean addShelf(VirtualBookshelf virtBS) {	
 		return addButler(new VirtualLibraryButler(virtBS, 1));
 	}
+	
+	/**
+	 * Adds a new Butler to the staff, trained on the input virtBS split into at most numShelfs categories.
+	 * @return false if "new" butler already exists.
+	 */
+	public boolean addShelf(VirtualBookshelf virtBS, int numShelfs) {	
+		return addButler(new VirtualLibraryButler(virtBS, numShelfs));
+	}
 
 	/**
 	 * Fires the given butler.
@@ -180,11 +188,20 @@ public class HeadButler implements Butler {
 
 	/**
 	 * Assembles the staff to determine book membership.
+	 * 
+	 * @param b the book to check 
+	 * @return a string of the form: "ButlerName: ShelfName"
+	 */
+	public String checkBook(Book b) { return identify(compareTo(b));}
+
+	/**
+	 * Assembles the staff to determine book membership.
 	 * The return value should only be used as the parameter to "identify(int)"
 	 * 
 	 * @param b the book to check 
 	 */
 	@Override
+	@Deprecated
 	public int compareTo(Book b) {
 
 		double[][] answers = new double[staff.size()][];
