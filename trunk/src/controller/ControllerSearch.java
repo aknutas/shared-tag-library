@@ -27,11 +27,15 @@ public abstract class ControllerSearch {
 
     public static Bookshelf searchAlllibsFlat(String str,
 	    Collection<Library> allLibs) {
+
+   	
 	Iterator<Library> iter = allLibs.iterator();
 	VirtualBookshelf vb = new VirtualBookshelf();
 	while (iter.hasNext()) {
-	    vb.union(search(str, iter.next()));
+	   	Bookshelf avb=search(str, iter.next());
+		vb = (VirtualBookshelf) vb.union(avb);
 	}
+
 	return vb;
     }
 
