@@ -115,19 +115,27 @@ public class ConnectTo extends JDialog {
 
 		    try {
 			if (addressField.getText().equals("")) {
+
 			    control.connect((String) connectionList
 				    .getSelectedItem());
 			} else {
+
 			    control.addConnection(addressField.getText(),
 				    ipAlias.getText());
 			    control.connect(ipAlias.getText());
 			}
 
-			// ChooseBookshelves dialog = new
-			// ChooseBookshelves(thisClass, control,
-			// treeView, /*lib*/);
-			// dialog.setVisible(true);
-			tree.refresh();
+			if (control.getLibrary(ipAlias.getText()) != null) {
+
+			    ChooseBookshelves dialog = new ChooseBookshelves(
+				    root, control, tree, control
+					    .getLibrary(ipAlias.getText()));
+			    dialog.setVisible(true);
+			    
+			    tree.refresh();
+			} else {
+			    root.setStatus("Error Connecting");
+			}
 		    } catch (IllegalArgumentException e) {
 			root.setStatus("Error Connecting");
 		    } catch (NullPointerException e) {

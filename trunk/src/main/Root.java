@@ -847,10 +847,8 @@ public class Root extends JFrame {
 	    this.setTitle("Book Butler");
 
 	} catch (IllegalArgumentException e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	} catch (NullPointerException e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }
