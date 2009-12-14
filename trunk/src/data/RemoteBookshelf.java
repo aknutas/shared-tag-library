@@ -2,6 +2,7 @@ package data;
 
 import java.util.*;
 import java.util.Map.*;
+
 import data.messages.*;
 import network.*;
 
@@ -142,28 +143,37 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	 *         error
 	 */
 	@Override
-	public Iterator<Entry<String, String>> enumerateProperties() {
-		try {
-			BookshelfMessage message = new BookshelfMessage(BookshelfMessage.MSG_PROPERTY_ITERATOR, this.id);
-			RemoteMessage response = this.send(message, 5000);
-			if(null == response)
-				return null;
-			
-			if(!(response instanceof BookshelfMessage))
-				return null;
-			
-			if(BookshelfMessage.MSG_PROPERTY_ITERATOR != response.getMessageType())
-				return null;
-			
-			Integer id = response.dequeParameter();
-			if(null == id)
-				return null;
-			
-			return new RemotePropertyIterator(this.network, this.connection, id.intValue());
-		}
-		catch(RemoteObjectException ex) {
+	public Iterable<Entry<String, String>> enumerateProperties() {
+		BookshelfMessage message = new BookshelfMessage(BookshelfMessage.MSG_PROPERTY_ITERATOR, this.id);
+		RemoteMessage response = this.send(message, 5000);
+		if(null == response)
 			return null;
-		}
+		
+		if(!(response instanceof BookshelfMessage))
+			return null;
+		
+		if(BookshelfMessage.MSG_PROPERTY_ITERATOR != response.getMessageType())
+			return null;
+		
+		Integer id = response.dequeParameter();
+		if(null == id)
+			return null;
+		
+		/* closure variables */
+		final Control network = this.network;
+		final int connection = this.connection;
+		final int iteratorId = id.intValue();
+		
+		/* create anonymous Iterable object (delayed execution) */
+		return new Iterable<Entry<String, String>>() {
+			public Iterator<Entry<String, String>> iterator() {
+				try {
+					return new RemotePropertyIterator(network, connection, iteratorId);
+				} catch(RemoteObjectException ex) {
+					return null;
+				}
+			}				
+		};
 	}
 	
 	/**

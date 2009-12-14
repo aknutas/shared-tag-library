@@ -33,43 +33,42 @@ public class ConnectionMetadata implements Serializable {
     private transient Library selectedShelves = null;
 
     /**
-     * Creates a new ConnectionMetadata instance with the given alias and
-     * hostname
+     * Creates a new ConnectionMetadata instance with the given alias
+     * and hostname
      * 
-     * @param alias
-     *            the alias given to this connection
-     * @param hostname
-     *            the ip address or hostname of the connection
+     * @param alias the alias given to this connection
+     * @param hostname the ip address or hostname of the connection
      * 
-     * @throws NullPointerException
-     *             if the hostname or alias given are null
+     * @throws NullPointerException if the hostname or alias given 
+     *         are null
      */
-    public ConnectionMetadata(String alias, String hostname)
-	    throws NullPointerException {
-	if (null == alias || null == hostname)
-	    throw new NullPointerException("hostname cannot be null");
-
-	/* set persistent variables */
-	this.alias = alias;
-	this.hostname = hostname;
+    public ConnectionMetadata(String alias, String hostname) throws NullPointerException {
+		if (null == alias || null == hostname)
+		    throw new NullPointerException("hostname cannot be null");
+	
+		/* set persistent variables */
+		this.alias = alias;
+		this.hostname = hostname;
     }
 
     /**
-     * Gets the hostname name stored in this ConnectionMetadata instance.
+     * Gets the hostname name stored in this ConnectionMetadata
+     * instance.
      * 
      * @return the hostname String
      */
     public String getHostname() {
-	return this.hostname;
+    	return this.hostname;
     }
 
     /**
-     * Gets the alias name stored in this ConnectionMetadata instance.
+     * Gets the alias name stored in this ConnectionMetadata
+     * instance.
      * 
      * @return the alias String
      */
     public String getAlias() {
-	return this.alias;
+		return this.alias;
     }
 
     /**
@@ -77,82 +76,75 @@ public class ConnectionMetadata implements Serializable {
      * 
      * @return the library or null if not connected
      */
-    public Library getLib() {
-	return (this.selectedShelves != null) ? this.selectedShelves
-		: this.library;
+    public Library getLibrary() {
+    	return (this.selectedShelves != null) ? this.selectedShelves : this.library;
     }
 
     /**
-     * Determines whether this ConnectionMetadata object has an open connection.
+     * Determines whether this ConnectionMetadata object has an open
+     * connection.
      * 
      * @return if there is an open connection, else false
      */
     public boolean isConnected() {
-	return this.connected;
+    	return this.connected;
     }
 
     /**
-     * Attempts to connect to the host contained in this ConnectionMetadata
-     * object, returning the result.
+     * Attempts to connect to the host contained in this
+     * ConnectionMetadata object, returning the result.
      * 
-     * @param network
-     *            the network control object to connect through
+     * @param network the network control object to connect through
      * 
      * @return true if connection was successful, else false
      * 
-     * @throws NullPointerException
-     *             if the network given is null
+     * @throws NullPointerException if the network given is null
      */
     public boolean connect(Control network) throws NullPointerException {
-	if (null == network)
-	    throw new NullPointerException("network cannot be null");
-
-	try {
-	    this.connected = true;
-	    this.connection = network.connect(this.hostname);
-	    this.library = new RemoteLibrary(this.connection, network);
-	} catch (Exception ex) {
-	    this.connected = false;
-	    this.connection = 0;
-	    this.library = null;
-	}
-
-	return this.connected;
+		if (null == network)
+		    throw new NullPointerException("network cannot be null");
+	
+		try {
+		    this.connected = true;
+		    this.connection = network.connect(this.hostname);
+		    this.library = new RemoteLibrary(this.connection, network);
+		} catch (Exception ex) {
+		    this.connected = false;
+		    this.connection = 0;
+		    this.library = null;
+		}
+	
+		return this.connected;
     }
 
     /**
      * This method is used to disconnect a ConnectionMetadata object.
      * 
-     * @param network
-     *            the network control object to disconnect through
+     * @param network the network control object to disconnect 
+     *        through
      * 
      * @return true if disconnected, otherwise false
      * 
-     * @throws NullPointerException
-     *             if the network given is null.
+     * @throws NullPointerException if the network given is null.
      */
     public boolean disconnect(Control network) throws NullPointerException {
-	if (null == network)
-	    throw new NullPointerException("network cannot be null");
-
-	if (network.disconnect(this.connection)) {
-	    this.connected = false;
-	    this.connection = 0;
-	    this.library = null;
-	}
-
-	return this.connected;
-    }
-
-    public Iterator<String> getBookshelfNames() {
-	return this.library.getBookshelfNames();
+		if (null == network)
+		    throw new NullPointerException("network cannot be null");
+	
+		if (network.disconnect(this.connection)) {
+		    this.connected = false;
+		    this.connection = 0;
+		    this.library = null;
+		}
+	
+		return this.connected;
     }
 
     public void selectShelves(Collection<String> shelves) {
-	this.selectedShelves = new VirtualLibrary();
-	Iterator<Bookshelf> iter = this.library.getBookshelf(shelves);
-	while (iter.hasNext()) {
-	    this.selectedShelves.addBookshelf(iter.next());
-	}
+		this.selectedShelves = new VirtualLibrary();
+		Iterator<Bookshelf> iter = this.library.getBookshelf(shelves);
+		
+		while (iter.hasNext())
+		    this.selectedShelves.addBookshelf(iter.next());
     }
 }

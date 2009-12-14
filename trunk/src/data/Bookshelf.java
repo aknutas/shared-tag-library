@@ -112,11 +112,4 @@ public interface Bookshelf extends Properties, Iterable<Book> {
 	 */
 	public Bookshelf subset(Comparable<Book> comparable) throws NullPointerException;
 	
-	/**
-	 * Returns an iterator containing the key-value pairs of all the properties
-	 * the book has.
-	 * 
-	 * @return an iterator of properties
-	 */
-	public Iterator<Map.Entry<String, String>> enumerateProperties();
 }

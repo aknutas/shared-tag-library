@@ -35,13 +35,10 @@ public abstract class BookOperations {
 	}
 
 	public static int countProperties(Book book){
-		
-		Iterator<Map.Entry<String, String>> tags = book.enumerateProperties();
 		int num = 0;
-		while (tags.hasNext()){
+		
+		for(Map.Entry<String, String> tag : book.enumerateProperties())
 			++num;
-			tags.next();
-		}
 		
 		return num;
 	}

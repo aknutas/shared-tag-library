@@ -177,8 +177,21 @@ public class VirtualBook implements Book, Serializable {
 	 * 
 	 * @return an iterator of properties
 	 */
-	public Iterator<Entry<String, String>> enumerateProperties() {
-		return this.properties.entrySet().iterator();
+	public Collection<Entry<String, String>> enumerateProperties() {
+		return this.properties.entrySet();
+	}
+	
+	@Override
+	public boolean equals(Object object) throws NullPointerException {
+		if(null == object)
+			throw new NullPointerException("object cannot be null");
+		
+		if(!(object instanceof Book))
+			return false;
+		
+		Book book = (Book)object;
+		
+		return true;
 	}
 
 }

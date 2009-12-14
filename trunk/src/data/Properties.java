@@ -1,5 +1,6 @@
 package data;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -42,6 +43,6 @@ public interface Properties {
 	 * 
 	 * @return an iterator of properties
 	 */
-	public Iterator<Map.Entry<String, String>> enumerateProperties();
+	public Iterable<Map.Entry<String, String>> enumerateProperties();
 	
 }

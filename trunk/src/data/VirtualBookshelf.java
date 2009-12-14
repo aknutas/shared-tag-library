@@ -14,6 +14,10 @@ import javax.jdo.annotations.*;
 @PersistenceCapable(detachable="true")
 public final class VirtualBookshelf implements Bookshelf {
 
+	/* default bookshelf id */
+	private static long shelfID = 0;
+	
+	/* data containers */
 	private Set<Book> bookshelf;
 	private Set<Bookshelf> shelves;
 	private Map<String, String> properties;
@@ -31,8 +35,26 @@ public final class VirtualBookshelf implements Bookshelf {
 		this.shelves = new HashSet<Bookshelf>();
 		this.properties = new HashMap<String, String>();
 		this.comparable = null;
+		
+		/* set default name */
+		this.setProperty("name", "shelf" + shelfID);
+		VirtualBookshelf.shelfID += 1;
 	}
 	
+	/**
+	 * Creates a new Bookshelf object which contains no boIllegalArgumentExceptionoks.
+	 * 
+	 * @throws IllegalArgumentException if the name given is null
+	 */
+	public VirtualBookshelf(String name) throws NullPointerException {
+		this();
+		
+		if(null == name)
+			throw new NullPointerException("name given is null");
+		
+		this.setProperty("name", name);
+	}
+		
 	/**
 	 * A copy constructor for the VirtualBookshelf class. Any classes
 	 * extending VirtualBookshelf should create their own copy
@@ -71,20 +93,6 @@ public final class VirtualBookshelf implements Bookshelf {
 			toShelf.insert(book);
 		
 		return toShelf;
-	}
-	
-	/**
-	 * Creates a new Bookshelf object which contains no boIllegalArgumentExceptionoks.
-	 * 
-	 * @throws IllegalArgumentException if the name given is null
-	 */
-	public VirtualBookshelf(String name) throws NullPointerException {
-		this();
-		
-		if(null == name)
-			throw new NullPointerException("name given is null");
-		
-		this.setProperty("name", name);
 	}
 	
 	/**
@@ -291,8 +299,8 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @return an iterator of properties
 	 */
-	public Iterator<Entry<String, String>> enumerateProperties() {
-		return this.properties.entrySet().iterator();
+	public Collection<Entry<String, String>> enumerateProperties() {
+		return this.properties.entrySet();
 	}
 	
 	/**

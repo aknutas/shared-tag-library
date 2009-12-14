@@ -67,7 +67,7 @@ public class LibraryResponder extends RemoteResponder {
 		case LibraryMessage.MSG_BOOKSHELVES:
 			return this.handleBookshelvesMessage((LibraryMessage)message);
 		case LibraryMessage.MSG_BOOKSHELF_NAMES:
-			return this.handleBookshelfMessage((LibraryMessage)message);
+			return this.handleBookshelfNames((LibraryMessage)message);
 		default:
 			RemoteMessage errorMessage = new LibraryMessage(LibraryMessage.MSG_ERROR);
 			errorMessage.queueParameter("illegal message type");

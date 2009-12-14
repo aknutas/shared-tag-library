@@ -100,27 +100,44 @@ public class VirtualLibrary implements Library {
 	}
 	
 	@Override
-	public Iterator<Entry<String, String>> enumerateProperties() {
-		return this.properties.entrySet().iterator();
+	public Collection<Entry<String, String>> enumerateProperties() {
+		return this.properties.entrySet();
 	}
 
 	@Override
 	public Bookshelf getBookshelf(String name) throws NullPointerException {
-		// TODO Auto-generated method stub
+		/* find bookshelf through iterator */
+		for(Bookshelf shelf : this) {
+			if(!name.equals(shelf.getProperty("name")))
+				continue;
+			
+			return shelf;
+		}
+		
 		return null;
 	}
 
 	@Override
-	public Iterator<Bookshelf> getBookshelf(Collection<String> names)
-			throws NullPointerException {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterator<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
+		Library library = new VirtualLibrary();
+		
+		/* could also be done with a subset.. */
+		for(Bookshelf shelf : this) {
+			if(names.contains(shelf.getProperty("name")))
+				library.addBookshelf(shelf);
+		}
+		
+		return library.iterator();
 	}
 
 	@Override
-	public Iterator<String> getBookshelfNames() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<String> getBookshelfNames() {
+		Collection<String> names = new LinkedList<String>();
+		
+		for(Bookshelf shelf : this)
+			names.add(shelf.getProperty("name"));
+		
+		return names;
 	}
 
 }

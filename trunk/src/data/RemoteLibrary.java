@@ -112,7 +112,7 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	}
 	
 	@Override
-	public Iterator<Entry<String, String>> enumerateProperties() {
+	public Iterable<Entry<String, String>> enumerateProperties() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -156,10 +156,10 @@ public class RemoteLibrary extends RemoteObject implements Library {
 	}
 
 	@Override
-	public Iterator<String> getBookshelfNames() {
+	public Collection<String> getBookshelfNames() {
 		try {
 			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF_NAMES);
-			message = this.send(message);
+			message = this.send(message, 5000);
 			
 			if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELF_NAMES != message.getMessageType())
 				return null;
@@ -173,8 +173,9 @@ public class RemoteLibrary extends RemoteObject implements Library {
 				name = message.dequeParameter();
 			}
 			
-			return names.iterator();
+			return names;
 		} catch(Exception ex) {
+			ex.printStackTrace();
 			return null;
 		}
 	}
