@@ -43,6 +43,23 @@ public class HeadButler implements Butler {
 		maxNumOfShelfs = wadsworth.countShelfs();
 
 	}
+	
+	/**
+	 * Constructs a new HeadButler from a collection of ButlerWeights. These weights
+	 * would most likely be pulled from the database.
+	 * 
+	 * @param weights
+	 * @throws IllegalArgumentException
+	 */
+	public HeadButler(Collection<ButlerWeights> weights) throws IllegalArgumentException {
+		if (null == weights)
+			throw new IllegalArgumentException("weights cannot be null");
+		staff = new HashSet<LibraryButlerInterface>();
+		for (ButlerWeights bw : weights)
+			staff.add(new VirtualLibraryButler(bw));
+		
+		reCountShelfs();
+	}
 
 	/**
 	 * Adds a new Butler to the staff.
@@ -50,11 +67,20 @@ public class HeadButler implements Butler {
 	 * @param newButler the new Butler that was hired.
 	 * @return false if newButler already exists. 
 	 */
-	public boolean addButler(LibraryButler newButler) {
+	public boolean addButler(LibraryButlerInterface newButler) {
 
 		maxNumOfShelfs = Math.max(maxNumOfShelfs, newButler.countShelfs());
 
-		return staff.add(newButler);}
+		return staff.add(newButler);
+	}
+	
+	/**
+	 * Adds a new Butler to the staff, trained on the input virtBS
+	 * @return false if "new" butler already exists.
+	 */
+	public boolean addShelf(VirtualBookshelf virtBS) {	
+		return addButler(new VirtualLibraryButler(virtBS, 1));
+	}
 
 	/**
 	 * Fires the given butler.
