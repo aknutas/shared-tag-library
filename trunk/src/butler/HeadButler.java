@@ -7,6 +7,7 @@ import java.util.Set;
 import data.Book;
 import data.VirtualBook;
 import data.VirtualBookshelf;
+import data.VirtualLibrary;
 
 /**
  * The HeadButler class contains references to the VirtualLibraryButler and the
@@ -22,6 +23,18 @@ public class HeadButler implements Butler {
 	int maxNumOfShelfs;
 	double[] lastResults;
 
+	/**
+	 * Creates a new HeadButler from a given VirtualLibrary.
+	 * @param virtLib
+	 * @throws IllegalArgumentException
+	 */
+	public HeadButler(VirtualLibrary virtLib) throws IllegalArgumentException{
+		if (null == virtLib)
+			throw new IllegalArgumentException("VirtualLibrary cannot be null.");
+		staff = new HashSet<LibraryButlerInterface>();
+		staff.add(new VirtualLibraryButler(virtLib));
+	}
+	
 	/**
 	 * Constructs a new HeadButler. Requires a VirtualLibraryButler that was trained
 	 * on the entire local library.

@@ -26,6 +26,7 @@ import data.Book;
 import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
+import data.VirtualLibrary;
 
 /**
  * The VirtualLibraryButler class is an extension of LibraryButler. It is trained
@@ -348,13 +349,23 @@ public class VirtualLibraryButler extends LibraryButler {
 	
 	/**
 	 * Creates and initializes a new Butler from a shelf and number of shelfs.
-	 * Ready for use.
+	 * Butler is immediately ready for use.
 	 * @param shelf
 	 * @param numShelfs
 	 */
 	public VirtualLibraryButler(Bookshelf shelf, int numShelfs){
 		properties = new HashMap<String, String>();
 		initialize(shelf, numShelfs);
+	}
+	
+	/**
+	 * Creates and initializes a new Butler from a VirtualLibrary. Butler is
+	 * immediately ready for use.
+	 * @param virtLib
+	 */
+	public VirtualLibraryButler(VirtualLibrary virtLib) {
+		properties = new HashMap<String, String>();
+		initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
 	}
 
 	@Override
