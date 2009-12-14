@@ -958,8 +958,8 @@ public class Root extends JFrame {
     private JMenuItem sortBookshelfMenuItem() {
 	if (sortBookshelf == null) {
 	    sortBookshelf = new JMenuItem("Sort Bookshelf");
-	    sortBookshelf.setMnemonic(KeyEvent.VK_S);
-	    sortBookshelf.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+	    sortBookshelf.setMnemonic(KeyEvent.VK_O);
+	    sortBookshelf.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 		    ActionEvent.CTRL_MASK));
 	    sortBookshelf.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
