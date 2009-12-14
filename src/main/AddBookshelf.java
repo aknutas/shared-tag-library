@@ -83,7 +83,7 @@ public class AddBookshelf extends JDialog {
 			    }
 			}
 			results.setResults(shelf);
-			tree.addChild(shelf);
+			//tree.addChild(shelf);
 			tree.refresh();
 		    }
 
