@@ -365,6 +365,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	 */
 	public VirtualLibraryButler(VirtualLibrary virtLib) {
 		properties = new HashMap<String, String>();
+		properties.put("name", virtLib.getProperty("name"));
 		initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
 	}
 

@@ -33,13 +33,12 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	public RemoteLibraryButler(int connection, Control network, long timeout, int id) throws NullPointerException, RemoteObjectException {
 		super(connection, network, timeout);
 		this.id = id;
-		
+				
 		RemoteMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.id);
 		RemoteMessage response = this.send(message, timeout);
 		
 		ButlerWeights weights = (ButlerWeights)response.dequeParameter();
 		butler = new VirtualLibraryButler(weights);
-		
 	}
 
 	/**
