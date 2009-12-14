@@ -304,25 +304,6 @@ public class Controller {
 	}
 	
 	/**
-	 * 
-	 * @param alias
-	 * @return
-	 */
-
-	public synchronized Collection<String> allBookshelves(String alias) {
-		if (connections.isEmpty()) {
-			throw new IllegalArgumentException();
-		}
-
-		for (int id = 0; id < connections.size(); id++) {
-			if (connections.get(id).getAlias().equals(alias)) {
-				return connections.get(id).getRemoteShelfNames();
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * This method registers shutdown hook in the runtime system. The hook is
 	 * basically a thread that gets executed moments before the program
 	 * terminates. Do not add any commands here that would take longer than a
