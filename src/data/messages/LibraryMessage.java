@@ -29,7 +29,7 @@ public class LibraryMessage extends TrackedMessage {
 	public LibraryMessage(int messageType) throws IllegalArgumentException {
 		super(messageType);
 
-		if(messageType < RemoteMessage.MSG_PING || messageType > LibraryMessage.MSG_ITERATOR)
+		if(messageType < RemoteMessage.MSG_PING || messageType > LibraryMessage.MSG_BOOKSHELF_NAMES)
 			throw new IllegalArgumentException("illegal message type");
 	}
 	

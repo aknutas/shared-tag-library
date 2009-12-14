@@ -1,6 +1,8 @@
 package scripts;
 
 import controller.*;
+
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -34,7 +36,7 @@ public class DefaultProperties {
 		// TODO: add butler package properties
 		
 		/* controller package properties */
-		// TODO: add controller package properties
+		props.setProperty("controller::connection_meta", new HashMap<String, Serializable>());
 		
 		/* data package properties */
 		props.setProperty("data::timeout", new Integer(5000)); /* controls message timeout */

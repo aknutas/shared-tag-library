@@ -158,7 +158,7 @@ public class BookResponder extends RoutedResponder {
 		
 		/* create response */
 		BookMessage response = new BookMessage(BookMessage.MSG_PROPERTY_ITERATOR, this.getID());
-		response.queueParameter((new PropertyIteratorResponder(this.book.enumerateProperties())).getID());
+		response.queueParameter((new PropertyIteratorResponder(this.book.enumerateProperties().iterator())).getID());
 		return response;
 	}
 	
@@ -185,12 +185,8 @@ public class BookResponder extends RoutedResponder {
 				tags.put(tag.getKey(), tag.getValue());
 			}
 			
-			Iterator<Entry<String, String>> propertyIterator = book.enumerateProperties();
-			while(propertyIterator.hasNext()) {
-				Entry<String, String> property = propertyIterator.next();
-				
+			for(Entry<String, String> property : book.enumerateProperties())
 				properties.put(property.getKey(), property.getValue());
-			}
 		}
 		
 		/* create response */

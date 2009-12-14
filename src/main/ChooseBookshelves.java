@@ -55,7 +55,7 @@ public class ChooseBookshelves extends JDialog {
 	if (bookshelfList == null) {
 
 	    List<String> names = new ArrayList<String>();
-	    Iterator<String> bookshelves = library.getBookshelfNames();
+	    Iterator<String> bookshelves = library.getBookshelfNames().iterator();
 	    while (bookshelves.hasNext()) {
 		names.add(bookshelves.next());
 	    }

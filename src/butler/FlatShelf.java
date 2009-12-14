@@ -1,5 +1,6 @@
 package butler;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -32,10 +33,10 @@ public final class FlatShelf implements Book {
 
 		for (Book b : shelf) {
 
-			Iterator<Map.Entry<String, String>> bookProps = b.enumerateProperties();
+			//Iterator<Map.Entry<String, String>> bookProps = b.enumerateProperties();
 
-			while (bookProps.hasNext()) {
-				Map.Entry<String, String> prop = bookProps.next();
+			for(Map.Entry<String, String> prop : b.enumerateProperties()) {
+				//Map.Entry<String, String> prop = bookProps.next();
 				//System.out.println(prop.getKey() + ": " + prop.getValue());
 				if (!tags.containsKey(prop.getValue()))
 					tags.put(prop.getValue(), 1);
@@ -55,19 +56,14 @@ public final class FlatShelf implements Book {
 
 		}
 
-		Iterator<Map.Entry<String, String>> shelfProps = shelf.enumerateProperties();
-
-		while (shelfProps.hasNext()) {
-			Map.Entry<String, String> prop = shelfProps.next();
+		for(Map.Entry<String, String> prop : shelf.enumerateProperties())
 			properties.put(prop.getKey(), prop.getValue());
-		}
-
 	}
 	
 	public int getWeight(String tag) {return tags.get(tag);}
 
 	@Override
-	public Iterator<Entry<String, String>> enumerateProperties() {return properties.entrySet().iterator();}
+	public Collection<Entry<String, String>> enumerateProperties() {return properties.entrySet();}
 
 	@Override
 	public String getProperty(String name) throws NullPointerException {return properties.get(name);}

@@ -155,7 +155,7 @@ public class RemoteBook extends RemoteObject implements Book {
 	}
 	
 	@Override
-	public Iterator<Entry<String, String>> enumerateProperties() {
-		return this.properties.entrySet().iterator();
+	public Collection<Entry<String, String>> enumerateProperties() {
+		return this.properties.entrySet();
 	}	
 }

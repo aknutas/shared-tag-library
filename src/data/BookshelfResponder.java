@@ -113,7 +113,7 @@ public class BookshelfResponder extends RoutedResponder {
 		
 		/* create response */
 		BookshelfMessage response = new BookshelfMessage(BookshelfMessage.MSG_PROPERTY_ITERATOR, this.getID());
-		response.queueParameter((new PropertyIteratorResponder(this.shelf.enumerateProperties())).getID());
+		response.queueParameter((new PropertyIteratorResponder(this.shelf.enumerateProperties().iterator())).getID());
 		return response;
 	}
 	

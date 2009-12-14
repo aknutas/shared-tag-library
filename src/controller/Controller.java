@@ -273,7 +273,7 @@ public class Controller {
 	}
 	for (int id = 0; id < connections.size(); id++) {
 	    if (connections.get(id).getAlias().equals(alias))
-		return connections.get(id).getLib();
+		return connections.get(id).getLibrary();
 	}
 	return null;
     }
@@ -285,7 +285,7 @@ public class Controller {
 
 	for (int id = 0; id < connections.size(); id++) {
 	    if (connections.get(id).getAlias().equals(alias)) {
-		return connections.get(id).getBookshelfNames();
+		return connections.get(id).getLibrary().getBookshelfNames().iterator();
 	    }
 	}
 	return null;
@@ -572,7 +572,7 @@ public class Controller {
 	}
 	for (int i = 0; i < connections.size(); i++) {
 	    if (target.equals(connections.get(i).getAlias())) {
-		return search(searchTerms, connections.get(i).getLib());
+		return search(searchTerms, connections.get(i).getLibrary());
 	    }
 	}
 	return null;
@@ -583,7 +583,7 @@ public class Controller {
 	Vector<Library> libs = new Vector<Library>();
 	for (int i = 0; i < connections.size(); i++) {
 	    if (connections.get(i).isConnected())
-		libs.add(connections.get(i).getLib());
+		libs.add(connections.get(i).getLibrary());
 	}
 	libs.add(myLib);
 	return ControllerSearch.searchAlllibsFlat(str, libs);

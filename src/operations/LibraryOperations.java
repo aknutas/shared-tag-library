@@ -50,17 +50,12 @@ public abstract class LibraryOperations {
 		Iterator<Book> master = masterShelf.iterator();
 		Map<String, String> allProperties = new HashMap<String, String>();
 		
-		while (master.hasNext()){
+		while (master.hasNext()) {
 			//System.out.println("Master has next.");
 			Book current = master.next();
-			Iterator<Map.Entry<String, String>> props = current.enumerateProperties();
-			while (props.hasNext()){
-				Map.Entry<String, String> prop = props.next();
-				allProperties.put(prop.getKey(),prop.getValue());
-
-				//System.out.println("Props: " + prop.getKey() + " : " + prop.getValue());
-			}
 			
+			for(Map.Entry<String, String> prop : current.enumerateProperties())
+				allProperties.put(prop.getKey(), prop.getValue());
 		}
 		
 		return allProperties.entrySet().iterator();
