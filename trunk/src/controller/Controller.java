@@ -2,8 +2,6 @@ package controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +22,6 @@ import data.Bookshelf;
 import data.Library;
 import data.LibraryResponder;
 import data.PersistentLibrary;
-import data.RemoteObjectException;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 import database.Access;
