@@ -116,7 +116,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	} catch (ClassCastException e1) {
 	    System.out.println("You don't want to browse the library root...");
 	} catch (NullPointerException e2) {
-
+	    System.out.println("Error Retrieving Bookshelf");
+	} catch (IllegalArgumentException e2) {
+	    System.out.println("Error Processing Bookshelf");
 	}
     }
 
