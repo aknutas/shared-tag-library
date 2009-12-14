@@ -1,9 +1,8 @@
 package data;
 
-import java.util.*;
-import data.messages.*;
-import network.*;
-import network.messages.*;
+import data.messages.LibraryMessage;
+import data.messages.RemoteMessage;
+import data.messages.RoutedMessage;
 
 /**
  * The LibraryResponder class extends the RemoteResponder abstract class and is

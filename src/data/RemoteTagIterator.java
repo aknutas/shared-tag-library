@@ -1,8 +1,8 @@
 package data;
 
-import network.Control;
-import java.util.Map.*;
+import java.util.Map.Entry;
 
+import network.Control;
 import data.messages.IteratorMessage;
 
 public class RemoteTagIterator extends RemoteIterator<Entry<String, Integer>> {

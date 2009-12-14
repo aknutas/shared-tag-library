@@ -1,7 +1,5 @@
 package data;
 
-import java.util.*;
-
 /**
  * The Bookshelf interface stores a set of books. The Bookshelf is main
  * object used for searching through books.

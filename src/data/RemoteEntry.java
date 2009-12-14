@@ -1,10 +1,12 @@
 package data;
 
-import java.io.*;
-import java.util.Map.*;
+import java.io.Serializable;
+import java.util.Map.Entry;
 
 public class RemoteEntry<K, V> implements Entry<K, V>, Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	final K key;
 	final V value;
 	

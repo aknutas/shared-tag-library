@@ -1,9 +1,10 @@
 package data;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.*;
-import data.messages.*;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import data.messages.RemoteMessage;
 
 public class PropertyIteratorResponder extends IteratorResponder<Entry<String, String>> {
 

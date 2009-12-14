@@ -1,9 +1,8 @@
 package data;
 
-import java.util.*;
-import data.messages.*;
-import network.*;
-import network.messages.*;
+import data.messages.BookshelfMessage;
+import data.messages.RemoteMessage;
+import data.messages.RoutedMessage;
 
 public class BookshelfResponder extends RoutedResponder {
 

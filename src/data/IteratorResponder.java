@@ -1,8 +1,11 @@
 package data;
 
-import java.io.*;
-import java.util.*;
-import data.messages.*;
+import java.io.Serializable;
+import java.util.Iterator;
+
+import data.messages.IteratorMessage;
+import data.messages.RemoteMessage;
+import data.messages.RoutedMessage;
 
 public abstract class IteratorResponder<T> extends RoutedResponder {
 

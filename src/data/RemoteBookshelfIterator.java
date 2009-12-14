@@ -1,7 +1,7 @@
 package data;
 
-import data.messages.IteratorMessage;
 import network.Control;
+import data.messages.IteratorMessage;
 
 /**
  * The RemoteBookshelfIterator extends the RemoteIterator and is used to iterate
