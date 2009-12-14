@@ -139,12 +139,16 @@ public class ConnectionMetadata implements Serializable {
 	
 		return this.connected;
     }
-
-    public void selectShelves(Collection<String> shelves) {
+    
+    public Collection<String> getRemoteShelfNames() {
+    	return this.library.getBookshelfNames();
+        }
+    public Library selectShelves(Collection<String> shelves) {
 		this.selectedShelves = new VirtualLibrary();
 		Iterator<Bookshelf> iter = this.library.getBookshelf(shelves);
 		
 		while (iter.hasNext())
 		    this.selectedShelves.addBookshelf(iter.next());
+	return getLibrary();
     }
 }
