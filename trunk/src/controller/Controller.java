@@ -254,25 +254,25 @@ public class Controller {
 	}
 
 	/**
-	 * returns the library at the alias
+	 * returns the library at the alias consisting of the imported shelves 
 	 * 
 	 * @param alias
 	 * @return returns null if not connected
 	 */
-	public synchronized Library getLibrary(String alias) {
+	public synchronized Library getImportedLibrary(String alias) {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 		for (int id = 0; id < connections.size(); id++) {
-			if (connections.get(id).getAlias().equals(alias))
-				return connections.get(id).getLibrary();
+			if (connections.get(id).getAlias().equals(alias)){
+				return connections.get(id).getImportedLibrary();	
+			}
 		}
 		return null;
 	}
 	
 	/**
 	 * Gets the available shelves from a remote library
-	 * 
 	 * @param alias
 	 * @return returns null if not connected else an iterator of all shelf names
 	 */
@@ -282,7 +282,7 @@ public class Controller {
 		}
 		for (int id = 0; id < connections.size(); id++) {
 			if (connections.get(id).getAlias().equals(alias))
-				return connections.get(id).getRemoteShelfNames();
+				return connections.get(id).getLibrary().getBookshelfNames();
 		}
 		return null;
 	}
@@ -292,13 +292,14 @@ public class Controller {
 	 * @param alias
 	 * @return returns null if not connected else the library of selected shelves
 	 */
-	public synchronized Library SetShelveSelection(String alias,Collection<String> shelves) {
+	public synchronized Library setShelveSelection(String alias,Collection<String> shelves) {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 		for (int id = 0; id < connections.size(); id++) {
-			if (connections.get(id).getAlias().equals(alias))
-				return connections.get(id).selectShelves(shelves);
+			ConnectionMetadata conn = connections.get(id);
+			if (conn.getAlias().equals(alias))
+				return importSelectBookshelves(conn.getImportedLibrary(),conn.getLibrary(),shelves);
 		}
 		return null;
 	}
@@ -350,12 +351,24 @@ public class Controller {
 			throw new IllegalArgumentException();
 		Bookshelf bs;
 		while (iter.hasNext()) {
-			// System.out.println("dsaf");
 			bs = iter.next();
 			local.addBookshelf(bs);
 		}
 	}
-
+	public synchronized Library importSelectBookshelves(Library local, Library remote,Collection<String> selection) {
+		if (local == null || remote == null || selection == null) {
+			throw new IllegalArgumentException();
+		}
+		Iterator<Bookshelf> iter = remote.getBookshelf(selection);
+		if (iter == null)
+			throw new IllegalArgumentException();
+		Bookshelf bs;
+		while (iter.hasNext()) {
+			bs = iter.next();
+			local.addBookshelf(bs);
+		}
+		return local;
+	}
 	/**
 	 * This method is responsible for handling and responding to incoming
 	 * messages and status changes.
