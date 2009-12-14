@@ -32,8 +32,8 @@ public class ConnectTo extends JDialog {
     private JLabel jLabel = null;
     private JLabel jLabel1 = null;
     private JLabel jLabel2 = null;
-    private TreeView tree = null;
     private Root root = null;
+    private TreeView tree = null;
 
     /**
      * @param owner
@@ -129,9 +129,10 @@ public class ConnectTo extends JDialog {
 
 			    ChooseBookshelves dialog = new ChooseBookshelves(
 				    root, control, tree, control
-					    .getImportedLibrary(ipAlias.getText()));
+					    .getImportedLibrary(ipAlias
+						    .getText()));
 			    dialog.setVisible(true);
-			    
+
 			    tree.refresh();
 			} else {
 			    root.setStatus("Error Connecting");

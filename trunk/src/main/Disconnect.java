@@ -26,8 +26,8 @@ public class Disconnect extends JDialog {
     private JButton disconnectButton = null;
     private JComboBox ipAlias = null;
     private JPanel jContentPane = null;
-    private TreeView tree = null;
     private Root root = null;
+    private TreeView tree = null;
 
     /**
      * @param owner
