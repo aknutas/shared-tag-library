@@ -326,6 +326,8 @@ public class VirtualLibraryButler extends LibraryButler {
 
 	/**
 	 * Creates this with an existing ButlerWeights object
+	 * The Butler will not function properly until one of the
+	 * initialize methods are called.
 	 * @param weights the existing ButlerWeights object.
 	 */
 	public VirtualLibraryButler(ButlerWeights weights){
@@ -334,15 +336,25 @@ public class VirtualLibraryButler extends LibraryButler {
 	}
 
 	/**
-	 * Default constructor. Initializes this with a new BasicNetwork brain.
-	 * The LibraryButler will not function properly until one of the
+	 * Sets the name property of this to name.
+	 * The Butler will not function properly until one of the
 	 * initialize methods are called.
 	 */
 	public VirtualLibraryButler(String name){
 		properties = new HashMap<String, String>();
 		properties.put("name", name);
-		brain = new BasicNetwork();
 		initialized = false;
+	}
+	
+	/**
+	 * Creates and initializes a new Butler from a shelf and number of shelfs.
+	 * Ready for use.
+	 * @param shelf
+	 * @param numShelfs
+	 */
+	public VirtualLibraryButler(Bookshelf shelf, int numShelfs){
+		properties = new HashMap<String, String>();
+		initialize(shelf, numShelfs);
 	}
 
 	@Override
