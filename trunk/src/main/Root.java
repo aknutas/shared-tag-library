@@ -61,7 +61,9 @@ public class Root extends JFrame {
     static Root thisClass = null;
 
     /**
-     * @param args
+     * Initializes main loop.
+     * 
+     * @param args No arguments are parsed.
      */
     public static void main(String[] args) {
 
@@ -156,9 +158,9 @@ public class Root extends JFrame {
     private JLabel withinLabel = null;
 
     /**
-     * This is the default constructor
+     * This is the default constructor for the main object.
      */
-    public Root() {
+    protected Root() {
 	super();
 	// This is where message trigger handler gets created and started up.
 	msgTrigger = new MsgTrigger();
@@ -227,7 +229,7 @@ public class Root extends JFrame {
     }
 
     /**
-     * 
+     * Repaints and double-y assures that everything is displayed correctly.
      */
     protected void draw() {
 	treeView.draw();
@@ -760,7 +762,11 @@ public class Root extends JFrame {
 	return startMenu;
     }
 
-    public JToolBar getStatusBar() {
+    /**
+     * Returns a status bar for messages.
+     * 
+     */
+    private JToolBar getStatusBar() {
 	if (statusBar == null) {
 
 	    statusBar = new JToolBar();
@@ -918,7 +924,10 @@ public class Root extends JFrame {
 	return renameBookDialogMenuItem;
     }
 
-    public void resetSearchOptions() {
+    /**
+     * Resets search options (for new connections)
+     */
+    protected void resetSearchOptions() {
 	if (searchFilterComboBox != null && control != null) {
 	    searchFilterComboBox.setModel(new DefaultComboBoxModel(control
 		    .searchOptions().toArray(new String[0])));
@@ -939,7 +948,12 @@ public class Root extends JFrame {
 	return searchFilterComboBox;
     }
 
-    public void setStatus(String s) {
+    /**
+     * Updates the status, and automatically disappears after 5 seconds.
+     * 
+     * @param s New Status
+     */
+    protected void setStatus(String s) {
 
 	// Clear status after...
 	ActionListener clearText = new ActionListener() {

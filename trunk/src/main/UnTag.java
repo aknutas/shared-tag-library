@@ -18,6 +18,12 @@ import javax.swing.JTextField;
 
 import data.Book;
 
+/**
+ * Un-tag dialog for books
+ * 
+ * @author patrick
+ * 
+ */
 public class UnTag extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -30,8 +36,7 @@ public class UnTag extends JDialog {
     private SearchResults searchResults = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * Un-tag dialog for books
      */
     public UnTag(Frame owner, SearchResults s, ArrayList<Book> c) {
 	super(owner);

@@ -18,6 +18,12 @@ import javax.swing.JTextField;
 
 import data.Book;
 
+/**
+ * This is the add tag dialog.
+ * 
+ * @author patrick
+ * 
+ */
 public class AddTag extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -30,8 +36,7 @@ public class AddTag extends JDialog {
     private SearchResults searchResults = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * Add tag dialog
      */
     public AddTag(Frame owner, SearchResults s, ArrayList<Book> c) {
 	super(owner);

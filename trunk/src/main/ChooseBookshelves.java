@@ -19,6 +19,12 @@ import controller.Controller;
 import data.Bookshelf;
 import data.Library;
 
+/**
+ * This is the choose bookshelves dialog.
+ * 
+ * @author patrick
+ * 
+ */
 public class ChooseBookshelves extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -34,7 +40,7 @@ public class ChooseBookshelves extends JDialog {
     private String alias = "";  //  @jve:decl-index=0:
 
     /**
-     * @param owner
+     * Choose bookshelves dialog
      */
     public ChooseBookshelves(Frame owner, Controller c, TreeView t, Iterable<String> l, String a) {
 	super(owner);

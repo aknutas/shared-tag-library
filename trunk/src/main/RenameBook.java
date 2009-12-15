@@ -17,6 +17,12 @@ import javax.swing.JTextField;
 
 import data.Book;
 
+/**
+ * Rename book dialog
+ * 
+ * @author patrick
+ * 
+ */
 public class RenameBook extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -32,8 +38,7 @@ public class RenameBook extends JDialog {
     private SearchResults searchResults = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * Rename book dialog
      */
     public RenameBook(Frame owner, SearchResults s, Book c) {
 	super(owner);
@@ -44,7 +49,7 @@ public class RenameBook extends JDialog {
 	initialize();
     }
 
-    public Book getBook() {
+    protected Book getBook() {
 	return book;
     }
 

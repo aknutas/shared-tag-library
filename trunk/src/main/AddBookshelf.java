@@ -20,6 +20,12 @@ import controller.Controller;
 import data.Book;
 import data.Bookshelf;
 
+/**
+ * This is the add bookshelf dialog.
+ * 
+ * @author patrick
+ * 
+ */
 public class AddBookshelf extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -36,8 +42,7 @@ public class AddBookshelf extends JDialog {
     private TreeView tree = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * This is the add bookshelf dialog.
      */
     public AddBookshelf(Frame owner, Controller ctl, SearchResults r,
 	    TreeView treeView) {
@@ -52,7 +57,7 @@ public class AddBookshelf extends JDialog {
      * @param owner
      * @param treeView
      */
-    public AddBookshelf(Frame owner, Controller ctl, SearchResults r,
+    protected AddBookshelf(Frame owner, Controller ctl, SearchResults r,
 	    TreeView treeView, ArrayList<Book> b) {
 	super(owner);
 	control = ctl;
@@ -175,7 +180,7 @@ public class AddBookshelf extends JDialog {
 	return jTextField;
     }
 
-    public Bookshelf getShelf() {
+    protected Bookshelf getShelf() {
 	return shelf;
     }
 

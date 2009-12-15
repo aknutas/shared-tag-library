@@ -24,6 +24,8 @@ import javax.swing.JToggleButton;
 import data.Book;
 
 /**
+ * This is the search result (a book).
+ * 
  * @author patrick
  * 
  */
@@ -51,7 +53,10 @@ public class Result extends JPanel {
     private JPanel Title = null;
 
     /**
-     * @param b
+     * This is the result node for books.
+     * 
+     * @param b Book result
+     * @param c SearchResult pane
      */
     public Result(Book b, SearchResults c) {
 	super();
@@ -107,7 +112,7 @@ public class Result extends JPanel {
 	super.repaint();
     }
 
-    public Book getBook() {
+    protected Book getBook() {
 	return book;
     }
 
@@ -325,7 +330,7 @@ public class Result extends JPanel {
 	draw();
     }
 
-    public Boolean isSelected() {
+    protected Boolean isSelected() {
 	return selected;
     }
 

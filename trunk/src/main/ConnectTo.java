@@ -20,6 +20,12 @@ import javax.swing.JTextField;
 import controller.Controller;
 import data.RemoteObjectException;
 
+/**
+ * Connect to dialog
+ * 
+ * @author patrick
+ * 
+ */
 public class ConnectTo extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -37,8 +43,7 @@ public class ConnectTo extends JDialog {
     private TreeView tree = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * Connect to dialog
      */
     public ConnectTo(Frame owner, Controller ctl, TreeView treeView) {
 	super(owner);
@@ -147,9 +152,6 @@ public class ConnectTo extends JDialog {
 			root.setStatus("Error Connecting (Already Connected)");
 		    } catch (NullPointerException e) {
 			root.setStatus("Error Connecting (NULL)");
-		    } catch (RemoteObjectException e) {
-			root.setStatus("Error Connecting (Cannot Establish Butler)");
-			e.printStackTrace();
 		    }
 		    setVisible(false);
 		}

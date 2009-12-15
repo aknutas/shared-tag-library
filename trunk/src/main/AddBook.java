@@ -19,6 +19,12 @@ import controller.Controller;
 import data.Book;
 import data.Bookshelf;
 
+/**
+ * This is the add book dialog.
+ * 
+ * @author patrick
+ * 
+ */
 public class AddBook extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -61,7 +67,7 @@ public class AddBook extends JDialog {
 	initialize();
     }
 
-    public Book getBook() {
+    protected Book getBook() {
 	return book;
     }
 
@@ -213,7 +219,7 @@ public class AddBook extends JDialog {
 	return jTextField1;
     }
 
-    public Bookshelf getShelf() {
+    protected Bookshelf getShelf() {
 	return shelf;
     }
 

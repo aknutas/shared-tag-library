@@ -12,6 +12,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * Help dialog displays a introductory level guide for using basic functionality of the program, and displaying an about page.
+ * 
+ * 
+ * @author piranspa
+ *
+ */
 public class Help extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -27,6 +34,8 @@ public class Help extends JDialog {
     private String[] topics = { "Intro", "Basics", "Tags", "About" };
 
     /**
+     * Main constructor for dialog.
+     * 
      * @param owner
      */
     public Help(Frame owner) {
@@ -35,6 +44,8 @@ public class Help extends JDialog {
     }
 
     /**
+     * Convenience constructor for asking for about page.
+     * 
      * @param owner
      */
     public Help(Frame owner, Boolean about) {
@@ -45,7 +56,7 @@ public class Help extends JDialog {
     }
 
     /**
-     * This method initializes jContentPane
+     * This method initializes the main content pane.
      * 
      * @return javax.swing.JPanel
      */
@@ -60,7 +71,7 @@ public class Help extends JDialog {
     }
 
     /**
-     * This method initializes jList
+     * This method initializes the list of bookshelves.
      * 
      * @return javax.swing.JList
      */
