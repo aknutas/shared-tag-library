@@ -82,7 +82,7 @@ public class Controller {
 				.getProperty("controller::connections");
 		if (connections == null)
 			connections = new Vector<ConnectionMetadata>();
-		//System.out.println(qb.getButlerWeights().isEmpty());
+		System.out.println(qb.getButlerWeights().isEmpty());
 		// Registering shutdown hooks
 		addShutdownHooks();
 	}
@@ -292,6 +292,24 @@ public class Controller {
 			}
 		}
 		return null;
+	}
+	
+	
+	/**
+	 * returns A vector of all connected remote libraries 
+	 * @return returns empty if no connections
+	 */
+	public synchronized Vector<Library> retrieveRemoteLibraries() {
+		if (connections.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		Vector<Library> libs = new Vector<Library>();
+		for (int id = 0; id < connections.size(); id++) {
+			if (connections.get(id).isConnected()) {
+				libs.add(connections.get(id).getImportedLibrary());
+			}
+		}
+		return libs;
 	}
 
 	/**
