@@ -116,8 +116,6 @@ public class ConnectTo extends JDialog {
 		    try {
 			if (addressField.getText().equals("")) {
 
-			    System.out.println((String) connectionList
-				    .getSelectedItem());
 			    control.connect((String) connectionList
 				    .getSelectedItem());
 			    ipAlias.setText((String) connectionList
