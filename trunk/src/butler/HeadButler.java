@@ -1,8 +1,11 @@
 package butler;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 import data.Book;
 import data.VirtualBook;
@@ -17,11 +20,13 @@ import data.VirtualLibrary;
  * @author sjpurol
  *
  */
-public class HeadButler implements Butler {
+public class HeadButler{
 
-	Set<LibraryButlerInterface> staff;
+	Map<String, LibraryButlerInterface> staff;
+	private int numOfLocalButlers;
 	int maxNumOfShelfs;
-	double[] lastResults;
+	FlatShelf bestFitShelf;
+	double bestFitResult;
 
 	/**
 	 * Creates a new HeadButler from a given VirtualLibrary.
@@ -31,10 +36,11 @@ public class HeadButler implements Butler {
 	public HeadButler(VirtualLibrary virtLib) throws IllegalArgumentException{
 		if (null == virtLib)
 			throw new IllegalArgumentException("VirtualLibrary cannot be null.");
-		staff = new HashSet<LibraryButlerInterface>();
-		staff.add(new VirtualLibraryButler(virtLib));
+		staff = new HashMap<String, LibraryButlerInterface>();
+		staff.put("local0", new VirtualLibraryButler(virtLib));
+		numOfLocalButlers = 1;
 	}
-	
+
 	/**
 	 * Constructs a new HeadButler. Requires a VirtualLibraryButler that was trained
 	 * on the entire local library.
@@ -50,13 +56,14 @@ public class HeadButler implements Butler {
 	public HeadButler(VirtualLibraryButler wadsworth) throws IllegalArgumentException{
 		if (null == wadsworth)
 			throw new IllegalArgumentException("VirtualLibraryButler cannot be null.");
-		staff = new HashSet<LibraryButlerInterface>();
-		staff.add(wadsworth);
+		staff = new HashMap<String, LibraryButlerInterface>();
+		staff.put("local0", wadsworth);
+		numOfLocalButlers = 1;
 
 		maxNumOfShelfs = wadsworth.countShelfs();
 
 	}
-	
+
 	/**
 	 * Constructs a new HeadButler from a collection of ButlerWeights. These weights
 	 * would most likely be pulled from the database.
@@ -67,11 +74,23 @@ public class HeadButler implements Butler {
 	public HeadButler(Collection<ButlerWeights> weights) throws IllegalArgumentException {
 		if (null == weights)
 			throw new IllegalArgumentException("weights cannot be null");
-		staff = new HashSet<LibraryButlerInterface>();
-		for (ButlerWeights bw : weights)
-			staff.add(new VirtualLibraryButler(bw));
-		
-		reCountShelfs();
+		if (weights.isEmpty()) {
+			staff = new HashMap<String, LibraryButlerInterface>();
+			staff.put("local0", new VirtualLibraryButler(new VirtualLibrary()));
+			numOfLocalButlers = 1;
+		}
+		else {
+			staff = new HashMap<String, LibraryButlerInterface>();
+			String local = "local";
+			numOfLocalButlers = 0;
+			for (ButlerWeights bw : weights) {
+				String name = local + String.valueOf(numOfLocalButlers);
+				staff.put(name, new VirtualLibraryButler(bw));
+				numOfLocalButlers++;
+			}
+
+			reCountShelfs();
+		}
 	}
 
 	/**
@@ -80,202 +99,114 @@ public class HeadButler implements Butler {
 	 * @param newButler the new Butler that was hired.
 	 * @return false if newButler already exists. 
 	 */
-	public boolean addButler(LibraryButlerInterface newButler) {
+	public void addButler(LibraryButlerInterface newButler) {
 
 		maxNumOfShelfs = Math.max(maxNumOfShelfs, newButler.countShelfs());
+		String name = "";
+		if (newButler instanceof VirtualLibraryButler) {
+			name = "local" + String.valueOf(numOfLocalButlers);
+			numOfLocalButlers++;
+		}
+		else
+			name = ((RemoteLibraryButler)newButler).getProperty("name");
 
-		return staff.add(newButler);
+		staff.put(name, newButler);
 	}
-	
+
 	/**
 	 * Adds a new Butler to the staff, trained on the input virtBS
-	 * @return false if "new" butler already exists.
 	 */
-	public boolean addShelf(VirtualBookshelf virtBS) {	
-		return addButler(new VirtualLibraryButler(virtBS, 1));
+	public void addShelf(VirtualBookshelf virtBS) {
+		addButler(new VirtualLibraryButler(virtBS, 1));
 	}
-	
+
 	/**
 	 * Adds a new Butler to the staff, trained on the input virtBS split into at most numShelfs categories.
-	 * @return false if "new" butler already exists.
 	 */
-	public boolean addShelf(VirtualBookshelf virtBS, int numShelfs) {	
-		return addButler(new VirtualLibraryButler(virtBS, numShelfs));
+	public void addShelf(VirtualBookshelf virtBS, int numShelfs) {	
+		addButler(new VirtualLibraryButler(virtBS, numShelfs));
 	}
 
 	/**
 	 * Fires the given butler.
 	 * 
 	 * @param oldButler the old Butler that was fired.
-	 * @return false if oldButler did not exist.
 	 */
-	public boolean removeButler(LibraryButler oldButler) {
+	public void removeButler(LibraryButler oldButler) {
 
 		if (maxNumOfShelfs == oldButler.countShelfs())
 			reCountShelfs();
 
-		return staff.remove(oldButler);
+		staff.remove(oldButler);
+	}
+
+	/**
+	 * Fires the given RemoteButler.
+	 * 
+	 * @param alias the name of the remote Butler that was fired.
+	 */
+	public void removeButler(String alias){
+		staff.remove(alias);
 	}
 
 	/**
 	 * Recounts the max number of shelfs.
 	 */
-	private void reCountShelfs() {
+	protected void reCountShelfs() {
 		int newNum = 0;
-		for (LibraryButlerInterface b : staff)
+		for (LibraryButlerInterface b : staff.values())
 			newNum = Math.max(newNum, b.countShelfs());
 		maxNumOfShelfs = newNum;
 
 	}
 
 	/**
-	 * Takes a double[][] as input and normalizes each row
-	 * to a scale of -1.0 - 1.0
-	 * @param input the values to normalize
-	 * @return the normalized values
-	 */
-	private double[][] normalize(double[][] input) {
-
-		double[][] normal = new double[input.length][];
-
-		for (int i = 0; i < input.length; ++i) {
-			//System.out.println("normalize row: " + i + " / " + (input.length-1));
-			double[] row = input[i];
-			double max = Double.MIN_VALUE;
-
-			for (int j = 0; j < row.length; ++j)
-				max = Math.max(max, Math.abs(row[j]));
-
-			for (int j = 0; j < row.length; ++j)
-				row[j] = row[j] / max;
-
-			normal[i] = row;
-		}
-
-		//System.out.println("normalized");
-		return normal;
-	}
-
-	/**
-	 * Takes a double[][] and compacts it into a double[].
-	 */
-	private double[] compact (double[][] input) {
-
-		int size = 0;
-		int rows = 0;
-		for (; rows < input.length; ++rows) {
-			size = size + input[rows].length; 
-		}
-
-		double[] returnValue = new double[size+rows];
-		int index = 0;
-		for (int i = 0; i < rows; ++i) {
-			for (int j = 0; j < input[i].length; ++j) {
-				//System.out.println("i: " + i + " j: " + j);
-
-				returnValue[index] = input[i][j];
-				++index;
-			}
-			returnValue[index] = (-1*i) - 2;
-			//System.out.println(returnValue[index]);
-
-			++index;
-		}
-
-		//System.out.println("compacted.");
-		return returnValue;
-	}
-
-	/**
 	 * Assembles the staff to determine book membership.
 	 * 
 	 * @param b the book to check 
-	 * @return a string of the form: "ButlerName: ShelfName"
+	 * @return the FlatShelf that this book best fits on.
 	 */
-	public String checkBook(Book b) { return identify(compareTo(b));}
+	public FlatShelf checkBook(Book b) {
 
-	/**
-	 * Assembles the staff to determine book membership.
-	 * The return value should only be used as the parameter to "identify(int)"
-	 * 
-	 * @param b the book to check 
-	 */
-	@Override
-	@Deprecated
-	public int compareTo(Book b) {
-
-		double[][] answers = new double[staff.size()][];
+		//double[][] answersX = new double[staff.size()][];
 
 		int butle = 0; //it's what a butler does... he butles.
-
-		for (LibraryButlerInterface wadsworth : staff) {
-			answers[butle] = wadsworth.assemble(b);
-			butle++;
-		}
-
-		double[] compact = compact(normalize(answers));
 		
-		double best = Double.MIN_VALUE;
+		Map<Integer, LibraryButlerInterface> staffIDs = new HashMap<Integer, LibraryButlerInterface>();
+		Map<FlatShelf, Double> answers = new HashMap<FlatShelf, Double>();
 
-		for (int i = 0; i < compact.length; ++i) {
-			//System.out.println("compact[" + i + "]: " + compact[i]);
-			best = Math.max(best, compact[i]);
-		}
-
-		int index = -1;
-
-		for (int i = 0; i < compact.length; ++i) {
-			if (compact[i] == best) {
-				index = i;
+		for (LibraryButlerInterface wadsworth : staff.values()) {
+			
+			Map.Entry<FlatShelf, Double> temp = wadsworth.assemble(b);
+			//System.out.println("Best fit from " + wadsworth.getProperty("name") + " is " + temp.getKey().getProperty("name"));
+			
+			if (!(null == temp)) {
+				staffIDs.put(butle, wadsworth);
+				butle++;
 			}
+			
+			answers.put(temp.getKey(), temp.getValue());
 		}
-		lastResults = compact;
-
-		return index;
+		
+		FlatShelf bestShelf = null;
+		double bestOutput = Double.MIN_VALUE;
+		
+		for (Map.Entry<FlatShelf, Double> e : answers.entrySet()) {
+			bestOutput = Math.max(bestOutput, e.getValue());
+			if (bestOutput == e.getValue())
+				bestShelf = e.getKey();
+		}
+		
+		bestFitShelf = bestShelf;
+		bestFitResult = bestOutput;
+		
+		return bestFitShelf;
 	}
 
-	/**
-	 * Identifies the LibraryButler and Bookshelf that a given index points to within lastResults.
-	 * @param index the index to look up.
-	 * @return a string of the form: "ButlerName: ShelfName"
-	 */
-	public String identify(int index) {
-
-		//System.out.println("index: "+ index);
-
-		int k = index;
-
-			while ( k > 0 && lastResults[k] >= 0) {
-				--k;
-			}
-
-		int butlerNumber;
-
-		if (k == 0)
-			butlerNumber = 0;
-		else
-			butlerNumber = -1 * ( (int)lastResults[k] + 2);
-
-		//System.out.println("index: " + index + " k: " + k + " butlerNumber: " + butlerNumber);
-		int shelfNumber = index-k-butlerNumber;
-
-		int i = 0;
-		LibraryButlerInterface best = null;
-		//System.out.println("is " + i + " < " + butlerNumber);
-		for (LibraryButlerInterface b : staff)
-			if (i == butlerNumber)
-				best = b;
-			else
-				++i;
-		
-		if (null == best)
-			return new String("Error! No best fit detected!");
-		
-		//System.out.println("best has: " + best.countShelfs() + " shelfs.");
-		System.out.println("looking for shelf #" + shelfNumber);
-		String shelfName = best.identifyShelf(shelfNumber);
-
-		return new String(best.getProperty("name") + ": " + shelfName);
+	protected Map.Entry<FlatShelf, Double> remoteAssemble(Book b) {
+		HashMap<FlatShelf, Double> tmp = new HashMap<FlatShelf, Double>();
+		tmp.put(checkBook(b), bestFitResult);
+		return tmp.entrySet().iterator().next();
 	}
 
 	/**
@@ -296,6 +227,8 @@ public class HeadButler implements Butler {
 		return oldWeights;
 	}
 
+	public int getNumOfLocalButlers() {return numOfLocalButlers;}
+
 	/**
 	 * Returns a collection of the VirtualLibraryButlers in the staff.
 	 * If there are no VirtualLibraryButlers in the staff, returns null.
@@ -304,7 +237,7 @@ public class HeadButler implements Butler {
 
 		Collection<VirtualLibraryButler> butlers = new HashSet<VirtualLibraryButler>();
 
-		for (LibraryButlerInterface b : staff)
+		for (LibraryButlerInterface b : staff.values())
 			if (b instanceof VirtualLibraryButler)
 				butlers.add((VirtualLibraryButler) b);
 
@@ -316,7 +249,8 @@ public class HeadButler implements Butler {
 
 	public static void main(String[] args) {
 
-		VirtualBookshelf bs = new VirtualBookshelf();
+		VirtualBookshelf kid = new VirtualBookshelf();
+		VirtualBookshelf horror = new VirtualBookshelf();
 
 		Book green = new VirtualBook("Green Eggs and Ham", "Dr. Seuss");
 		String[] greenTags = {"childrens books","dr seuss","classic",
@@ -349,7 +283,7 @@ public class HeadButler implements Butler {
 			}
 		}
 
-		bs.insert(green);
+		kid.insert(green);
 
 		Book cat = new VirtualBook("The Cat in the Hat", "Dr. Seuss");
 		String[] catTags = {"childrens books","early reader","childrens literature",
@@ -365,7 +299,7 @@ public class HeadButler implements Butler {
 			}
 		}
 
-		bs.insert(cat);
+		kid.insert(cat);
 
 		Book fish = new VirtualBook("One Fish Two Fish Red Fish Blue Fish", "Dr. Seuss");
 
@@ -394,7 +328,7 @@ public class HeadButler implements Butler {
 			}
 		}
 
-		bs.insert(fish);
+		kid.insert(fish);
 
 		Book places = new VirtualBook("Oh, the Places You'll Go!", "Dr. Seuss");
 
@@ -439,7 +373,7 @@ public class HeadButler implements Butler {
 
 		}
 
-		bs.insert(places);
+		kid.insert(places);
 
 		Book it = new VirtualBook("It", "Stephen King");
 		String[] itTags = {"stephen king","horror","horror book","fiction",
@@ -455,11 +389,11 @@ public class HeadButler implements Butler {
 				"novels","one of my favorites","possible-kindle","read",
 				"review","roger3","room 237","shelf","stephen king horror",
 				"stephen king it","supernatural","suspense","thriller",
-				"urban fantasy","wordy","childrens books"};
+				"urban fantasy","wordy"};
 
 		int[] itWeights = {24,73,26,21,18,13,10,10,9,8,4,3,3,2,2,2,2,2,
 				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				1,1,1,1,1,1,1,1,1,1,1,1, -100};
+				1,1,1,1,1,1,1,1,1,1,1,1};
 
 		for (int i = 0; i < itTags.length; ++i){
 			int num = itWeights[i];
@@ -469,7 +403,7 @@ public class HeadButler implements Butler {
 			}
 		}
 
-		bs.insert(it);
+		horror.insert(it);
 
 		Book catBack = new VirtualBook("The Cat in the Hat Comes Back", "Dr. Seuss");
 		String[] backTags = {"dr seuss","childrens books","beginner books",
@@ -491,6 +425,8 @@ public class HeadButler implements Butler {
 				--num;
 			}
 		}
+		
+		kid.insert(catBack);
 
 		Book salem = new VirtualBook("Salems' Lot", "Stephen King");
 		String[] salemTags = {"horror","stephen king","vampire",
@@ -504,9 +440,9 @@ public class HeadButler implements Butler {
 				"mary kate","mass market paperback","modern gothic",
 				"not free sf reader","novels",
 				"one of my favorite king stories","shelf","smart horror",
-				"vampire books","vamps","writer", "childrens book"};
+				"vampire books","vamps","writer"};
 
-		int[] salemWeights = {84,29,47,13,12,9,7,3,3,3,3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-523};
+		int[] salemWeights = {84,29,47,13,12,9,7,3,3,3,3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
 		for (int i = 0; i < salemTags.length; ++i){
 			int num = salemWeights[i];
@@ -515,6 +451,8 @@ public class HeadButler implements Butler {
 				--num;
 			}
 		}
+		
+		horror.insert(salem);
 
 		Book interview = new VirtualBook("Interview with a Vampire", "Anne Rice");
 		String[] interviewTags = {"vampire","anne rice","vampire chronicles",
@@ -533,10 +471,10 @@ public class HeadButler implements Butler {
 				"scary stories","series","silverbullet","southern discomfort",
 				"spouse","stake","summerreading","trips and journeys",
 				"uncompromising","vampire book","vampire novel","women",
-				"women writers", "childrens book"};
+				"women writers"};
 		int[] interviewWeights = {134,67,36,18,10,91,7,5,5,4,3,3,3,3,2,2,2,
 				2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-59};
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
 		for (int i = 0; i < interviewTags.length; ++i){
 			int num = interviewWeights[i];
@@ -546,18 +484,30 @@ public class HeadButler implements Butler {
 				--num;
 			}
 		}
+		
+		horror.insert(interview);
 
 		System.out.println("Books initialized");
 
 		VirtualLibraryButler wadsworth = new VirtualLibraryButler("wadsworth");
+		VirtualLibraryButler scaryTim = new VirtualLibraryButler("scaryTim");
 
-		wadsworth.initialize(bs, 3);
+		wadsworth.initialize(kid, 5);
+		scaryTim.initialize(horror, 2);
 
 		System.out.println("Wadsworth initialized");
 		HeadButler TimCurry = new HeadButler(wadsworth);
+		TimCurry.addButler(scaryTim);
 
-		System.out.println(interview.getProperty("title"));
-		System.out.println(TimCurry.identify(TimCurry.compareTo(interview)));
+		System.out.println("Scary Books:");
+		System.out.println(TimCurry.checkBook(interview).getProperty("name"));
+		System.out.println(TimCurry.checkBook(it).getProperty("name"));
+		System.out.println(TimCurry.checkBook(salem).getProperty("name"));
+
+		System.out.println("Kid's Books:");
+		System.out.println(TimCurry.checkBook(cat).getProperty("name"));
+		System.out.println(TimCurry.checkBook(places).getProperty("name"));
+		//System.out.println(TimCurry.identify(TimCurry.compareTo(interview)));
 
 	}
 

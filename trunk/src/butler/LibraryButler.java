@@ -1,5 +1,6 @@
 package butler;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -60,23 +61,55 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 				inputValues[current] = ( (double)tag.getValue() );/// maxTagMag);
 			//inputValues[current.getValue()] = ( (double)tag.getValue() / maxTagMag);
 		}
+		
+		double max[] = max(inputValues);
+		for (int i = 0; i < inputValues.length; ++i)
+			inputValues[i] = inputValues[i] / max[0];
+		
 		return inputValues;
 	}
 	
 	/**
 	 * Typically called by the HeadButler. Runs the input book through
-	 * the brain and returns the raw output vector. If this butler was
-	 * initialized with the empty library, returns a size 0 array.
+	 * the brain and returns an entry containing the matching FlatShelf
+	 * and the corresponding raw output value. If this butler was
+	 * initialized with the empty library, returns null.
 	 * 
 	 * @param b the book to examine
 	 */
-	public double[] assemble(Book b) {
+	public Map.Entry<FlatShelf, Double> assemble(Book b) {
 		
 		double[] inputValues = readyBook(b);
 		NeuralData book = new BasicNeuralData(inputValues);
 		if (flatShelfs.size() == 0)
-			return new double[0];
-		return brain.compute(book).getData();
+			return null;
+				
+		double[] answer = max(brain.compute(book).getData());
+		
+		//for (double d : answer)
+		//	System.out.println(d);
+
+		Map<FlatShelf, Double> temp = new HashMap<FlatShelf, Double>();
+		temp.put(flatShelfs.get((int)answer[1]), answer[0]);
+		return temp.entrySet().iterator().next();
+	}
+	
+	protected double[] max(double[] input) {
+		
+		double max = Double.MIN_VALUE;
+		int index = -1;
+		
+		for (int i = 0; i < input.length; ++i) {
+			max = Math.max(max, input[i]);
+			if (max == input[i])
+				index = i;
+		}
+		
+		double[] answer = new double[2];
+		answer[0] = max;
+		answer[1] = index;
+		
+		return answer;
 	}
 	
 	/**
@@ -87,8 +120,16 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 * @return a String containing the name of the FlatShelf
 	 */
 	public String identifyShelf(int index) {
+		/*if (null == flatShelfs)
+			System.out.println("Flatshelfs is null!");
+		else if (null == flatShelfs.get(index))
+			System.out.println("This particular flatshelf is null");
+		else if (null == flatShelfs.get(index).getProperty("name"))
+			System.out.println("This particular flatshelf does not have a name");*/
 		//System.out.println(index);
-		return flatShelfs.get(index).getProperty("name");}
+		return flatShelfs.get(index).getProperty("name");
+	
+	}
 	
 	/**
 	 * Returns the number of shelfs this LibraryButler has learned.
