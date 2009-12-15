@@ -305,10 +305,16 @@ public class Controller {
 		}
 		for (int id = 0; id < connections.size(); id++) {
 			ConnectionMetadata conn = connections.get(id);
-			if (conn.getAlias().equals(alias))
+			if (conn.getAlias().equals(alias)){
+			    if(conn.isConnected()){
 				return importSelectBookshelves(conn.getImportedLibrary(), conn
 						.getLibrary(), shelves);
+			    }
+				else
+					System.out.println("EROR not connected");				    
+			}
 		}
+		System.out.println("error finding connection");
 		return null;
 	}
 
@@ -359,13 +365,13 @@ public class Controller {
 	 * @param local
 	 * @param remote
 	 */
-	public synchronized void importAllBookshelves(Library local, Library remote) throws IllegalArgumentException{
+	private synchronized void importAllBookshelves(Library local, Library remote) throws NullPointerException{
 		if (local == null || remote == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		Iterator<Bookshelf> iter = remote.iterator();
 		if (iter == null)
-			throw new IllegalArgumentException();
+			throw new NullPointerException("remote library iterator failure");
 		Bookshelf bs;
 		while (iter.hasNext()) {
 			bs = iter.next();
@@ -381,14 +387,21 @@ public class Controller {
 	 * @param selection
 	 * @return
 	 */
-	public synchronized Library importSelectBookshelves(Library local,
-			Library remote, Collection<String> selection) throws IllegalArgumentException {
-		if (local == null || remote == null || selection == null) {
-			throw new IllegalArgumentException();
+	private synchronized Library importSelectBookshelves(Library local,
+			Library remote, Collection<String> selection) throws NullPointerException {
+		System.out.println("Selecting shelves");
+	    if (local == null || remote == null || selection == null) {
+			throw new NullPointerException();
 		}
-		Iterator<Bookshelf> iter = remote.getBookshelf(selection).iterator();
+	    	for(String str:selection)
+			System.out.println(str);
+	    	    
+		Iterable<Bookshelf> shelves = remote.getBookshelf(selection);
+		if(shelves==null)
+			System.out.println("No valid shelves");	    
+		Iterator<Bookshelf> iter = shelves.iterator();
 		if (iter == null)
-			throw new IllegalArgumentException();
+			throw new NullPointerException("remote library iterator failure");
 		Bookshelf bs;
 		while (iter.hasNext()) {
 			bs = iter.next();
