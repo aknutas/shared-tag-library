@@ -42,6 +42,10 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * @param args
 	 */
 	public static void main(String[] args){
+		
+		VirtualLibrary emptyLib = new VirtualLibrary();
+		VirtualLibraryButler dumbBut = new VirtualLibraryButler(emptyLib);
+		
 		//ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
 		//sg.generateLibrary(20, 5);
 
@@ -366,7 +370,10 @@ public class VirtualLibraryButler extends LibraryButler {
 	public VirtualLibraryButler(VirtualLibrary virtLib) {
 		properties = new HashMap<String, String>();
 		properties.put("name", virtLib.getProperty("name"));
-		initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
+		if (virtLib.getMasterShelf().size() > 0)
+			initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
+		else
+			initialized = false;
 	}
 
 	@Override
@@ -426,13 +433,13 @@ public class VirtualLibraryButler extends LibraryButler {
 		while (tags.hasNext()){
 			Map.Entry<String, Integer> tag = tags.next();
 			//System.out.println("tags: " + tag.getKey() + " : " + tag.getValue());
-			IDPair current = idPairs.get(tag.getKey());
+			Integer current = idPairs.get(tag.getKey());
 			if (current == null){
 				//current = idPairs.get(OTHER);
 				//inputValues[current.getValue()] += tag.getValue();
 			}
 			else
-				inputValues[current.getValue()] = tag.getValue();
+				inputValues[current] = tag.getValue();
 
 			//inputPairs.add(new InputPair(current.getValue(), (double)tag.getValue()));
 
@@ -498,9 +505,9 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * Creates the IDPairSet that identifies which tag goes to which input neuron.
 	 * @param basis the bookshelf that contains the books which contain the tags to be ID'ed.
 	 */
-	private IDPairSet identifyInputs(Bookshelf basis) {
+	private Map<String, Integer> identifyInputs(Bookshelf basis) {
 
-		IDPairSet idPairs = new IDPairSet();
+		Map<String, Integer> idPairs = new HashMap<String, Integer>();
 
 		maxTagMag = 0;
 
@@ -518,13 +525,13 @@ public class VirtualLibraryButler extends LibraryButler {
 
 				maxTagMag = Math.max(maxTagMag, Math.abs(tag.getValue()));
 
-				if (!idPairs.contains(tag.getKey())) {
-					idPairs.add(new IDPair(tag.getKey(), i));
+				if (!idPairs.containsValue(tag.getKey())) {
+					idPairs.put(tag.getKey(), i);
 					++i;
 				}
 			}
 		}
-		idPairs.add(new IDPair(OTHER, i));
+		idPairs.put(OTHER, i);
 
 		numTags = i+1;
 
@@ -559,20 +566,20 @@ public class VirtualLibraryButler extends LibraryButler {
 
 			while (tags.hasNext()) {
 				Map.Entry<String, Integer> tag = tags.next();
-				int index = idPairs.get(tag.getKey()).getValue();
+				Integer index = idPairs.get(tag.getKey());
 
-				if (index > numTags) {
+				if (index.intValue() > numTags) {
 					System.out.println("ERROR: INDEX OUT OF BOUNDS!");
 					System.out.println("name: " + tag.getKey() + " index: " + index);
 					System.out.println("numTags: " + numTags);
 
 				}
-				else if (index == numTags) {
+				else if (index.intValue() == numTags) {
 					//System.out.println("__OTHER__ detected!");
-					inputValues[i][index] += ( (double)tag.getValue() / (double) maxTagMag );
+					inputValues[i][index.intValue()] += ( (double)tag.getValue() / (double) maxTagMag );
 				}
 				else {
-					inputValues[i][index] = ( (double)tag.getValue() / (double) maxTagMag );
+					inputValues[i][index.intValue()] = ( (double)tag.getValue() / (double) maxTagMag );
 				}
 			}
 			++i;
@@ -705,7 +712,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				while (tags.hasNext()) {
 
 					Map.Entry<String, Integer> tag = tags.next();
-					int index = idPairs.get(tag.getKey()).getValue();
+					int index = idPairs.get(tag.getKey());
 
 					if (index > numTags) {
 						System.out.println("ERROR: INDEX OUT OF BOUNDS!");
