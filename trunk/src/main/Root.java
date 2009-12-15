@@ -800,7 +800,7 @@ public class Root extends JFrame {
      */
     private TreeView getTreeView() {
 	if (treeView == null) {
-	    treeView = new TreeView(control, searchResults);
+	    treeView = new TreeView(this, control, searchResults);
 	}
 	return treeView;
     }

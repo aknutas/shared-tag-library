@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Dimension;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -14,6 +15,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import controller.Controller;
 import data.Bookshelf;
+import data.Library;
 
 public class TreeView extends JPanel implements TreeSelectionListener {
 
@@ -24,30 +26,23 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
     private JTree tree = new JTree(top);
     JScrollPane treeView = new JScrollPane(tree);
+    private Root root = null;
 
     /**
      * @param l
      */
-    public TreeView(Controller c, SearchResults s) {
+    public TreeView(Root r, Controller c, SearchResults s) {
 
 	super();
+	root = r;
 	control = c;
 	results = s;
 	initialize();
     }
 
- /*   public void addChild(Bookshelf shelf) {
-
-	if (shelf != null) {
-	    
-	    top.add(new TreeNode(shelf));
-	    refresh();
-	}
-    }
-*/
     protected void draw() {
 
-//	((DefaultTreeModel) tree.getModel()).reload();
+	// ((DefaultTreeModel) tree.getModel()).reload();
 	this.repaint();
     }
 
@@ -95,13 +90,21 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	top.removeAllChildren();
 
 	Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
-
 	while (bookshelves.hasNext()) {
-	    
+
 	    Bookshelf shelf = bookshelves.next();
 	    top.add(new TreeNode(shelf));
-	} 
-	//System.out.println(top.getChildCount());
+	}
+
+	Vector<Library> nBookshelves = control.retrieveRemoteLibraries();
+	for (Library l : nBookshelves) {
+
+	    Iterator<Bookshelf> bs = l.iterator();
+	    while (bs.hasNext()) {
+
+		top.add(new TreeNode(bs.next()));
+	    }
+	}
 
 	tree.setModel(new DefaultTreeModel(top));
 	((DefaultTreeModel) tree.getModel()).reload();
@@ -117,11 +120,16 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	    results.setResults(node);
 	    draw();
 	} catch (ClassCastException e1) {
-	    System.out.println("You don't want to browse the library root...");
+	    root.setStatus("Error Displaying Bookshelf");
 	} catch (NullPointerException e2) {
-	    System.out.println("Error Retrieving Bookshelf");
+	    root.setStatus("Error Processing Bookshelf");
 	} catch (IllegalArgumentException e2) {
-	    System.out.println("Error Processing Bookshelf");
+
+	    root.setStatus("Processing Remote Bookshelf...");
+	    Bookshelf node = ((TreeNode) tree.getLastSelectedPathComponent())
+		    .getUserObject().getShelf();
+	    results.setResults(node);
+	    draw();
 	}
     }
 

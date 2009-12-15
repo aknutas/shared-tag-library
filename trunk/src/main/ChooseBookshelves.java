@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import controller.Controller;
+import data.Bookshelf;
 import data.Library;
 
 public class ChooseBookshelves extends JDialog {
@@ -104,6 +105,7 @@ public class ChooseBookshelves extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
+			
 			Object[] shelves = bookshelfList.getSelectedValues();
 			if (shelves.length > 0) {
 
@@ -112,9 +114,7 @@ public class ChooseBookshelves extends JDialog {
 				imported.add((String) shelves[x]);
 			    }
 			    
-			    Library l = control.setShelfSelection(alias, imported);
-			    if (l == null) System.out.println("null!");
-			    control.addBookshelf(l.getMasterShelf());
+			    control.setShelfSelection(alias, imported);
 			} else {
 			    control.setShelfSelectionAll(alias);
 			}
