@@ -14,9 +14,12 @@ public interface Bookshelf extends Properties, Iterable<Book> {
 	 * 
 	 * @param book the Book to add to the Bookshelf.
 	 * 
+	 * @return true if the book was inserted successfully, otherwise
+	 *         false
+	 * 
 	 * @throws NullPointerException if the book given is null.
 	 */
-	public void insert(Book book) throws NullPointerException;
+	public boolean insert(Book book) throws NullPointerException;
 	
 	/**
 	 * Removes a book from the Bookshelf, if the Bookshelf does not

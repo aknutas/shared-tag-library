@@ -124,7 +124,11 @@ public class RemoteLibrary extends RemoteObject implements Library {
 			throw new NullPointerException("names cannot be null");
 		
 		RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELVES);
-		message = this.send(message);
+		
+		for(String name : names)
+			message.queueParameter(name);
+		
+		message = this.send(message, 5000);
 		
 		if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELVES != message.getMessageType())
 			return null;
