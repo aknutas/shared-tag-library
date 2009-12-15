@@ -24,6 +24,7 @@ public class SearchResults extends JScrollPane {
 
     private Bookshelf bookshelf = null; // @jve:decl-index=0:
     Controller control = null;
+    Root root = null;
 
     GridBagConstraints gbc = null;
     List<Result> results = null;
@@ -31,8 +32,9 @@ public class SearchResults extends JScrollPane {
     /**
      * This is the default constructor
      */
-    public SearchResults(Controller c) {
+    public SearchResults(Root r, Controller c) {
 	super(panel);
+	root = r;
 	control = c;
 	initialize();
     }
@@ -133,16 +135,20 @@ public class SearchResults extends JScrollPane {
 	    removeResults();
 
 	    Iterator<Book> result = bookshelf.iterator();
-	    System.out.println("hasnext:" + result.hasNext());
-	    int count = 0;
-	    while (result.hasNext() && count < 20) {
-		Book b = result.next();
-		System.out.println("TITLE: " + b.getProperty("title"));
-		results.add(new Result(b, this));
-		count++;
-	    }
 
-	    addResults();
+	    if (result != null) {
+		int count = 0;
+		while (result.hasNext() && count < 20) {
+		    Book b = result.next();
+		    System.out.println("TITLE: " + b.getProperty("title"));
+		    results.add(new Result(b, this));
+		    count++;
+		}
+
+		addResults();
+	    } else {
+		root.setStatus("Error parsing bookshelf. Network Error?");
+	    }
 	} else {
 	    removeResults();
 	    bookshelf = null;

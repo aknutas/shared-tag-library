@@ -709,7 +709,7 @@ public class Root extends JFrame {
      */
     private SearchResults getSearchResults() {
 	if (searchResults == null) {
-	    searchResults = new SearchResults(control);
+	    searchResults = new SearchResults(this, control);
 	}
 	return searchResults;
     }
