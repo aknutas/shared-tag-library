@@ -128,6 +128,7 @@ public class ConnectTo extends JDialog {
 			
 			if (control.isConnected(ipAlias.getText())) {
 
+			    root.setStatus("Choose bookshelves to import.");
 			    ChooseBookshelves dialog = new ChooseBookshelves(
 				    root, control, tree, control
 					    .getShelveSelection(ipAlias
