@@ -20,6 +20,7 @@ import data.messages.RemoteMessage;
 public class RemoteLibraryButler extends RemoteObject implements LibraryButlerInterface {
 	
 	HeadButler butler;
+	String name;
 	
 	/**
 	 * Creates a new RemoteLibraryButler object.
@@ -31,9 +32,10 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * @throws NullPointerException
 	 * @throws RemoteObjectException
 	 */
-	public RemoteLibraryButler(int connection, Control network, long timeout) throws NullPointerException, RemoteObjectException {
+	public RemoteLibraryButler(int connection, Control network, long timeout, String name) throws NullPointerException, RemoteObjectException {
 		super(connection, network, timeout);
-				
+		
+		this.name = name;
 		ButlerMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE);
 		RemoteMessage response = this.send(message, timeout);
 		int numberOfButlers = ((Integer)response.dequeParameter()).intValue();
@@ -56,8 +58,8 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * @throws NullPointerException
 	 * @throws RemoteObjectException
 	 */
-	public RemoteLibraryButler(int connection, Control network) throws NullPointerException, RemoteObjectException {
-		this(connection, network, 5000);
+	public RemoteLibraryButler(int connection, Control network, String name) throws NullPointerException, RemoteObjectException {
+		this(connection, network, 5000, name);
 	}
 
 	@Override
@@ -88,7 +90,13 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * Not valid for a RemoteLibraryButler. Returns null.
 	 */
 	@Override
-	public String getProperty(String name) {return null;}
+	public String getProperty(String name) {
+		if (name.equalsIgnoreCase("name"))
+			return this.name;
+		else
+			return "";
+		
+	}
 
 	/**
 	 * Not valid for a RemoteLibraryButler. Returns null.
