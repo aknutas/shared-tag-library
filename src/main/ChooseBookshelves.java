@@ -61,8 +61,8 @@ public class ChooseBookshelves extends JDialog {
 	if (bookshelfList == null) {
 
 	    List<String> names = new ArrayList<String>();
-	    Iterator<String> bookshelves = library.iterator();//.getBookshelfNames()
-	//	    .iterator();
+	    Iterator<String> bookshelves = library.iterator();
+	    
 	    while (bookshelves.hasNext()) {
 		System.out.println("more");
 		names.add(bookshelves.next());
@@ -111,12 +111,10 @@ public class ChooseBookshelves extends JDialog {
 			    for (int x = 0; x < shelves.length; x++) {
 				imported.add((String) shelves[x]);
 			    }
-			    System.out.println(alias + " " + imported.size());
+			    
 			    Library l = control.setShelveSelection(alias, imported);
 			    if (l == null) System.out.println("null!");
 			    control.addBookshelf(l.getMasterShelf());
-		//	    control.importSelectBookshelves(control.myLib,
-		//		    library, imported);
 			} else {
 			//    control
 			//	    .importAllBookshelves(control.myLib,
