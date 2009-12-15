@@ -36,6 +36,8 @@ import data.VirtualLibrary;
  *
  */
 public class VirtualLibraryButler extends LibraryButler {
+	
+	private Set<Bookshelf> sortedShelfs;
 
 	/**
 	 * Test method.
@@ -361,9 +363,9 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * @param shelf
 	 * @param numShelfs
 	 */
-	public VirtualLibraryButler(Bookshelf shelf, int numShelfs){
+	VirtualLibraryButler(Bookshelf shelf, int numShelfs){
 		properties = new HashMap<String, String>();
-		initialize(shelf, numShelfs);
+		sortedShelfs = initialize(shelf, numShelfs);
 		org.encog.util.logging.Logging.stopConsoleLogging();
 	}
 	
@@ -381,6 +383,8 @@ public class VirtualLibraryButler extends LibraryButler {
 		else
 			initialized = false;
 	}
+	
+	Set<Bookshelf> getSortedShelfs() {return sortedShelfs;}
 
 	/**
 	 * Checks an input book against the trained network.
@@ -554,7 +558,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * @param numShelfs the maximum number of shelfs
 	 * @return the collection of all bookshelfs generated.
 	 */
-	public Collection<Bookshelf> initialize(Bookshelf basis, int numShelfs) throws IllegalArgumentException{
+	public Set<Bookshelf> initialize(Bookshelf basis, int numShelfs) throws IllegalArgumentException{
 		if (null == basis)
 			throw new IllegalArgumentException("input cannot be null.");
 
@@ -678,8 +682,10 @@ public class VirtualLibraryButler extends LibraryButler {
 		}
 		
 		//System.out.println("cleanShelfs size: " + cleanShelfs.size());
+		
+		
 
-		return cleanShelfs.values();
+		return (Set<Bookshelf>)cleanShelfs.values();
 	}
 
 	/**
