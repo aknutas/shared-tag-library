@@ -76,14 +76,14 @@ public class AddBookshelf extends JDialog {
 		    shelf = control.addBookshelf(jTextField.getText());
 
 		    if (shelf != null) {
-
 			if (books != null) {
 			    for (Book b : books) {
-				shelf.insert(b);
+				
+				shelf.insert(b.makeVirtual());
 			    }
 			}
+			
 			results.setResults(shelf);
-			//tree.addChild(shelf);
 			tree.refresh();
 		    }
 

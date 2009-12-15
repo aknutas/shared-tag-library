@@ -122,10 +122,11 @@ public class ConnectTo extends JDialog {
 				    .getSelectedItem());
 			} else {
 
-			    control.addConnection(ipAlias.getText(), addressField.getText());
+			    control.addConnection(ipAlias.getText(),
+				    addressField.getText());
 			    control.connect(ipAlias.getText());
 			}
-			
+
 			if (control.isConnected(ipAlias.getText())) {
 
 			    root.setStatus("Choose bookshelves to import.");
@@ -133,12 +134,13 @@ public class ConnectTo extends JDialog {
 				    root, control, tree, control
 					    .getShelveSelection(ipAlias
 						    .getText()), ipAlias
-						    .getText());
+					    .getText());
 			    dialog.setVisible(true);
 
 			    tree.refresh();
 			} else {
-			    root.setStatus("Could not connect. Is the host up?");
+			    root
+				    .setStatus("Could not connect. Is the host up?");
 			}
 		    } catch (IllegalArgumentException e) {
 			root.setStatus("Error Connecting (Already Connected)");
