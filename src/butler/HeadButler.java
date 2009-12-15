@@ -4,8 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import data.Book;
+import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 import data.VirtualLibrary;
@@ -92,6 +94,12 @@ public class HeadButler{
 
 			reCountShelfs();
 		}
+	}
+	
+	public Set<Bookshelf> identify(VirtualBookshelf bs, int num){
+		VirtualLibraryButler virtLB = new VirtualLibraryButler(bs, num);
+		return virtLB.getSortedShelfs();
+		
 	}
 
 	/**
