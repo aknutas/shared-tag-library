@@ -112,7 +112,7 @@ public class ChooseBookshelves extends JDialog {
 				imported.add((String) shelves[x]);
 			    }
 			    
-			    Library l = control.setShelveSelection(alias, imported);
+			    Library l = control.setShelfSelection(alias, imported);
 			    if (l == null) System.out.println("null!");
 			    control.addBookshelf(l.getMasterShelf());
 			} else {
