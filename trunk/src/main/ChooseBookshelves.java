@@ -30,7 +30,7 @@ public class ChooseBookshelves extends JDialog {
     private Iterable<String> library = null;
     private Root root = null;
     private TreeView treeView = null;
-    private String alias = "";
+    private String alias = "";  //  @jve:decl-index=0:
 
     /**
      * @param owner
@@ -116,9 +116,7 @@ public class ChooseBookshelves extends JDialog {
 			    if (l == null) System.out.println("null!");
 			    control.addBookshelf(l.getMasterShelf());
 			} else {
-			//    control
-			//	    .importAllBookshelves(control.myLib,
-			//		    library);
+			    control.setShelfSelectionAll(alias);
 			}
 
 			treeView.refresh();
