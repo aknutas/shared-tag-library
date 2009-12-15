@@ -92,9 +92,9 @@ public class Controller {
 	}
 
 	/**
-	 * 
-	 * @param bookshelf
-	 * @param num
+	 * Sorts a local shelf into a number of shelves based on similarities of books
+	 * @param bookshelf the local bookshelf to split
+	 * @param num the max number of shelves to group it into
 	 * @return
 	 */
 	public void sortShelves(Bookshelf bookshelf,int num){
@@ -109,7 +109,11 @@ public class Controller {
 		throw new IllegalArgumentException("Non Local shelf");
     
 	}
-	
+	/**
+	 * returns an object with properties of the name of the shelf the book is most likely to fit in
+	 * @param book
+	 * @return
+	 */
 	public FlatShelf checkBook(Book book){
 		return HB.checkBook(book);
 	}
