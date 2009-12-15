@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.Controller;
+import data.RemoteObjectException;
 
 public class ConnectTo extends JDialog {
 
@@ -146,6 +147,9 @@ public class ConnectTo extends JDialog {
 			root.setStatus("Error Connecting (Already Connected)");
 		    } catch (NullPointerException e) {
 			root.setStatus("Error Connecting (NULL)");
+		    } catch (RemoteObjectException e) {
+			root.setStatus("Error Connecting (Cannot Establish Butler)");
+			e.printStackTrace();
 		    }
 		    setVisible(false);
 		}
