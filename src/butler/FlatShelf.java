@@ -10,6 +10,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import data.Book;
 import data.Bookshelf;
+import data.VirtualBook;
 
 /**
  * The FlatShelf class unexpectedly implements Book. A FlatShelf is obtained bytaking all of
@@ -63,11 +64,6 @@ public final class FlatShelf implements Book {
 		for(Map.Entry<String, String> prop : shelf.enumerateProperties())
 			properties.put(prop.getKey(), prop.getValue());
 	}
-	
-	/**
-	 * Returns the weight associated with the given tag.
-	 */
-	public int getWeight(String tag) {return tags.get(tag);}
 
 	@Override
 	public Collection<Entry<String, String>> enumerateProperties() {return properties.entrySet();}
@@ -99,10 +95,19 @@ public final class FlatShelf implements Book {
 	@Override
 	public int untag(String tag) throws NullPointerException {return 0;}
 
+	@Override
+	public int weight(String tag) throws NullPointerException {
+		
+		if (null == tag)
+			throw new NullPointerException("tag cannot be null.");
+	
+		return tags.get(tag);
+	}
+
 	/**
-	 * Not valid for a FlatShelf. Returns 0.
+	 * Not valid for a FlatShelf. Returns null.
 	 */
 	@Override
-	public int weight(String tag) throws NullPointerException {return 0;}
+	public VirtualBook makeVirtual() {return null;}
 
 }

@@ -1,5 +1,7 @@
 package butler;
 
+import java.util.Map;
+
 import data.Book;
 
 /**
@@ -8,7 +10,7 @@ import data.Book;
  * @author sjpurol
  *
  */
-public interface LibraryButlerInterface extends Butler{
+public interface LibraryButlerInterface{
 
 	/**
 	 * Returns the name property of the FlatShelf referenced
@@ -38,7 +40,7 @@ public interface LibraryButlerInterface extends Butler{
 	 * the brain and returns the raw output vector.
 	 * @param b the book to examine
 	 */
-	double[] assemble(Book b);
+	Map.Entry<FlatShelf, Double> assemble(Book b);
 	
 	/**
 	 * Returns the property that name maps to

@@ -188,11 +188,11 @@ public class VirtualLibraryButler extends LibraryButler {
 				"novels","one of my favorites","possible-kindle","read",
 				"review","roger3","room 237","shelf","stephen king horror",
 				"stephen king it","supernatural","suspense","thriller",
-				"urban fantasy","wordy","childrens books"};
+				"urban fantasy","wordy"};
 
 		int[] itWeights = {24,73,26,21,18,13,10,10,9,8,4,3,3,2,2,2,2,2,
 				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				1,1,1,1,1,1,1,1,1,1,1,1, -100};
+				1,1,1,1,1,1,1,1,1,1,1,1};
 
 		for (int i = 0; i < itTags.length; ++i){
 			int num = itWeights[i];
@@ -237,9 +237,9 @@ public class VirtualLibraryButler extends LibraryButler {
 				"mary kate","mass market paperback","modern gothic",
 				"not free sf reader","novels",
 				"one of my favorite king stories","shelf","smart horror",
-				"vampire books","vamps","writer", "childrens book"};
+				"vampire books","vamps","writer"};
 
-		int[] salemWeights = {84,29,47,13,12,9,7,3,3,3,3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-523};
+		int[] salemWeights = {84,29,47,13,12,9,7,3,3,3,3,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
 		for (int i = 0; i < salemTags.length; ++i){
 			int num = salemWeights[i];
@@ -310,20 +310,20 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		System.out.println(buddy.getProperty("name") + " results:\n");
 
-		buddy.compareTo(catBack);
-		buddy.compareTo(salem);
-		buddy.compareTo(interview);
-		buddy.compareTo(cat);
-		buddy.compareTo(fish);
+		System.out.println(buddy.checkBook(catBack).getProperty("name"));
+		System.out.println(buddy.checkBook(salem).getProperty("name"));
+		System.out.println(buddy.checkBook(interview).getProperty("name"));
+		System.out.println(buddy.checkBook(cat).getProperty("name"));
+		System.out.println(buddy.checkBook(fish).getProperty("name"));
 
 		for (int n = 2; n < 5; ++n) {
 			wadsworth.initialize(bigShelf, n);
 			System.out.println(wadsworth.getProperty("name") + " results (" + n + " shelfs):\n");
-			wadsworth.compareTo(catBack);
-			wadsworth.compareTo(salem);
-			wadsworth.compareTo(interview);
-			wadsworth.compareTo(cat);
-			wadsworth.compareTo(fish);
+			wadsworth.checkBook(catBack);
+			wadsworth.checkBook(salem);
+			wadsworth.checkBook(interview);
+			wadsworth.checkBook(cat);
+			wadsworth.checkBook(fish);
 		}
 	}
 
@@ -369,26 +369,25 @@ public class VirtualLibraryButler extends LibraryButler {
 	 */
 	public VirtualLibraryButler(VirtualLibrary virtLib) {
 		properties = new HashMap<String, String>();
-		properties.put("name", virtLib.getProperty("name"));
+		properties.put("library", virtLib.getProperty("name"));
 		if (virtLib.getMasterShelf().size() > 0)
 			initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
 		else
 			initialized = false;
 	}
 
-	@Override
 	/**
 	 * Checks an input book against the trained network.
-	 * Returns the index of the shelf that best matches.
-	 * If no shelf matches, returns -1. If the network has
-	 * not been initialized, returns -2.
+	 * Returns the flatshelf that best matches.
+	 * If no shelf matches, returns null. If the network has
+	 * not been initialized, returns null.
 	 * 
 	 * @param b The book to check.
 	 */
-	public int compareTo(Book b) {
+	public FlatShelf checkBook(Book b) {
 
 		if (!initialized)
-			return -2;
+			return null;
 
 		double[] inputValues = readyBook(b);
 
@@ -410,7 +409,10 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		initialized = true;
 
-		return index;
+		FlatShelf fs = getShelfs().get(index);
+		fs.setProperty("library", this.getProperty("library"));
+		
+		return fs;
 	}
 
 	/**
@@ -421,7 +423,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * @param bool 
 	 * @return the index of the proper output value from brain
 	 */
-	private int compareTo(FlatShelf b){
+	private int checkBook(FlatShelf b){
 
 		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
 		//Iterator<Map.Entry<String, String>> properties = b.enumerateProperties();
@@ -646,7 +648,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			
 			String heaviestTagName = "";
 			int heaviestTagWeight = Integer.MIN_VALUE;
-			int k = compareTo(fs);
+			int k = checkBook(fs);
 			
 			Iterator<Map.Entry<String,Integer>> fsTags = fs.enumerateTags();
 			
@@ -741,7 +743,7 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		for (Bookshelf s : basis) {
 			FlatShelf fs = new FlatShelf(s);
-			flatShelfs.put(compareTo(fs), fs);
+			flatShelfs.put(checkBook(fs), fs);
 		}
 
 		currentWeights = new ButlerWeights(brain.getStructure().getSynapses().get(0).getMatrix(), numTags, flatShelfs, idPairs);

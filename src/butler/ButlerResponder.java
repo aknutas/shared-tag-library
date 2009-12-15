@@ -1,5 +1,7 @@
 package butler;
 
+import java.util.Collection;
+
 import data.RoutedResponder;
 import data.messages.BookshelfMessage;
 import data.messages.RemoteMessage;
@@ -7,9 +9,9 @@ import data.messages.RoutedMessage;
 
 public class ButlerResponder extends RoutedResponder {
 
-	private LibraryButlerInterface butler;
+	private HeadButler butler;
 
-	public ButlerResponder(LibraryButlerInterface butler) throws IllegalArgumentException{
+	public ButlerResponder(HeadButler butler) throws IllegalArgumentException{
 		super();
 		if (null == butler)
 			throw new IllegalArgumentException("butler cannot be null.");
@@ -45,13 +47,18 @@ public class ButlerResponder extends RoutedResponder {
 	private RoutedMessage handleInitializeMessage(ButlerMessage message) {
 		if (null == message)
 			throw new NullPointerException("message cannot be null");
-		
+
 		if (ButlerMessage.MSG_INITIALIZE != message.getMessageType())
 			throw new IllegalArgumentException("invalid message type");
-		
+
 		/* create response */
 		ButlerMessage response = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.getID());
-		response.queueParameter(butler.getWeights());
+		response.queueParameter(new Integer(butler.getNumOfLocalButlers()));
+		
+		Collection<VirtualLibraryButler> allButlers = butler.getLocalButlers();
+		
+		for (VirtualLibraryButler vlb : allButlers)
+			response.queueParameter(vlb.getWeights());
 		return response;
 	}
 }
