@@ -224,12 +224,12 @@ public class Controller {
 	public synchronized void connect(String alias)
 			throws IllegalArgumentException {
 		if (connections.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("no available connections");
 		}
 		for (int id = 0; id < connections.size(); id++) {
 			if (connections.get(id).getAlias().equals(alias)){
 				if (connections.get(id).isConnected())
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("already connected");
 			}
 			connections.get(id).connect(cntrl);
 			//HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId()));
