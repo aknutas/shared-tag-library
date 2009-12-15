@@ -17,6 +17,8 @@ import network.messages.ChatMessage;
 import network.messages.Message;
 import scripts.InOutParser;
 import butler.ButlerWeights;
+import butler.HeadButler;
+import butler.RemoteLibraryButler;
 import data.Book;
 import data.Bookshelf;
 import data.Library;
@@ -56,7 +58,12 @@ public class Controller {
 	 * a connection and its associated library
 	 */
 	public Vector<ConnectionMetadata> connections;
-
+	
+	
+	/**
+	 * The Head butler
+	 */
+	public HeadButler HB;
 	/**
 	 * The default controller constructor all things that need to be initialized
 	 * on startup should be here
@@ -66,7 +73,7 @@ public class Controller {
 		// load in library
 		qb = new QueryBuilderImpl();
 		myLib = new PersistentLibrary(qb);
-
+		
 		cntrl = new ControlImpl(new LibraryResponder(myLib));
 		myLib.setProperty("name", "My Library");
 		modifiedBs = new Vector<Bookshelf>();
@@ -75,6 +82,7 @@ public class Controller {
 				.getProperty("controller::connections");
 		if (connections == null)
 			connections = new Vector<ConnectionMetadata>();
+		//System.out.println(qb.getButlerWeights().isEmpty());
 		// Registering shutdown hooks
 		addShutdownHooks();
 	}
@@ -90,24 +98,8 @@ public class Controller {
 		if (book == null || !(focus instanceof VirtualBookshelf))
 			throw new IllegalArgumentException();
 		focus.insert(book);
-		myLib.saveBookshelf((VirtualBookshelf) focus);
 		return addBook(focus, book);
 	}
-
-	/**
-	 * Add a book to the library
-	 * 
-	 * @return the added book (null if error)
-	 */
-	private synchronized Book addBook(Bookshelf bookshelf, Book book) {
-		if (book == null || !(bookshelf instanceof VirtualBookshelf))
-			return null;
-		bookshelf.insert(book);
-		setFocus(bookshelf);
-		myLib.saveBookshelf((VirtualBookshelf) bookshelf);
-		return book;
-	}
-
 	/**
 	 * Add a book to the focused shelf in the library
 	 * 
@@ -120,26 +112,25 @@ public class Controller {
 	public synchronized Book addBook(String title, String author)
 			throws IllegalArgumentException {
 		Book book = addBook(new VirtualBook(title, author));
-		myLib.saveBookshelf((VirtualBookshelf) focus);
+		return addBook(focus, book);
+	}
+	/**
+	 * Add a book to the library
+	 * 
+	 * @return the added book (null if error)
+	 */
+	private synchronized Book addBook(Bookshelf bookshelf, Book book) {
+		if (book == null || !(bookshelf instanceof VirtualBookshelf))
+			return null;
+		bookshelf.insert(book);
+		setFocus(bookshelf);
+		if (!modifiedBs.contains(bookshelf)) {
+			modifiedBs.add(bookshelf);
+		}
 		return book;
 	}
 
-	/**
-	 * Add a bookshelf to the library
-	 * 
-	 * @return the added bookshelf (null if error)
-	 */
-	public synchronized Bookshelf addBookshelf(Book book)
-			throws IllegalArgumentException {
-		if (book == null)
-			throw new IllegalArgumentException();
-		VirtualBookshelf bs = new VirtualBookshelf("From book "
-				+ book.getProperty("Name"));
-		addBook(bs, book);
-		myLib.saveBookshelf(bs);
-		setFocus(bs);
-		return bs;
-	}
+
 
 	/**
 	 * Add a bookshelf to the library
@@ -150,8 +141,10 @@ public class Controller {
 			throws IllegalArgumentException {
 		if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
 			throw new IllegalArgumentException();
-
-		myLib.saveBookshelf((VirtualBookshelf) bookshelf);
+		if (!modifiedBs.contains(bookshelf)) {
+			modifiedBs.add(bookshelf);
+		}
+		myLib.addBookshelf(bookshelf);
 		setFocus(bookshelf);
 		return bookshelf;
 	}
@@ -165,10 +158,13 @@ public class Controller {
 			throws IllegalArgumentException {
 		if (name == null)
 			throw new IllegalArgumentException();
-		VirtualBookshelf bs = new VirtualBookshelf(name);
-		myLib.saveBookshelf(bs);
-		setFocus(bs);
-		return bs;
+		VirtualBookshelf bookshelf = new VirtualBookshelf(name);
+		if (!modifiedBs.contains(bookshelf)) {
+			modifiedBs.add(bookshelf);
+		}
+		myLib.addBookshelf(bookshelf);
+		setFocus(bookshelf);
+		return bookshelf;
 	}
 
 	/**
@@ -231,10 +227,12 @@ public class Controller {
 			throw new IllegalArgumentException();
 		}
 		for (int id = 0; id < connections.size(); id++) {
-			if (connections.get(id).getAlias().equals(alias))
+			if (connections.get(id).getAlias().equals(alias)){
 				if (connections.get(id).isConnected())
 					throw new IllegalArgumentException();
+			}
 			connections.get(id).connect(cntrl);
+			//HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId()));
 		}
 	}
 
@@ -250,9 +248,10 @@ public class Controller {
 			throw new IllegalArgumentException();
 		}
 		for (int id = 0; id < connections.size(); id++) {
-			if (connections.get(id).getAlias().equals(alias))
+			if (connections.get(id).getAlias().equals(alias)){
 				if (!connections.get(id).isConnected())
 					throw new IllegalArgumentException();
+			}
 			connections.get(id).disconnect(cntrl);
 		}
 	}
@@ -666,9 +665,6 @@ public class Controller {
 			throws IllegalArgumentException {
 		if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
 			throw new IllegalArgumentException();
-		if (!modifiedBs.contains(bookshelf)) {
-			modifiedBs.add(bookshelf);
-		}
 		focus = bookshelf;
 	}
 
