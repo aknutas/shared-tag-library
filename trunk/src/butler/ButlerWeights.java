@@ -24,7 +24,7 @@ public class ButlerWeights implements Serializable{
 	private Long timestamp;
 	private int numTags;
 	private Map<Integer, FlatShelf> shelfs;
-	private IDPairSet idPairs;
+	private Map<String, Integer> idPairs;
 
 	/**
 	 * Default constructor
@@ -34,7 +34,7 @@ public class ButlerWeights implements Serializable{
 	 * @param ids the set identifying the input neurons
 	 */
 	
-	ButlerWeights(Matrix input, int tags, Map<Integer, FlatShelf> fshelfs, IDPairSet ids){
+	ButlerWeights(Matrix input, int tags, Map<Integer, FlatShelf> fshelfs, Map<String, Integer> ids){
 		inputs = input;
 		timestamp = new Date().getTime();
 		numTags = tags;
@@ -49,9 +49,9 @@ public class ButlerWeights implements Serializable{
 	public Map<Integer, FlatShelf> getShelfs() {return shelfs;}
 	
 	/**
-	 * Returns the set of IDPairs
+	 * Returns the map of IDPairs
 	 */
-	public IDPairSet getIDPairs() {return idPairs;}
+	public Map<String, Integer> getIDPairs() {return idPairs;}
 	
 	/**
 	 * Returns the matrix
