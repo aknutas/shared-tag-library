@@ -73,7 +73,6 @@ public class Controller {
 		// load in library
 		qb = new QueryBuilderImpl();
 		myLib = new PersistentLibrary(qb);
-		
 		cntrl = new ControlImpl(new LibraryResponder(myLib));
 		myLib.setProperty("name", "My Library");
 		modifiedBs = new Vector<Bookshelf>();
@@ -82,7 +81,10 @@ public class Controller {
 				.getProperty("controller::connections");
 		if (connections == null)
 			connections = new Vector<ConnectionMetadata>();
-		System.out.println(qb.getButlerWeights().isEmpty());
+		if(retrieveButlerWeights()==null)
+		    HB = new HeadButler(myLib);
+		else
+		    HB = new HeadButler(retrieveButlerWeights());
 		// Registering shutdown hooks
 		addShutdownHooks();
 	}
@@ -517,12 +519,10 @@ public class Controller {
 					// tempqueue.size());
 
 					while (msgiterator.hasNext()) {
-						// TODO Do actual message-based functionality here
 						Object tryout = msgiterator.next();
 						if (tryout.getClass().getName().equals(
 								network.messages.ChatMessage.class.getName())) {
 							ChatMessage hello = (ChatMessage) tryout;
-							// TODO Replace console printout with small GUI
 							// notification
 							System.out.println("Connection "
 									+ tryentry.getKey() + " says "
@@ -630,13 +630,11 @@ public class Controller {
 	 * 
 	 * @return a stored Butler
 	 */
-	public synchronized ButlerWeights retrieveButlerWeights() {
+	public synchronized List<ButlerWeights> retrieveButlerWeights() {
 		List<ButlerWeights> butlerList = qb.getButlerWeights();
 		if (butlerList.size() == 0)
 			return null;
-
-		// TODO Storing several butlers and then retrieving the one you want
-		return butlerList.get(0);
+		return butlerList;
 	}
 
 	/**
