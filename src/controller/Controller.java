@@ -344,8 +344,7 @@ public class Controller {
 	 * @return returns null if not connected else the library of selected
 	 *         shelves
 	 */
-	public synchronized Library setShelfSelectionAll(String alias,
-			Collection<String> shelves) {
+	public synchronized Library setShelfSelectionAll(String alias) {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
