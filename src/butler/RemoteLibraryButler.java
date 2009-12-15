@@ -1,5 +1,7 @@
 package butler;
 
+import java.util.Map;
+
 import network.Control;
 import data.Book;
 import data.RemoteObject;
@@ -17,8 +19,7 @@ import data.messages.RemoteMessage;
  */
 public class RemoteLibraryButler extends RemoteObject implements LibraryButlerInterface {
 	
-	final int id;
-	VirtualLibraryButler butler;
+	HeadButler butler;
 	
 	/**
 	 * Creates a new RemoteLibraryButler object.
@@ -30,15 +31,20 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * @throws NullPointerException
 	 * @throws RemoteObjectException
 	 */
-	public RemoteLibraryButler(int connection, Control network, long timeout, int id) throws NullPointerException, RemoteObjectException {
+	public RemoteLibraryButler(int connection, Control network, long timeout) throws NullPointerException, RemoteObjectException {
 		super(connection, network, timeout);
-		this.id = id;
 				
-		RemoteMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.id);
+		ButlerMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE);
 		RemoteMessage response = this.send(message, timeout);
+		int numberOfButlers = ((Integer)response.dequeParameter()).intValue();
+		VirtualLibraryButler butOne = new VirtualLibraryButler((ButlerWeights)response.dequeParameter());
+		butler = new HeadButler(butOne);
 		
-		ButlerWeights weights = (ButlerWeights)response.dequeParameter();
-		butler = new VirtualLibraryButler(weights);
+		for (int i = 0; i < numberOfButlers-1; ++i) {
+			ButlerWeights bw = (ButlerWeights)response.dequeParameter();
+			VirtualLibraryButler but = new VirtualLibraryButler(bw);
+			butler.addButler(but);
+		}
 	}
 
 	/**
@@ -50,36 +56,44 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * @throws NullPointerException
 	 * @throws RemoteObjectException
 	 */
-	public RemoteLibraryButler(int connection, Control network, int id) throws NullPointerException, RemoteObjectException {
-		super(connection, network);
-		this.id = id;
-		
-		RemoteMessage message = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.id);
-		RemoteMessage response = this.send(message);
-
-		ButlerWeights weights = (ButlerWeights)response.dequeParameter();
-		butler = new VirtualLibraryButler(weights);
+	public RemoteLibraryButler(int connection, Control network) throws NullPointerException, RemoteObjectException {
+		this(connection, network, 5000);
 	}
 
 	@Override
-	public int compareTo(Book b) {return butler.compareTo(b);}
+	public Map.Entry<FlatShelf, Double> assemble(Book b) {return butler.remoteAssemble(b);}
 
+	/**
+	 * Returns the max number of shelfs within the HeadButler
+	 */
 	@Override
-	public double[] assemble(Book b) {return butler.assemble(b);}
+	public int countShelfs() {
+		butler.reCountShelfs();
+		return butler.maxNumOfShelfs;
+	}
+	
+	/**
+	 * Not valid for a RemoteLibraryButler. Returns null.
+	 */
+	@Override
+	public String identifyShelf(int index) {return null;}
 
+	/**
+	 * Not valid for a RemoteLibraryButler. Returns null.
+	 */
 	@Override
-	public int countShelfs() {return butler.countShelfs();}
+	public double[] readyBook(Book b) {return null;}
 
+	/**
+	 * Not valid for a RemoteLibraryButler. Returns null.
+	 */
 	@Override
-	public String identifyShelf(int index) {return butler.identifyShelf(index);}
+	public String getProperty(String name) {return null;}
 
+	/**
+	 * Not valid for a RemoteLibraryButler. Returns null.
+	 */
 	@Override
-	public double[] readyBook(Book b) {return butler.readyBook(b);}
-
-	@Override
-	public String getProperty(String name) {return butler.getProperty(name);}
-
-	@Override
-	public ButlerWeights getWeights() {return butler.getWeights();}
+	public ButlerWeights getWeights() {return null;}
 
 }
