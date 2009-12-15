@@ -65,6 +65,16 @@ public interface Book extends Properties {
 	 * @return an Iterator of map entries.
 	 */
 	public Iterator<Map.Entry<String, Integer>> enumerateTags();
+	
+	
+	/**
+	 * Returns a VirtualBook object of this Book interface object. If
+	 * the book is already a VirtualBook then the Book is returned
+	 * and no copy is made.
+	 * 
+	 * @return a VirtualBook
+	 */
+	public VirtualBook makeVirtual();
 
 }
 

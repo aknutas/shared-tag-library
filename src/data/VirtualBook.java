@@ -205,5 +205,10 @@ public class VirtualBook implements Book, Serializable {
 		return true;
 	}
 
+	@Override
+	public VirtualBook makeVirtual() {
+		return this;
+	}
+
 }
 

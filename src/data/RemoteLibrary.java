@@ -84,8 +84,6 @@ public class RemoteLibrary extends RemoteObject implements Library {
 		}
 	}
 
-	
-	
 	@Override
 	public String getProperty(String name) throws NullPointerException {
 		// TODO: implement (copy some code)
