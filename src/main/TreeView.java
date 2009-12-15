@@ -17,6 +17,12 @@ import controller.Controller;
 import data.Bookshelf;
 import data.Library;
 
+/**
+ * Tree view for bookshelves.
+ * 
+ * @author patrick
+ * 
+ */
 public class TreeView extends JPanel implements TreeSelectionListener {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +35,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
     private Root root = null;
 
     /**
-     * @param l
+     * Tree view for bookshelves
      */
     public TreeView(Root r, Controller c, SearchResults s) {
 
@@ -86,7 +92,7 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 
     }
 
-    public void refresh() {
+    protected void refresh() {
 	top.removeAllChildren();
 
 	Iterator<Bookshelf> bookshelves = control.retrieveLibrary();
@@ -111,6 +117,9 @@ public class TreeView extends JPanel implements TreeSelectionListener {
 	draw();
     }
 
+    /**
+     * Value changed. A new bookshelf is selected. Make sure it's displayed on search results.
+     */
     @Override
     public void valueChanged(TreeSelectionEvent e) {
 	try {

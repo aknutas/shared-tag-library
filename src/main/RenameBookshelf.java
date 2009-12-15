@@ -18,31 +18,31 @@ import javax.swing.JTextField;
 import controller.Controller;
 import data.Bookshelf;
 
+/**
+ * Rename bookshelf dialog.
+ * 
+ * @author patrick
+ * 
+ */
 public class RenameBookshelf extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private JButton cancel = null;
     private JButton commit = null;
-    private Controller control = null;
     private JPanel jContentPane = null;
     private JLabel jLabel = null;
     private JLabel jLabel1 = null;
 
-    private JTextField jTextField = null;
     private JTextField jTextField1 = null;
-    private SearchResults results = null;
     private Bookshelf shelf = null;
     private TreeView tree = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * Rename bookshelf dialog
      */
     public RenameBookshelf(Frame owner, Controller ctl, Bookshelf b,
 	    TreeView treeView) {
 	super(owner);
-
-	control = ctl;
 
 	tree = treeView;
 
@@ -177,7 +177,7 @@ public class RenameBookshelf extends JDialog {
 	return jTextField1;
     }
 
-    public Bookshelf getShelf() {
+    protected Bookshelf getShelf() {
 	return shelf;
     }
 

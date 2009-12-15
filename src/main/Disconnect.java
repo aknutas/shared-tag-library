@@ -17,6 +17,12 @@ import javax.swing.JPanel;
 
 import controller.Controller;
 
+/**
+ * This is the disconnect dialog
+ * 
+ * @author patrick
+ * 
+ */
 public class Disconnect extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -30,8 +36,7 @@ public class Disconnect extends JDialog {
     private TreeView tree = null;
 
     /**
-     * @param owner
-     * @param treeView
+     * Disconnect dialog
      */
     public Disconnect(Frame owner, Controller ctl, TreeView treeView) {
 	super(owner);

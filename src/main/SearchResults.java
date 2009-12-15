@@ -16,9 +16,15 @@ import controller.Controller;
 import data.Book;
 import data.Bookshelf;
 
+/**
+ * Search results pane.
+ * 
+ * @author patrick
+ * 
+ */
 public class SearchResults extends JScrollPane {
 
-    public static JPanel panel = new JPanel();
+    protected static JPanel panel = new JPanel();
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +65,7 @@ public class SearchResults extends JScrollPane {
 	this.repaint();
     }
 
-    public Bookshelf getBookshelf() {
+    protected Bookshelf getBookshelf() {
 	return bookshelf;
     }
 
@@ -130,7 +136,7 @@ public class SearchResults extends JScrollPane {
 	resetResults();
     }
 
-    public void resetResults() {
+    protected void resetResults() {
 	setResults(bookshelf);
     }
 
