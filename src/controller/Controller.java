@@ -95,8 +95,10 @@ public class Controller {
 	 *             if the focus shelf is not mutable or book is null
 	 */
 	public synchronized Book addBook(Book book) throws IllegalArgumentException {
-		if (book == null || !(focus instanceof VirtualBookshelf))
+		if (book == null)
 			throw new IllegalArgumentException();
+		if(focus==null)
+		    throw new IllegalArgumentException("Cannot add to a non Local shelf");
 		focus.insert(book);
 		return addBook(focus, book);
 	}
@@ -120,7 +122,7 @@ public class Controller {
 	 * @return the added book (null if error)
 	 */
 	private synchronized Book addBook(Bookshelf bookshelf, Book book) {
-		if (book == null || !(bookshelf instanceof VirtualBookshelf))
+		if (book == null ||bookshelf==null|| !(bookshelf instanceof VirtualBookshelf) ) 
 			return null;
 		bookshelf.insert(book);
 		setFocus(bookshelf);
@@ -139,8 +141,10 @@ public class Controller {
 	 */
 	public synchronized Bookshelf addBookshelf(Bookshelf bookshelf)
 			throws IllegalArgumentException {
-		if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
+		if (bookshelf == null)
 			throw new IllegalArgumentException();
+		if(!(bookshelf instanceof VirtualBookshelf))
+		    throw new IllegalArgumentException("Cannot add a non Local Shelf");
 		if (!modifiedBs.contains(bookshelf)) {
 			modifiedBs.add(bookshelf);
 		}
@@ -559,8 +563,10 @@ public class Controller {
 	 */
 	public synchronized Book removeBook(Book book)
 			throws IllegalArgumentException {
+		if(focus==null)
+		    throw new IllegalArgumentException("Cannot remove from a non Local shelf");
 		if (!focus.contains(book))
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Shelf does not contain the book");
 		focus.remove(book);
 		myLib.saveBookshelf((VirtualBookshelf) focus);
 		return book;
@@ -577,38 +583,6 @@ public class Controller {
 		return removeBook(book);
 	}
 
-	/**
-	 * Remove a book from the library
-	 * 
-	 * @return the removed book (null if error)
-	 */
-	public synchronized Book removeBook(Bookshelf bookshelf, String name)
-			throws IllegalArgumentException {
-		setFocus(bookshelf);
-		return removeBook(name);
-	}
-
-	/**
-	 * Remove a book from the library
-	 * 
-	 * @return the removed book (null if error)
-	 */
-	public synchronized Book removeBook(String name)
-			throws IllegalArgumentException {
-		if (name == null)
-			throw new IllegalArgumentException();
-		Iterator<Book> iter = focus.iterator();
-		Book book = null;
-		while (iter.hasNext()) {
-			book = iter.next();
-			if (book.getProperty("Name") == name) {
-				removeBook(focus, book);
-				break;
-			}
-		}
-		myLib.saveBookshelf((VirtualBookshelf) focus);
-		return book;
-	}
 
 	/**
 	 * Remove a bookshelf from the library not currently implemented
@@ -617,11 +591,13 @@ public class Controller {
 	 */
 	public synchronized Bookshelf removeBookshelf(Bookshelf bookshelf) {
 		setFocus(bookshelf);
+		if(focus==null)
+		    throw new IllegalArgumentException("Cannot remove a non Local shelf");
 		return removeBookshelf();
 	}
 
 	/**
-	 * Remove a bookshelf from the library not currently implemented
+	 * Removes the focused bookshelf
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
@@ -629,14 +605,19 @@ public class Controller {
 		if (focus != null) {
 			Bookshelf bs = focus;
 			modifiedBs.remove(focus);
-			if (!myLib.deleteBookshelf((VirtualBookshelf) focus))
-				throw new IllegalArgumentException();
+			if(myLib.shelfStored((VirtualBookshelf) focus)){
+				if (!myLib.deleteBookshelf((VirtualBookshelf) focus))
+					throw new IllegalArgumentException("failed to delete");    
+			}
+			else
+			    myLib.removeBookshelf(focus);
+
 			focus = null;
 			return bs;
 		}
 		return null;
 	}
-
+	Error Retrieving Bookshelf
 	/**
 	 * Returns a butlerweights if something has been stored, or a null
 	 * otherwise.
@@ -739,8 +720,10 @@ public class Controller {
 	 */
 	public synchronized void setFocus(Bookshelf bookshelf)
 			throws IllegalArgumentException {
-		if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf))
+		if (bookshelf == null || !(bookshelf instanceof VirtualBookshelf)){
+		    focus = null;
 			throw new IllegalArgumentException();
+		}
 		focus = bookshelf;
 	}
 
