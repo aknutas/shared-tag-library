@@ -14,7 +14,6 @@ import javax.jdo.annotations.PersistenceCapable;
  * @author sjpurol
  *
  */
-@PersistenceCapable(detachable="true")
 public class IDPairSet implements Set<IDPair> {
 
 	HashSet<IDPair> set;

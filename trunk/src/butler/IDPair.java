@@ -11,7 +11,6 @@ import javax.jdo.annotations.PersistenceCapable;
  * @author sjpurol
  *
  */
-@PersistenceCapable(detachable="true")
 public class IDPair implements Entry<String, Integer> {
 
 	String key;
