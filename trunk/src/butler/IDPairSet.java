@@ -6,12 +6,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.jdo.annotations.PersistenceCapable;
+
 /**
  * An implementation of a Set of IDPair.
  * 
  * @author sjpurol
  *
  */
+@PersistenceCapable(detachable="true")
 public class IDPairSet implements Set<IDPair> {
 
 	HashSet<IDPair> set;

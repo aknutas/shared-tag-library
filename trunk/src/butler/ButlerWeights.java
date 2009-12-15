@@ -22,7 +22,7 @@ public class ButlerWeights implements Serializable{
 	private static final long serialVersionUID = 783143047034007363L;
 	private Matrix inputs;
 	private Long timestamp;
-	private final int numTags;
+	private int numTags;
 	private Map<Integer, FlatShelf> shelfs;
 	private IDPairSet idPairs;
 

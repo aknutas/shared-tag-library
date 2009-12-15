@@ -8,8 +8,35 @@
             <inheritance strategy="new-table"/>
             <field name="inputs" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
             </field>
-            <field name="outputs" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+            <field name="idPairs" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+				<collection element-type="butler.IDPair"/>
+			</field>
+            <field name="tags" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+				<map key-type="java.lang.Integer" value-type="butler.FlatShelf" />
+				<join/>
             </field>
+        </class>
+        <class name="FlatShelf" identity-type="datastore">
+            <inheritance strategy="new-table"/>
+            <field name="inputs" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+            </field>
+            <field name="tags" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+				<map key-type="java.lang.String" value-type="java.lang.Integer" />
+				<join/>
+            </field>
+            <field name="properties" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+				<map key-type="java.lang.String" value-type="java.lang.String" />
+				<join/>
+            </field>
+        </class>
+        <class name="IDPairSet" identity-type="datastore">
+            <inheritance strategy="new-table"/>
+            <field name="set" persistence-modifier="persistent" default-fetch-group="true" recursion-depth="-1">
+				<collection element-type="butler.IDPair"/>
+			</field>
+        </class>
+        <class name="IDPair" identity-type="datastore">
+            <inheritance strategy="new-table"/>
         </class>
     </package>
 </orm>

@@ -1,6 +1,8 @@
 package butler;
 
 import java.util.Map.Entry;
+
+import javax.jdo.annotations.PersistenceCapable;
 /**
  * Implementation of an Entry of String and Integer.
  * 
@@ -9,6 +11,7 @@ import java.util.Map.Entry;
  * @author sjpurol
  *
  */
+@PersistenceCapable(detachable="true")
 public class IDPair implements Entry<String, Integer> {
 
 	String key;
