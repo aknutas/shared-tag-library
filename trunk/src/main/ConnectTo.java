@@ -120,6 +120,8 @@ public class ConnectTo extends JDialog {
 				    .getSelectedItem());
 			    control.connect((String) connectionList
 				    .getSelectedItem());
+			    ipAlias.setText((String) connectionList
+				    .getSelectedItem());
 			} else {
 
 			    control.addConnection(ipAlias.getText(), addressField.getText());
