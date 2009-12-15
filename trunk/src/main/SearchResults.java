@@ -117,8 +117,13 @@ public class SearchResults extends JScrollPane {
 
 	for (Result r : results) {
 	    if (r.isSelected()) {
-		panel.remove(r);
-		control.removeBook(bookshelf, r.getBook());
+		
+		try {
+		    control.removeBook(bookshelf, r.getBook());
+		    panel.remove(r);
+		} catch (IllegalArgumentException e) {
+		    root.setStatus(e.getMessage());
+		}
 	    }
 	}
 

@@ -482,11 +482,15 @@ public class Root extends JFrame {
 			Bookshelf shelf = searchResults.getBookshelf();
 			if (shelf != null) {
 
-			    setStatus("Deleting a bookshelf...");
-			    control.removeBookshelf(shelf);
-			    searchResults.setResults(null);
-			    treeView.refresh();
-			    draw();
+			    try {
+				setStatus("Deleting a bookshelf...");
+				control.removeBookshelf(shelf);
+				searchResults.setResults(null);
+				treeView.refresh();
+				draw();
+			    } catch (IllegalArgumentException e) {
+				setStatus("Cannot remove a remote bookshelf.");
+			    }
 			}
 		    }
 		}
