@@ -113,8 +113,14 @@ public class Controller {
 	 */
 	public synchronized Book addBook(String title, String author)
 			throws IllegalArgumentException {
-		Book book = addBook(new VirtualBook(title, author));
-		return addBook(focus, book);
+	    	Book returnBook = null;
+		try {
+		    Book book = addBook(new VirtualBook(title, author));
+		    returnBook = addBook(focus, book);
+		} catch (Exception e) {
+		    throw new IllegalArgumentException();
+		}
+		return returnBook;
 	}
 	/**
 	 * Add a book to the library
@@ -589,7 +595,7 @@ public class Controller {
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
-	public synchronized Bookshelf removeBookshelf(Bookshelf bookshelf) {
+	public synchronized Bookshelf removeBookshelf(Bookshelf bookshelf) throws IllegalArgumentException {
 		setFocus(bookshelf);
 		if(focus==null)
 		    throw new IllegalArgumentException("Cannot remove a non Local shelf");
@@ -601,7 +607,7 @@ public class Controller {
 	 * 
 	 * @return the removed bookshelf (null if error)
 	 */
-	public synchronized Bookshelf removeBookshelf() {
+	public synchronized Bookshelf removeBookshelf() throws IllegalArgumentException {
 		if (focus != null) {
 			Bookshelf bs = focus;
 			modifiedBs.remove(focus);
@@ -617,7 +623,7 @@ public class Controller {
 		}
 		return null;
 	}
-	Error Retrieving Bookshelf
+
 	/**
 	 * Returns a butlerweights if something has been stored, or a null
 	 * otherwise.
