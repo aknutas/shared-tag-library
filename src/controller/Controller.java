@@ -214,6 +214,25 @@ public class Controller {
 		}
 	}
 
+	
+	/**
+	 * remove the connection named alias
+	 * 
+	 * @param alias
+	 */
+	public synchronized boolean isConnected(String alias) {
+		if (connections.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		for (int i = 0; i < connections.size(); i++) {
+			if (connections.get(i).getAlias().equals(alias)) {
+				return connections.get(i).isConnected();
+			}
+		}
+		return false;
+	}
+	
+	
 	/**
 	 * connects the named alias
 	 * 
@@ -223,6 +242,7 @@ public class Controller {
 	 */
 	public synchronized void connect(String alias)
 			throws IllegalArgumentException {
+		System.out.println("Attempting to connect to" + alias);
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException("no available connections");
 		}
@@ -230,8 +250,11 @@ public class Controller {
 			if (connections.get(id).getAlias().equals(alias)){
 				if (connections.get(id).isConnected())
 					throw new IllegalArgumentException("already connected");
+				connections.get(id).connect(cntrl);
+				System.out.println("Connected to " + connections.get(id).getAlias());
+				System.out.println("Connected " + connections.get(id).isConnected());
 			}
-			connections.get(id).connect(cntrl);
+
 			//HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId()));
 		}
 	}
@@ -251,8 +274,8 @@ public class Controller {
 			if (connections.get(id).getAlias().equals(alias)){
 				if (!connections.get(id).isConnected())
 					throw new IllegalArgumentException();
+				connections.get(id).disconnect(cntrl);
 			}
-			connections.get(id).disconnect(cntrl);
 		}
 	}
 
