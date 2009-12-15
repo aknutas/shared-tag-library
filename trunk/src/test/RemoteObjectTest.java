@@ -11,6 +11,8 @@ import java.util.NoSuchElementException;
 
 import junit.framework.Assert;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import network.Control;
@@ -24,20 +26,16 @@ import data.VirtualLibrary;
 
 public class RemoteObjectTest {
 	
-	private final Control network;
-	private final Library library1;
-	private final Library library2;
+	private Control network;
+	private Library library1;
+	private Library library2;
 	
-	public RemoteObjectTest() {
-		/* initialize */
+	@Before
+	public void initializeLibraries() {
 		this.network = new TestNetworkControl();
 		this.library1 = new VirtualLibrary();
 		this.library2 = new VirtualLibrary();
 		
-		this.initializeLibraries();
-	}
-	
-	private void initializeLibraries() {
 		/* a bookshelf about programming */
 		Bookshelf shelf = new VirtualBookshelf("programming");
 		shelf.insert(new VirtualBook("Parallel Programming", "Smith"));
@@ -92,7 +90,8 @@ public class RemoteObjectTest {
 		((TestNetwork)network).addLibrary("library2", library2);
 	}
 	
-	private void printNetworkStatistics() {
+	@After
+	public void printNetworkStatistics() {
 		/* prevent exceptions in this code from reaching JUnit */
 		try {
 			long messagesSent = ((TestNetworkControl)this.network).getMessagesSent();
@@ -144,6 +143,7 @@ public class RemoteObjectTest {
 		for(Bookshelf shelf : remoteLibrary)
 			Assert.assertNotNull(this.library1.getBookshelf(shelf.getProperty("name")));
 		
+		/* test of getBookshelf(Collection) */
 		Collection<String> shelfList = new LinkedList<String>();
 		shelfList.add("mathematics");
 		shelfList.add("programming");
@@ -164,8 +164,23 @@ public class RemoteObjectTest {
 			
 			Assert.assertTrue(found);
 		}
+	}
+	
+	/**
+	 * This method tests the functionality of the Bookshelf interface
+	 * over a simulated network.
+	 * 
+	 * @throws Exception any sort of Exception not caught is
+	 *         considered an error
+	 */
+	@Test
+	public void testBookshelf() throws Exception {
+		Library remoteLibrary = new RemoteLibrary(this.network.connect("library1"), this.network);
+		Bookshelf remoteShelf = remoteLibrary.getBookshelf("mathematics");
+		System.out.println(remoteShelf);
 		
-		this.printNetworkStatistics();
+		/* test of insert */
+		Assert.assertFalse(remoteShelf.insert(new VirtualBook("Illegal Operation", "Illegal Operation")));
 	}
 	
 }

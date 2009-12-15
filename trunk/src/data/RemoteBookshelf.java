@@ -260,9 +260,8 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	 * Not implemented (yet).
 	 */
 	@Override
-	public void insert(Book book) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		System.out.println("shelf");
+	public boolean insert(Book book) throws IllegalArgumentException {
+		return false;
 	}
 
 	/**

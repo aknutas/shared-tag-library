@@ -165,21 +165,22 @@ public class LibraryResponder extends RemoteResponder {
 		
 		if(LibraryMessage.MSG_BOOKSHELVES != message.getMessageType())
 			throw new IllegalArgumentException("illegal message type");
-		
+
 		/* put requested shelves into temporary library */
 		String name = message.dequeParameter();
 		Library library = new VirtualLibrary();
-		
+				
 		while(null != name) {
 			for(Bookshelf shelf : this.library) {
-				if(!shelf.getProperty("title").equals(name))
+				if(!shelf.getProperty("name").equals(name))
 					continue;
 				
 				library.addBookshelf(shelf);
 			}
+			
+			name = message.dequeParameter();
 		}
-		
-		
+			
 		message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELVES);
 		message.queueParameter((Integer)(new LibraryResponder(library).handleIteratorRequest(new LibraryMessage(LibraryMessage.MSG_ITERATOR))).dequeParameter());
 		return message;

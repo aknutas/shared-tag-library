@@ -109,11 +109,12 @@ public final class VirtualBookshelf implements Bookshelf {
 	 * 
 	 * @throws NullPointerException if the book given is null.
 	 */
-	public void insert(Book book) throws NullPointerException {
+	public boolean insert(Book book) throws NullPointerException {
 		if(null == book)
 			throw new NullPointerException("book cannot be null");
 
 		this.bookshelf.add(book);
+		return true;
 	}
 
 	/**

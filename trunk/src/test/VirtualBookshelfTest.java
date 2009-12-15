@@ -6,13 +6,20 @@ import data.Book;
 import data.Bookshelf;
 import data.VirtualBook;
 import data.VirtualBookshelf;
+import data.VirtualLibrary;
+import data.PersistentLibrary;
+import database.QueryBuilderImpl;
 
 public class VirtualBookshelfTest {
 
 	/* test case */
 	public static void main(String []args) {
+		VirtualLibrary lib = new PersistentLibrary(new QueryBuilderImpl());
 		VirtualBookshelf a = new VirtualBookshelf("a");
 		VirtualBookshelf b = new VirtualBookshelf("b");
+		lib.addBookshelf(a);
+		lib.addBookshelf(b);
+		
 		
 		a.insert(new VirtualBook("a", "b"));
 		a.insert(new VirtualBook("c", "d"));
@@ -27,6 +34,17 @@ public class VirtualBookshelfTest {
 		b.insert(new VirtualBook("s", "t"));
 		b.insert(new VirtualBook("u", "v"));
 		b.insert(new VirtualBook("w", "x"));
+		
+		
+		Bookshelf shelf = lib.getBookshelf("a");
+		shelf.insert(new VirtualBook("test", "test"));
+		((PersistentLibrary)lib).saveBookshelf(new VirtualBookshelf("c"));
+		
+		for(Bookshelf s : lib) 
+			System.out.println(s.getProperty("name"));
+		
+		
+		
 		
 		Iterator<Book> it = a.enumerate();
 		int i = 0;

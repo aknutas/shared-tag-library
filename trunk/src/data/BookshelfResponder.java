@@ -7,7 +7,6 @@ import data.messages.RoutedMessage;
 public class BookshelfResponder extends RoutedResponder {
 
 	private Bookshelf shelf;
-	private int id;
 
 	/**
 	 * Creates a new BookshelfResponder object using the given
@@ -22,11 +21,6 @@ public class BookshelfResponder extends RoutedResponder {
 			throw new NullPointerException("parent cannot be null");
 		
 		this.shelf = shelf;
-		this.id = RoutedResponder.putResponder(this);
-	}
-	
-	public int getID() {
-		return this.id;
 	}
 
 	@Override

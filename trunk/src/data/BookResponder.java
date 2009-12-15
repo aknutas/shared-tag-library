@@ -9,10 +9,25 @@ import data.messages.BookshelfMessage;
 import data.messages.RemoteMessage;
 import data.messages.RoutedMessage;
 
+/**
+ * The BookResponder class extends the RoutedResponder and is used to
+ * Respond to RemoteMessages from RemoteBook objects over a network.
+ * It generates its response based on the Book object it contains.
+ * 
+ * @author Andrew Alm
+ */
 public class BookResponder extends RoutedResponder {
 
-	private Book book;
+	private final Book book;
 	
+	/**
+	 * Creates a new BookResponder using the given Book object as the
+	 * response generator.
+	 * 
+	 * @param book the book to use
+	 * 
+	 * @throws NullPointerException if the book given is null.
+	 */
 	public BookResponder(Book book) throws NullPointerException {
 		if(null == book)
 			throw new NullPointerException("book cannot be null");
@@ -20,6 +35,9 @@ public class BookResponder extends RoutedResponder {
 		this.book = book;
 	}
 	
+	/**
+	 * This method 
+	 */
 	@Override
 	public RoutedMessage onRoutedMessage(RoutedMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
