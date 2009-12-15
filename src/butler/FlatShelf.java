@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.jdo.annotations.PersistenceCapable;
+
 import data.Book;
 import data.Bookshelf;
 
@@ -18,6 +20,7 @@ import data.Bookshelf;
  * @author sjpurol
  *
  */
+@PersistenceCapable(detachable="true")
 public final class FlatShelf implements Book {
 
 	Map<String, Integer> tags;
