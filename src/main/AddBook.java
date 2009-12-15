@@ -35,6 +35,7 @@ public class AddBook extends JDialog {
     private SearchResults results = null;
     private Bookshelf shelf = null;
     private TreeView tree = null;
+    private Root root = null;
 
     /**
      * @param owner
@@ -43,7 +44,7 @@ public class AddBook extends JDialog {
     public AddBook(Frame owner, Controller ctl, Bookshelf b,
 	    SearchResults searchResults, TreeView treeView) {
 	super(owner);
-
+	root = (Root) owner;
 	control = ctl;
 
 	tree = treeView;
@@ -75,12 +76,16 @@ public class AddBook extends JDialog {
 	    commit.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
-		    book = control.addBook(jTextField.getText(), jTextField1
+		    try {
+			book = control.addBook(jTextField.getText(), jTextField1
 			    .getText());
 
-		    results.resetResults();
+			results.resetResults();
 
-		    setVisible(false);
+			setVisible(false);
+		    } catch (IllegalArgumentException e) {
+			root.setStatus("Can not add book. Please select a local bookshelf.");
+		    }
 
 		}
 	    });
