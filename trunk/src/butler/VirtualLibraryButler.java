@@ -282,6 +282,8 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		VirtualLibraryButler buddy = new VirtualLibraryButler("buddy");
 		VirtualLibraryButler wadsworth = new VirtualLibraryButler("wadsworth");
+		
+		System.out.println(dumbBut.checkBook(catBack).getProperty("name"));
 
 		//VirtualFlatShelf flatBS = new VirtualFlatShelf(bs);
 		//System.out.println("created flatBS");
@@ -338,6 +340,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	public VirtualLibraryButler(ButlerWeights weights){
 		setMatrixes(weights);
 		initialized = true;
+		org.encog.util.logging.Logging.stopConsoleLogging();
 	}
 
 	/**
@@ -349,6 +352,7 @@ public class VirtualLibraryButler extends LibraryButler {
 		properties = new HashMap<String, String>();
 		properties.put("name", name);
 		initialized = false;
+		org.encog.util.logging.Logging.stopConsoleLogging();
 	}
 	
 	/**
@@ -360,6 +364,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	public VirtualLibraryButler(Bookshelf shelf, int numShelfs){
 		properties = new HashMap<String, String>();
 		initialize(shelf, numShelfs);
+		org.encog.util.logging.Logging.stopConsoleLogging();
 	}
 	
 	/**
@@ -370,6 +375,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	public VirtualLibraryButler(VirtualLibrary virtLib) {
 		properties = new HashMap<String, String>();
 		properties.put("library", virtLib.getProperty("name"));
+		org.encog.util.logging.Logging.stopConsoleLogging();
 		if (virtLib.getMasterShelf().size() > 0)
 			initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
 		else
@@ -387,7 +393,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	public FlatShelf checkBook(Book b) {
 
 		if (!initialized)
-			return null;
+			return new FlatShelf();
 
 		double[] inputValues = readyBook(b);
 
@@ -586,7 +592,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			}
 			++i;
 		}
-		Map.Entry<String, Integer> tag = tags.next();
+		
 		NeuralDataSet data = new BasicNeuralDataSet(inputValues, null);
 
 		train(data);
@@ -709,7 +715,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			while (books.hasNext()) {
 
 				Book book = books.next();
-				Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags();
+				Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags().iterator();
 
 				while (tags.hasNext()) {
 
@@ -791,6 +797,8 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		double[] lastErrors = new double[errorSize];
 
+		org.encog.util.logging.Logging.stopConsoleLogging();
+		
 		// training loop
 		do {
 			train.iteration();

@@ -26,6 +26,14 @@ public final class FlatShelf implements Book {
 
 	Map<String, Integer> tags;
 	Map<String, String> properties;
+	
+	/**
+	 * Creates the special empty FlatShelf.
+	 */
+	public FlatShelf() {
+		properties = new HashMap<String, String>();
+		properties.put("name", "__empty__");
+	}
 
 	/**
 	 * Creates a new FlatShelf from the given VirtualBookshelf

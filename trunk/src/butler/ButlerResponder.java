@@ -2,12 +2,10 @@ package butler;
 
 import java.util.Collection;
 
-import data.RoutedResponder;
-import data.messages.BookshelfMessage;
+import data.RemoteResponder;
 import data.messages.RemoteMessage;
-import data.messages.RoutedMessage;
 
-public class ButlerResponder extends RoutedResponder {
+public class ButlerResponder extends RemoteResponder {
 
 	private HeadButler butler;
 
@@ -21,11 +19,6 @@ public class ButlerResponder extends RoutedResponder {
 
 	@Override
 	public RemoteMessage onRemoteMessage(RemoteMessage message) throws NullPointerException, IllegalArgumentException {
-		return null;
-	}
-
-	@Override
-	public RoutedMessage onRoutedMessage(RoutedMessage message) throws NullPointerException, IllegalArgumentException {
 
 		if (null == message)
 			throw new NullPointerException("message cannot be null");
@@ -37,14 +30,14 @@ public class ButlerResponder extends RoutedResponder {
 		case ButlerMessage.MSG_INITIALIZE:
 			return this.handleInitializeMessage((ButlerMessage)message);
 		default:
-			RoutedMessage error = new BookshelfMessage(BookshelfMessage.MSG_ERROR, this.getID());
+			RemoteMessage error = new ButlerMessage(ButlerMessage.MSG_ERROR);
 		error.queueParameter("unknown message type");
 		return error;
 		}
 
 	}
 
-	private RoutedMessage handleInitializeMessage(ButlerMessage message) {
+	private RemoteMessage handleInitializeMessage(ButlerMessage message) {
 		if (null == message)
 			throw new NullPointerException("message cannot be null");
 
@@ -52,7 +45,7 @@ public class ButlerResponder extends RoutedResponder {
 			throw new IllegalArgumentException("invalid message type");
 
 		/* create response */
-		ButlerMessage response = new ButlerMessage(ButlerMessage.MSG_INITIALIZE, this.getID());
+		ButlerMessage response = new ButlerMessage(ButlerMessage.MSG_INITIALIZE);
 		response.queueParameter(new Integer(butler.getNumOfLocalButlers()));
 		
 		Collection<VirtualLibraryButler> allButlers = butler.getLocalButlers();

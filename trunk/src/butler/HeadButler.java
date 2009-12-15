@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
 
 import data.Book;
 import data.VirtualBook;
@@ -34,6 +32,7 @@ public class HeadButler{
 	 * @throws IllegalArgumentException
 	 */
 	public HeadButler(VirtualLibrary virtLib) throws IllegalArgumentException{
+		org.encog.util.logging.Logging.stopConsoleLogging();
 		if (null == virtLib)
 			throw new IllegalArgumentException("VirtualLibrary cannot be null.");
 		staff = new HashMap<String, LibraryButlerInterface>();
@@ -54,6 +53,7 @@ public class HeadButler{
 	 * @param wadsworth the first VirtualLibraryButler.
 	 */
 	public HeadButler(VirtualLibraryButler wadsworth) throws IllegalArgumentException{
+		org.encog.util.logging.Logging.stopConsoleLogging();
 		if (null == wadsworth)
 			throw new IllegalArgumentException("VirtualLibraryButler cannot be null.");
 		staff = new HashMap<String, LibraryButlerInterface>();
@@ -72,6 +72,7 @@ public class HeadButler{
 	 * @throws IllegalArgumentException
 	 */
 	public HeadButler(Collection<ButlerWeights> weights) throws IllegalArgumentException {
+		org.encog.util.logging.Logging.stopConsoleLogging();
 		if (null == weights)
 			throw new IllegalArgumentException("weights cannot be null");
 		if (weights.isEmpty()) {

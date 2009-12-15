@@ -1,7 +1,6 @@
 package butler;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.encog.neural.data.NeuralData;
@@ -118,15 +117,13 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 * @return a String containing the name of the FlatShelf
 	 */
 	public String identifyShelf(int index) {
-		/*if (null == flatShelfs)
-			System.out.println("Flatshelfs is null!");
-		else if (null == flatShelfs.get(index))
-			System.out.println("This particular flatshelf is null");
-		else if (null == flatShelfs.get(index).getProperty("name"))
-			System.out.println("This particular flatshelf does not have a name");*/
-		//System.out.println(index);
-		return flatShelfs.get(index).getProperty("name");
-	
+		
+		try {
+			return flatShelfs.get(index).getProperty("name");
+		}
+		catch (Exception e) {
+			return "unknown";
+		}
 	}
 	
 	/**
