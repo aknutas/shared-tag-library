@@ -425,7 +425,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	 */
 	private int checkBook(FlatShelf b){
 
-		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
+		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags().iterator();
 		//Iterator<Map.Entry<String, String>> properties = b.enumerateProperties();
 
 		//InputPairSet inputPairs = new InputPairSet();	// neuron # -> weight
@@ -519,7 +519,7 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		while (books.hasNext()) {
 			Book book = books.next();
-			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags(); 
+			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags().iterator(); 
 
 			while (tags.hasNext()) {
 
@@ -564,7 +564,7 @@ public class VirtualLibraryButler extends LibraryButler {
 		//parse through the properties and tags of each book and normalize the weights.
 		for (Book book : basis) {
 			
-			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags();
+			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags().iterator();
 
 			while (tags.hasNext()) {
 				Map.Entry<String, Integer> tag = tags.next();
@@ -586,7 +586,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			}
 			++i;
 		}
-
+		Map.Entry<String, Integer> tag = tags.next();
 		NeuralDataSet data = new BasicNeuralDataSet(inputValues, null);
 
 		train(data);
@@ -650,7 +650,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			int heaviestTagWeight = Integer.MIN_VALUE;
 			int k = checkBook(fs);
 			
-			Iterator<Map.Entry<String,Integer>> fsTags = fs.enumerateTags();
+			Iterator<Map.Entry<String,Integer>> fsTags = fs.enumerateTags().iterator();
 			
 			while (fsTags.hasNext()) {
 				

@@ -115,8 +115,8 @@ public class RemoteBook extends RemoteObject implements Book {
 	}
 	
 	@Override
-	public Iterator<Entry<String, Integer>> enumerateTags() {
-		return this.tags.entrySet().iterator();
+	public Iterable<Entry<String, Integer>> enumerateTags() {
+		return this.tags.entrySet();
 	}
 	
 	public int getTagCount() {

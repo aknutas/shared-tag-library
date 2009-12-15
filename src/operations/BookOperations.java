@@ -23,13 +23,10 @@ public abstract class BookOperations {
 	}
 	
 	public static int countTags(Book book){
-		
-		Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags();
 		int num = 0;
-		while (tags.hasNext()){
+		
+		for(Map.Entry<String, Integer> tag : book.enumerateTags())
 			++num;
-			tags.next();
-		}
 		
 		return num;
 	}

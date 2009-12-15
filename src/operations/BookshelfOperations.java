@@ -115,14 +115,11 @@ public abstract class BookshelfOperations{
 
 		while (shelfIt.hasNext()){		//each book on the shelf
 			Book current = shelfIt.next();
-			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
 			++numBooks;
 
-			while (tags.hasNext()){		//each tag on a book
-				Map.Entry<String, Integer> temp = tags.next();
+			for(Map.Entry<String, Integer> temp : current.enumerateTags()) {
 				map.put(temp.getKey(), temp.getValue());
 				++numTags;
-
 			}
 
 		}
@@ -149,16 +146,14 @@ public abstract class BookshelfOperations{
 
 		while (shelfIt.hasNext()){		//each book on the shelf
 			Book current = shelfIt.next();
-			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
 			++numBooks;
 
-			while (tags.hasNext()){		//each tag on a book
-				Map.Entry<String, Integer> temp = tags.next();
-
+			for(Map.Entry<String, Integer> temp : current.enumerateTags()) {
 				if (map.containsKey(temp.getKey()))	//a shelf's tags are the sum of its books' tags
 					map.put(temp.getKey(), temp.getValue() + map.remove(temp.getKey()));
 				else
 					map.put(temp.getKey(), temp.getValue());
+				
 				++numTags;
 			}
 		}

@@ -49,7 +49,7 @@ public final class FlatShelf implements Book {
 					tags.put(prop.getValue(), (tags.get(prop.getValue()) + 1));
 			}
 
-			Iterator<Map.Entry<String, Integer>> bookTags = b.enumerateTags();
+			Iterator<Map.Entry<String, Integer>> bookTags = b.enumerateTags().iterator();
 
 			while (bookTags.hasNext()) {
 				Map.Entry<String, Integer> tag = bookTags.next();
@@ -78,7 +78,7 @@ public final class FlatShelf implements Book {
 	public String setProperty(String name, String value) throws NullPointerException {return null;}
 
 	@Override
-	public Iterator<Entry<String, Integer>> enumerateTags() {return tags.entrySet().iterator();}
+	public Iterable<Entry<String, Integer>> enumerateTags() {return tags.entrySet();}
 
 	@Override
 	public int getTagCount() {return tags.size();}

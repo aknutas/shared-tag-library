@@ -107,20 +107,25 @@ public class TestNetworkControl extends TestNetwork implements Control {
 
 	@Override
 	public void sendMsg(int connection, final Message message) {
-		if(null == message)
-			throw new NullPointerException("message cannot be null");
-		
-		final ServerResponder server = this.connections.get(connection);
-		if(null == server)
-			throw new IllegalArgumentException("unknown connection");
-		
-		(new Thread(new Runnable() {
-			public void run() {
-				server.onMessage(message);
-			}
-		})).start();
-		
-		this.recordSend(message);
+		try {
+			if(null == message)
+				throw new NullPointerException("message cannot be null");
+			
+			final ServerResponder server = this.connections.get(connection);
+			if(null == server)
+				throw new IllegalArgumentException("unknown connection");
+			
+			(new Thread(new Runnable() {
+				public void run() {
+					server.onMessage(message);
+				}
+			})).start();
+			
+			Thread.sleep(100);
+			this.recordSend(message);
+		} catch(Exception ex) {
+			
+		}
 	}
 
 	private void recordSend(Message message) {

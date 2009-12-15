@@ -30,9 +30,8 @@ public abstract class LibraryOperations {
 		while (master.hasNext()){
 			//System.out.println("Master has next.");
 			Book current = master.next();
-			Iterator<Map.Entry<String, Integer>> tags = current.enumerateTags();
-			while (tags.hasNext()){
-				Map.Entry<String,Integer> tag = tags.next();
+			
+			for(Map.Entry<String, Integer> tag : current.enumerateTags()) {
 				if (allTags.containsKey(tag.getKey())) {
 					Integer old = allTags.remove(tag.getKey());
 					allTags.put(tag.getKey(), old + tag.getValue());

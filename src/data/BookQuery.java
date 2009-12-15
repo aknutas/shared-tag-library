@@ -324,7 +324,7 @@ public final class BookQuery implements Comparable<Book> {
 	 */
 	@Override
 	public int compareTo(Book book) {
-		Iterator<Entry<String, Integer>> tagIter = book.enumerateTags();
+		Iterator<Entry<String, Integer>> tagIter = book.enumerateTags().iterator();
 		Iterator<Entry<String, String>> propertyIter = book.enumerateProperties().iterator();
 		
 		boolean match = false;
