@@ -27,14 +27,15 @@ public class ChooseBookshelves extends JDialog {
     private JButton importButton = null;
 
     private JPanel jContentPane = null;
-    private Library library = null;
+    private Iterable<String> library = null;
     private Root root = null;
     private TreeView treeView = null;
+    private String alias = "";
 
     /**
      * @param owner
      */
-    public ChooseBookshelves(Frame owner, Controller c, TreeView t, Library l) {
+    public ChooseBookshelves(Frame owner, Controller c, TreeView t, Iterable<String> l, String a) {
 	super(owner);
 
 	root = (Root) owner;
@@ -43,6 +44,7 @@ public class ChooseBookshelves extends JDialog {
 	    control = c;
 	    treeView = t;
 	    library = l;
+	    alias = a;
 
 	    initialize();
 	} else {
@@ -59,9 +61,10 @@ public class ChooseBookshelves extends JDialog {
 	if (bookshelfList == null) {
 
 	    List<String> names = new ArrayList<String>();
-	    Iterator<String> bookshelves = library.getBookshelfNames()
-		    .iterator();
+	    Iterator<String> bookshelves = library.iterator();//.getBookshelfNames()
+	//	    .iterator();
 	    while (bookshelves.hasNext()) {
+		System.out.println("more");
 		names.add(bookshelves.next());
 	    }
 
@@ -108,12 +111,16 @@ public class ChooseBookshelves extends JDialog {
 			    for (int x = 0; x < shelves.length; x++) {
 				imported.add((String) shelves[x]);
 			    }
-			    control.importSelectBookshelves(control.myLib,
-				    library, imported);
+			    System.out.println(alias + " " + imported.size());
+			    Library l = control.setShelveSelection(alias, imported);
+			    if (l == null) System.out.println("null!");
+			    control.addBookshelf(l.getMasterShelf());
+		//	    control.importSelectBookshelves(control.myLib,
+		//		    library, imported);
 			} else {
-			    control
-				    .importAllBookshelves(control.myLib,
-					    library);
+			//    control
+			//	    .importAllBookshelves(control.myLib,
+			//		    library);
 			}
 
 			treeView.refresh();

@@ -116,12 +116,13 @@ public class ConnectTo extends JDialog {
 		    try {
 			if (addressField.getText().equals("")) {
 
+			    System.out.println((String) connectionList
+				    .getSelectedItem());
 			    control.connect((String) connectionList
 				    .getSelectedItem());
 			} else {
 
-			    control.addConnection(addressField.getText(),
-				    ipAlias.getText());
+			    control.addConnection(ipAlias.getText(), addressField.getText());
 			    control.connect(ipAlias.getText());
 			}
 
@@ -129,8 +130,9 @@ public class ConnectTo extends JDialog {
 
 			    ChooseBookshelves dialog = new ChooseBookshelves(
 				    root, control, tree, control
-					    .getImportedLibrary(ipAlias
-						    .getText()));
+					    .getShelveSelection(ipAlias
+						    .getText()), ipAlias
+						    .getText());
 			    dialog.setVisible(true);
 
 			    tree.refresh();
@@ -138,9 +140,9 @@ public class ConnectTo extends JDialog {
 			    root.setStatus("Error Connecting");
 			}
 		    } catch (IllegalArgumentException e) {
-			root.setStatus("Error Connecting");
+			root.setStatus("Error Connecting (Illegal Argument)");
 		    } catch (NullPointerException e) {
-			root.setStatus("Error Connecting");
+			root.setStatus("Error Connecting (NULL)");
 		    }
 		    setVisible(false);
 		}
