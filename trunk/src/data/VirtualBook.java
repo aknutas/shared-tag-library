@@ -125,8 +125,8 @@ public class VirtualBook implements Book, Serializable {
 	 * 
 	 * @return an Iterator of tags and weights.
 	 */
-	public Iterator<Map.Entry<String, Integer>> enumerateTags() {
-		return this.tags.entrySet().iterator();
+	public Iterable<Map.Entry<String, Integer>> enumerateTags() {
+		return this.tags.entrySet();
 	}
 	
 	/**

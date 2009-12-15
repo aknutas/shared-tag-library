@@ -64,7 +64,7 @@ public interface Book extends Properties {
 	 * 
 	 * @return an Iterator of map entries.
 	 */
-	public Iterator<Map.Entry<String, Integer>> enumerateTags();
+	public Iterable<Map.Entry<String, Integer>> enumerateTags();
 	
 	
 	/**

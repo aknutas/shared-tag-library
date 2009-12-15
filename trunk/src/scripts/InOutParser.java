@@ -270,11 +270,10 @@ public class InOutParser {
      */
     private void writeTags(Book book, BufferedWriter output) throws IOException {
 	String tags = "TAG:";
-	Iterator<Entry<String, Integer>> iter = book.enumerateTags();
-	while (iter.hasNext()) {
-	    Entry<String, Integer> ent = iter.next();
+
+	for(Entry<String, Integer> ent : book.enumerateTags()) 
 	    tags = tags.concat(ent.getKey() + "," + ent.getValue() + ",");
-	}
+	
 	tags.substring(0, tags.length() - 1);
 	output.write(tags);
 	output.newLine();

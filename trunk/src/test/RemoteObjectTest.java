@@ -127,6 +127,7 @@ public class RemoteObjectTest {
 	 */
 	@Test
 	public void testLibrary() throws Exception {
+		int count;
 		Library remoteLibrary = new RemoteLibrary(this.network.connect("library1"), this.network);
 		
 		/* test addBookshelf (not allowed, should return false) */
@@ -136,20 +137,36 @@ public class RemoteObjectTest {
 		Assert.assertFalse(remoteLibrary.removeBookshelf(new VirtualBookshelf("test")));
 		
 		/* test getBookshelfNames */
-		for(String shelfName : remoteLibrary.getBookshelfNames())
+		count = 0;
+		for(String shelfName : remoteLibrary.getBookshelfNames()) {
 			Assert.assertNotNull(this.library1.getBookshelf(shelfName));
+			count += 1;
+		}		
+		
+		Assert.assertEquals(count, 3);
+		
 		
 		/* test of getBookshelf */
-		for(Bookshelf shelf : remoteLibrary)
+		count = 0;
+		for(Bookshelf shelf : remoteLibrary) {
 			Assert.assertNotNull(this.library1.getBookshelf(shelf.getProperty("name")));
+			count += 1;
+		}
+		
+		Assert.assertEquals(count, 3);
 		
 		/* test of getBookshelf(Collection) */
 		Collection<String> shelfList = new LinkedList<String>();
 		shelfList.add("mathematics");
 		shelfList.add("programming");
 		
-		for(Bookshelf shelf : remoteLibrary.getBookshelf(shelfList))
+		count = 0;
+		for(Bookshelf shelf : remoteLibrary.getBookshelf(shelfList)) {
 			Assert.assertNotNull(this.library1.getBookshelf(shelf.getProperty("name")));
+			count += 1;
+		}
+		
+		Assert.assertEquals(count, 3);
 		
 		/* test of getMasterBookshelf */
 		for(Book book : remoteLibrary.getMasterShelf()) {

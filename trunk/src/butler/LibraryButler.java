@@ -45,11 +45,9 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 */
 	public double[] readyBook(Book b) {
 
-		Iterator<Map.Entry<String, Integer>> tags = b.enumerateTags();
 		double[] inputValues = new double[this.numTags];
 
-		while (tags.hasNext()){
-			Map.Entry<String, Integer> tag = tags.next();
+		for(Map.Entry<String, Integer> tag : b.enumerateTags()) {
 			//System.out.println("tags: " + tag.getKey() + " : " + tag.getValue());
 			Integer current = idPairs.get(tag.getKey());
 			if (current == null) {
