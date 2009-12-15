@@ -17,6 +17,7 @@ import network.messages.ChatMessage;
 import network.messages.Message;
 import scripts.InOutParser;
 import butler.ButlerWeights;
+import butler.FlatShelf;
 import butler.HeadButler;
 import butler.RemoteLibraryButler;
 import data.Book;
@@ -24,6 +25,7 @@ import data.Bookshelf;
 import data.Library;
 import data.LibraryResponder;
 import data.PersistentLibrary;
+import data.RemoteObjectException;
 import data.VirtualBook;
 import data.VirtualBookshelf;
 import database.Access;
@@ -89,6 +91,29 @@ public class Controller {
 		addShutdownHooks();
 	}
 
+	/**
+	 * 
+	 * @param bookshelf
+	 * @param num
+	 * @return
+	 */
+	public void sortShelves(Bookshelf bookshelf,int num){
+	    Set<Bookshelf> shelves;
+	    if(bookshelf instanceof VirtualBookshelf){
+		shelves = HB.identify((VirtualBookshelf) bookshelf,num);
+		for(Bookshelf shelf:shelves){
+		    addBookshelf(shelf);
+		}
+	    }
+	    else
+		throw new IllegalArgumentException("Non Local shelf");
+    
+	}
+	
+	public FlatShelf checkBook(Book book){
+		return HB.checkBook(book);
+	}
+	
 	/**
 	 * Add a book to the library
 	 * 
@@ -246,14 +271,16 @@ public class Controller {
 	
 	
 	/**
-	 * connects the named alias
+	 * connects the named alias and hires the related butler
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if already connected
 	 * @param alias
+	 * @throws RemoteObjectException 
+	 * @throws NullPointerException 
 	 */
 	public synchronized void connect(String alias)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, NullPointerException, RemoteObjectException {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException("no available connections");
 		}
@@ -262,14 +289,13 @@ public class Controller {
 				if (connections.get(id).isConnected())
 					throw new IllegalArgumentException("already connected");
 				connections.get(id).connect(cntrl);
+				HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId(),cntrl,connections.get(id).getAlias()));
 			}
-
-			//HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId()));
 		}
 	}
 
 	/**
-	 * disconnect the named alias
+	 * disconnect the named alias and fires the related butler
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if not connected
@@ -284,6 +310,7 @@ public class Controller {
 				if (!connections.get(id).isConnected())
 					throw new IllegalArgumentException();
 				connections.get(id).disconnect(cntrl);
+				HB.removeButler(connections.get(id).getAlias());
 			}
 		}
 	}
