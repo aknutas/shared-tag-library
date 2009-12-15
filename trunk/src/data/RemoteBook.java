@@ -161,5 +161,9 @@ public class RemoteBook extends RemoteObject implements Book {
 	@Override
 	public Collection<Entry<String, String>> enumerateProperties() {
 		return this.properties.entrySet();
-	}	
+	}
+	
+	public VirtualBook makeVirtual() {
+		return new VirtualBook(this.tags, this.properties);
+	}
 }

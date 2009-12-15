@@ -106,6 +106,8 @@ public abstract class RemoteIterator<T> extends RemoteObject implements Iterator
 	 */
 	@Override
 	public T next() {
+		if(!this.hasNext() && this.objectQueue)
+		
 		if(!this.hasNext())
 			throw new NoSuchElementException();
 		
