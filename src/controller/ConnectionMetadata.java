@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
+import butler.LibraryButlerInterface;
+
 import network.Control;
 import data.Bookshelf;
 import data.Library;
@@ -31,7 +33,7 @@ public class ConnectionMetadata implements Serializable {
 	private transient int connection = 0;
 	private transient Library library = null;
 	private transient Library ImportedLibrary = null;
-
+	//private transient LibraryButlerInterface myButler=null;
 	/**
 	 * Creates a new ConnectionMetadata instance with the given alias and
 	 * hostname
@@ -79,6 +81,14 @@ public class ConnectionMetadata implements Serializable {
 	 */
 	public Library getLibrary() {
 		return this.library;
+	}
+	/**
+	 * Gets the connection int stored in this ConnectionMetadata instance.
+	 * 
+	 * @return the library or null if not connected
+	 */
+	public int getConnectionId() {
+		return this.connection;
 	}
 	/**
 	 * Gets the Imported library stored in this ConnectionMetadata instance.
