@@ -125,8 +125,8 @@ public class ConnectTo extends JDialog {
 			    control.addConnection(ipAlias.getText(), addressField.getText());
 			    control.connect(ipAlias.getText());
 			}
-
-			if (control.getImportedLibrary(ipAlias.getText()) != null) {
+			
+			if (control.isConnected(ipAlias.getText())) {
 
 			    ChooseBookshelves dialog = new ChooseBookshelves(
 				    root, control, tree, control
@@ -137,10 +137,10 @@ public class ConnectTo extends JDialog {
 
 			    tree.refresh();
 			} else {
-			    root.setStatus("Error Connecting");
+			    root.setStatus("Could not connect. Is the host up?");
 			}
 		    } catch (IllegalArgumentException e) {
-			root.setStatus("Error Connecting (Illegal Argument)");
+			root.setStatus("Error Connecting (Already Connected)");
 		    } catch (NullPointerException e) {
 			root.setStatus("Error Connecting (NULL)");
 		    }

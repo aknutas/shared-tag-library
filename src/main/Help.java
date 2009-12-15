@@ -16,13 +16,15 @@ public class Help extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private String[] content = {
-	    "Hello, I am trying to figure this stuff out...",
+	    "Welcometo the Book Butler!\n\nCreate and modify book collections and share them with other people. Along the way, use an intelligent tag weighting system to sort existing collections.\n\nPress links on the left to explore different application features.",
+	    "Use the top menu to choose operations. Add a new bookshelf by selecting 'Library' and pressing 'Add Bookshelf'. Operations on the bookshelf, and its books, are located in 'Bookshelf' and 'Book'.\nSelect books by pressing the title of each book.",
+	    "You can add tags by selecting the menu item 'Add Tag' under 'Book' with one or more books selected. You can also press 'Details' on a resultant book and use that add tag feature. Tags have unique properties called weights, that can be increased or decreased according to their relative priority. Their priority is used to automatically generate more bookshelves that contain the priority/relevancy sorted tags.",
 	    "Michigan Technological University 2009\n\nTeam Software Projects: Team One\n\tAndrew Alm\n\tRobert Amundson\n\tAntti Knutas\n\tSteven Purol\n\tPatrick Ranspach" };
     private int focus = 0;
     private JPanel jContentPane = null;
     private JList jList = null;
     private JTextPane jTextPane = null;
-    private String[] topics = { "Intro", "About" };
+    private String[] topics = { "Intro", "Basics", "Tags", "About" };
 
     /**
      * @param owner
@@ -38,7 +40,7 @@ public class Help extends JDialog {
     public Help(Frame owner, Boolean about) {
 	super(owner);
 	if (about)
-	    focus = 1;
+	    focus = 3;
 	initialize();
     }
 
