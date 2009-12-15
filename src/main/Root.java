@@ -336,6 +336,7 @@ public class Root extends JFrame {
 	    addBookMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 
+		    shelf = searchResults.getBookshelf();
 		    addBookDialog = new AddBook(thisClass, control, shelf,
 			    searchResults, treeView);
 		    addBookDialog.setLocationRelativeTo(content);
