@@ -242,7 +242,6 @@ public class Controller {
 	 */
 	public synchronized void connect(String alias)
 			throws IllegalArgumentException {
-		System.out.println("Attempting to connect to" + alias);
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException("no available connections");
 		}
@@ -251,8 +250,6 @@ public class Controller {
 				if (connections.get(id).isConnected())
 					throw new IllegalArgumentException("already connected");
 				connections.get(id).connect(cntrl);
-				System.out.println("Connected to " + connections.get(id).getAlias());
-				System.out.println("Connected " + connections.get(id).isConnected());
 			}
 
 			//HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId()));
@@ -321,7 +318,7 @@ public class Controller {
 	 * @return returns null if not connected else the library of selected
 	 *         shelves
 	 */
-	public synchronized Library setShelveSelection(String alias,
+	public synchronized Library setShelfSelection(String alias,
 			Collection<String> shelves) {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException();
@@ -340,7 +337,32 @@ public class Controller {
 		System.out.println("error finding connection");
 		return null;
 	}
-
+	/**
+	 * Sets the selected shelves to a subset of the avaiable shelves
+	 * 
+	 * @param alias
+	 * @return returns null if not connected else the library of selected
+	 *         shelves
+	 */
+	public synchronized Library setShelfSelectionAll(String alias,
+			Collection<String> shelves) {
+		if (connections.isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		for (int id = 0; id < connections.size(); id++) {
+			ConnectionMetadata conn = connections.get(id);
+			if (conn.getAlias().equals(alias)){
+			    if(conn.isConnected()){
+				return importAllBookshelves(conn.getImportedLibrary(), conn
+						.getLibrary());
+			    }
+				else
+					System.out.println("EROR not connected");				    
+			}
+		}
+		System.out.println("error finding connection");
+		return null;
+	}
 	/**
 	 * This method registers shutdown hook in the runtime system. The hook is
 	 * basically a thread that gets executed moments before the program
@@ -388,7 +410,7 @@ public class Controller {
 	 * @param local
 	 * @param remote
 	 */
-	private synchronized void importAllBookshelves(Library local, Library remote) throws NullPointerException{
+	private synchronized Library importAllBookshelves(Library local, Library remote) throws NullPointerException{
 		if (local == null || remote == null) {
 			throw new NullPointerException();
 		}
@@ -400,6 +422,7 @@ public class Controller {
 			bs = iter.next();
 			local.addBookshelf(bs);
 		}
+		return local;
 	}
 
 	/**
