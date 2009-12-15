@@ -106,6 +106,7 @@ public class RemoteLibrary extends RemoteObject implements Library {
 		
 		try {
 			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF);
+			message.queueParameter(name);
 			message = this.send(message, 5000);
 		
 			if(!(message instanceof LibraryMessage) || LibraryMessage.MSG_BOOKSHELF != message.getMessageType())

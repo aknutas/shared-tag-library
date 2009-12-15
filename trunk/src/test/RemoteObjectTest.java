@@ -176,8 +176,7 @@ public class RemoteObjectTest {
 	@Test
 	public void testBookshelf() throws Exception {
 		Library remoteLibrary = new RemoteLibrary(this.network.connect("library1"), this.network);
-		Bookshelf remoteShelf = remoteLibrary.getBookshelf("mathematics");
-		System.out.println(remoteShelf);
+		Bookshelf remoteShelf = remoteLibrary.getBookshelf("classics");
 		
 		/* test of insert */
 		Assert.assertFalse(remoteShelf.insert(new VirtualBook("Illegal Operation", "Illegal Operation")));
