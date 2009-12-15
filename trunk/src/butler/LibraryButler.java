@@ -33,7 +33,7 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	/**
 	 * Contains pairs of Strings and Integers mapping each tag to a specific input neuron.
 	 */
-	protected IDPairSet idPairs;
+	protected Map<String, Integer> idPairs;
 	
 	/**
 	 * Takes an input book and returns the proper input values
@@ -50,14 +50,14 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 		while (tags.hasNext()){
 			Map.Entry<String, Integer> tag = tags.next();
 			//System.out.println("tags: " + tag.getKey() + " : " + tag.getValue());
-			IDPair current = idPairs.get(tag.getKey());
+			Integer current = idPairs.get(tag.getKey());
 			if (current == null) {
 				current = idPairs.get(OTHER);
-				inputValues[current.getValue()] += ( (double)tag.getValue() );/// maxTagMag);
+				inputValues[current] += ( (double)tag.getValue() );/// maxTagMag);
 				//inputValues[current.getValue()] += ( (double)tag.getValue() / maxTagMag);
 			}
 			else
-				inputValues[current.getValue()] = ( (double)tag.getValue() );/// maxTagMag);
+				inputValues[current] = ( (double)tag.getValue() );/// maxTagMag);
 			//inputValues[current.getValue()] = ( (double)tag.getValue() / maxTagMag);
 		}
 		return inputValues;
@@ -65,13 +65,17 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	
 	/**
 	 * Typically called by the HeadButler. Runs the input book through
-	 * the brain and returns the raw output vector.
+	 * the brain and returns the raw output vector. If this butler was
+	 * initialized with the empty library, returns a size 0 array.
+	 * 
 	 * @param b the book to examine
 	 */
 	public double[] assemble(Book b) {
 		
 		double[] inputValues = readyBook(b);
 		NeuralData book = new BasicNeuralData(inputValues);
+		if (flatShelfs.size() == 0)
+			return new double[0];
 		return brain.compute(book).getData();
 	}
 	
@@ -82,7 +86,9 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 * @param index the index returned by compareTo(FlatShelf)
 	 * @return a String containing the name of the FlatShelf
 	 */
-	public String identifyShelf(int index) {return flatShelfs.get(index).getProperty("name");}
+	public String identifyShelf(int index) {
+		//System.out.println(index);
+		return flatShelfs.get(index).getProperty("name");}
 	
 	/**
 	 * Returns the number of shelfs this LibraryButler has learned.
