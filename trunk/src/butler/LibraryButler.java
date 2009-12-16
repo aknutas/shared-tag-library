@@ -101,10 +101,10 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 */
 	protected double[] max(double[] input) {
 		
-		double max = Double.MIN_VALUE;
+		double max = -1*Double.MAX_VALUE;
 		int index = -1;
 		
-		for (int i = 0; i < input.length; ++i) {
+		for (int i = 0; i < input.length; i++) {
 			max = Math.max(max, input[i]);
 			if (max == input[i])
 				index = i;
