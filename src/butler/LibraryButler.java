@@ -94,7 +94,8 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	
 	/**
 	 * Takes a double[] as input and returns a 2 element double[].
-	 * ans
+	 * answer[0] = maxValue
+	 * answer[1] = index;
 	 * @param input
 	 * @return
 	 */
