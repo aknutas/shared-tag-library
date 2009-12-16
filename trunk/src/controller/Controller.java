@@ -16,6 +16,8 @@ import network.Definitions;
 import network.messages.ChatMessage;
 import network.messages.Message;
 import scripts.InOutParser;
+import butler.ButlerMessage;
+import butler.ButlerResponder;
 import butler.ButlerWeights;
 import butler.FlatShelf;
 import butler.HeadButler;
@@ -26,8 +28,11 @@ import data.Library;
 import data.LibraryResponder;
 import data.PersistentLibrary;
 import data.RemoteObjectException;
+import data.RemoteResponder;
 import data.VirtualBook;
 import data.VirtualBookshelf;
+import data.messages.LibraryMessage;
+import data.messages.RemoteMessage;
 import database.Access;
 import database.AccessImpl;
 import database.QueryBuilder;
@@ -75,7 +80,28 @@ public class Controller {
 		// load in library
 		qb = new QueryBuilderImpl();
 		myLib = new PersistentLibrary(qb);
-		cntrl = new ControlImpl(new LibraryResponder(myLib));
+		
+		if(retrieveButlerWeights()==null)
+		    HB = new HeadButler(myLib);
+		else
+		    HB = new HeadButler(retrieveButlerWeights());
+		
+		final LibraryResponder libResponder = new LibraryResponder(myLib);
+		final ButlerResponder butResponder = new ButlerResponder(HB);
+		
+		cntrl = new ControlImpl(new RemoteResponder() {
+			@Override
+			public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
+				if(RemoteMessage.class.equals(LibraryMessage.class))
+					return libResponder.onRemoteMessage(message);
+				else if(RemoteMessage.class.equals(ButlerMessage.class))
+					return butResponder.onRemoteMessage(message);
+				
+				throw new IllegalArgumentException();
+			}
+		});
+		
+		
 		myLib.setProperty("name", "My Library");
 		modifiedBs = new Vector<Bookshelf>();
 		ProgramProperties props = ProgramProperties.getInstance();
@@ -83,10 +109,7 @@ public class Controller {
 				.getProperty("controller::connections");
 		if (connections == null)
 			connections = new Vector<ConnectionMetadata>();
-		if(retrieveButlerWeights()==null)
-		    HB = new HeadButler(myLib);
-		else
-		    HB = new HeadButler(retrieveButlerWeights());
+		
 		// Registering shutdown hooks
 		addShutdownHooks();
 	}
