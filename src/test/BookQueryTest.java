@@ -1,9 +1,10 @@
 package test;
 
-import java.util.*;
-import java.util.Map.*;
-
-import data.*;
+import data.Book;
+import data.BookQuery;
+import data.Bookshelf;
+import data.VirtualBook;
+import data.VirtualBookshelf;
 
 public class BookQueryTest {
 
@@ -34,4 +35,9 @@ public class BookQueryTest {
 		    + book.getProperty("author"));
     }
 
+	//@Test
+	public void testQuery() {
+		
+	}
+	
 }
