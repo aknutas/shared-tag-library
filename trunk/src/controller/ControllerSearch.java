@@ -1,3 +1,6 @@
+/**
+ * Contains Methods that search on all possible varieties of searchable objects
+ */
 package controller;
 
 import java.util.Collection;
@@ -13,40 +16,51 @@ import data.Library;
 import data.VirtualBookshelf;
 
 public abstract class ControllerSearch {
-
-    public static Collection<Bookshelf> searchAlllibs(String str,
+    /**
+     * Searchs with a string on a collection of libraries
+     * @param searchTerm the term to search
+     * @param allLibs a collection of libraries
+     * @return a shelf for each library
+     */
+    public static Collection<Bookshelf> searchAlllibs(String searchTerm,
 	    Collection<Library> allLibs) {
 	Iterator<Library> iter = allLibs.iterator();
 	Collection<Bookshelf> shelves = new Vector<Bookshelf>();
 
 	while (iter.hasNext()) {
-	    shelves.add(search(str, iter.next()));
+	    shelves.add(search(searchTerm, iter.next()));
 	}
 	return shelves;
     }
-
-    public static Bookshelf searchAlllibsFlat(String str,
+    /**
+     * Searchs with a string on a collection of libraries and flattens the results
+     * @param searchTerm the term to search
+     * @param allLibs a collection of libraries
+     * @return a shelf for each library
+     */
+    public static Bookshelf searchAlllibsFlat(String searchTerm,
 	    Collection<Library> allLibs) {
-
-   	
 	Iterator<Library> iter = allLibs.iterator();
 	VirtualBookshelf vb = new VirtualBookshelf();
 	while (iter.hasNext()) {
-	   	Bookshelf avb=search(str, iter.next());
+	   	Bookshelf avb=search(searchTerm, iter.next());
 		vb = (VirtualBookshelf) vb.union(avb);
 	}
 
 	return vb;
     }
-
-    public static Bookshelf search(String str, Library aLib) {
-	if (str == null)
+    /**
+     * Searchs with a string on a library and flattens the results
+     * @param searchTerm the term to search
+     * @param aLib a library
+     * @return a shelf for each library
+     */
+    public static Bookshelf search(String searchTerm, Library aLib) {
+	if (searchTerm == null)
 	    return null;
-	// Bookshelf result = new VirtualBookshelf(aLib.getProperty("Name") +
-	// ":Search on " + str);
-	Bookshelf result = new VirtualBookshelf("Search on " + str);
+	Bookshelf result = new VirtualBookshelf("Search on " + searchTerm);
 	BookQuery bq = new BookQuery();
-	bq.match(str);
+	bq.match(searchTerm);
 	Iterator<Bookshelf> iter = aLib.iterator();
 	Bookshelf bs;
 	while (iter.hasNext()) {
