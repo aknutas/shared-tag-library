@@ -130,13 +130,18 @@ public final class QueryBuilderImpl implements QueryBuilder {
 
     /**
      * Stores a butlerweights object into the database.
-     *  
-     * @param butler The butler to be stored.
+     * 
+     * @param butler
+     *            The butler to be stored.
      * @return int Storing success status.
      */
     public int storeButler(ButlerWeights butler) {
 	Access db = AccessImpl.getInstance();
-	db.removeOne(butler);
+	String querystring = "SELECT FROM butler.ButlerWeights";
+	List<ButlerWeights> returnlist = (List<ButlerWeights>) db
+		.query(querystring);
+	if (!returnlist.isEmpty())
+	    db.removeOne(butler);
 	int returnvalue = db.commitOne(butler);
 	return returnvalue;
     }
