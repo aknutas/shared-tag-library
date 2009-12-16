@@ -227,7 +227,6 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	 */
 	@Override
 	public Bookshelf union(Bookshelf shelf) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -257,7 +256,7 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	}
 	
 	/**
-	 * Not implemented (yet).
+	 * Operation not permitted.
 	 */
 	@Override
 	public boolean insert(Book book) throws IllegalArgumentException {
@@ -265,14 +264,17 @@ public class RemoteBookshelf extends RemoteObject implements Bookshelf {
 	}
 
 	/**
-	 * Not implemented (yet).
+	 * Operation not permitted.
 	 */
 	@Override
 	public boolean remove(Book book) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
+	/**
+	 * Operation not permitted.
+	 */
+	@Override
 	public boolean removeAll() {
 		return false;
 	}

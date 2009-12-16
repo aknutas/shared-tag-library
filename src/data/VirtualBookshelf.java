@@ -136,6 +136,12 @@ public final class VirtualBookshelf implements Bookshelf {
 		return this.bookshelf.remove(book);
 	}
 	
+	/**
+	 * Removes all books from the Bookshelf, if the Bookshelf does not
+	 * contain any books then this method does nothing.
+	 * 
+	 * @return a boolean determining whether the Bookshelf was cleared
+	 */
 	public boolean removeAll() {
 		this.shelves.clear();
 		this.bookshelf.clear();
@@ -143,6 +149,15 @@ public final class VirtualBookshelf implements Bookshelf {
 		return true;
 	}
 
+	/**
+	 * Determines whether the bookshelf contains the given book.
+	 * 	 * @param
+	 * @param book the book to check for
+	 * 
+	 * @return true if the the bookshelf has the book, otherwise false
+	 * 
+	 * @throws NullPointerException if the book given is null.
+	 */
 	public boolean contains(Book book) throws NullPointerException {
 		if(null == book)
 			throw new NullPointerException("book cannot be null");

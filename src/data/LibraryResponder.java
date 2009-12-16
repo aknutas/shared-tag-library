@@ -135,6 +135,19 @@ public class LibraryResponder extends RemoteResponder {
 		return message;
 	}
 
+	/**
+	 * Responds to an MSG_BOOKSHELF type LibraryMessage. This will
+	 * respond with a LibraryMessage containing the id of the
+	 * Bookshelf this method creates.
+	 * 
+	 * @param message the MSG_BOOKSHELF message to respond to
+	 * 
+	 * @return the response message
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the LibraryMessage type is
+	 *         not MSG_BOOKSHELF
+	 */
 	private LibraryMessage handleBookshelfMessage(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -159,6 +172,19 @@ public class LibraryResponder extends RemoteResponder {
 		return new LibraryMessage(LibraryMessage.MSG_ERROR);
 	}
 	
+	/**
+	 * Responds to an MSG_BOOKSHELVES type LibraryMessage. This will
+	 * respond with a LibraryMessage containing the id of the
+	 * Iterator of Bookshelves this method creates.
+	 * 
+	 * @param message the MSG_BOOKSHELVES message to respond to
+	 * 
+	 * @return the response message
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the LibraryMessage type is
+	 *         not MSG_BOOKSHELVES
+	 */
 	private LibraryMessage handleBookshelvesMessage(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -186,6 +212,19 @@ public class LibraryResponder extends RemoteResponder {
 		return message;
 	}
 
+	/**
+	 * Responds to an MSG_BOOKSHELF_NAMES type LibraryMessage. This
+	 * will respond with a LibraryMessage containing all of the names
+	 * of all the Bookshelves in the library.
+	 * 
+	 * @param message the MSG_BOOKSHELF_NAMES message to respond to
+	 * 
+	 * @return the response message
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the LibraryMessage type is
+	 *         not MSG_BOOKSHELF_NAMES
+	 */
 	private LibraryMessage handleBookshelfNames(LibraryMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");

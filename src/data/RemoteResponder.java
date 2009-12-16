@@ -63,14 +63,24 @@ public abstract class RemoteResponder implements ServerResponder {
 		return response;
 	}
 	
+	/**
+	 * This method does nothing in this class, however may be 
+	 * overridden by extending classes for more advanced behavior, if
+	 * needed.
+	 * 
+	 * @param connection the connection id
+	 */
 	@Override
-	public void onDisconnect(int connection) {
-		
-	}
+	public void onDisconnect(int connection) {}
 	
+	/**
+	 * This method does nothing in this class, however may be 
+	 * overridden by extending classes for more advanced behavior, if
+	 * needed.
+	 * 
+	 * @param connection the connection id
+	 */
 	@Override
-	public void onLoop(int connection) {
-		
-	}
+	public void onLoop(int connection) {}
 
 }

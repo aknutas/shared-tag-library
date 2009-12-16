@@ -2,7 +2,6 @@ package data;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,13 +9,32 @@ import network.Control;
 import data.messages.BookMessage;
 import data.messages.RemoteMessage;
 
+/**
+ * The RemotBook class extends the RemoteObject class and implements the Book
+ * interface. It is used to generate and handle message in order to interact
+ * with a Book object over a network.
+ *  
+ * @author Andrew alm
+ */
 public class RemoteBook extends RemoteObject implements Book {
 
 	private final int id;
 	private Map<String, Integer> tags;
 	private Map<String, String> properties;
 	
-	public RemoteBook(int connection, Control network, int id) throws NullPointerException, RemoteObjectException {
+	/**
+	 * Creates a RemoteBook object given the network, connection, and
+	 * id.
+	 * 
+	 * @param connection the connection id to use
+	 * @param network the network Control object to use
+	 * @param id the id to use in for the RoutedMessages
+	 * 
+	 * @throws NullPointerException if the network given is null
+	 * @throws RemoteObjectException if the RemoteBook object cannot
+	 *         be created
+	 */
+	public RemoteBook(Control network, int connection, int id) throws NullPointerException, RemoteObjectException {
 		super(connection, network, 5000);
 		
 		this.tags = new HashMap<String, Integer>();
@@ -26,6 +44,14 @@ public class RemoteBook extends RemoteObject implements Book {
 		this.getBookInfo();
 	}
 	
+	/**
+	 * This method sends a MSG_INITIALIZE message to the responder in
+	 * order to get the tags and properties from a book and cache
+	 * them locally.
+	 * 
+	 * @throws RemoteObjectException if there was an error receiving
+	 *         the properties or tags
+	 */
 	@SuppressWarnings("unchecked")
 	private void getBookInfo() throws RemoteObjectException {
 		RemoteMessage message = new BookMessage(BookMessage.MSG_INITIALIZE, this.id);
@@ -44,6 +70,15 @@ public class RemoteBook extends RemoteObject implements Book {
 		this.properties = properties;
 	}
 	
+	/**
+	 * The weight of the given tag is increased.
+	 *
+	 * @param tag name of the tag
+	 *
+	 * @return the weight of the tag.
+	 *
+	 * @throws NullPointerException if the tag given is null
+	 */
 	@Override
 	public int tag(String tag) throws NullPointerException {
 		if(null == tag)
@@ -55,6 +90,15 @@ public class RemoteBook extends RemoteObject implements Book {
 		return weight;
 	}
 
+	/**
+	 * The weight of the given tag is decreased.
+	 *
+	 * @param tag name of the tag
+	 *
+	 * @return the weight of the tag
+	 *
+	 * @throws NullPointerException if the tag given is null
+	 */
 	@Override
 	public int untag(String tag) throws NullPointerException {
 		if(null == tag)
@@ -66,6 +110,18 @@ public class RemoteBook extends RemoteObject implements Book {
 		return weight;
 	}
 
+	/**
+	 * Gets the weight of a given tag. If the tag has never been used 
+	 * with this VirtualBook then the weight will be zero. (Note: A 
+	 * return value of zero does not necessarily indicate that a tag
+	 * has never been used with the book.)
+	 *
+	 * @param tag the name of the tag
+	 *
+	 * @return the weight of the tag
+	 *
+	 * @throws NullPointerException if the tag given is null
+	 */
 	@Override
 	public int weight(String tag) throws NullPointerException {
 		if(null == tag)
@@ -114,16 +170,37 @@ public class RemoteBook extends RemoteObject implements Book {
 		return weight.intValue();
 	}
 	
+	/**
+	 * Returns an iterator of all tags on a book and their associated
+	 * weights.
+	 * 
+	 * @return an Iterator of map entries.
+	 */
 	@Override
 	public Iterable<Entry<String, Integer>> enumerateTags() {
 		return this.tags.entrySet();
 	}
 	
+	/**
+	 * Get the number of tags that are associated with this Book
+	 * object.
+	 * 
+	 * @return the number of tags
+	 */
 	public int getTagCount() {
 		return this.tags.size();
 	}
 
-	
+	/**
+	 * Gets the value of the given property. If the given property does not
+	 * exist then null is returned.
+	 * 
+	 * @param property the name of the property to get.
+	 * 
+	 * @return the value of the property
+	 * 
+	 * @throws NullPointerException if the property given is null
+	 */
 	@Override
 	public String getProperty(String name) throws NullPointerException {
 		if(null == name)
@@ -132,6 +209,15 @@ public class RemoteBook extends RemoteObject implements Book {
 		return this.properties.get(name);
 	}
 
+	/**
+	 * Sets the named property to the given value, returning the old value for
+	 * the property. If the property does not exist, null is returned.
+	 * 
+	 * @param name the name of the property
+	 * @param value the value to set the property to
+	 * 
+	 * @return NullPointerException if the name of value given is null
+	 */
 	@Override
 	public String setProperty(String name, String value) throws NullPointerException {
 		if((null == name) || (null == value))
@@ -158,11 +244,24 @@ public class RemoteBook extends RemoteObject implements Book {
 		return response.dequeParameter();
 	}
 	
+	/**
+	 * Returns an iterator containing the key-value pairs of all the
+	 * properties.
+	 * 
+	 * @return an iterator of properties
+	 */
 	@Override
 	public Collection<Entry<String, String>> enumerateProperties() {
 		return this.properties.entrySet();
 	}
 	
+	/**
+	 * Returns a VirtualBook object of this Book interface object. If
+	 * the book is already a VirtualBook then the Book is returned
+	 * and no copy is made.
+	 * 
+	 * @return a VirtualBook
+	 */
 	public VirtualBook makeVirtual() {
 		return new VirtualBook(this.tags, this.properties);
 	}

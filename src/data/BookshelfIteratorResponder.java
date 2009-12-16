@@ -3,8 +3,6 @@ package data;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import data.messages.RemoteMessage;
-
 /**
  * A BookshelfIteratorResponder extends an IteratorResponder for Bookshelf
  * objects
@@ -25,17 +23,21 @@ public class BookshelfIteratorResponder extends IteratorResponder<Bookshelf> {
 		super(iter);
 	}
 
+	/**
+	 * This method is used to serialize a bookshelf into an Integer.
+	 * 
+	 * @param the Bookshelf to serialize
+	 * 
+	 * @return a Serializable object
+	 * 
+	 * @throws NullPointerException if the shelf given is null
+	 */
 	@Override
 	public Serializable serializeObject(Bookshelf shelf) throws NullPointerException {
 		if(null == shelf)
 			throw new NullPointerException("shelf cannot be null");
 		
 		return new Integer((new BookshelfResponder(shelf)).getID());
-	}
-
-	@Override
-	public RemoteMessage onRemoteMessage(RemoteMessage message) throws NullPointerException, IllegalArgumentException {
-		return null;
 	}
 	
 }

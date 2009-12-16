@@ -1,12 +1,10 @@
 package data;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 import data.messages.BookMessage;
 import data.messages.BookshelfMessage;
-import data.messages.RemoteMessage;
 import data.messages.RoutedMessage;
 
 /**
@@ -325,20 +323,6 @@ public class BookResponder extends RoutedResponder {
 		BookMessage response = new BookMessage(BookMessage.MSG_TAG_ITERATOR, this.getID());
 		response.queueParameter((new TagIteratorResponder(this.book.enumerateTags().iterator())).getID());
 		return response;
-	}
-	
-	/**
-	 * Not used.
-	 * 
-	 * @param messsage the message to respond to
-	 * 
-	 * @returns nothing, always throws
-	 * 
-	 * @throws IllegalArgumentException if this function is called
-	 */
-	@Override
-	public RemoteMessage onRemoteMessage(RemoteMessage message) throws NullPointerException, IllegalArgumentException {
-		throw new IllegalArgumentException();
 	}
 
 }
