@@ -301,7 +301,8 @@ public class VirtualLibraryButler extends LibraryButler {
 		VirtualLibraryButler buddy = new VirtualLibraryButler("buddy");
 		VirtualLibraryButler wadsworth = new VirtualLibraryButler("wadsworth");
 
-		System.out.println("The Cat in the Hat Comes Back: " + dumbBut.checkBook(catBack).getProperty("name"));
+		System.out.println("The Cat in the Hat Comes Back: "
+				+ dumbBut.checkBook(catBack).getProperty("name"));
 
 		// VirtualFlatShelf flatBS = new VirtualFlatShelf(bs);
 		// System.out.println("created flatBS");
@@ -333,9 +334,9 @@ public class VirtualLibraryButler extends LibraryButler {
 		buddy.initialize(allShelfs);
 
 		while (buddy.isTraining()) {
-			//wait
+			// wait
 		}
-		
+
 		System.out.println(buddy.getProperty("name") + " results:\n");
 
 		System.out.println("The Cat in the Hat Comes Back: "
@@ -360,8 +361,6 @@ public class VirtualLibraryButler extends LibraryButler {
 			wadsworth.checkBook(fish);
 		}
 	}
-
-	protected boolean initialized = false;
 
 	/**
 	 * Creates this with an existing ButlerWeights object The Butler will not
@@ -444,7 +443,7 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		if (inputValues[0] == inputValues[1])
 			return new FlatShelf();
-		
+
 		NeuralData book = new BasicNeuralData(inputValues);
 		NeuralData output;
 		try {
@@ -689,7 +688,7 @@ public class VirtualLibraryButler extends LibraryButler {
 
 			if (!(outputValues.length == 0)) {
 				double[] bestResult = max(outputValues);
-				newShelfs.get((int)bestResult[1]).insert(book);
+				newShelfs.get((int) bestResult[1]).insert(book);
 			}
 		}
 
@@ -711,7 +710,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			// System.out.println("retraining needed. " + numShelfs +
 			// " becomes " + cleanShelfs.size());
 			return initialize(basis, cleanShelfs.size()); // retrain with the
-															// proper size.
+			// proper size.
 		}
 
 		Collection<FlatShelf> randomFlatShelfs = flattenAll(cleanShelfs
@@ -738,11 +737,10 @@ public class VirtualLibraryButler extends LibraryButler {
 					heaviestTagName = tag.getKey();
 
 			}
-			
+
 			try {
-			cleanShelfs.get(k).setProperty("name", heaviestTagName);
-			}
-			catch (Exception e) {
+				cleanShelfs.get(k).setProperty("name", heaviestTagName);
+			} catch (Exception e) {
 				int timeout = 0;
 				while (timeout < 10000) {
 					System.out.println(heaviestTagName == null);
@@ -873,9 +871,9 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		training = new Thread() {
 			public void run() {
-				
+
 				org.encog.util.logging.Logging.setConsoleLevel(Level.OFF);
-				
+
 				final Train train = new CompetitiveTraining(brain, 0.7,
 						theInput, new NeighborhoodGaussian(
 								new GaussianFunction(0.0, 5.0, 1.5)));
@@ -888,7 +886,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				int errorSize = 250;
 
 				double[] lastErrors = new double[errorSize];
-				
+
 				// training loop
 				do {
 					train.iteration();
