@@ -77,41 +77,46 @@ public class Controller {
 	 */
 	@SuppressWarnings("unchecked")
 	public Controller() {
-		// load in library
-		qb = new QueryBuilderImpl();
-		myLib = new PersistentLibrary(qb);
-		myLib.setProperty("name", "My Library");
-		modifiedBs = new Vector<Bookshelf>();
-		ProgramProperties props = ProgramProperties.getInstance();
-		connections = (Vector<ConnectionMetadata>) props
-				.getProperty("controller::connections");
-		if (connections == null)
-			connections = new Vector<ConnectionMetadata>();
-		
-		
-		if(retrieveButlerWeights()==null)
-		    HB = new HeadButler(myLib);
-		else
-		    HB = new HeadButler(retrieveButlerWeights());
-		
-		final LibraryResponder libResponder = new LibraryResponder(myLib);
-		final ButlerResponder butResponder = new ButlerResponder(HB);
-		
-		cntrl = new ControlImpl(new RemoteResponder() {
-			@Override
-			public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
-				if(message instanceof ButlerMessage)
-					return butResponder.onRemoteMessage(message);
-				else
-					return libResponder.onRemoteMessage(message);
-			}
-		});
-		
-		
-		
-		
-		// Registering shutdown hooks
-		addShutdownHooks();
+		try {
+			// load in library
+			qb = new QueryBuilderImpl();
+			myLib = new PersistentLibrary(qb);
+			myLib.setProperty("name", "My Library");
+			modifiedBs = new Vector<Bookshelf>();
+			ProgramProperties props = ProgramProperties.getInstance();
+			connections = (Vector<ConnectionMetadata>) props
+					.getProperty("controller::connections");
+			if (connections == null)
+				connections = new Vector<ConnectionMetadata>();
+			
+			
+			if(retrieveButlerWeights()==null)
+			    HB = new HeadButler(myLib);
+			else
+			    HB = new HeadButler(retrieveButlerWeights());
+			
+			final LibraryResponder libResponder = new LibraryResponder(myLib);
+			final ButlerResponder butResponder = new ButlerResponder(HB);
+			
+			cntrl = new ControlImpl(new RemoteResponder() {
+				@Override
+				public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
+					if(message instanceof ButlerMessage)
+						return butResponder.onRemoteMessage(message);
+					else
+						return libResponder.onRemoteMessage(message);
+				}
+			});
+			
+			
+			
+			
+			// Registering shutdown hooks
+			addShutdownHooks();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			throw new NullPointerException();
+		}
 	}
 
 	/**
