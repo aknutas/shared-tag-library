@@ -60,7 +60,10 @@ public class Controller {
 	 * Contains bookshelves currently displayed or modified for eventual saving
 	 */
 	public Vector<Bookshelf> modifiedBs;
-
+	/**
+	 * Contains bookshelves added this seesion for method of removal selection
+	 */
+	public Vector<Bookshelf> transientBs;
 	/**
 	 * a connection and its associated library
 	 */
@@ -83,6 +86,7 @@ public class Controller {
 			myLib = new PersistentLibrary(qb);
 			myLib.setProperty("name", "My Library");
 			modifiedBs = new Vector<Bookshelf>();
+			transientBs = new Vector<Bookshelf>();
 			ProgramProperties props = ProgramProperties.getInstance();
 			connections = (Vector<ConnectionMetadata>) props
 					.getProperty("controller::connections");
@@ -213,6 +217,7 @@ public class Controller {
 		if (!modifiedBs.contains(bookshelf)) {
 			modifiedBs.add(bookshelf);
 		}
+		transientBs.add(bookshelf);
 		myLib.addBookshelf(bookshelf);
 		setFocus(bookshelf);
 		return bookshelf;
@@ -231,6 +236,7 @@ public class Controller {
 		if (!modifiedBs.contains(bookshelf)) {
 			modifiedBs.add(bookshelf);
 		}
+		transientBs.add(bookshelf);
 		myLib.addBookshelf(bookshelf);
 		setFocus(bookshelf);
 		return bookshelf;
@@ -487,9 +493,7 @@ public class Controller {
 			if (bs instanceof VirtualBookshelf)
 				myLib.saveBookshelf((VirtualBookshelf) bs);
 		}
-		Collection<ButlerWeights> weights =HB.exportWeights();
-		for(ButlerWeights bw:weights)
-		qb.storeButler(bw);
+
 	}
 
 	/**
@@ -670,13 +674,16 @@ public class Controller {
 		if (focus != null) {
 			Bookshelf bs = focus;
 			modifiedBs.remove(focus);
-			if(myLib.shelfStored((VirtualBookshelf) focus)){
-				if (!myLib.deleteBookshelf((VirtualBookshelf) focus))
-					throw new IllegalArgumentException("failed to delete");    
-			}
-			else
-			    myLib.removeBookshelf(focus);
 
+			if(!transientBs.contains(bs)){
+				if (!myLib.deleteBookshelf((VirtualBookshelf) bs))
+					throw new IllegalArgumentException("failed to delete");    
+				    System.out.println("stored");
+			}
+			else{
+			    System.out.println("temp");
+			    myLib.removeBookshelf(bs);
+			}
 			focus = null;
 			return bs;
 		}
