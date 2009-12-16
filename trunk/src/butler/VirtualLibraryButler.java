@@ -331,8 +331,6 @@ public class VirtualLibraryButler extends LibraryButler {
 		}
 	}
 
-	private boolean initialized;
-
 	/**
 	 * Creates this with an existing ButlerWeights object
 	 * The Butler will not function properly until one of the
@@ -763,11 +761,6 @@ public class VirtualLibraryButler extends LibraryButler {
 		currentWeights = new ButlerWeights(brain.getStructure().getSynapses().get(0).getMatrix(), numTags, flatShelfs, idPairs);
 		initialized = true;
 	}
-
-	/**
-	 * Returns true if initialized.
-	 */
-	public boolean isInitialized() {return initialized;}
 
 	/**
 	 * Sets the weights within brain to those found in the input

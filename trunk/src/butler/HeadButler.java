@@ -95,11 +95,19 @@ public class HeadButler{
 			reCountShelfs();
 		}
 	}
-	
+
+	/**
+	 * Takes an unsorted bookshelf and an int and creates a new VirtualLibraryButler to sort
+	 * the books into at most num number of shelfs.
+	 * 
+	 * @param bs the unsorted books
+	 * @param num the max number of shelfs to return.
+	 * @return a set of bookshelfs containing the books from bs.
+	 */
 	public Set<Bookshelf> identify(VirtualBookshelf bs, int num){
 		VirtualLibraryButler virtLB = new VirtualLibraryButler(bs, num);
 		return virtLB.getSortedShelfs();
-		
+
 	}
 
 	/**
@@ -180,38 +188,43 @@ public class HeadButler{
 		//double[][] answersX = new double[staff.size()][];
 
 		int butle = 0; //it's what a butler does... he butles.
-		
+
 		Map<Integer, LibraryButlerInterface> staffIDs = new HashMap<Integer, LibraryButlerInterface>();
 		Map<FlatShelf, Double> answers = new HashMap<FlatShelf, Double>();
 
 		for (LibraryButlerInterface wadsworth : staff.values()) {
-			
-			Map.Entry<FlatShelf, Double> temp = wadsworth.assemble(b);
-			//System.out.println("Best fit from " + wadsworth.getProperty("name") + " is " + temp.getKey().getProperty("name"));
-			
-			if (!(null == temp)) {
-				staffIDs.put(butle, wadsworth);
-				butle++;
+			if (wadsworth.isInitialized()){
+				Map.Entry<FlatShelf, Double> temp = wadsworth.assemble(b);
+				//System.out.println("Best fit from " + wadsworth.getProperty("name") + " is " + temp.getKey().getProperty("name"));
+
+				if (!(null == temp)) {
+					staffIDs.put(butle, wadsworth);
+					butle++;
+				}
+
+				answers.put(temp.getKey(), temp.getValue());
 			}
-			
-			answers.put(temp.getKey(), temp.getValue());
 		}
-		
+
 		FlatShelf bestShelf = null;
 		double bestOutput = Double.MIN_VALUE;
-		
+
 		for (Map.Entry<FlatShelf, Double> e : answers.entrySet()) {
 			bestOutput = Math.max(bestOutput, e.getValue());
 			if (bestOutput == e.getValue())
 				bestShelf = e.getKey();
 		}
-		
+
 		bestFitShelf = bestShelf;
 		bestFitResult = bestOutput;
-		
+
 		return bestFitShelf;
 	}
 
+	/**
+	 * Returns an entry containing the best matching shelf and it's corresponding output value.
+	 * @param b the book to examine
+	 */
 	protected Map.Entry<FlatShelf, Double> remoteAssemble(Book b) {
 		HashMap<FlatShelf, Double> tmp = new HashMap<FlatShelf, Double>();
 		tmp.put(checkBook(b), bestFitResult);
@@ -236,6 +249,9 @@ public class HeadButler{
 		return oldWeights;
 	}
 
+	/**
+	 * Returns the number of VirtualLibraryButlers on the staff of HeadButler
+	 */
 	public int getNumOfLocalButlers() {return numOfLocalButlers;}
 
 	/**
@@ -247,8 +263,9 @@ public class HeadButler{
 		Collection<VirtualLibraryButler> butlers = new HashSet<VirtualLibraryButler>();
 
 		for (LibraryButlerInterface b : staff.values())
-			if (b instanceof VirtualLibraryButler)
+			if (b instanceof VirtualLibraryButler && ((VirtualLibraryButler)b).isInitialized())
 				butlers.add((VirtualLibraryButler) b);
+
 
 		if (butlers.size() > 0)
 			return butlers;
@@ -434,7 +451,7 @@ public class HeadButler{
 				--num;
 			}
 		}
-		
+
 		kid.insert(catBack);
 
 		Book salem = new VirtualBook("Salems' Lot", "Stephen King");
@@ -460,7 +477,7 @@ public class HeadButler{
 				--num;
 			}
 		}
-		
+
 		horror.insert(salem);
 
 		Book interview = new VirtualBook("Interview with a Vampire", "Anne Rice");
@@ -480,7 +497,7 @@ public class HeadButler{
 				"scary stories","series","silverbullet","southern discomfort",
 				"spouse","stake","summerreading","trips and journeys",
 				"uncompromising","vampire book","vampire novel","women",
-				"women writers"};
+		"women writers"};
 		int[] interviewWeights = {134,67,36,18,10,91,7,5,5,4,3,3,3,3,2,2,2,
 				2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
@@ -493,7 +510,7 @@ public class HeadButler{
 				--num;
 			}
 		}
-		
+
 		horror.insert(interview);
 
 		System.out.println("Books initialized");
