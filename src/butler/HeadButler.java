@@ -258,7 +258,7 @@ public class HeadButler {
 		Collection<ButlerWeights> oldWeights = new HashSet<ButlerWeights>();
 
 		if (butler.isEmpty())
-			return null;
+			return new HashSet<ButlerWeights>();
 		else {
 			for (VirtualLibraryButler wadsworth : butler)
 				oldWeights.add(wadsworth.getWeights());
@@ -286,10 +286,7 @@ public class HeadButler {
 					&& ((VirtualLibraryButler) b).isInitialized())
 				butlers.add((VirtualLibraryButler) b);
 
-		if (butlers.size() > 0)
-			return butlers;
-		else
-			return null;
+		return butlers;
 	}
 
 	public static void main(String[] args) {
