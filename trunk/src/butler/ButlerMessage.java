@@ -15,6 +15,10 @@ public class ButlerMessage extends RemoteMessage {
 	// message types
 	public static final int MSG_INITIALIZE = 2;
 	
+	/**
+	 * Creates a new ButlerMessage with the given messageType
+	 * @param messageType
+	 */
 	public ButlerMessage(int messageType) {
 		super(messageType);
 	}

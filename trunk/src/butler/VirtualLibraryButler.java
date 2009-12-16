@@ -618,8 +618,13 @@ public class VirtualLibraryButler extends LibraryButler {
 			
 			double best = Double.MIN_VALUE;
 			int j = 0;
+			try {
 			for (; j < outputValues.length; ++j)
 				best = Math.max(best, outputValues[j]);
+			}
+			catch (Exception e){
+				best = max(outputValues)[0];
+			}
 			
 			--j; // off by one.
 			for (; !foundBest;) {
