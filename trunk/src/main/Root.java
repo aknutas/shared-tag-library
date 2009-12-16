@@ -986,12 +986,7 @@ public class Root extends JFrame {
 		    Bookshelf oldShelf = searchResults.getBookshelf();
 		    if (oldShelf != null) {
 
-			// TODO Implement butler sorting in Controller
-			// Set<Bookshelf> newShelves =
-			// control.sortBookshelf(oldShelf, 10);
-			// for (int x = 0; x < newShelves.size(); x++) {
-			// control.addBookshelf(newShelves.get(x));
-			// }
+			control.sortShelves(oldShelf, 10);
 			treeView.refresh();
 		    }
 		}
