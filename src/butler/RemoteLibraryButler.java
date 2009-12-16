@@ -21,6 +21,7 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	
 	HeadButler butler;
 	String name;
+	boolean initialized = false;
 	
 	/**
 	 * Creates a new RemoteLibraryButler object.
@@ -103,5 +104,10 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 */
 	@Override
 	public ButlerWeights getWeights() {return null;}
+
+	/**
+	 * Returns true if initialized.
+	 */
+	public boolean isInitialized() {return initialized;}
 
 }

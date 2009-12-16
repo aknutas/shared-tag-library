@@ -24,6 +24,7 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	protected final static String OTHER = "__OTHER__";
 	protected ButlerWeights currentWeights;
 	protected Map<Integer, FlatShelf> flatShelfs;
+	boolean initialized = false;
 
 	/**
 	 * used to store meta-data.
@@ -91,6 +92,12 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 		return temp.entrySet().iterator().next();
 	}
 	
+	/**
+	 * Takes a double[] as input and returns a 2 element double[].
+	 * ans
+	 * @param input
+	 * @return
+	 */
 	protected double[] max(double[] input) {
 		
 		double max = Double.MIN_VALUE;
@@ -135,5 +142,10 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 * Returns the magnitude (absolute value) of the largest tag.
 	 */
 	public int getMaxTagMag() {return maxTagMag;}
+
+	/**
+	 * Returns true if initialized.
+	 */
+	public boolean isInitialized() {return initialized;}
 
 }

@@ -11,7 +11,7 @@ import data.Book;
  *
  */
 public interface LibraryButlerInterface{
-
+	
 	/**
 	 * Returns the name property of the FlatShelf referenced
 	 * by index.
@@ -52,4 +52,9 @@ public interface LibraryButlerInterface{
 	 * Returns the current ButlerWeights object.
 	 */
 	ButlerWeights getWeights();
+
+	/**
+	 * Returns true if initialized.
+	 */
+	public boolean isInitialized();
 }
