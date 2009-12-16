@@ -1,7 +1,6 @@
 package data;
 
 import data.messages.BookshelfMessage;
-import data.messages.RemoteMessage;
 import data.messages.RoutedMessage;
 
 public class BookshelfResponder extends RoutedResponder {
@@ -23,6 +22,19 @@ public class BookshelfResponder extends RoutedResponder {
 		this.shelf = shelf;
 	}
 
+	/**
+	 * This method is called when a message is received from a
+	 * RemoteObject. It generates an appropriate RemoteMessage
+	 * response to the message given.
+	 * 
+	 * @param message the RemoteMessage to respond to
+	 * 
+	 * @return a RemoteMessage response message
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the message given cannot
+	 *         be processed
+	 */
 	@Override
 	public RoutedMessage onRoutedMessage(RoutedMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
@@ -49,6 +61,18 @@ public class BookshelfResponder extends RoutedResponder {
 		}
 	}
 	
+	/**
+	 * This method is used to handle a MSG_SIZE LibraryMessage. It
+	 * responds with the size of the bookshelf.
+	 * 
+	 * @param message the MSG_SIZE to respond to
+	 * 
+	 * @return a LibraryMessage response
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the message type is not a
+	 *         MSG_SIZE
+	 */
 	private BookshelfMessage handleSizeMessage(BookshelfMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -62,6 +86,18 @@ public class BookshelfResponder extends RoutedResponder {
 		return response;
 	}
 	
+	/**
+	 * This method is used to handle a MSG_GET LibraryMessage. It
+	 * is responds with the value of the property given.
+	 * 
+	 * @param message the MSG_GET to respond to
+	 * 
+	 * @return a LibraryMessage response
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the message type is not a
+	 *         MSG_GET
+	 */
 	private BookshelfMessage handleGetMessage(BookshelfMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -79,6 +115,18 @@ public class BookshelfResponder extends RoutedResponder {
 		return response;
 	}
 	
+	/**
+	 * This method is used to handle a MSG_SET LibraryMessage. It
+	 * responds by setting a bookshelf property.
+	 * 
+	 * @param message the MSG_SET to respond to
+	 * 
+	 * @return a LibraryMessage response
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the message type is not a
+	 *         MSG_SET
+	 */
 	private BookshelfMessage handleSetMessage(BookshelfMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -97,6 +145,19 @@ public class BookshelfResponder extends RoutedResponder {
 		return response;
 	}
 	
+	/**
+	 * This method is used to handle a MSG_PROPERTY_ITERATOR 
+	 * LibraryMessage. It responds with the the id of the
+	 * PropertyIterator required.
+	 * 
+	 * @param message the MSG_PROPERTY_ITERATOR to respond to
+	 * 
+	 * @return a LibraryMessage response
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the message type is not a
+	 *         MSG_PROPERTY_ITERATOR
+	 */
 	private BookshelfMessage handlePropertyIterator(BookshelfMessage message) throws NullPointerException, IllegalArgumentException {
 		if(null == message)
 			throw new NullPointerException("message cannot be null");
@@ -110,6 +171,18 @@ public class BookshelfResponder extends RoutedResponder {
 		return response;
 	}
 	
+	/**
+	 * This method is used to handle a MSG_ITERATOR LibraryMessage. It
+	 * responds with the id of the BookIteratorResponder created.
+	 * 
+	 * @param message the MSG_ITERATOR to respond to
+	 * 
+	 * @return a LibraryMessage response
+	 * 
+	 * @throws NullPointerException if the message given is null
+	 * @throws IllegalArgumentException if the message type is not a
+	 *         MSG_ITERATOR
+	 */
 	private BookshelfMessage handleIteratorRequest(BookshelfMessage message) throws NullPointerException, IllegalArgumentException {
 		BookshelfMessage response = new BookshelfMessage(BookshelfMessage.MSG_ITERATOR, this.getID());
 		
@@ -122,11 +195,6 @@ public class BookshelfResponder extends RoutedResponder {
 		BookIteratorResponder responder = new BookIteratorResponder(this.shelf.iterator());
 		response.queueParameter(responder.getID());
 		return response;
-	}
-
-	@Override
-	public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
-		return null;
 	}
 
 }

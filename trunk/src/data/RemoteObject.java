@@ -68,17 +68,9 @@ public abstract class RemoteObject implements ClientResponder {
 			this.lock.release();
 		}
 
-		@Override
-		public void onDisconnect(int connection) throws IllegalArgumentException {
-			// TODO Auto-generated method stub
-			
-		}
+		public void onDisconnect(int connection) throws IllegalArgumentException {}
 
-		@Override
-		public void onLoop(int connection) throws IllegalArgumentException {
-			// TODO Auto-generated method stub
-			
-		}
+		public void onLoop(int connection) throws IllegalArgumentException {}
 		
 	} 
 	
@@ -207,14 +199,25 @@ public abstract class RemoteObject implements ClientResponder {
 			return;
 	}
 	
+	
+	/**
+	 * This method does nothing in this class, however may be 
+	 * overridden by extending classes for more advanced behavior, if
+	 * needed.
+	 * 
+	 * @param connection the connection id
+	 */
 	@Override
-	public void onDisconnect(int connection) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-	}
+	public void onDisconnect(int connection) throws IllegalArgumentException {}
 
+	/**
+	 * This method does nothing in this class, however may be 
+	 * overridden by extending classes for more advanced behavior, if
+	 * needed.
+	 * 
+	 * @param connection the connection id
+	 */
 	@Override
-	public void onLoop(int connection) throws IllegalArgumentException {
-		// TODO Auto-generated method stub	
-	}
+	public void onLoop(int connection) throws IllegalArgumentException {}
 	
 }

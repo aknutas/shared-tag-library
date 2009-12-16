@@ -97,6 +97,17 @@ public class RemoteLibrary extends RemoteObject implements Library {
 		return null;
 	}
 
+	/**
+	 * Gets the bookshelf of the given name from the library. If the
+	 * library does not contain a given bookshelf then null is
+	 * returned.
+	 * 
+	 * @param name the name of the bookshelf
+	 * 
+	 * @return the Bookshelf object
+	 * 
+	 * @throws NullPointerException if the name given is null
+	 */
 	@Override
 	public Bookshelf getBookshelf(String name) throws NullPointerException {
 		if(null == name)
@@ -117,6 +128,18 @@ public class RemoteLibrary extends RemoteObject implements Library {
 		}
 	}
 
+	/**
+	 * Gets an iterator of bookshelves with the names given in the
+	 * Collection. If a bookshelf name in the collection does not
+	 * exist the Iterator will be a small size than the collection.
+	 * 
+	 * @param names the name of the Bookshelf
+	 * 
+	 * @return an Iterator of Bookshelf objects 
+	 * 
+	 * @throws NullPointerException if the names collection given isremoteLibrary1.getBookshelf("programming");
+	 *         null
+	 */
 	@Override
 	public Iterable<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
 		if(null == names)
@@ -152,8 +175,14 @@ public class RemoteLibrary extends RemoteObject implements Library {
 		};
 	}
 
+	/**
+	 * This method is used to get an iterator containing the names of
+	 * all of the bookshelves the library contains.
+	 * 
+	 * @return and iterator of strings
+	 */
 	@Override
-	public Collection<String> getBookshelfNames() {
+	public Iterable<String> getBookshelfNames() {
 		try {
 			RemoteMessage message = new LibraryMessage(LibraryMessage.MSG_BOOKSHELF_NAMES);
 			message = this.send(message, 5000);

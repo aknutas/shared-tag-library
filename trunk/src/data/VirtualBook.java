@@ -3,7 +3,6 @@ package data;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -44,7 +43,21 @@ public class VirtualBook implements Book, Serializable {
 		this.setProperty("author", author);
 	}
 	
-	protected VirtualBook(Map<String, Integer> tags, Map<String, String> properties) {
+	/**
+	 * Creates a VirtualBook object from the given Map of tags and 
+	 * properties. This is a protected method and is used only inside
+	 * this package.
+	 * 
+	 * @param tags the tags Map to use
+	 * @param properties the properties Map to use
+	 * 
+	 * @throws NullPointerException if the tags or properties given 
+	 *         are null.
+	 */
+	protected VirtualBook(Map<String, Integer> tags, Map<String, String> properties) throws NullPointerException {
+		if(null == tags || null == properties)
+			throw new NullPointerException("tags or properties cannot be null");
+		
 		this.tags = tags;
 		this.properties = properties;
 	}
@@ -171,6 +184,12 @@ public class VirtualBook implements Book, Serializable {
 		return oldValue;
 	}
 	
+	/**
+	 * Get the number of tags that are associated with this Book
+	 * object.
+	 * 
+	 * @return the number of tags
+	 */
 	public int getTagCount() {
 		return this.tags.size();
 	}
@@ -185,12 +204,15 @@ public class VirtualBook implements Book, Serializable {
 		return this.properties.entrySet();
 	}
 	
+	/**
+	 * An overridden equals method. This is used to compare two book
+	 * objects to each other.
+	 * 
+	 * @param object the Object to check the equality of
+	 */
 	@Override
 	public boolean equals(Object object) throws NullPointerException {
-		if(null == object)
-			throw new NullPointerException("object cannot be null");
-		
-		if(!(object instanceof Book))
+		if(null == object || !(object instanceof Book))
 			return false;
 		
 		Book book = (Book)object;
@@ -205,6 +227,13 @@ public class VirtualBook implements Book, Serializable {
 		return true;
 	}
 
+	/**
+	 * Returns a VirtualBook object of this Book interface object. If
+	 * the book is already a VirtualBook then the Book is returned
+	 * and no copy is made.
+	 * 
+	 * @return a VirtualBook
+	 */
 	@Override
 	public VirtualBook makeVirtual() {
 		return this;

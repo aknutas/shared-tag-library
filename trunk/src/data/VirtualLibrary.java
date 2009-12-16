@@ -88,6 +88,12 @@ public class VirtualLibrary implements Library {
 	}
 
 	
+	/**
+	 * This method is used to get a property of the given name from
+	 * library. If the property does not exist then null is returned.
+	 * 
+	 * @return the value of the property
+	 */
 	@Override
 	public String getProperty(String name) throws NullPointerException {
 		if(null == name)
@@ -96,6 +102,15 @@ public class VirtualLibrary implements Library {
 		return this.properties.get(name);
 	}
 
+	/**
+	 * Sets the named property to the given value, returning the old value for
+	 * the property. If the property does not exist, null is returned.
+	 * 
+	 * @param name the name of the property
+	 * @param value the value to set the property to
+	 * 
+	 * @return NullPointerException if the name of value given is null
+	 */
 	@Override
 	public String setProperty(String name, String value) {
 		if(null == name || null == value)
@@ -104,11 +119,28 @@ public class VirtualLibrary implements Library {
 		return this.properties.put(name, value);
 	}
 	
+	/**
+	 * Returns an iterator containing the key-value pairs of all the
+	 * properties.
+	 * 
+	 * @return an iterator of properties
+	 */
 	@Override
 	public Collection<Entry<String, String>> enumerateProperties() {
 		return this.properties.entrySet();
 	}
 
+	/**
+	 * Gets the bookshelf of the given name from the library. If the
+	 * library does not contain a given bookshelf then null is
+	 * returned.
+	 * 
+	 * @param name the name of the bookshelf
+	 * 
+	 * @return the Bookshelf object
+	 * 
+	 * @throws NullPointerException if the name given is null
+	 */
 	@Override
 	public Bookshelf getBookshelf(String name) throws NullPointerException {
 		/* find bookshelf through iterator */
@@ -122,6 +154,18 @@ public class VirtualLibrary implements Library {
 		return null;
 	}
 
+	/**
+	 * Gets an iterator of bookshelves with the names given in the
+	 * Collection. If a bookshelf name in the collection does not
+	 * exist the Iterator will be a small size than the collection.
+	 * 
+	 * @param names the name of the Bookshelf
+	 * 
+	 * @return an Iterator of Bookshelf objects 
+	 * 
+	 * @throws NullPointerException if the names collection given isremoteLibrary1.getBookshelf("programming");
+	 *         null
+	 */
 	@Override
 	public Collection<Bookshelf> getBookshelf(Collection<String> names) throws NullPointerException {
 		Collection<Bookshelf> shelves = new LinkedList<Bookshelf>();
@@ -135,6 +179,11 @@ public class VirtualLibrary implements Library {
 		return shelves;
 	}
 
+	/**
+	 * Gets the master shelf, a union of every bookshelf.
+	 *
+	 * @return a Bookshelf.
+	 */
 	@Override
 	public Collection<String> getBookshelfNames() {
 		Collection<String> names = new LinkedList<String>();

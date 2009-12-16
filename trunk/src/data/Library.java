@@ -1,7 +1,6 @@
 package data;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * The Library contains a set of bookshelves which can be used together.  The

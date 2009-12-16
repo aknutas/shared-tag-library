@@ -3,8 +3,6 @@ package data;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import data.messages.RemoteMessage;
-
 /**
  * The BookIteratorResponder class extends the IteratorResponder and is used to
  * handle RemoteIterator objects for Books. 
@@ -41,15 +39,5 @@ public class BookIteratorResponder extends IteratorResponder<Book> {
 		
 		return new Integer((new BookResponder(book)).getID());
 	}
-
-	/**
-	 * Stub method.
-	 */
-	@Override
-	public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
-		return null;
-	}
-
-	
 	
 }
