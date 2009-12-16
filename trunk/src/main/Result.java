@@ -55,8 +55,10 @@ public class Result extends JPanel {
     /**
      * This is the result node for books.
      * 
-     * @param b Book result
-     * @param c SearchResult pane
+     * @param b
+     *            Book result
+     * @param c
+     *            SearchResult pane
      */
     public Result(Book b, SearchResults c) {
 	super();
@@ -179,7 +181,8 @@ public class Result extends JPanel {
 	if (book != null) {
 
 	    int count = 0;
-	    Iterator<Entry<String, Integer>> properties = book.enumerateTags().iterator();
+	    Iterator<Entry<String, Integer>> properties = book.enumerateTags()
+		    .iterator();
 	    while (properties.hasNext() && count < 20) {
 		count++;
 		Entry<String, Integer> e = properties.next();
@@ -212,7 +215,8 @@ public class Result extends JPanel {
 		if (book != null) {
 
 		    Boolean duplicate = false;
-		    Iterator<Entry<String, Integer>> b = book.enumerateTags().iterator();
+		    Iterator<Entry<String, Integer>> b = book.enumerateTags()
+			    .iterator();
 		    while (b.hasNext()) {
 			if (b.next().getKey().compareTo(tagContent.getText()) == 0) {
 			    duplicate = true;

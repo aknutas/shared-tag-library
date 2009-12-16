@@ -5,19 +5,17 @@ import data.messages.RemoteMessage;
 public class ReplyMessage extends Message {
 
     private static final long serialVersionUID = 1041061591404140362L;
-    
+
     RemoteMessage datamessage;
-    
-    private ReplyMessage()
-    {
-	
+
+    private ReplyMessage() {
+
     }
-    
-    public ReplyMessage(RemoteMessage datamessage, long comID, long msgID)
-    {
-	this.datamessage=datamessage;
-	this.comID=comID;
-	this.msgID=msgID;
+
+    public ReplyMessage(RemoteMessage datamessage, long comID, long msgID) {
+	this.datamessage = datamessage;
+	this.comID = comID;
+	this.msgID = msgID;
     }
 
     public synchronized RemoteMessage getDatamessage() {

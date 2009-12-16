@@ -37,12 +37,13 @@ public class ChooseBookshelves extends JDialog {
     private Iterable<String> library = null;
     private Root root = null;
     private TreeView treeView = null;
-    private String alias = "";  //  @jve:decl-index=0:
+    private String alias = ""; // @jve:decl-index=0:
 
     /**
      * Choose bookshelves dialog
      */
-    public ChooseBookshelves(Frame owner, Controller c, TreeView t, Iterable<String> l, String a) {
+    public ChooseBookshelves(Frame owner, Controller c, TreeView t,
+	    Iterable<String> l, String a) {
 	super(owner);
 
 	root = (Root) owner;
@@ -69,7 +70,7 @@ public class ChooseBookshelves extends JDialog {
 
 	    List<String> names = new ArrayList<String>();
 	    Iterator<String> bookshelves = library.iterator();
-	    
+
 	    while (bookshelves.hasNext()) {
 		System.out.println("more");
 		names.add(bookshelves.next());
@@ -111,7 +112,7 @@ public class ChooseBookshelves extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			
+
 			Object[] shelves = bookshelfList.getSelectedValues();
 			if (shelves.length > 0) {
 
@@ -119,7 +120,7 @@ public class ChooseBookshelves extends JDialog {
 			    for (int x = 0; x < shelves.length; x++) {
 				imported.add((String) shelves[x]);
 			    }
-			    
+
 			    control.setShelfSelection(alias, imported);
 			} else {
 			    control.setShelfSelectionAll(alias);

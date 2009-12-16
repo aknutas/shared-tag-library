@@ -14,7 +14,8 @@ import network.Definitions;
 import network.messages.*;
 
 /**
- * Class CommTestServer This is a test listener that initializes the ClientThread and works on its functionality.
+ * Class CommTestServer This is a test listener that initializes the
+ * ClientThread and works on its functionality.
  * 
  * @author Antti Knutas
  * 

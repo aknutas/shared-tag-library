@@ -11,7 +11,8 @@ import network.Definitions;
 import network.messages.*;
 
 /**
- * Class Chatterer This class is a test object sender for outgoing communication.
+ * Class Chatterer This class is a test object sender for outgoing
+ * communication.
  * 
  * @author Antti Knutas
  * 
@@ -25,7 +26,7 @@ public class Chatterer {
     Communication comm;
     Object obj;
     long time;
-    int i=1;
+    int i = 1;
 
     public static void main(String[] args) {
 	Chatterer application = new Chatterer();

@@ -27,7 +27,8 @@ public interface Control {
      * @throws IOException
      * @throws UnknownHostException
      */
-    public int connect(String address) throws UnknownHostException, ConnectException, IOException;
+    public int connect(String address) throws UnknownHostException,
+	    ConnectException, IOException;
 
     /**
      * A command to disconnect a certain client or server connection.
@@ -48,7 +49,8 @@ public interface Control {
      * @param receiver
      *            The message listener which should receive the reply.
      */
-    public void sendLibraryMsg(int connection, Message message, ClientResponder receiver);
+    public void sendLibraryMsg(int connection, Message message,
+	    ClientResponder receiver);
 
     /**
      * A command to send a data object to the specified connection, with no
@@ -76,13 +78,13 @@ public interface Control {
      *         id and the second is connection status.
      */
     public Map<Integer, Integer> getStatus();
-    
+
     /**
      * A request to start shutdown routines regarding networking. This stops
      * connection listening, and starts to disconnect threads.
      */
     public void shutDown();
-    
+
     /**
      * The method is used to register objects that need to be notified when the
      * connection this specific ID gets shut down.

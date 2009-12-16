@@ -13,11 +13,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 /**
- * Help dialog displays a introductory level guide for using basic functionality of the program, and displaying an about page.
+ * Help dialog displays a introductory level guide for using basic functionality
+ * of the program, and displaying an about page.
  * 
  * 
  * @author piranspa
- *
+ * 
  */
 public class Help extends JDialog {
 

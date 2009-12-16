@@ -34,11 +34,11 @@ public abstract class Message implements Serializable {
     }
 
     public long getOrgID() {
-        return orgID;
+	return orgID;
     }
 
     public void setOrgID(long orgID) {
-        this.orgID = orgID;
+	this.orgID = orgID;
     }
 
 }

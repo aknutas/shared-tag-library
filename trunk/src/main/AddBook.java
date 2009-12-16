@@ -83,14 +83,15 @@ public class AddBook extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 
 		    try {
-			book = control.addBook(jTextField.getText(), jTextField1
-			    .getText());
+			book = control.addBook(jTextField.getText(),
+				jTextField1.getText());
 
 			results.resetResults();
 
 			setVisible(false);
 		    } catch (IllegalArgumentException e) {
-			root.setStatus("Can not add book. Please select a local bookshelf.");
+			root
+				.setStatus("Can not add book. Please select a local bookshelf.");
 		    }
 
 		}
