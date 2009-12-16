@@ -113,7 +113,8 @@ public final class QueryBuilderImpl implements QueryBuilder {
     }
 
     /**
-     * Checks if the database has a stored butlerweights object, and returns a list with them.
+     * Checks if the database has a stored butlerweights object, and returns a
+     * list with them.
      * 
      * @return List<ButlerWeights> List of butlerweights objects.
      */
@@ -149,6 +150,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
 
     /**
      * Stores the ProgramProperties object
+     * 
      * @return int Storing success status.
      */
     @SuppressWarnings("unchecked")
@@ -167,6 +169,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
 
     /**
      * Gets the stored ProgramProperties from the database.
+     * 
      * @return ProgramProperties ProgramProperties object.
      */
     public int storeProperties(ProgramProperties properties) {

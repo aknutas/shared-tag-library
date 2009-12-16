@@ -13,53 +13,53 @@ import data.Book;
  */
 public interface LibraryButlerInterface {
 
-	/**
-	 * Returns the name property of the FlatShelf referenced by index.
-	 * 
-	 * @param index
-	 *            the index returned by compareTo(FlatShelf)
-	 * @return a String containing the name of the FlatShelf
-	 */
-	public String identifyShelf(int index);
+    /**
+     * Returns the name property of the FlatShelf referenced by index.
+     * 
+     * @param index
+     *            the index returned by compareTo(FlatShelf)
+     * @return a String containing the name of the FlatShelf
+     */
+    public String identifyShelf(int index);
 
-	/**
-	 * Returns the number of shelfs this LibraryButler has learned.
-	 */
-	int countShelfs();
+    /**
+     * Returns the number of shelfs this LibraryButler has learned.
+     */
+    int countShelfs();
 
-	/**
-	 * Takes an input book and returns the proper input values for the brain.
-	 * 
-	 * @param b
-	 *            the book to ready
-	 * @return See description
-	 */
-	double[] readyBook(Book b);
+    /**
+     * Takes an input book and returns the proper input values for the brain.
+     * 
+     * @param b
+     *            the book to ready
+     * @return See description
+     */
+    double[] readyBook(Book b);
 
-	/**
-	 * Only called by the HeadButler. Runs the input book through the brain and
-	 * returns the raw output vector.
-	 * 
-	 * @param b
-	 *            the book to examine
-	 */
-	Map.Entry<FlatShelf, Double> assemble(Book b);
+    /**
+     * Only called by the HeadButler. Runs the input book through the brain and
+     * returns the raw output vector.
+     * 
+     * @param b
+     *            the book to examine
+     */
+    Map.Entry<FlatShelf, Double> assemble(Book b);
 
-	/**
-	 * Returns the property that name maps to
-	 * 
-	 * @param name
-	 *            the key whose value to return
-	 */
-	String getProperty(String name);
+    /**
+     * Returns the property that name maps to
+     * 
+     * @param name
+     *            the key whose value to return
+     */
+    String getProperty(String name);
 
-	/**
-	 * Returns the current ButlerWeights object.
-	 */
-	ButlerWeights getWeights();
+    /**
+     * Returns the current ButlerWeights object.
+     */
+    ButlerWeights getWeights();
 
-	/**
-	 * Returns true if initialized.
-	 */
-	public boolean isInitialized();
+    /**
+     * Returns true if initialized.
+     */
+    public boolean isInitialized();
 }

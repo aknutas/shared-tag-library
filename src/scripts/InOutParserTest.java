@@ -15,8 +15,9 @@ public class InOutParserTest {
 
     @Test
     public void testInOutParser() {
-	InOutParser inOut = new InOutParser("src\\scripts\\input.txt","src\\scripts\\output.txt");
-	assertTrue(inOut.lib!= null);
+	InOutParser inOut = new InOutParser("src\\scripts\\input.txt",
+		"src\\scripts\\output.txt");
+	assertTrue(inOut.lib != null);
 	assertTrue(!inOut.parseFlag);
     }
 
@@ -39,11 +40,12 @@ public class InOutParserTest {
     public void testWriteOutLibrary() {
 	Library lib = new VirtualLibrary();
 	Bookshelf bs = new VirtualBookshelf("frank");
-	bs.insert(new VirtualBook("abook","by a man"));
+	bs.insert(new VirtualBook("abook", "by a man"));
 	lib.addBookshelf(bs);
-	InOutParser inOut = new InOutParser("src\\scripts\\input.txt","src\\scripts\\output.txt");
+	InOutParser inOut = new InOutParser("src\\scripts\\input.txt",
+		"src\\scripts\\output.txt");
 	inOut.writeOutLibrary(lib);
-	assertTrue(inOut.outLib!=null);
+	assertTrue(inOut.outLib != null);
     }
 
 }

@@ -83,11 +83,11 @@ public class AddBookshelf extends JDialog {
 		    if (shelf != null) {
 			if (books != null) {
 			    for (Book b : books) {
-				
+
 				shelf.insert(b.makeVirtual());
 			    }
 			}
-			
+
 			results.setResults(shelf);
 			tree.refresh();
 		    }

@@ -18,8 +18,11 @@ import data.VirtualBookshelf;
 public abstract class ControllerSearch {
     /**
      * Searchs with a string on a collection of libraries
-     * @param searchTerm the term to search
-     * @param allLibs a collection of libraries
+     * 
+     * @param searchTerm
+     *            the term to search
+     * @param allLibs
+     *            a collection of libraries
      * @return a shelf for each library
      */
     public static Collection<Bookshelf> searchAlllibs(String searchTerm,
@@ -32,10 +35,15 @@ public abstract class ControllerSearch {
 	}
 	return shelves;
     }
+
     /**
-     * Searchs with a string on a collection of libraries and flattens the results
-     * @param searchTerm the term to search
-     * @param allLibs a collection of libraries
+     * Searchs with a string on a collection of libraries and flattens the
+     * results
+     * 
+     * @param searchTerm
+     *            the term to search
+     * @param allLibs
+     *            a collection of libraries
      * @return a shelf for each library
      */
     public static Bookshelf searchAlllibsFlat(String searchTerm,
@@ -43,16 +51,20 @@ public abstract class ControllerSearch {
 	Iterator<Library> iter = allLibs.iterator();
 	VirtualBookshelf vb = new VirtualBookshelf();
 	while (iter.hasNext()) {
-	   	Bookshelf avb=search(searchTerm, iter.next());
-		vb = (VirtualBookshelf) vb.union(avb);
+	    Bookshelf avb = search(searchTerm, iter.next());
+	    vb = (VirtualBookshelf) vb.union(avb);
 	}
 
 	return vb;
     }
+
     /**
      * Searchs with a string on a library and flattens the results
-     * @param searchTerm the term to search
-     * @param aLib a library
+     * 
+     * @param searchTerm
+     *            the term to search
+     * @param aLib
+     *            a library
      * @return a shelf for each library
      */
     public static Bookshelf search(String searchTerm, Library aLib) {

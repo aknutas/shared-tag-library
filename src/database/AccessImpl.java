@@ -51,7 +51,8 @@ public class AccessImpl implements Access {
      * Takes a string as a query, and returns the result as an array of objects.
      * 
      * @return List Result list of objects.
-     * @param querystring Query, formatted by QueryBuilder. 
+     * @param querystring
+     *            Query, formatted by QueryBuilder.
      */
     @SuppressWarnings("unchecked")
     public synchronized List query(String querystring) {
@@ -72,12 +73,12 @@ public class AccessImpl implements Access {
 	    }
 	}
 	ArrayList results = null;
-	if (queryresults==null)
+	if (queryresults == null)
 	    results = new ArrayList();
 	else
 	    results = new ArrayList(queryresults);
 	q.closeAll();
-	
+
 	return results;
     }
 
@@ -85,7 +86,8 @@ public class AccessImpl implements Access {
      * Persists a single object.
      * 
      * @return int Success status.
-     * @param object The persisted object.
+     * @param object
+     *            The persisted object.
      */
     public synchronized int commitOne(Object object) {
 	int returnvalue = 1;
@@ -110,7 +112,8 @@ public class AccessImpl implements Access {
      * Persists the objects in the list.
      * 
      * @return int Success status.
-     * @param objects List of objects to be persisted.
+     * @param objects
+     *            List of objects to be persisted.
      */
     @SuppressWarnings("unchecked")
     public synchronized int commitCollection(Collection objects) {
@@ -141,7 +144,7 @@ public class AccessImpl implements Access {
 	// Trying to create the persistence manager
 	try {
 	    pmf = JDOHelper
-	    .getPersistenceManagerFactory("datanucleus.properties");
+		    .getPersistenceManagerFactory("datanucleus.properties");
 	    pm = pmf.getPersistenceManager();
 	    pm.getFetchPlan().setMaxFetchDepth(-1);
 	    pm.setDetachAllOnCommit(true);
@@ -168,7 +171,8 @@ public class AccessImpl implements Access {
      * Removes a single object from the persistence graph.
      * 
      * @return int Success status.
-     * @param object The persisted object.
+     * @param object
+     *            The persisted object.
      */
     public synchronized int removeOne(Object object) {
 	int returnvalue = 1;

@@ -22,7 +22,7 @@ public class CommunicationImpl implements Communication {
      * 
      * @param _socket
      *            Socket to be used
-     * @return Object that is received, null if timeout happened (or a deformed 
+     * @return Object that is received, null if timeout happened (or a deformed
      *         message)
      * @throws IOException
      *             When there is problems with the connection

@@ -123,7 +123,7 @@ public class SearchResults extends JScrollPane {
 
 	for (Result r : results) {
 	    if (r.isSelected()) {
-		
+
 		try {
 		    control.removeBook(bookshelf, r.getBook());
 		    panel.remove(r);

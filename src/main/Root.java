@@ -63,7 +63,8 @@ public class Root extends JFrame {
     /**
      * Initializes main loop.
      * 
-     * @param args No arguments are parsed.
+     * @param args
+     *            No arguments are parsed.
      */
     public static void main(String[] args) {
 
@@ -951,7 +952,8 @@ public class Root extends JFrame {
     /**
      * Updates the status, and automatically disappears after 5 seconds.
      * 
-     * @param s New Status
+     * @param s
+     *            New Status
      */
     protected void setStatus(String s) {
 

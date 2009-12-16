@@ -47,9 +47,9 @@ public class QueryBuilderImplTest {
 	shelf.setProperty("name", "Plop");
 	book = new VirtualBook("Diiba", "Daaba");
 	shelf.insert(book);
-	//Here is where we persist it
+	// Here is where we persist it
 	qb.shelfStore(shelf);
-	
+
 	// Second test query
 	returnlist = qb.shelfSearchByBookName("Diiba");
 	testshelf = (Bookshelf) returnlist.get(0);
@@ -59,15 +59,15 @@ public class QueryBuilderImplTest {
 
     @Test
     public void testShelfSearchByProperty() {
-	//Creating new shelf
+	// Creating new shelf
 	shelf = new VirtualBookshelf("");
 	shelf.setProperty("name", "Plop");
 	book = new VirtualBook("Diiba", "Daaba");
 	shelf.insert(book);
-	//Here is where we persist it
+	// Here is where we persist it
 	qb.shelfStore(shelf);
 
-	//First test query
+	// First test query
 	returnlist = qb.shelfSearchByProperty("name", "Plop");
 	testshelf = (Bookshelf) returnlist.get(0);
 	assert testshelf.getProperty("name").equals("Plop");
@@ -75,63 +75,63 @@ public class QueryBuilderImplTest {
 
     @Test
     public void testShelfList() {
-	//Creating new shelf
+	// Creating new shelf
 	shelf = new VirtualBookshelf("");
 	shelf.setProperty("name", "Plop");
 	book = new VirtualBook("Diiba", "Daaba");
 	shelf.insert(book);
-	//Here is where we persist it
+	// Here is where we persist it
 	qb.shelfStore(shelf);
-	
+
 	assert testshelf.size() == 1;
     }
 
     @Test
     public void testShelfStore() {
-	//Creating new shelf
+	// Creating new shelf
 	shelf = new VirtualBookshelf("");
 	shelf.setProperty("name", "Plop");
 	book = new VirtualBook("Diiba", "Daaba");
 	shelf.insert(book);
-	//Here is where we persist it
+	// Here is where we persist it
 	qb.shelfStore(shelf);
 
-	//First test query
+	// First test query
 	returnlist = qb.shelfSearchByProperty("name", "Plop");
 	testshelf = (Bookshelf) returnlist.get(0);
 	assert testshelf.getProperty("name").equals("Plop");
-	
-	//Creating new shelf
+
+	// Creating new shelf
 	Bookshelf shelf2 = new VirtualBookshelf("");
 	shelf2.setProperty("name", "Plap");
 	book = new VirtualBook("Diiba", "Daaba");
 	shelf2.insert(book);
-	
+
 	TreeSet<Bookshelf> shelfset = new TreeSet<Bookshelf>();
 	shelfset.add(shelf2);
 	qb.shelfStore(shelfset);
 
-	//Second test query
+	// Second test query
 	returnlist = qb.shelfSearchByProperty("name", "Plap");
 	testshelf = (Bookshelf) returnlist.get(0);
 	assert testshelf.getProperty("name").equals("Plap");
-	
+
 	qb.shelfRemove(shelf2);
     }
 
     @Test
     public void testShelfRemove() {
-	//Creating new shelf
+	// Creating new shelf
 	shelf = new VirtualBookshelf("");
 	shelf.setProperty("name", "Plop");
 	book = new VirtualBook("Diiba", "Daaba");
 	shelf.insert(book);
-	//Here is where we persist it
+	// Here is where we persist it
 	qb.shelfStore(shelf);
-	
+
 	qb.shelfRemove(shelf);
 	returnlist = qb.shelfList();
-	
+
 	assert testshelf.size() == 0;
 	qb.shelfStore(shelf);
     }

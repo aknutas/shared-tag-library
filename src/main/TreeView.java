@@ -118,7 +118,8 @@ public class TreeView extends JPanel implements TreeSelectionListener {
     }
 
     /**
-     * Value changed. A new bookshelf is selected. Make sure it's displayed on search results.
+     * Value changed. A new bookshelf is selected. Make sure it's displayed on
+     * search results.
      */
     @Override
     public void valueChanged(TreeSelectionEvent e) {

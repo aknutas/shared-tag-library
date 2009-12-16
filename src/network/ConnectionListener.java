@@ -22,17 +22,16 @@ public class ConnectionListener extends Thread {
 	this.ccb = ccb;
 	status = Definitions.CONNECTED;
     }
-    
-    public void shutdown()
-    {
+
+    public void shutdown() {
 	status = Definitions.DISCONNECTED;
     }
 
     public void run() {
 	try {
 	    ss = new ServerSocket(Definitions.PORT);
-	    //Debug
-//	    System.out.println("Listening for connections.");
+	    // Debug
+	    // System.out.println("Listening for connections.");
 	} catch (IOException e) {
 	    System.out.println("Could not listen on port: " + Definitions.PORT);
 	    status = Definitions.DISCONNECTED;

@@ -27,7 +27,8 @@ public interface Access {
      * Takes a string as a query, and returns the result as an array of objects.
      * 
      * @return List Result list of objects.
-     * @param querystring Query, formatted by QueryBuilder.
+     * @param querystring
+     *            Query, formatted by QueryBuilder.
      */
     @SuppressWarnings("unchecked")
     public List query(String querystring);
@@ -36,7 +37,8 @@ public interface Access {
      * Persists a single object.
      * 
      * @return int Success status.
-     * @param object The persisted object.    
+     * @param object
+     *            The persisted object.
      */
     public int commitOne(Object object);
 
@@ -44,7 +46,8 @@ public interface Access {
      * Removes a single object from the persistence graph.
      * 
      * @return int Success status.
-     * @param object The persisted object.   
+     * @param object
+     *            The persisted object.
      */
     public int removeOne(Object object);
 
@@ -52,7 +55,8 @@ public interface Access {
      * Persists the objects in the list.
      * 
      * @return int Success status.
-     * @param objects List of objects to be persisted.
+     * @param objects
+     *            List of objects to be persisted.
      */
     @SuppressWarnings("unchecked")
     public int commitCollection(Collection objects);

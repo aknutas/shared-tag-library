@@ -23,7 +23,8 @@ public interface QueryBuilder {
      * Returns all bookshelves with a book object with this specific title.
      * 
      * @return List A list of shelves.
-     * @param booktitle Book title.
+     * @param booktitle
+     *            Book title.
      */
     public List<Bookshelf> shelfSearchByBookName(String booktitle);
 
@@ -31,8 +32,10 @@ public interface QueryBuilder {
      * Returns all bookshelves with this specific property set to this value.
      * 
      * @return List A list of shelves.
-     * @param property Property name.
-     * @param value Value.
+     * @param property
+     *            Property name.
+     * @param value
+     *            Value.
      */
     public List<Bookshelf> shelfSearchByProperty(String property, String value);
 
@@ -48,18 +51,20 @@ public interface QueryBuilder {
      * persisted shelf object as a parameter.
      * 
      * @return int Success status.
-     * @param shelf The shelf to be stored or updated.
-     *            
+     * @param shelf
+     *            The shelf to be stored or updated.
+     * 
      */
     public int shelfStore(Bookshelf shelf);
-    
+
     /**
-     * Stores new shelf, or updates the database with the changes. Takes a collection
-     * of persisted shelf objects as a parameters.
+     * Stores new shelf, or updates the database with the changes. Takes a
+     * collection of persisted shelf objects as a parameters.
      * 
      * @return int Success status.
-     * @param shelf The shelf to be stored or updated.
-     *            
+     * @param shelf
+     *            The shelf to be stored or updated.
+     * 
      */
     public int shelfStore(Collection<Bookshelf> shelves);
 
@@ -71,32 +76,36 @@ public interface QueryBuilder {
      * @param shelf
      */
     public int shelfRemove(Bookshelf shelf);
-    
+
     /**
-     * Checks if the database has a stored butlerweights object, and returns a list with them.
+     * Checks if the database has a stored butlerweights object, and returns a
+     * list with them.
      * 
      * @return int
      */
     public List<ButlerWeights> getButlerWeights();
-    
+
     /**
      * Stores a butlerweights object into the database.
-     *  
-     * @param butler The butler to be stored.
+     * 
+     * @param butler
+     *            The butler to be stored.
      * @return int
      */
     public int storeButler(ButlerWeights butler);
-    
+
     /**
      * Stores ProgramProperties
+     * 
      * @return int Storing status.
      */
     public int storeProperties(ProgramProperties properties);
-    
+
     /**
      * Gets the stored ProgramProperties from the database.
+     * 
      * @return ProgramProperties
      */
     public ProgramProperties getProperties();
-    
+
 }
