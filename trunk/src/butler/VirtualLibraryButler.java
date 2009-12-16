@@ -613,6 +613,9 @@ public class VirtualLibraryButler extends LibraryButler {
 			
 			double[] outputValues = brain.compute(new BasicNeuralData(readyBook(book))).getData();
 			boolean foundBest = false;
+			
+			System.out.println("outputValues length: " + outputValues.length);
+			
 			double best = Double.MIN_VALUE;
 			int j = 0;
 			for (; j < outputValues.length; ++j)
@@ -623,6 +626,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				if (outputValues[j] == best) {
 					newShelfs.get(j).insert(book);
 					foundBest = true;
+					System.out.println("j: " + j);
 				}
 				else
 					--j;
@@ -683,9 +687,7 @@ public class VirtualLibraryButler extends LibraryButler {
 		
 		//System.out.println("cleanShelfs size: " + cleanShelfs.size());
 		
-		
-
-		return (Set<Bookshelf>)cleanShelfs.values();
+		return new HashSet<Bookshelf>(cleanShelfs.values());
 	}
 
 	/**
@@ -790,7 +792,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * Trains the network with the specified NeuralDataSet.
 	 * @param input
 	 */
-	private void train(NeuralDataSet input){
+	private boolean train(NeuralDataSet input){
 
 		final Train train = new CompetitiveTraining(brain, 0.7, input, new NeighborhoodGaussian(new GaussianFunction(0.0, 5.0, 1.5)));
 		Strategy smartLearn = new SmartLearningRate();
@@ -808,19 +810,20 @@ public class VirtualLibraryButler extends LibraryButler {
 		// training loop
 		do {
 			train.iteration();
-			//System.out.println("Epoch #" + epoch + " Error:" + train.getError()); // + " MovingAvg:" + movingAvg);
+			System.out.println("Epoch #" + epoch + " Error:" + train.getError()); // + " MovingAvg:" + movingAvg);
 			lastErrors[epoch % errorSize] = train.getError();
 
 			double avg = 0;
 			for (int i = 0; (i < epoch) && (i < errorSize); ++i)
 				avg = (avg * i + lastErrors[i]) / (i+1);
 
-			if (Math.abs(avg - train.getError()) < 0.01)
+			if (Math.abs(avg - train.getError()) < 0.1)
 				train.setError(0.001);
 
 			epoch++;
 		} while(train.getError() > 0.01);
 
+		return true;
 		//System.out.println("training complete.");
 	}
 
