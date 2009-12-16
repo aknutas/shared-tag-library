@@ -36,7 +36,7 @@ public interface LibraryButlerInterface{
 	double[] readyBook(Book b);
 	
 	/**
-	 * Typically called by the HeadButler. Runs the input book through
+	 * Only called by the HeadButler. Runs the input book through
 	 * the brain and returns the raw output vector.
 	 * @param b the book to examine
 	 */

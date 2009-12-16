@@ -27,6 +27,11 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	boolean initialized = false;
 
 	/**
+	 * Default constructor. Does nothing interesting.
+	 */
+	public LibraryButler(){}
+	
+	/**
 	 * used to store meta-data.
 	 */
 	protected Map<String, String> properties;
@@ -44,7 +49,12 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	 * @return See description
 	 */
 	public double[] readyBook(Book b) {
-
+		
+		if (null == idPairs) {
+			double[] returnVal= {-1.0,-1.0};
+			return returnVal;
+		}
+			
 		double[] inputValues = new double[this.numTags];
 
 		for(Map.Entry<String, Integer> tag : b.enumerateTags()) {
@@ -78,6 +88,13 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	public Map.Entry<FlatShelf, Double> assemble(Book b) {
 		
 		double[] inputValues = readyBook(b);
+		
+		if (inputValues[0] == inputValues[1]) {
+			Map<FlatShelf, Double> temp = new HashMap<FlatShelf, Double>();
+			temp.put(new FlatShelf(), 0.0);
+			return temp.entrySet().iterator().next();
+		}
+		
 		NeuralData book = new BasicNeuralData(inputValues);
 		if (flatShelfs.size() == 0)
 			return null;
@@ -95,7 +112,7 @@ public abstract class LibraryButler implements LibraryButlerInterface {
 	/**
 	 * Takes a double[] as input and returns a 2 element double[].
 	 * answer[0] = maxValue
-	 * answer[1] = index;
+	 * 
 	 * @param input
 	 * @return
 	 */
