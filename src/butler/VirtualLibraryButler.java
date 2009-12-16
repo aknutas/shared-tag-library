@@ -614,7 +614,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			double[] outputValues = brain.compute(new BasicNeuralData(readyBook(book))).getData();
 			boolean foundBest = false;
 			
-			System.out.println("outputValues length: " + outputValues.length);
+			//System.out.println("outputValues length: " + outputValues.length);
 			
 			double best = Double.MIN_VALUE;
 			int j = 0;
