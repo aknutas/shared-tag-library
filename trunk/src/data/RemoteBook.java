@@ -120,73 +120,65 @@ public class RemoteBook extends RemoteObject implements Book {
 	return weight;
     }
 
-    /**
-     * Gets the weight of a given tag. If the tag has never been used with this
-     * VirtualBook then the weight will be zero. (Note: A return value of zero
-     * does not necessarily indicate that a tag has never been used with the
-     * book.)
-     * 
-     * @param tag
-     *            the name of the tag
-     * 
-     * @return the weight of the tag
-     * 
-     * @throws NullPointerException
-     *             if the tag given is null
-     */
-    @Override
-    public int weight(String tag) throws NullPointerException {
-	if (null == tag)
-	    throw new NullPointerException("tag cannot be null");
-
-	return this.tags.get(tag);
-    }
-
-    /**
-     * This method is used to send a Generic 'weight' message. Every weight
-     * message send a tag and receives a weight as a response.
-     * 
-     * @param messageType
-     *            the message type to use
-     * @param tag
-     *            the tag to perform this weight message on
-     * 
-     * @return the weight returned (0 on error)
-     * 
-     * @throws NullPointerException
-     *             if the tag is null
-     * @throws IllegalArugmentException
-     *             if the message type is illegal
-     */
-    private int weightMessage(int messageType, String tag)
-	    throws NullPointerException, IllegalArgumentException {
-	if (null == tag)
-	    throw new NullPointerException("tag cannot be null");
-
-	if (BookMessage.MSG_TAG != messageType
-		&& BookMessage.MSG_UNTAG != messageType
-		&& BookMessage.MSG_WEIGHT != messageType)
-	    throw new IllegalArgumentException("illegal message type");
-
+	/**
+	 * Gets the weight of a given tag. If the tag has never been used 
+	 * with this VirtualBook then the weight will be zero. (Note: A 
+	 * return value of zero does not necessarily indicate that a tag
+	 * has never been used with the book.)
+	 *
+	 * @param tag the name of the tag
+	 *
+	 * @return the weight of the tag
+	 *
+	 * @throws NullPointerException if the tag given is null
+	 */
+	@Override
+	public int weight(String tag) throws NullPointerException {
+	if(null == tag)
+		throw new NullPointerException("tag cannot be null");
+	
+	return (null != this.tags.get(tag)) ? this.tags.get(tag) : 0;
+	}
+	
+	/**
+	 * This method is used to send a Generic 'weight' message. Every
+	 * weight message send a tag and receives a weight as a response.
+	 * 
+	 * @param messageType the message type to use
+	 * @param tag the tag to perform this weight message on
+	 * 
+	 * @return the weight returned (0 on error)
+	 * 
+	 * @throws NullPointerException if the tag is null
+	 * @throws IllegalArugmentException if the message type is
+	 *         illegal
+	 */
+	private int weightMessage(int messageType, String tag) throws NullPointerException, IllegalArgumentException {
+	if(null == tag)
+		throw new NullPointerException("tag cannot be null");
+	
+	if(BookMessage.MSG_TAG != messageType && BookMessage.MSG_UNTAG != messageType && BookMessage.MSG_WEIGHT != messageType)
+		throw new IllegalArgumentException("illegal message type");
+	
 	/* send message */
 	BookMessage message = new BookMessage(messageType, this.id);
 	message.queueParameter(tag);
 	RemoteMessage response = this.send(message, 5000);
-	if (null == response)
-	    return 0;
-
-	if (!(response instanceof BookMessage))
-	    return 0;
-
-	if (messageType != response.getMessageType())
-	    return 0;
-
+	if(null == response)
+		return 0;
+	
+	if(!(response instanceof BookMessage))
+		return 0;
+	
+	if(messageType != response.getMessageType())
+		return 0;
+	
 	Integer weight = response.dequeParameter();
-	if (null == weight)
-	    return 0;
-
+	if(null == weight)
+		return 0;
+	
 	return weight.intValue();
-    }
+	}
 
     /**
      * Returns an iterator of all tags on a book and their associated weights.
