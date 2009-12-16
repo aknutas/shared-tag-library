@@ -626,7 +626,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				if (outputValues[j] == best) {
 					newShelfs.get(j).insert(book);
 					foundBest = true;
-					System.out.println("j: " + j);
+					//System.out.println("j: " + j);
 				}
 				else
 					--j;
