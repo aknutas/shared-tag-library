@@ -89,7 +89,7 @@ public class Controller {
 			if (connections == null)
 				connections = new Vector<ConnectionMetadata>();
 			
-			
+			System.out.println(retrieveButlerWeights()==null);
 			if(retrieveButlerWeights()==null)
 			    HB = new HeadButler(myLib);
 			else
@@ -487,6 +487,9 @@ public class Controller {
 			if (bs instanceof VirtualBookshelf)
 				myLib.saveBookshelf((VirtualBookshelf) bs);
 		}
+		Collection<ButlerWeights> weights =HB.exportWeights();
+		for(ButlerWeights bw:weights)
+		qb.storeButler(bw);
 	}
 
 	/**
@@ -688,7 +691,7 @@ public class Controller {
 	 */
 	public synchronized List<ButlerWeights> retrieveButlerWeights() {
 		List<ButlerWeights> butlerList = qb.getButlerWeights();
-		if (butlerList.size() == 0)
+		if (butlerList.isEmpty())
 			return null;
 		return butlerList;
 	}
