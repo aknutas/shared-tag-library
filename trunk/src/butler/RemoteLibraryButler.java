@@ -29,7 +29,6 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * @param connection the connection ID
 	 * @param network the network controller
 	 * @param timeout the timeout in ms
-	 * @param id the ID of this
 	 * @throws NullPointerException
 	 * @throws RemoteObjectException
 	 */
@@ -55,7 +54,6 @@ public class RemoteLibraryButler extends RemoteObject implements LibraryButlerIn
 	 * 
 	 * @param connection the connection ID
 	 * @param network the network controller
-	 * @param id the ID of this
 	 * @throws NullPointerException
 	 * @throws RemoteObjectException
 	 */
