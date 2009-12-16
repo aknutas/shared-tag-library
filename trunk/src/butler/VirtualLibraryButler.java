@@ -331,6 +331,8 @@ public class VirtualLibraryButler extends LibraryButler {
 		}
 	}
 
+	protected boolean initialized = false;
+
 	/**
 	 * Creates this with an existing ButlerWeights object
 	 * The Butler will not function properly until one of the
@@ -759,7 +761,7 @@ public class VirtualLibraryButler extends LibraryButler {
 		}
 
 		currentWeights = new ButlerWeights(brain.getStructure().getSynapses().get(0).getMatrix(), numTags, flatShelfs, idPairs);
-		initialized = true;
+		//initialized = true;
 	}
 
 	/**
@@ -785,39 +787,47 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * Trains the network with the specified NeuralDataSet.
 	 * @param input
 	 */
-	private boolean train(NeuralDataSet input){
-
-		final Train train = new CompetitiveTraining(brain, 0.7, input, new NeighborhoodGaussian(new GaussianFunction(0.0, 5.0, 1.5)));
-		Strategy smartLearn = new SmartLearningRate();
+	private void train(NeuralDataSet input){
 		
-		smartLearn.init(train);
-		train.addStrategy(smartLearn);
+		final NeuralDataSet theInput = input;
+		final VirtualLibraryButler that = this;
 
-		int epoch = 0;
-		int errorSize = 250;
+		(new Thread() {
+			public void run() {
+				final Train train = new CompetitiveTraining(brain, 0.7, theInput, new NeighborhoodGaussian(new GaussianFunction(0.0, 5.0, 1.5)));
+				Strategy smartLearn = new SmartLearningRate();
+				
+				smartLearn.init(train);
+				train.addStrategy(smartLearn);
 
-		double[] lastErrors = new double[errorSize];
+				int epoch = 0;
+				int errorSize = 250;
 
-		org.encog.util.logging.Logging.stopConsoleLogging();
-		
-		// training loop
-		do {
-			train.iteration();
-			System.out.println("Epoch #" + epoch + " Error:" + train.getError()); // + " MovingAvg:" + movingAvg);
-			lastErrors[epoch % errorSize] = train.getError();
+				double[] lastErrors = new double[errorSize];
 
-			double avg = 0;
-			for (int i = 0; (i < epoch) && (i < errorSize); ++i)
-				avg = (avg * i + lastErrors[i]) / (i+1);
+				org.encog.util.logging.Logging.stopConsoleLogging();
+				
+				// training loop
+				do {
+					train.iteration();
+					//System.out.println("Epoch #" + epoch + " Error:" + train.getError()); // + " MovingAvg:" + movingAvg);
+					lastErrors[epoch % errorSize] = train.getError();
 
-			if (Math.abs(avg - train.getError()) < 0.1)
-				train.setError(0.001);
+					double avg = 0;
+					for (int i = 0; (i < epoch) && (i < errorSize); ++i)
+						avg = (avg * i + lastErrors[i]) / (i+1);
 
-			epoch++;
-		} while(train.getError() > 0.01);
+					if (Math.abs(avg - train.getError()) < 0.01)
+						train.setError(0.001);
 
-		return true;
-		//System.out.println("training complete.");
+					epoch++;
+				} while(train.getError() > 0.01);
+
+				//System.out.println("training complete.");
+				
+				that.initialized = true;
+			}
+		}).start();
 	}
 
 }

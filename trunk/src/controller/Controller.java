@@ -80,6 +80,14 @@ public class Controller {
 		// load in library
 		qb = new QueryBuilderImpl();
 		myLib = new PersistentLibrary(qb);
+		myLib.setProperty("name", "My Library");
+		modifiedBs = new Vector<Bookshelf>();
+		ProgramProperties props = ProgramProperties.getInstance();
+		connections = (Vector<ConnectionMetadata>) props
+				.getProperty("controller::connections");
+		if (connections == null)
+			connections = new Vector<ConnectionMetadata>();
+		
 		
 		if(retrieveButlerWeights()==null)
 		    HB = new HeadButler(myLib);
@@ -94,21 +102,15 @@ public class Controller {
 			public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
 				if(RemoteMessage.class.equals(LibraryMessage.class))
 					return libResponder.onRemoteMessage(message);
-				else if(RemoteMessage.class.equals(ButlerMessage.class))
-					return butResponder.onRemoteMessage(message);
+				//else if(RemoteMessage.class.equals(ButlerMessage.class))
+				//	return butResponder.onRemoteMessage(message);
 				
 				throw new IllegalArgumentException();
 			}
 		});
 		
 		
-		myLib.setProperty("name", "My Library");
-		modifiedBs = new Vector<Bookshelf>();
-		ProgramProperties props = ProgramProperties.getInstance();
-		connections = (Vector<ConnectionMetadata>) props
-				.getProperty("controller::connections");
-		if (connections == null)
-			connections = new Vector<ConnectionMetadata>();
+		
 		
 		// Registering shutdown hooks
 		addShutdownHooks();
