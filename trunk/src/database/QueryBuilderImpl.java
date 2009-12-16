@@ -141,7 +141,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
 	String querystring = "SELECT FROM butler.ButlerWeights";
 	List<ButlerWeights> returnlist = (List<ButlerWeights>) db
 		.query(querystring);
-	if (!returnlist.isEmpty())
+	if (returnlist.contains(butler))
 	    db.removeOne(butler);
 	int returnvalue = db.commitOne(butler);
 	return returnvalue;
