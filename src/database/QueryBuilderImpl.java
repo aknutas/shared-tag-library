@@ -135,6 +135,7 @@ public final class QueryBuilderImpl implements QueryBuilder {
      *            The butler to be stored.
      * @return int Storing success status.
      */
+    @SuppressWarnings("unchecked")
     public int storeButler(ButlerWeights butler) {
 	Access db = AccessImpl.getInstance();
 	String querystring = "SELECT FROM butler.ButlerWeights";
