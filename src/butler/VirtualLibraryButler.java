@@ -36,18 +36,19 @@ import data.VirtualLibrary;
  *
  */
 public class VirtualLibraryButler extends LibraryButler {
-	
+
 	private Set<Bookshelf> sortedShelfs;
+	private Thread training;
 
 	/**
 	 * Test method.
 	 * @param args
 	 */
 	public static void main(String[] args){
-		
+
 		VirtualLibrary emptyLib = new VirtualLibrary();
 		VirtualLibraryButler dumbBut = new VirtualLibraryButler(emptyLib);
-		
+
 		//ScriptGenerator sg = new ScriptGenerator("src\\scripts\\en_US.dic");
 		//sg.generateLibrary(20, 5);
 
@@ -268,7 +269,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				"scary stories","series","silverbullet","southern discomfort",
 				"spouse","stake","summerreading","trips and journeys",
 				"uncompromising","vampire book","vampire novel","women",
-				"women writers"};
+		"women writers"};
 		int[] interviewWeights = {134,67,36,18,10,191,7,5,5,4,3,3,3,3,2,2,2,
 				2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
@@ -284,8 +285,8 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		VirtualLibraryButler buddy = new VirtualLibraryButler("buddy");
 		VirtualLibraryButler wadsworth = new VirtualLibraryButler("wadsworth");
-		
-		System.out.println(dumbBut.checkBook(catBack).getProperty("name"));
+
+		System.out.println("The Cat in the Hat Comes Back: " + dumbBut.checkBook(catBack).getProperty("name"));
 
 		//VirtualFlatShelf flatBS = new VirtualFlatShelf(bs);
 		//System.out.println("created flatBS");
@@ -295,6 +296,9 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		horror.setProperty("name", "horror");
 		bs.setProperty("name", "Seussville");
+		
+		System.out.println(horror.getProperty("name"));
+		System.out.println(bs.getProperty("name"));
 
 		//horror.insert(interview);
 		horror.insert(salem);
@@ -314,11 +318,11 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		System.out.println(buddy.getProperty("name") + " results:\n");
 
-		System.out.println(buddy.checkBook(catBack).getProperty("name"));
-		System.out.println(buddy.checkBook(salem).getProperty("name"));
-		System.out.println(buddy.checkBook(interview).getProperty("name"));
-		System.out.println(buddy.checkBook(cat).getProperty("name"));
-		System.out.println(buddy.checkBook(fish).getProperty("name"));
+		System.out.println("The Cat in the Hat Comes Back: " + buddy.checkBook(catBack).getProperty("name"));
+		System.out.println("Salem's Lot: " + buddy.checkBook(salem).getProperty("name"));
+		System.out.println("Interview with a Vampire: " + buddy.checkBook(interview).getProperty("name"));
+		System.out.println("The Cat in the Hat: " + buddy.checkBook(cat).getProperty("name"));
+		System.out.println("One Fish Two Fish Red Fish Blue Fish: " + buddy.checkBook(fish).getProperty("name"));
 
 		for (int n = 2; n < 5; ++n) {
 			wadsworth.initialize(bigShelf, n);
@@ -356,7 +360,7 @@ public class VirtualLibraryButler extends LibraryButler {
 		initialized = false;
 		org.encog.util.logging.Logging.stopConsoleLogging();
 	}
-	
+
 	/**
 	 * Creates and initializes a new Butler from a shelf and number of shelfs.
 	 * Butler is immediately ready for use.
@@ -368,7 +372,7 @@ public class VirtualLibraryButler extends LibraryButler {
 		sortedShelfs = initialize(shelf, numShelfs);
 		org.encog.util.logging.Logging.stopConsoleLogging();
 	}
-	
+
 	/**
 	 * Creates and initializes a new Butler from a VirtualLibrary. Butler is
 	 * immediately ready for use.
@@ -383,9 +387,16 @@ public class VirtualLibraryButler extends LibraryButler {
 		else
 			initialized = false;
 	}
-	
+
 	Set<Bookshelf> getSortedShelfs() {return sortedShelfs;}
 
+	private NeuralData compute(NeuralData b) throws IllegalArgumentException {
+		if (this.isTraining())
+			throw new IllegalArgumentException("This butler is still training.");
+		else
+			return brain.compute(b);
+	}
+	
 	/**
 	 * Checks an input book against the trained network.
 	 * Returns the flatshelf that best matches.
@@ -402,7 +413,14 @@ public class VirtualLibraryButler extends LibraryButler {
 		double[] inputValues = readyBook(b);
 
 		NeuralData book = new BasicNeuralData(inputValues);
-		final NeuralData output = brain.compute(book);
+		NeuralData output;
+		try {
+			output = this.compute(book);
+		}
+		catch (Exception e)
+		{
+			return new FlatShelf();
+		}
 
 		double best = Double.MIN_VALUE; 
 
@@ -421,7 +439,7 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		FlatShelf fs = getShelfs().get(index);
 		fs.setProperty("library", this.getProperty("library"));
-		
+
 		return fs;
 	}
 
@@ -481,10 +499,10 @@ public class VirtualLibraryButler extends LibraryButler {
 	 */
 	private Collection<FlatShelf> flattenAll(Collection<Bookshelf> books) {
 		Set<FlatShelf> flatShelfs = new HashSet<FlatShelf>();
-		
+
 		for (Bookshelf b : books)
 			flatShelfs.add(new FlatShelf(b));
-		
+
 		return flatShelfs;
 	}
 
@@ -512,7 +530,7 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * Returns the current ButlerWeights object.
 	 */
 	public ButlerWeights getWeights() {return currentWeights;}
-	
+
 	/**
 	 * Creates the IDPairSet that identifies which tag goes to which input neuron.
 	 * @param basis the bookshelf that contains the books which contain the tags to be ID'ed.
@@ -573,7 +591,7 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		//parse through the properties and tags of each book and normalize the weights.
 		for (Book book : basis) {
-			
+
 			Iterator<Map.Entry<String, Integer>> tags = book.enumerateTags().iterator();
 
 			while (tags.hasNext()) {
@@ -596,7 +614,7 @@ public class VirtualLibraryButler extends LibraryButler {
 			}
 			++i;
 		}
-		
+
 		NeuralDataSet data = new BasicNeuralDataSet(inputValues, null);
 
 		train(data);
@@ -610,49 +628,30 @@ public class VirtualLibraryButler extends LibraryButler {
 			newShelfs.put(j, new VirtualBookshelf());
 
 		for (Book book : basis) {
-			
-			double[] outputValues = brain.compute(new BasicNeuralData(readyBook(book))).getData();
-			boolean foundBest = false;
-			
-			//System.out.println("outputValues length: " + outputValues.length);
-			
-			double best = Double.MIN_VALUE;
-			int j = 0;
-			try {
-			for (; j < outputValues.length; ++j)
-				best = Math.max(best, outputValues[j]);
-			}
-			catch (Exception e){
-				best = max(outputValues)[0];
-			}
-			
-			--j; // off by one.
-			for (; !foundBest;) {
-				if (outputValues[j] == best) {
-					newShelfs.get(j).insert(book);
-					foundBest = true;
-					//System.out.println("j: " + j);
-				}
-				else
-					--j;
-			}
 
+			double[] outputValues = brain.compute(new BasicNeuralData(readyBook(book))).getData();
+
+			if (!(outputValues.length == 0))
+			{
+				double[] bestResult = max(outputValues);
+				newShelfs.get(bestResult[1]).insert(book);
+			}
 		}
-		
+
 		Map<Integer, Bookshelf> cleanShelfs = new HashMap<Integer, Bookshelf>();
 		int j = 0;
 		for (Bookshelf b: newShelfs.values()) {
 			//System.out.println("(clean up) shelf size: " + b.size());
-		
+
 			if (!b.empty()) {
 				cleanShelfs.put(j, b);
 				++j;
 			}
 		}
-		
+
 		//System.out.println("numShelfs input: " + numShelfs);
 		//System.out.println("actual numShelfs: " + cleanShelfs.size());
-		
+
 		if (cleanShelfs.size() < numShelfs) {
 			//System.out.println("retraining needed. " + numShelfs + " becomes " + cleanShelfs.size());
 			return initialize(basis, cleanShelfs.size());	//retrain with the proper size.
@@ -660,38 +659,38 @@ public class VirtualLibraryButler extends LibraryButler {
 
 		Collection<FlatShelf> randomFlatShelfs = flattenAll(cleanShelfs.values());
 		flatShelfs = new HashMap<Integer, FlatShelf>();
-		
+
 		//System.out.println("naming and sorting flatshelfs");
-		
+
 		for (FlatShelf fs : randomFlatShelfs) {
-			
+
 			String heaviestTagName = "";
 			int heaviestTagWeight = Integer.MIN_VALUE;
 			int k = checkBook(fs);
-			
+
 			Iterator<Map.Entry<String,Integer>> fsTags = fs.enumerateTags().iterator();
-			
+
 			while (fsTags.hasNext()) {
-				
+
 				Map.Entry<String, Integer> tag = fsTags.next();
 				heaviestTagWeight = Math.max(heaviestTagWeight, tag.getValue());
-				
+
 				if (heaviestTagWeight == tag.getValue())
 					heaviestTagName = tag.getKey();
-				
+
 			}
 			cleanShelfs.get(k).setProperty("name", heaviestTagName);
-			
+
 			//System.out.println(heaviestTagName + " is shelf #" + k);
-			
+
 			flatShelfs.put(k, new FlatShelf(cleanShelfs.get(k)));
-			
+
 			//System.out.println(flatShelfs.get(k).getProperty("name"));
-			
+
 		}
-		
+
 		//System.out.println("cleanShelfs size: " + cleanShelfs.size());
-		
+
 		return new HashSet<Bookshelf>(cleanShelfs.values());
 	}
 
@@ -793,15 +792,15 @@ public class VirtualLibraryButler extends LibraryButler {
 	 * @param input
 	 */
 	private void train(NeuralDataSet input){
-		
-		final NeuralDataSet theInput = input;
-		final VirtualLibraryButler that = this;
 
-		(new Thread() {
+		final NeuralDataSet theInput = input;
+		final VirtualLibraryButler that = this;	
+		
+		training = new Thread() {
 			public void run() {
 				final Train train = new CompetitiveTraining(brain, 0.7, theInput, new NeighborhoodGaussian(new GaussianFunction(0.0, 5.0, 1.5)));
 				Strategy smartLearn = new SmartLearningRate();
-				
+
 				smartLearn.init(train);
 				train.addStrategy(smartLearn);
 
@@ -811,7 +810,7 @@ public class VirtualLibraryButler extends LibraryButler {
 				double[] lastErrors = new double[errorSize];
 
 				org.encog.util.logging.Logging.stopConsoleLogging();
-				
+
 				// training loop
 				do {
 					train.iteration();
@@ -829,10 +828,19 @@ public class VirtualLibraryButler extends LibraryButler {
 				} while(train.getError() > 0.01);
 
 				//System.out.println("training complete.");
-				
+
 				that.initialized = true;
 			}
-		}).start();
+		};
+		
+		training.start();
+	}
+	
+	private boolean isTraining(){
+		if (null == training)
+			return false;
+		else
+			return training.isAlive();
 	}
 
 }
