@@ -114,7 +114,6 @@ public class HeadButler{
 	 * Adds a new Butler to the staff.
 	 * 
 	 * @param newButler the new Butler that was hired.
-	 * @return false if newButler already exists. 
 	 */
 	public void addButler(LibraryButlerInterface newButler) {
 
