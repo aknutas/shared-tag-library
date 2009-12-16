@@ -100,12 +100,10 @@ public class Controller {
 		cntrl = new ControlImpl(new RemoteResponder() {
 			@Override
 			public RemoteMessage onRemoteMessage(RemoteMessage message)	throws NullPointerException, IllegalArgumentException {
-				if(RemoteMessage.class.equals(LibraryMessage.class))
+				if(message instanceof ButlerMessage)
+					return butResponder.onRemoteMessage(message);
+				else
 					return libResponder.onRemoteMessage(message);
-				//else if(RemoteMessage.class.equals(ButlerMessage.class))
-				//	return butResponder.onRemoteMessage(message);
-				
-				throw new IllegalArgumentException();
 			}
 		});
 		
