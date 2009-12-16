@@ -382,8 +382,12 @@ public class VirtualLibraryButler extends LibraryButler {
 		properties = new HashMap<String, String>();
 		properties.put("library", virtLib.getProperty("name"));
 		org.encog.util.logging.Logging.stopConsoleLogging();
-		if (virtLib.getMasterShelf().size() > 0)
-			initialize(virtLib.getMasterShelf(), virtLib.getMasterShelf().size());
+		Collection<Bookshelf> allShelfs = new HashSet<Bookshelf>();
+		if (virtLib.getMasterShelf().size() > 0) {
+			for (Bookshelf b : virtLib)
+				allShelfs.add(b);
+			this.initialize(allShelfs);
+		}
 		else
 			initialized = false;
 	}
