@@ -56,10 +56,6 @@ public abstract class RemoteObject implements ClientResponder {
 			}
 		}
 		
-		public long getResponseTime() {
-			return this.time;
-		}
-		
 		public void onMessage(Message message) {
 			if(!(message instanceof RemoteMessage))
 				throw new IllegalArgumentException("illegal message type");
