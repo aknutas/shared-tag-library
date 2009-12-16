@@ -343,9 +343,6 @@ public class Controller {
 	 * @return returns empty if no connections
 	 */
 	public synchronized Vector<Library> retrieveRemoteLibraries() {
-		if (connections.isEmpty()) {
-			throw new IllegalArgumentException();
-		}
 		Vector<Library> libs = new Vector<Library>();
 		for (int id = 0; id < connections.size(); id++) {
 			if (connections.get(id).isConnected()) {
