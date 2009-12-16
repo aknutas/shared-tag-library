@@ -41,8 +41,10 @@ public final class FlatShelf implements Book {
 	 * 
 	 * @param shelf
 	 */
-	public FlatShelf(Bookshelf shelf) {
-
+	public FlatShelf(Bookshelf shelf) throws IllegalArgumentException{
+		if (shelf.size() == 0)
+			throw new IllegalArgumentException("shelf cannot be empty. call FlatShelf()");
+		
 		tags = new HashMap<String, Integer>();
 		properties = new HashMap<String, String>();
 
