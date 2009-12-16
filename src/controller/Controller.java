@@ -110,7 +110,7 @@ public class Controller {
     
 	}
 	/**
-	 * returns an object with properties of the name of the shelf the book is most likely to fit in
+	 * Returns an object with properties of the name of the shelf the book is most likely to fit in
 	 * @param book
 	 * @return
 	 */
@@ -275,7 +275,7 @@ public class Controller {
 	
 	
 	/**
-	 * connects the named alias and hires the related butler
+	 * connects the named alias
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if already connected
@@ -284,7 +284,7 @@ public class Controller {
 	 * @throws NullPointerException 
 	 */
 	public synchronized void connect(String alias)
-			throws IllegalArgumentException, NullPointerException, RemoteObjectException {
+			throws IllegalArgumentException, NullPointerException {
 		if (connections.isEmpty()) {
 			throw new IllegalArgumentException("no available connections");
 		}
@@ -293,13 +293,13 @@ public class Controller {
 				if (connections.get(id).isConnected())
 					throw new IllegalArgumentException("already connected");
 				connections.get(id).connect(cntrl);
-				HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId(),cntrl,connections.get(id).getAlias()));
+				//HB.addButler(new RemoteLibraryButler(connections.get(id).getConnectionId(),cntrl,connections.get(id).getAlias()));
 			}
 		}
 	}
 
 	/**
-	 * disconnect the named alias and fires the related butler
+	 * Disconnect the named alias
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if not connected
@@ -314,7 +314,7 @@ public class Controller {
 				if (!connections.get(id).isConnected())
 					throw new IllegalArgumentException();
 				connections.get(id).disconnect(cntrl);
-				HB.removeButler(connections.get(id).getAlias());
+				//HB.removeButler(connections.get(id).getAlias());
 			}
 		}
 	}
