@@ -13,6 +13,9 @@ public class ButlerMessage extends RemoteMessage {
 	private static final long serialVersionUID = 3618806708211736297L;
 	
 	// message types
+	/**
+	 * the int ID of an initialize message.
+	 */
 	public static final int MSG_INITIALIZE = 2;
 	
 	/**

@@ -16,7 +16,7 @@ import data.VirtualLibrary;
  * The HeadButler class contains references to the VirtualLibraryButler and the
  * RemoteLibraryButlers from the RemoteLibrarys that we are currently connected to.
  * 
- * Book classification is done by the method chain: identify(compareTo(Book)).
+ * Book classification is done with the identify method.
  * @author sjpurol
  *
  */
